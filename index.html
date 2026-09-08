@@ -2092,6 +2092,7 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Télécharger la facture": "Scaricare la fattura",
     "Se souvenir de moi": "Ricordati di me",
     "Comptes": "Account",
     "Les documents partent depuis noreply@autivio.fr.": "I documenti partono da noreply@autivio.fr.",
@@ -2833,6 +2834,7 @@ const DICO = {
   },
 
   lb: {
+    "Télécharger la facture": "Rechnung eroflueden",
     "Se souvenir de moi": "Mech behalen",
     "Comptes": "Konten",
     "Les documents partent depuis noreply@autivio.fr.": "D’Dokumenter ginn vun noreply@autivio.fr geschéckt.",
@@ -3573,6 +3575,7 @@ const DICO = {
   },
 
   en: {
+    "Télécharger la facture": "Download the invoice",
     "Se souvenir de moi": "Remember me",
     "Comptes": "Accounts",
     "Les documents partent depuis noreply@autivio.fr.": "Documents are sent from noreply@autivio.fr.",
@@ -4312,6 +4315,7 @@ const DICO = {
   },
 
   de: {
+    "Télécharger la facture": "Rechnung herunterladen",
     "Se souvenir de moi": "Angemeldet bleiben",
     "Comptes": "Konten",
     "Les documents partent depuis noreply@autivio.fr.": "Dokumente werden von noreply@autivio.fr gesendet.",
@@ -5067,6 +5071,7 @@ const DICO = {
   },
 
   nl: {
+    "Télécharger la facture": "Factuur downloaden",
     "Se souvenir de moi": "Mij onthouden",
     "Comptes": "Accounts",
     "Les documents partent depuis noreply@autivio.fr.": "Documenten worden verzonden vanaf noreply@autivio.fr.",
@@ -5816,7 +5821,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.00';
+const VERSION = '2.01';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -8982,6 +8987,12 @@ function demander(options){
 
 async function supprimerFiches(ids){
   if(!ids.length) return;
+  /* Le nom de dossier de chaque fiche, releve tant qu'elle existe
+     encore. */
+  const dossiersAvant = ids.map(function(id){
+    const v = vehicles[id];
+    return v ? sousDossierVehicule(v) : '';
+  }).filter(Boolean);
   const noms = ids.map(function(id){
     const v = vehicles[id];
     return v ? ((v.vehicule.immat || t('Véhicule sans marque')) + ' — '
@@ -9084,6 +9095,19 @@ async function supprimerFiches(ids){
         return { id: id, maj: tombes[id], supprimee: true };
       }));
     }catch(e){ /* la marque locale suffira au prochain passage */ }
+
+    /* Les documents suivent la fiche.
+
+       Ils vivent dans Storage, que la base ne touche pas : sans cela,
+       les PDF d'un vehicule supprime restaient en ligne indefiniment,
+       et « Mes documents en ligne » continuait de les proposer.
+
+       On s'appuie sur les dossiers releves AVANT la suppression : une
+       fois la fiche effacee, on ne sait plus a quelle plaque elle
+       correspondait. */
+    for(const sous of dossiersAvant){
+      if(sous) await serveurEffacerDocuments(sous).catch(function(){});
+    }
   }
 
   // on pousse tout de suite, pour que les autres appareils l'apprennent
@@ -10955,7 +10979,7 @@ function renderMain(){
     +     (OFFICIAL_PDF_GENERATORS[currentDoc] ? '<button class="official-btn" id="officialPdfBtn">'
             + ico('enregistrer') + '<span>' + esc(t('Télécharger le Cerfa officiel rempli')) + '</span></button>' : '')
     +     (currentDoc === 'facture' ? '<button type="button" class="official-btn" id="btPdfFacture">'
-            + ico('enregistrer') + '<span>' + esc(t('Enregistrer la facture')) + '</span></button>' : '')
+            + ico('enregistrer') + '<span>' + esc(t('Télécharger la facture')) + '</span></button>' : '')
     +     ((isCession || isAchat)
             ? '<button class="print-btn" id="imprimerCerfa">' + ico('imprimer')
               + '<span>' + esc(t(estAndroid() ? 'Imprimer / PDF' : 'Imprimer'))
@@ -21007,6 +21031,12 @@ async function livrerPdf(bytes, nom, v){
         { titre: t('PDF enregistré') });
       return;
     }
+    /* Dans un navigateur, aucune passerelle ne repond : le fichier
+       descendait par un lien, sans jamais passer par le serveur. */
+    const b64Nav = bytesToB64(bytes);
+    envoyerEnLigne(nom, b64Nav, 'application/pdf', true, sousDossierVehicule(v))
+      .catch(function(){});
+
     if(await pdfAndroid(bytes, nom, v)) return;
     const blob = new Blob([bytes], { type: 'application/pdf' });
     if(typeof isIOS === 'function' && isIOS()){
