@@ -323,6 +323,10 @@
   .nav-principal{display:flex;flex-direction:column;gap:2px;margin-bottom:4px;}
   /* La pastille des comptes a valider : discrete, mais impossible a
      manquer une fois qu'on la cherche. */
+  /* L'onglet des comptes n'existe que pour un administrateur relie au
+     serveur. La regle l'emporte sur tout redessin. */
+  #navComptes{display:none !important;}
+  body.est-admin #navComptes{display:flex !important;}
   .nav-pastille{margin-left:auto;background:#c0392b;color:#fff;
     min-width:18px;height:18px;border-radius:9px;font-size:11px;
     font-weight:700;display:inline-flex;align-items:center;
@@ -871,6 +875,11 @@
     font-size:13.5px;color:var(--ink-soft);cursor:pointer;
     text-transform:none;letter-spacing:0;font-weight:400;}
   .li-memo input{width:16px;height:16px;cursor:pointer;}
+  /* Rien ne bouge tant qu'on n'est pas entre. */
+  body.avant-connexion{overflow:hidden !important;position:fixed;
+    width:100%;height:100%;overscroll-behavior:none;touch-action:none;}
+  body.avant-connexion #authScreen{overflow-y:auto;-webkit-overflow-scrolling:touch;
+    touch-action:pan-y;height:100%;}
   .auth-lien{background:none;border:0;color:var(--brand);cursor:pointer;
     width:100%;margin-top:10px;font-size:13.5px;text-decoration:underline;
     padding:6px;font-family:inherit;}
@@ -2092,6 +2101,12 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Ex. : frais de carte grise": "Es. : spese di immatricolazione",
+    "facultatif": "facoltativo",
+    "Ex. : 200": "Es. : 200",
+    "Exemple": "Esempio",
+    "vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.": "vi occupate dei documenti e fatturate 200 € : designazione « Spese di immatricolazione », quantità 1, PU netto 200, IVA 20 %. Il cliente pagherà 240 € lordi per questa riga.",
+    "Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.": "Il prezzo unitario si inserisce AL NETTO. L’aliquota corrente è 20 % ; lasciate 0 % per ciò che rifatturate al centesimo, senza margine — una revisione, per esempio.",
     "Télécharger la facture": "Scaricare la fattura",
     "Se souvenir de moi": "Ricordati di me",
     "Comptes": "Account",
@@ -2834,6 +2849,12 @@ const DICO = {
   },
 
   lb: {
+    "Ex. : frais de carte grise": "Z.B. : Käschte fir de Fahrzeugschäin",
+    "facultatif": "fakultativ",
+    "Ex. : 200": "Z.B. : 200",
+    "Exemple": "Beispill",
+    "vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.": "Dir këmmert Iech ëm d’Pabeieren a rechent 200 € : Bezeechnung « Käschte fir de Fahrzeugschäin », Quantitéit 1, Eenheetspräis netto 200, MwSt. 20 %. De Client bezilt 240 € brutto fir dës Linn.",
+    "Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.": "Den Eenheetspräis gëtt NETTO agedroen. Den normalen Taux ass 20 % ; loosst 0 % fir dat wat Dir op de Cent nei verrechent, ouni Marge — eng technesch Kontroll zum Beispill.",
     "Télécharger la facture": "Rechnung eroflueden",
     "Se souvenir de moi": "Mech behalen",
     "Comptes": "Konten",
@@ -3575,6 +3596,12 @@ const DICO = {
   },
 
   en: {
+    "Ex. : frais de carte grise": "E.g. registration fees",
+    "facultatif": "optional",
+    "Ex. : 200": "E.g. 200",
+    "Exemple": "Example",
+    "vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.": "you handle the paperwork and charge 200 € : description “Registration fees”, quantity 1, unit price excl. tax 200, VAT 20 %. The customer pays 240 € incl. tax for this line.",
+    "Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.": "The unit price is entered EXCLUDING tax. The standard rate is 20 % ; leave 0 % for what you pass on at cost, without margin — a roadworthiness test, for instance.",
     "Télécharger la facture": "Download the invoice",
     "Se souvenir de moi": "Remember me",
     "Comptes": "Accounts",
@@ -4315,6 +4342,12 @@ const DICO = {
   },
 
   de: {
+    "Ex. : frais de carte grise": "Z. B. Zulassungsgebühren",
+    "facultatif": "optional",
+    "Ex. : 200": "Z. B. 200",
+    "Exemple": "Beispiel",
+    "vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.": "Sie kümmern sich um die Papiere und berechnen 200 € : Bezeichnung „Zulassungsgebühren“, Menge 1, Einzelpreis netto 200, MwSt. 20 %. Der Kunde zahlt 240 € brutto für diese Zeile.",
+    "Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.": "Der Einzelpreis wird NETTO eingegeben. Der normale Satz ist 20 % ; lassen Sie 0 % für das, was Sie ohne Aufschlag weiterberechnen — etwa eine Hauptuntersuchung.",
     "Télécharger la facture": "Rechnung herunterladen",
     "Se souvenir de moi": "Angemeldet bleiben",
     "Comptes": "Konten",
@@ -5071,6 +5104,12 @@ const DICO = {
   },
 
   nl: {
+    "Ex. : frais de carte grise": "Bijv. inschrijvingskosten",
+    "facultatif": "optioneel",
+    "Ex. : 200": "Bijv. 200",
+    "Exemple": "Voorbeeld",
+    "vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.": "u regelt de papieren en factureert 200 € : omschrijving “Inschrijvingskosten”, aantal 1, stukprijs excl. btw 200, btw 20 %. De klant betaalt 240 € incl. btw voor deze regel.",
+    "Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.": "De stukprijs wordt EXCLUSIEF btw ingevoerd. Het gangbare tarief is 20 % ; laat 0 % staan voor wat u zonder marge doorberekent — een keuring bijvoorbeeld.",
     "Télécharger la facture": "Factuur downloaden",
     "Se souvenir de moi": "Mij onthouden",
     "Comptes": "Accounts",
@@ -5821,7 +5860,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.01';
+const VERSION = '2.06';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6036,7 +6075,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '08/09/2026';
+const VERSION_DATE = '12/09/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -6496,6 +6535,62 @@ async function serveurChangerMotDePasse(nouveau){
    connexion : c'est la suite naturelle du geste.
    ===================================================================== */
 
+/* Previent l'administrateur qu'un compte vient d'etre cree.
+
+   Le message part de l'application de la PERSONNE qui s'inscrit, par
+   la fonction serveur — elle ne voit aucune cle, et ne sait meme pas
+   que ce message existe. */
+const ADMIN_EMAIL = 'yasinkhali.ft@outlook.com';
+
+async function prevenirAdministrateur(profil, adresse){
+  const pro = profil && profil.type_compte === 'professionnel';
+  const nom = (profil && profil.nom) || adresse;
+  const cadre = 'font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;'
+    + 'max-width:520px;margin:0 auto;padding:30px 24px;color:#101820';
+  const ligne = function(etiq, val){
+    return val ? '<tr><td style="padding:4px 14px 4px 0;color:#6b7a90;'
+      + 'font-size:13px;white-space:nowrap">' + esc(etiq) + '</td>'
+      + '<td style="padding:4px 0;font-size:13.5px">' + esc(val) + '</td></tr>' : '';
+  };
+  const html = '<div style="' + cadre + '">'
+    + '<div style="font-size:22px;font-weight:700;color:#123a6b">AUTIVIO</div>'
+    + '<div style="font-size:11.5px;color:#6b7a90;letter-spacing:.09em;'
+    +   'text-transform:uppercase;margin-bottom:26px">Immatriculation automobile</div>'
+    + '<div style="font-size:18px;font-weight:700;margin-bottom:14px">'
+    +   (pro ? 'Un compte professionnel attend votre validation'
+            : 'Nouveau compte particulier') + '</div>'
+    + '<table style="border-collapse:collapse;margin-bottom:18px">'
+    +   ligne('Nom', nom)
+    +   ligne('Adresse', adresse)
+    +   ligne('Type', pro ? 'Professionnel' : 'Particulier')
+    +   ligne('N° SIRET', profil && profil.siret)
+    +   ligne('N° TVA', profil && profil.tva)
+    + '</table>'
+    + (pro
+        ? '<p style="font-size:14px;line-height:1.6;color:#3d4a5c;margin:0 0 6px">'
+          + 'Ce compte est bloque tant que vous ne l\'avez pas valide. '
+          + 'Ouvrez « Comptes » dans Autivio pour verifier l\'entreprise.</p>'
+          + ((profil && profil.siret && lienInsee(profil.siret))
+              ? '<p style="font-size:13.5px;margin:0"><a href="'
+                + lienInsee(profil.siret) + '">Verifier sur l\'annuaire des entreprises</a></p>'
+              : '')
+        : '<p style="font-size:14px;line-height:1.6;color:#3d4a5c;margin:0">'
+          + 'Ce compte est actif : un particulier n\'a pas besoin de validation.</p>')
+    + '<div style="border-top:1px solid #e4e9f0;margin-top:26px;padding-top:14px;'
+    +   'font-size:11.5px;color:#93a0b3">Ceci est un mail automatique. '
+    +   'Merci de ne pas repondre.</div></div>';
+
+  const texte = (pro ? 'Un compte professionnel attend votre validation'
+                     : 'Nouveau compte particulier')
+    + '\n\n' + nom + '\n' + adresse
+    + (profil && profil.siret ? '\nSIRET : ' + profil.siret : '');
+
+  return await serveurExpedier(ADMIN_EMAIL,
+    'Autivio — ' + (pro ? 'compte professionnel à valider' : 'nouveau compte')
+      + ' : ' + nom,
+    texte, html, [], adresse);
+}
+
 async function serveurConfirmerInscription(adresse, code){
   let r;
   try{
@@ -6561,6 +6656,11 @@ function ecranCodeInscription(adresse){
       const profil = await serveurProfil();
       currentUser = compteDepuisProfil(profil, adresse);
       definirEspace(adresse);
+      /* L'administrateur est prevenu. C'est possible ICI et nulle part
+         ailleurs : la personne vient d'etre reconnue par le serveur,
+         son application peut donc lui demander d'envoyer. Avant la
+         confirmation, elle n'a aucun droit. */
+      prevenirAdministrateur(profil, adresse).catch(function(){});
       await premiereMontee();
       enterApp();
       return;
@@ -6856,7 +6956,21 @@ function ecranCreationCompte(){
 
 function authEl(){
   document.body.classList.add('avant-connexion');
+  figerEcranConnexion(true);
   return document.getElementById('authScreen');
+}
+
+/* Sur iPhone, l'ecran de connexion se laissait tirer vers le haut et
+   vers le bas — le rebond de Safari. On voyait le fond defiler sous la
+   carte, ce qui donne l'impression que l'application est cassee.
+
+   La classe « avant-connexion » fige la page ; elle est retiree des que
+   l'on entre. */
+function figerEcranConnexion(fige){
+  try{
+    document.documentElement.style.overscrollBehavior = fige ? 'none' : '';
+    document.body.style.overscrollBehavior = fige ? 'none' : '';
+  }catch(e){}
 }
 
 function authCard(inner){
@@ -7006,9 +7120,15 @@ function showLoginScreen(){
   const memo = document.getElementById('li_memo');
   let dernier = '';
   try{ dernier = localStorage.getItem('autivio_dernier') || ''; }catch(e){}
+  /* On pose l'etat DANS LES DEUX SENS.
+
+     En ne cochant que lorsqu'un identifiant existe, on laissait le
+     navigateur decider du reste : Chrome et Safari retablissent l'etat
+     des cases au rechargement, et la case revenait cochee alors que
+     rien n'avait ete retenu. */
+  if(memo) memo.checked = !!dernier;
   if(dernier){
     document.getElementById('li_user').value = dernier;
-    if(memo) memo.checked = true;
     document.getElementById('li_pass').focus();
   }
 
@@ -7024,6 +7144,8 @@ function showLoginScreen(){
 }
 
 async function enterApp(){
+  document.body.classList.remove('avant-connexion');
+  figerEcranConnexion(false);
   /* Un compte professionnel non valide ne va pas plus loin : ni fiches
      chargees, ni synchronisation. Le serveur les lui refuserait de
      toute facon, autant le dire clairement. */
@@ -7742,6 +7864,7 @@ async function synchroniserMaintenant(silencieux){
 
   /* Les demandes en attente, au meme rythme. */
   if(etat !== 'erreur') majComptesEnAttente().catch(function(){});
+  majOngletComptes();
 
   /* Le libelle revient au repos : sinon « À jour » resterait affiche
      alors que la fiche a peut-etre change depuis. */
@@ -8783,7 +8906,8 @@ function autoFormat(inp, fieldName){
   }
 }
 
-function renderAll(){ document.body.classList.remove('avant-connexion'); renderSidebar(); renderMain(); majNavigation(); brancherNavigation(); brancherMenuMobile(); }
+function renderAll(){
+  majOngletComptes(); document.body.classList.remove('avant-connexion'); renderSidebar(); renderMain(); majNavigation(); brancherNavigation(); brancherMenuMobile(); }
 
 function majNavigation(){
   document.querySelectorAll('.nav-item').forEach(function(bt){
@@ -8791,6 +8915,22 @@ function majNavigation(){
   });
   const n = document.getElementById('nbVehicules');
   if(n) n.textContent = vehicleOrder.length ? vehicleOrder.length : '';
+}
+
+/* L'onglet « Comptes » est cache des le dessin de l'ecran, et non une
+   fois la reponse du serveur revenue. Sans cela il restait visible un
+   instant apres un changement de compte — assez pour etre vu, et
+   clique. */
+function majOngletComptes(){
+  /* On marque le CORPS de la page, et une regle de style cache
+     l'onglet. L'attribut « hidden » ne tenait pas : la barre est
+     redessinee, et l'onglet reapparaissait.
+
+     Une classe sur le corps survit a tous les redessins. */
+  const admin = estAdministrateur() && serveurPret();
+  document.body.classList.toggle('est-admin', admin);
+  const onglet = document.getElementById('navComptes');
+  if(onglet) onglet.hidden = !admin;
 }
 
 function allerA(vue){
@@ -10320,9 +10460,16 @@ function vueTableau(){
         return '<div class="tb-carte bientot"><div class="tb-etiq">' + titre + '</div>'
           + '<div class="tb-nombre">—</div>'
           + '<div class="tb-detail">' + t('Bientôt disponible') + '</div></div>'; }).join('')
-  +   '<div class="tb-carte"><div class="tb-etiq">' + t('Formulaires') + '</div>'
-  +     '<div class="tb-nombre">' + FORMULAIRES_OFFICIELS.length + '</div>'
-  +     '<div class="tb-detail">' + FORMULAIRES_OFFICIELS.map(function(f){ return t(f[1]); }).join(' · ') + '</div></div>'
+  /* Le compteur annonce ce que CE compte peut produire, pas le total.
+     Un particulier lisait « 12 formulaires » et n'en trouvait que
+     cinq : le chiffre promettait ce qu'il n'aurait jamais. */
+  +   (function(){
+        const permis = FORMULAIRES_OFFICIELS.filter(function(f){ return docPermis(f[0]); });
+        return '<div class="tb-carte"><div class="tb-etiq">' + t('Formulaires') + '</div>'
+          + '<div class="tb-nombre">' + permis.length + '</div>'
+          + '<div class="tb-detail">'
+          + permis.map(function(f){ return t(f[1]); }).join(' · ') + '</div></div>';
+      })()
   + '</div>'
 
   + '<div class="tb-section">' + (q ? visibles.length + ' ' + t(visibles.length > 1 ? 'résultats' : 'résultat')
@@ -11181,6 +11328,13 @@ function ongletSiPermis(cle, libelle){
 }
 
 function tabBtn(key,label){
+  /* Le filtre est ICI, et non a l'endroit ou les onglets sont listes.
+
+     Ma premiere version l'avait pose sur la liste — mais les onglets
+     sont dessines a DEUX endroits, et le second continuait de tout
+     montrer. Place dans tabBtn, aucun appel ne peut passer a cote,
+     ni aujourd'hui ni demain. */
+  if(!docPermis(key)) return '';
   return `<div class="tab ${currentDoc===key?'active':''}" data-doc="${key}" onclick="setDoc('${key}')">${label}</div>`;
 }
 
@@ -21267,8 +21421,14 @@ const MODES_REGLEMENT = [
   'Mandat cash'
 ];
 
+/* Les frais de carte grise passent a 20 % : le garage facture une
+   PRESTATION — s'occuper des papiers — et prend sa marge dessus. Ce
+   n'est pas un debours.
+
+   Le controle technique reste a 0 % : il est refacture a l'euro pres,
+   sans marge. */
 const LIGNES_TYPES = [
-  ['Frais de carte grise',    '0'],
+  ['Frais de carte grise',    '20'],
   ['Préparation du véhicule', '20'],
   ['Frais de dossier',        '20'],
   ['Contrôle technique',      '0'],
@@ -21771,10 +21931,16 @@ function lignesFactureHtml(v){
     + f.lignes.map(function(l, i){
         const m = ligneMontants(l);
         return '<tr>'
-          + '<td><input data-lig="designation" data-i="' + i + '" value="' + esc(l.designation || '') + '"></td>'
-          + '<td><input data-lig="reference" data-i="' + i + '" value="' + esc(l.reference || '') + '" size="6"></td>'
+          /* Chaque champ dit ce qu'on attend de lui. Une ligne vide sans
+             indication laisse l'utilisateur deviner — et deviner mal :
+             un montant TTC dans une case HT fausse la facture entiere. */
+          + '<td><input data-lig="designation" data-i="' + i + '" value="' + esc(l.designation || '')
+          +   '" placeholder="' + esc(t('Ex. : frais de carte grise')) + '"></td>'
+          + '<td><input data-lig="reference" data-i="' + i + '" value="' + esc(l.reference || '')
+          +   '" size="6" placeholder="' + esc(t('facultatif')) + '"></td>'
           + '<td><input data-lig="qte" data-i="' + i + '" value="' + esc(l.qte || '1') + '" size="3"></td>'
-          + '<td><input data-lig="pu" data-i="' + i + '" value="' + esc(l.pu || '') + '" size="8"></td>'
+          + '<td><input data-lig="pu" data-i="' + i + '" value="' + esc(l.pu || '')
+          +   '" size="8" placeholder="' + esc(t('Ex. : 200')) + '"></td>'
           + '<td><input data-lig="tva" data-i="' + i + '" value="' + esc(l.tva === undefined ? '20' : l.tva) + '" size="4"></td>'
           + '<td class="lig-total">' + euro(m.ttc) + '</td>'
           + '<td><button type="button" class="lig-suppr" data-suppr="' + i + '" aria-label="'
@@ -21946,7 +22112,8 @@ function factureForm(v){
   + '</div>'
 
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Prestations supplémentaires')) + '</div>'
-  + '<div class="cerfa-aide">' + esc(t('Frais de carte grise, préparation, main-d’œuvre, jeu de clés… Chaque ligne porte son propre taux de TVA : le régime de la marge ne vaut que pour le véhicule.')) + '</div>'
+  + '<div class="cerfa-aide">' + esc(t('Frais de carte grise, préparation, main-d’œuvre, jeu de clés… Chaque ligne porte son propre taux de TVA : le régime de la marge ne vaut que pour le véhicule.')) + '<br>'
+  +   esc(t('Le prix unitaire se saisit HORS TAXES. Le taux courant est 20 % ; laissez 0 % pour ce que vous refacturez à l’euro près, sans marge — un contrôle technique, par exemple.')) + '</div>'
   + '<div id="facLignes">' + lignesFactureHtml(v) + '</div>'
   + '<div class="gar-lab">' + esc(t('Lignes courantes')) + '</div>'
   + '<div class="gar-choix">'
@@ -21955,6 +22122,12 @@ function factureForm(v){
           + '<span class="lig-plus">+</span><span>' + esc(t(l[0])) + '</span></button>'; }).join('')
   + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Rien n’est ajouté tant que vous ne cliquez pas. Le libellé et le taux sont remplis, le montant reste à vous.')) + '</div>'
+  /* Un exemple chiffre vaut mieux qu'une explication : on voit d'un
+     coup d'oeil ou va le montant et ce que devient la TVA. */
+  + '<div class="cerfa-aide" style="margin-top:6px">'
+  +   '<strong>' + esc(t('Exemple')) + '</strong> — '
+  +   esc(t('vous vous occupez des papiers et facturez 200 € : désignation « Frais de carte grise », quantité 1, PU HT 200, TVA 20 %. Le client paiera 240 € TTC pour cette ligne.'))
+  + '</div>'
   + '<div style="margin-top:10px"><button type="button" class="btn-sec" id="facAjouter">'
   +   esc(t('+ Ajouter une ligne vide')) + '</button></div>'
   + '</div>'
