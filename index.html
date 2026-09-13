@@ -5887,7 +5887,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.16';
+const VERSION = '2.17';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7135,6 +7135,23 @@ function ecranLangue(){
 }
 
 function showLoginScreen(){
+  /* Le menage est fait ICI, et non dans le bouton de deconnexion.
+
+     Cinq chemins ramenent a cet ecran — le bouton, le verrouillage, le
+     retour depuis la creation de compte, le choix de la langue. Un seul
+     fermait la fiche ouverte : par les autres, l'ecran du vehicule
+     restait dessine derriere et reapparaissait par transparence.
+
+     Place ici, aucun chemin ne peut l'oublier. */
+  currentId = null;
+  vueCourante = 'tableau';
+  try{
+    const zone = document.getElementById('main');
+    if(zone) zone.innerHTML = '';
+    const app = document.getElementById('app');
+    if(app) app.style.display = 'none';
+  }catch(e){}
+
   authEl().style.display = 'flex';
   const avert = stockagePersistant ? '' :
     '<div id="storageWarn" style="display:block">Cet appareil n\'autorise pas l\'enregistrement permanent ici. '
@@ -10394,14 +10411,6 @@ function renderSidebar(){
   document.getElementById('exportBtn').onclick = exportBackup;
   document.getElementById('importInput').onchange = (e)=>{ if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; };
   document.getElementById('logoutBtn').onclick = ()=>{
-    /* La fiche ouverte est refermee AVANT de sortir. Sans cela l'ecran
-       du vehicule restait dessine derriere, et reapparaissait par
-       transparence pendant que la page se figeait. */
-    currentId = null;
-    vueCourante = 'tableau';
-    const main = document.getElementById('main');
-    if(main) main.innerHTML = '';
-    document.getElementById('app').style.display = 'none';
     authEl().style.display = 'flex';
     showLoginScreen();
   };
