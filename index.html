@@ -59,6 +59,10 @@
   /* align-items:stretch force les deux colonnes a occuper toute la
      hauteur : sans cela elles se centrent et laissent une bande vide
      en haut de la fenetre. */
+  /* Ferme, l'application ne s'affiche sous aucune regle : les mises en
+     page telephone utilisent « !important », qu'un style en ligne ne
+     peut pas surpasser. */
+  #app.app-ferme{display:none !important;}
   #app{display:grid;grid-template-columns:280px 1fr;grid-template-rows:100vh;
     min-height:100vh;align-items:stretch;}
   /* chaque colonne occupe toute la hauteur et defile pour son compte :
@@ -5887,7 +5891,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.17';
+const VERSION = '2.19';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6470,14 +6474,32 @@ async function serveurAdresseDe(nom){
     /* PostgREST rend la valeur seule, mais selon les versions elle
        arrive parfois enveloppee. On accepte les deux formes. */
     if(typeof r === 'string' && r) return r;
-    if(Array.isArray(r) && r.length && typeof r[0] === 'string') return r[0];
-    if(r && typeof r === 'object' && typeof r.adresse_de === 'string') return r.adresse_de;
+    if(Array.isArray(r) && r.length){
+      if(typeof r[0] === 'string') return r[0];
+      /* Certaines versions rendent une ligne : [{adresse_de: "..."}] */
+      if(r[0] && typeof r[0] === 'object'){
+        for(const k in r[0]){
+          if(typeof r[0][k] === 'string' && r[0][k].indexOf('@') > 0) return r[0][k];
+        }
+      }
+    }
+    if(r && typeof r === 'object'){
+      for(const k in r){
+        if(typeof r[k] === 'string' && r[k].indexOf('@') > 0) return r[k];
+      }
+    }
+    /* Reponse comprise, mais vide : le nom n'existe pas. Ce n'est PAS
+       une panne du serveur — on laisse le message ordinaire. */
     return null;
   }catch(e){
-    const m = (e && e.message) || '';
-    if(e && (e.statut === 404 || /not exist|not find|schema cache/i.test(m))){
-      dernierEchecNom = t('La connexion par nom d’utilisateur n’est pas activée sur le serveur.');
-    }
+    /* Toute erreur du serveur signifie que la traduction du nom n'a pas
+       pu se faire — fonction absente, droit refuse, reseau coupe.
+
+       Je ne retenais que le 404. Un refus de PERMISSION renvoie 401 ou
+       403, et tombait dans « identifiant incorrect » : on cherchait
+       alors du cote du mot de passe, alors que le serveur n'avait
+       jamais repondu. */
+    dernierEchecNom = t('La connexion par nom d’utilisateur n’est pas activée sur le serveur.');
     return null;
   }
 }
@@ -7149,7 +7171,19 @@ function showLoginScreen(){
     const zone = document.getElementById('main');
     if(zone) zone.innerHTML = '';
     const app = document.getElementById('app');
-    if(app) app.style.display = 'none';
+    if(app){
+      app.style.display = 'none';
+      /* Une classe EN PLUS du style : sur telephone, une regle
+         « #app{display:block !important} » ecrasait le style et
+         l'application restait visible, menu lateral ouvert. */
+      app.classList.add('app-ferme');
+    }
+    /* Le menu lateral et son voile se referment : ouverts au moment du
+       verrouillage, ils restaient ouverts au retour. */
+    const barre = document.getElementById('sidebar');
+    if(barre) barre.classList.remove('ouvert');
+    const voile = document.getElementById('voileMenu');
+    if(voile) voile.classList.remove('ouvert');
   }catch(e){}
 
   authEl().style.display = 'flex';
@@ -7288,6 +7322,8 @@ function showLoginScreen(){
 async function enterApp(){
   document.body.classList.remove('avant-connexion');
   figerEcranConnexion(false);
+  const appOuvert = document.getElementById('app');
+  if(appOuvert) appOuvert.classList.remove('app-ferme');
   /* Un compte professionnel non valide ne va pas plus loin : ni fiches
      chargees, ni synchronisation. Le serveur les lui refuserait de
      toute facon, autant le dire clairement. */
