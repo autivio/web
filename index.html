@@ -881,11 +881,22 @@
     font-size:13.5px;color:var(--ink-soft);cursor:pointer;
     text-transform:none;letter-spacing:0;font-weight:400;}
   .li-memo input{width:16px;height:16px;cursor:pointer;}
-  /* Rien ne bouge tant qu'on n'est pas entre. */
+  /* Rien ne bouge tant qu'on n'est pas entre.
+
+     « position:fixed » SANS point d'ancrage laissait le navigateur
+     choisir : sur iPhone, la page se decalait vers la droite. Les
+     quatre cotes sont desormais fixes.
+
+     « touch-action:none » sur le corps bloquait aussi la carte
+     elle-meme : sur un petit ecran, le bas du formulaire devenait
+     inaccessible. Seul le corps est fige, la carte reste parcourable. */
   body.avant-connexion{overflow:hidden !important;position:fixed;
-    width:100%;height:100%;overscroll-behavior:none;touch-action:none;}
-  body.avant-connexion #authScreen{overflow-y:auto;-webkit-overflow-scrolling:touch;
-    touch-action:pan-y;height:100%;}
+    top:0;left:0;right:0;bottom:0;width:100%;height:100%;
+    margin:0;padding:0;overscroll-behavior:none;}
+  body.avant-connexion #authScreen{position:absolute;top:0;left:0;right:0;bottom:0;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;
+    display:flex;align-items:center;justify-content:center;padding:16px;
+    box-sizing:border-box;}
   .auth-lien{background:none;border:0;color:var(--brand);cursor:pointer;
     width:100%;margin-top:10px;font-size:13.5px;text-decoration:underline;
     padding:6px;font-family:inherit;}
@@ -2107,6 +2118,8 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "L’accesso con nome utente non è attivato sul server.",
+    "Patientez une minute avant de redemander un code.": "Attendete un minuto prima di richiedere un codice.",
     "Ex. : frais de carte grise": "Es. : spese di immatricolazione",
     "facultatif": "facoltativo",
     "Ex. : 200": "Es. : 200",
@@ -2855,6 +2868,8 @@ const DICO = {
   },
 
   lb: {
+    "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "D’Umeldung mam Benotzernumm ass um Server net aktivéiert.",
+    "Patientez une minute avant de redemander un code.": "Waart eng Minutt ier Dir en neie Code ufrot.",
     "Ex. : frais de carte grise": "Z.B. : Käschte fir de Fahrzeugschäin",
     "facultatif": "fakultativ",
     "Ex. : 200": "Z.B. : 200",
@@ -3602,6 +3617,8 @@ const DICO = {
   },
 
   en: {
+    "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Signing in with a username is not enabled on the server.",
+    "Patientez une minute avant de redemander un code.": "Please wait a minute before requesting another code.",
     "Ex. : frais de carte grise": "E.g. registration fees",
     "facultatif": "optional",
     "Ex. : 200": "E.g. 200",
@@ -4348,6 +4365,8 @@ const DICO = {
   },
 
   de: {
+    "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Die Anmeldung mit Benutzername ist auf dem Server nicht aktiviert.",
+    "Patientez une minute avant de redemander un code.": "Bitte warten Sie eine Minute, bevor Sie einen neuen Code anfordern.",
     "Ex. : frais de carte grise": "Z. B. Zulassungsgebühren",
     "facultatif": "optional",
     "Ex. : 200": "Z. B. 200",
@@ -5110,6 +5129,8 @@ const DICO = {
   },
 
   nl: {
+    "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Aanmelden met een gebruikersnaam is niet ingeschakeld op de server.",
+    "Patientez une minute avant de redemander un code.": "Wacht een minuut voordat u een nieuwe code aanvraagt.",
     "Ex. : frais de carte grise": "Bijv. inschrijvingskosten",
     "facultatif": "optioneel",
     "Ex. : 200": "Bijv. 200",
@@ -5866,7 +5887,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.12';
+const VERSION = '2.16';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6081,7 +6102,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '12/09/2026';
+const VERSION_DATE = '13/09/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -6405,10 +6426,13 @@ function compteDepuisProfil(profil, adresse){
    professionnel. A defaut le nom d'utilisateur, et en dernier recours
    la partie avant l'arobase : mieux vaut « yasin » que l'adresse
    entiere en haut de l'ecran. */
+/* Le nom d'utilisateur passe en premier : c'est celui que la personne
+   a choisi, et celui avec lequel elle se connecte. Le nom complet ne
+   sert qu'a defaut. */
 function nomAffiche(){
   if(!currentUser) return '';
-  if(currentUser.nom && !ressembleAdresse(currentUser.nom)) return currentUser.nom;
   if(currentUser.utilisateur) return currentUser.utilisateur;
+  if(currentUser.nom && !ressembleAdresse(currentUser.nom)) return currentUser.nom;
   if(currentUser.display) return currentUser.display;
   const u = currentUser.username || '';
   return u.indexOf('@') > 0 ? u.split('@')[0] : u;
@@ -6429,13 +6453,33 @@ async function serveurNomLibre(nom){
 /* L'adresse derriere un nom d'utilisateur. Le serveur ne sait
    reconnaitre que des adresses : on traduit le nom avant de lui
    parler. */
+/* L'adresse derriere un nom d'utilisateur.
+
+   L'echec etait avale : si la fonction n'existe pas sur le serveur —
+   le fichier SQL 10 non passe — la connexion echouait avec
+   « identifiant incorrect », ce qui envoyait chercher au mauvais
+   endroit. On retient donc la cause pour pouvoir la dire. */
+let dernierEchecNom = '';
+
 async function serveurAdresseDe(nom){
+  dernierEchecNom = '';
   try{
     const r = await serveurAppel('/rest/v1/rpc/adresse_de', {
       method: 'POST', sansJeton: true, body: { nom: nom }
     });
-    return (typeof r === 'string' && r) ? r : null;
-  }catch(e){ return null; }
+    /* PostgREST rend la valeur seule, mais selon les versions elle
+       arrive parfois enveloppee. On accepte les deux formes. */
+    if(typeof r === 'string' && r) return r;
+    if(Array.isArray(r) && r.length && typeof r[0] === 'string') return r[0];
+    if(r && typeof r === 'object' && typeof r.adresse_de === 'string') return r.adresse_de;
+    return null;
+  }catch(e){
+    const m = (e && e.message) || '';
+    if(e && (e.statut === 404 || /not exist|not find|schema cache/i.test(m))){
+      dernierEchecNom = t('La connexion par nom d’utilisateur n’est pas activée sur le serveur.');
+    }
+    return null;
+  }
 }
 
 async function tenterConnexion(identifiant, motDePasse){
@@ -6466,6 +6510,9 @@ async function tenterConnexion(identifiant, motDePasse){
   }
   const local = findAccount(identifiant, motDePasse);
   if(local) return { compte: local };
+  /* Si le serveur ne sait pas traduire les noms d'utilisateur, on le
+     dit : « identifiant incorrect » enverrait chercher ailleurs. */
+  if(dernierEchecNom) return { erreur: dernierEchecNom };
   return { erreur: t('Identifiant ou mot de passe incorrect.') };
 }
 
@@ -6614,11 +6661,64 @@ async function serveurConfirmerInscription(adresse, code){
 
 /* Redemande un code. Utile quand le premier s'est perdu, ou quand la
    personne a mis trop longtemps a le saisir. */
-async function serveurRenvoyerCode(adresse){
+/* Renvoyer un code.
+
+   Supabase impose une pause entre deux envois — une minute par defaut.
+   Reclamer trop tot ne donne rien, et le refus etait avale en
+   silence : le bouton semblait mort.
+
+   Le message du serveur est desormais montre tel quel. */
+async function serveurRenvoyerCode(adresse, genre){
   return await serveurAppel('/auth/v1/resend', {
     method: 'POST', sansJeton: true,
-    body: { type: 'signup', email: adresse }
+    body: { type: genre || 'signup', email: adresse }
   });
+}
+
+/* Le meme bouton pour les deux ecrans : confirmation d'adresse et mot
+   de passe oublie. La pause est celle du serveur, une minute. */
+function brancherRenvoi(idBouton, adresse, genre, err, info){
+  const b = document.getElementById(idBouton);
+  if(!b) return;
+  const libelle = b.textContent;
+  b.onclick = async function(){
+    b.disabled = true;
+    err.textContent = ''; info.textContent = '';
+    b.textContent = t('Envoi…');
+    try{
+      if(genre === 'recovery'){
+        /* Pour le mot de passe, « resend » ne s'applique pas : on
+           redemande simplement un code. */
+        await serveurAppel('/auth/v1/recover', {
+          method: 'POST', sansJeton: true, body: { email: adresse }
+        });
+      }else{
+        await serveurRenvoyerCode(adresse, genre);
+      }
+      info.textContent = t('Un nouveau code vient d’être envoyé.');
+    }catch(e){
+      const m = (e && e.message) || '';
+      /* « For security purposes, you can only request this after N
+         seconds » : on le dit en francais plutot que de laisser
+         l'anglais du serveur. */
+      err.textContent = /security purposes|rate limit|too many/i.test(m)
+        ? t('Patientez une minute avant de redemander un code.')
+        : (m || t('Envoi impossible.'));
+    }
+    /* Une minute : c'est la pause du serveur. En attendre moins,
+       c'est promettre un envoi qui sera refuse. */
+    let reste = 60;
+    b.textContent = libelle + ' (' + reste + ')';
+    const minuteur = setInterval(function(){
+      reste--;
+      if(reste <= 0){
+        clearInterval(minuteur);
+        b.disabled = false; b.textContent = libelle;
+      }else{
+        b.textContent = libelle + ' (' + reste + ')';
+      }
+    }, 1000);
+  };
 }
 
 function ecranCodeInscription(adresse){
@@ -6679,20 +6779,7 @@ function ecranCodeInscription(adresse){
 
   bouton.onclick = valider;
 
-  document.getElementById('ci_renvoi').onclick = async function(){
-    const b = document.getElementById('ci_renvoi');
-    b.disabled = true;
-    err.textContent = ''; info.textContent = '';
-    try{
-      await serveurRenvoyerCode(adresse);
-      info.textContent = t('Un nouveau code vient d’être envoyé.');
-    }catch(e){
-      err.textContent = (e && e.message) || t('Envoi impossible.');
-    }
-    /* Une pause avant de pouvoir redemander : sans elle, on epuise le
-       quota d'envoi en quelques clics. */
-    setTimeout(function(){ b.disabled = false; }, 30000);
-  };
+  brancherRenvoi('ci_renvoi', adresse, 'signup', err, info);
 
   document.getElementById('ci_retour').onclick = showLoginScreen;
   champ.focus();
@@ -6714,6 +6801,7 @@ function ecranCodeRecuperation(adresse){
     <div class="auth-error" id="rc_error"></div>
     <div class="auth-info" id="rc_info"></div>
     <button class="auth-btn" id="rc_submit">${t('Changer le mot de passe')}</button>
+    <button type="button" class="auth-lien" id="rc_renvoi">${t('Renvoyer le code')}</button>
     <button type="button" class="auth-btn auth-btn-2" id="rc_retour">${t('Retour à la connexion')}</button>
   `);
 
@@ -6759,6 +6847,7 @@ function ecranCodeRecuperation(adresse){
   };
 
   bouton.onclick = changer;
+  brancherRenvoi('rc_renvoi', adresse, 'recovery', err, info);
   document.getElementById('rc_retour').onclick = showLoginScreen;
   authEl().querySelectorAll('input').forEach(function(i){
     i.onkeydown = function(e){ if(e.key === 'Enter') changer(); };
@@ -7005,7 +7094,11 @@ function authScene(){
     + '<div class="auth-baseline">' + esc(t('Vos achats, vos ventes et vos formulaires officiels'))
     +   ' <b>' + esc(t('au même endroit')) + '</b>.</div>'
     + '<div class="auth-pastilles">'
-    +   [t('12 documents'), t('Contrat bilingue'), t('Hors ligne'), t('Sauvegarde')]
+    /* Le nombre est calcule, pas ecrit en dur : il disait « 12 » alors
+       que le logiciel en produit treize depuis la 2.10. Une etiquette
+       ecrite a la main finit toujours par mentir. */
+    +   [FORMULAIRES_OFFICIELS.length + ' ' + t('documents'),
+         t('Contrat bilingue'), t('Hors ligne'), t('Sauvegarde')]
           .map(function(x){ return '<span class="auth-pastille">' + esc(x) + '</span>'; }).join('')
     + '</div>'
     + '</div>';
@@ -7215,7 +7308,13 @@ async function enterApp(){
   majBoutonSync(serveurPret() ? 'pret' : '', t('Synchroniser'));
   lancerSyncPeriodique();
   /* Un menage discret, sans faire attendre l'ouverture. */
-  if(serveurPret()) serveurNettoyer().catch(function(){});
+  if(serveurPret()){
+    serveurNettoyer().catch(function(){});
+    /* Les inscriptions jamais confirmees, au cas ou l'horloge interne
+       du serveur ne serait pas disponible. */
+    serveurAppel('/rest/v1/rpc/effacer_inscriptions_abandonnees',
+      { method: 'POST', body: {} }).catch(function(){});
+  }
 }
 
 function showSplash(){
@@ -10295,6 +10394,13 @@ function renderSidebar(){
   document.getElementById('exportBtn').onclick = exportBackup;
   document.getElementById('importInput').onchange = (e)=>{ if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; };
   document.getElementById('logoutBtn').onclick = ()=>{
+    /* La fiche ouverte est refermee AVANT de sortir. Sans cela l'ecran
+       du vehicule restait dessine derriere, et reapparaissait par
+       transparence pendant que la page se figeait. */
+    currentId = null;
+    vueCourante = 'tableau';
+    const main = document.getElementById('main');
+    if(main) main.innerHTML = '';
     document.getElementById('app').style.display = 'none';
     authEl().style.display = 'flex';
     showLoginScreen();
