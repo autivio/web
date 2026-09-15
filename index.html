@@ -5891,7 +5891,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.20';
+const VERSION = '2.21';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7202,6 +7202,13 @@ function showLoginScreen(){
     if(barre) barre.classList.remove('ouvert');
     const voile = document.getElementById('voileMenu');
     if(voile) voile.classList.remove('ouvert');
+    /* Cette classe masque les boutons flottants du telephone —
+       « ☰ » et « + Nouveau ». Je la laissais posee : au retour,
+       « Nouveau véhicule » avait disparu, et lui seul.
+
+       Les trois vont ensemble ; en retirer deux sur trois laissait
+       l'ecran a moitie dans l'etat precedent. */
+    document.body.classList.remove('menu-ouvert');
   }catch(e){}
 
   authEl().style.display = 'flex';
@@ -7342,6 +7349,12 @@ async function enterApp(){
   figerEcranConnexion(false);
   const appOuvert = document.getElementById('app');
   if(appOuvert) appOuvert.classList.remove('app-ferme');
+  // Securite : on entre toujours avec le menu ferme.
+  document.body.classList.remove('menu-ouvert');
+  const barreEntree = document.getElementById('sidebar');
+  if(barreEntree) barreEntree.classList.remove('ouvert');
+  const voileEntree = document.getElementById('voileMenu');
+  if(voileEntree) voileEntree.classList.remove('ouvert');
   /* Un compte professionnel non valide ne va pas plus loin : ni fiches
      chargees, ni synchronisation. Le serveur les lui refuserait de
      toute facon, autant le dire clairement. */
