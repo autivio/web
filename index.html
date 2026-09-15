@@ -1591,6 +1591,14 @@
   .de-choix.actif{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);}
   .de-choix .mono{font-weight:600;color:var(--ink);}
 
+
+  /* iPhone zoome tout seul sur un champ ecrit en moins de 16 px, et
+     ne dezoome pas apres : l'ecran restait agrandi apres la connexion,
+     bouton ☰ hors de l'ecran. Sur ecran tactile, les champs passent
+     donc a 16 px. */
+  @media (pointer:coarse){
+    input,select,textarea{font-size:16px !important;}
+  }
 </style>
 </head>
 <body>
@@ -7344,11 +7352,27 @@ function showLoginScreen(){
   document.getElementById('li_user').focus();
 }
 
+/* Si l'iPhone a deja zoome pendant la saisie, on remet l'echelle a 1
+   en entrant : on bloque un instant le zoom, puis on le rend. */
+function dezoomer(){
+  try{
+    if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    const vp = document.querySelector('meta[name="viewport"]');
+    if(vp){
+      const origine = vp.getAttribute('content');
+      vp.setAttribute('content', origine + ', maximum-scale=1');
+      setTimeout(function(){ vp.setAttribute('content', origine); }, 400);
+    }
+    window.scrollTo(0, 0);
+  }catch(e){}
+}
+
 async function enterApp(){
   document.body.classList.remove('avant-connexion');
   figerEcranConnexion(false);
   const appOuvert = document.getElementById('app');
   if(appOuvert) appOuvert.classList.remove('app-ferme');
+  dezoomer();
   // Securite : on entre toujours avec le menu ferme.
   document.body.classList.remove('menu-ouvert');
   const barreEntree = document.getElementById('sidebar');
