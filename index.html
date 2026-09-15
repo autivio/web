@@ -1600,11 +1600,11 @@
     input,select,textarea{font-size:16px !important;}
   }
 
-  /* Barre d'etat de l'iPhone aux couleurs du logiciel : la page passe
-     sous l'heure et la batterie, et ce bandeau prend la couleur du
-     theme (bleu par defaut). */
+  /* Barre d'etat de l'iPhone : meme blanc bleute que le fond du
+     logiciel, pour qu'elle se fonde dans la page. Choix assume :
+     l'iPhone y ecrit l'heure en blanc, elle n'y est donc plus lisible. */
   body::before{content:"";position:fixed;top:0;left:0;right:0;
-    height:env(safe-area-inset-top, 0px);background:var(--brand, #14417f);
+    height:env(safe-area-inset-top, 0px);background:var(--paper, #eef1f8);
     z-index:10000;pointer-events:none;}
   body.avant-connexion #authScreen{padding-top:calc(env(safe-area-inset-top, 0px) + 16px);}
   @media print{ body::before{display:none !important;} }
