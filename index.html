@@ -5891,7 +5891,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.19';
+const VERSION = '2.20';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6106,7 +6106,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '13/09/2026';
+const VERSION_DATE = '15/09/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -6448,10 +6448,15 @@ function nomAffiche(){
    logiciel. */
 /* Ce nom d'utilisateur est-il libre ? */
 async function serveurNomLibre(nom){
-  const r = await serveurAppel('/rest/v1/rpc/utilisateur_libre', {
-    method: 'POST', sansJeton: true, body: { nom: nom }
-  });
-  return r;
+  try{
+    return await serveurAppel('/rest/v1/rpc/utilisateur_libre', {
+      method: 'POST', sansJeton: true, body: { p_nom: nom }
+    });
+  }catch(e){
+    return await serveurAppel('/rest/v1/rpc/utilisateur_libre', {
+      method: 'POST', sansJeton: true, body: { nom: nom }
+    });
+  }
 }
 
 /* L'adresse derriere un nom d'utilisateur. Le serveur ne sait
@@ -6468,9 +6473,22 @@ let dernierEchecNom = '';
 async function serveurAdresseDe(nom){
   dernierEchecNom = '';
   try{
-    const r = await serveurAppel('/rest/v1/rpc/adresse_de', {
-      method: 'POST', sansJeton: true, body: { nom: nom }
-    });
+    /* Le parametre s'appelle « p_nom » : « nom » entrait en conflit
+       avec la COLONNE « nom » de la table, et la fonction comparait le
+       nom d'utilisateur au nom complet — ce qui ne correspond jamais.
+
+       L'ancien nom est essaye en second, pour les serveurs qui n'ont
+       pas encore le SQL corrige. */
+    let r = null;
+    try{
+      r = await serveurAppel('/rest/v1/rpc/adresse_de', {
+        method: 'POST', sansJeton: true, body: { p_nom: nom }
+      });
+    }catch(e1){
+      r = await serveurAppel('/rest/v1/rpc/adresse_de', {
+        method: 'POST', sansJeton: true, body: { nom: nom }
+      });
+    }
     /* PostgREST rend la valeur seule, mais selon les versions elle
        arrive parfois enveloppee. On accepte les deux formes. */
     if(typeof r === 'string' && r) return r;
