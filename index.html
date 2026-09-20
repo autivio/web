@@ -2336,7 +2336,7 @@ const DICO = {
     "Connexion impossible.": "Connessione impossibile.",
     "Adresse e-mail invalide.": "Indirizzo e-mail non valido.",
     "Le mot de passe doit faire au moins 8 caractères.": "La password deve contenere almeno 8 caratteri.",
-    "Ceci est un mail automatique. Merci de ne pas répondre.": "Questa è una mail automatica. Si prega di non rispondere.",
+    "Ceci est un message automatique, merci de ne pas y répondre.": "Questa è una mail automatica. Si prega di non rispondere.",
     "Sélectionnez l’énergie": "Selezionate l’energia",
     "Indicatif du pays": "Prefisso del paese",
     "Sans indicatif": "Senza prefisso",
@@ -3089,7 +3089,7 @@ const DICO = {
     "Connexion impossible.": "Verbindung net méiglech.",
     "Adresse e-mail invalide.": "Ongülteg E-Mail-Adress.",
     "Le mot de passe doit faire au moins 8 caractères.": "D’Passwuert muss mindestens 8 Zeeche hunn.",
-    "Ceci est un mail automatique. Merci de ne pas répondre.": "Dëst ass eng automatesch Mail. Merci fir net ze äntweren.",
+    "Ceci est un message automatique, merci de ne pas y répondre.": "Dëst ass eng automatesch Mail. Merci fir net ze äntweren.",
     "Sélectionnez l’énergie": "Wielt d’Energie",
     "Indicatif du pays": "Landesvirwahl",
     "Sans indicatif": "Ouni Virwahl",
@@ -3841,7 +3841,7 @@ const DICO = {
     "Connexion impossible.": "Connection failed.",
     "Adresse e-mail invalide.": "Invalid e-mail address.",
     "Le mot de passe doit faire au moins 8 caractères.": "The password must be at least 8 characters long.",
-    "Ceci est un mail automatique. Merci de ne pas répondre.": "This is an automatic e-mail. Please do not reply.",
+    "Ceci est un message automatique, merci de ne pas y répondre.": "This is an automatic e-mail. Please do not reply.",
     "Sélectionnez l’énergie": "Select the fuel type",
     "Indicatif du pays": "Country dialling code",
     "Sans indicatif": "No dialling code",
@@ -4596,7 +4596,7 @@ const DICO = {
     "Connexion impossible.": "Verbindung fehlgeschlagen.",
     "Adresse e-mail invalide.": "Ungültige E-Mail-Adresse.",
     "Le mot de passe doit faire au moins 8 caractères.": "Das Passwort muss mindestens 8 Zeichen lang sein.",
-    "Ceci est un mail automatique. Merci de ne pas répondre.": "Dies ist eine automatische E-Mail. Bitte nicht antworten.",
+    "Ceci est un message automatique, merci de ne pas y répondre.": "Dies ist eine automatische E-Mail. Bitte nicht antworten.",
     "Sélectionnez l’énergie": "Energie auswählen",
     "Indicatif du pays": "Ländervorwahl",
     "Sans indicatif": "Ohne Vorwahl",
@@ -5363,7 +5363,7 @@ const DICO = {
     "Connexion impossible.": "Verbinding mislukt.",
     "Adresse e-mail invalide.": "Ongeldig e-mailadres.",
     "Le mot de passe doit faire au moins 8 caractères.": "Het wachtwoord moet minstens 8 tekens lang zijn.",
-    "Ceci est un mail automatique. Merci de ne pas répondre.": "Dit is een automatische e-mail. Gelieve niet te antwoorden.",
+    "Ceci est un message automatique, merci de ne pas y répondre.": "Dit is een automatische e-mail. Gelieve niet te antwoorden.",
     "Sélectionnez l’énergie": "Kies de energie",
     "Indicatif du pays": "Landnummer",
     "Sans indicatif": "Zonder landnummer",
@@ -6800,8 +6800,8 @@ async function prevenirAdministrateur(profil, adresse){
         : '<p style="font-size:14px;line-height:1.6;color:#3d4a5c;margin:0">'
           + 'Ce compte est actif : un particulier n\'a pas besoin de validation.</p>')
     + '<div style="border-top:1px solid #e4e9f0;margin-top:26px;padding-top:14px;'
-    +   'font-size:11.5px;color:#93a0b3">Ceci est un mail automatique. '
-    +   'Merci de ne pas repondre.</div></div>';
+    +   'font-size:11.5px;color:#93a0b3">Ceci est un message automatique, '
+    +   'merci de ne pas y repondre.</div></div>';
 
   const texte = (pro ? 'Un compte professionnel attend votre validation'
                      : 'Nouveau compte particulier')
@@ -9513,6 +9513,11 @@ function demanderTexte(options){
    elle ne s'affiche pas a la toute premiere installation.
    ===================================================================== */
 const CLE_VERSION_VUE = LS_BASE + 'version-vue';
+/* Le numero de la version dont la note a REELLEMENT ete montree. Il est
+   distinct du precedent : la 2.23 retenait le numero des sa premiere
+   ouverture, meme quand elle n'affichait rien, et la note se croyait
+   alors deja lue. */
+const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 
 const NOTES_VERSION = {
   '2.23': [
@@ -9540,34 +9545,47 @@ function noterVersionVue(){
 
 /* Ouvre la note. Avec force=true, elle s'affiche meme si elle a deja
    ete vue : c'est ce que fait le bouton des reglages. */
-/* Le logiciel a-t-il deja servi sur ce poste ? On regarde s'il a laisse
-   la moindre trace : fiches, session, apparence, langue. */
+/* Le logiciel a-t-il deja servi sur ce poste ? On cherche les traces
+   d'un vrai usage — des fiches, une fiche garage, une apparence
+   choisie — et non la simple presence d'une session ouverte : sur une
+   installation toute neuve, il n'y a rien a annoncer. */
 function logicielDejaUtilise(){
   try{
     for(let i = 0; i < localStorage.length; i++){
       const cle = localStorage.key(i) || '';
-      if(cle === CLE_VERSION_VUE) continue;
-      if(cle.indexOf('autivio') === 0 || cle.indexOf('dossierVehicules') === 0) return true;
+      if(cle.indexOf(STORAGE_INDEX_KEY) >= 0) return true;
+      if(cle.indexOf(DEALER_KEY) >= 0) return true;
+      if(cle.indexOf('vehicle-') >= 0) return true;
+      if(cle === 'autivio_theme') return true;
     }
   }catch(e){}
   return false;
+}
+
+function noteDejaMontree(){
+  try{ return localStorage.getItem(CLE_NOTE_VUE) || ''; }catch(e){ return ''; }
+}
+
+function noterNoteMontree(){
+  try{ localStorage.setItem(CLE_NOTE_VUE, VERSION); }catch(e){}
 }
 
 function afficherNoteMiseAJour(force){
   const lignes = NOTES_VERSION[VERSION];
   const deja = versionDejaVue();
   if(!force){
-    if(deja === VERSION) return;      // note deja lue sur ce poste
+    // la note de cette version a deja ete montree : on n'y revient pas
+    if(noteDejaMontree() === VERSION) return;
     noterVersionVue();
-    /* Aucun numero retenu : ou bien c'est une premiere installation —
-       rien a annoncer — ou bien le logiciel etait deja la mais ne
-       retenait pas encore le numero (versions anterieures a la 2.23).
-       Dans ce second cas, la presence de donnees le prouve, et la note
-       doit s'afficher. */
-    if(!deja && !logicielDejaUtilise()) return;
+    /* Sur une installation toute neuve, il n'y a rien a annoncer.
+       Partout ailleurs — mise a jour depuis une version precedente, ou
+       depuis une 2.23 qui retenait le numero sans rien montrer — la
+       note doit s'afficher une fois. */
+    if(!logicielDejaUtilise()) return;
   }
   if(!lignes || !lignes.length) return;
   noterVersionVue();
+  noterNoteMontree();
 
   document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
   const fond = document.createElement('div');
@@ -10307,7 +10325,7 @@ function corpsDecision(nom, valide, motif){
         : '')
     + '<div style="border-top:1px solid #e4e9f0;margin-top:26px;padding-top:14px;'
     +   'font-size:11.5px;color:#93a0b3">'
-    +   esc(t('Ceci est un mail automatique. Merci de ne pas répondre.')) + '</div>'
+    +   esc(t('Ceci est un message automatique, merci de ne pas y répondre.')) + '</div>'
     + '</div>';
 }
 
@@ -10323,7 +10341,7 @@ async function prevenirDecision(compte, valide, motif){
   const texte = (valide ? t('Votre compte est activé')
                         : t('Votre demande n’a pas été acceptée'))
     + '\n\n' + (motif && !valide ? t('Motif') + ' : ' + motif + '\n\n' : '')
-    + t('Ceci est un mail automatique. Merci de ne pas répondre.');
+    + t('Ceci est un message automatique, merci de ne pas y répondre.');
   try{
     return await smtpExpedier(compte.email, sujet, texte, html, [], '');
   }catch(e){
@@ -22013,7 +22031,7 @@ function poursuivreEnvoi(v, d, f, veh, dest){
        faux. */
     repondrePossible
       ? tr('Pour toute question, vous pouvez répondre à ce message.')
-      : tr('Ceci est un mail automatique. Merci de ne pas répondre.'),
+      : tr('Ceci est un message automatique, merci de ne pas y répondre.'),
     tr('Cordialement,'),
     (d && d.representant) || (d && d.raisonSociale) || ''
   ].filter(Boolean);
