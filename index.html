@@ -2158,6 +2158,7 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Pour toute question, vous pouvez répondre à ce message.": "Per qualsiasi domanda, può rispondere a questo messaggio.",
     "— sans plaque —": "— senza targa —",
     "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "L’accesso con nome utente non è attivato sul server.",
     "Patientez une minute avant de redemander un code.": "Attendete un minuto prima di richiedere un codice.",
@@ -2910,6 +2911,7 @@ const DICO = {
   },
 
   lb: {
+    "Pour toute question, vous pouvez répondre à ce message.": "Bei Froen kënnt Dir einfach op dës Noriicht äntweren.",
     "— sans plaque —": "— ouni Nummerplack —",
     "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "D’Umeldung mam Benotzernumm ass um Server net aktivéiert.",
     "Patientez une minute avant de redemander un code.": "Waart eng Minutt ier Dir en neie Code ufrot.",
@@ -3661,6 +3663,7 @@ const DICO = {
   },
 
   en: {
+    "Pour toute question, vous pouvez répondre à ce message.": "If you have any questions, you can simply reply to this message.",
     "— sans plaque —": "— no plate —",
     "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Signing in with a username is not enabled on the server.",
     "Patientez une minute avant de redemander un code.": "Please wait a minute before requesting another code.",
@@ -4411,6 +4414,7 @@ const DICO = {
   },
 
   de: {
+    "Pour toute question, vous pouvez répondre à ce message.": "Bei Fragen können Sie einfach auf diese Nachricht antworten.",
     "— sans plaque —": "— ohne Kennzeichen —",
     "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Die Anmeldung mit Benutzername ist auf dem Server nicht aktiviert.",
     "Patientez une minute avant de redemander un code.": "Bitte warten Sie eine Minute, bevor Sie einen neuen Code anfordern.",
@@ -5177,6 +5181,7 @@ const DICO = {
   },
 
   nl: {
+    "Pour toute question, vous pouvez répondre à ce message.": "Hebt u vragen, dan kunt u gewoon op dit bericht antwoorden.",
     "— sans plaque —": "— zonder kenteken —",
     "La connexion par nom d’utilisateur n’est pas activée sur le serveur.": "Aanmelden met een gebruikersnaam is niet ingeschakeld op de server.",
     "Patientez une minute avant de redemander un code.": "Wacht een minuut voordat u een nieuwe code aanvraagt.",
@@ -9513,6 +9518,7 @@ const NOTES_VERSION = {
   '2.23': [
     "Sur les Cerfa, les signatures et les cachets se posent maintenant par-dessus l'intitulé du cadre (« Signature du vendeur », « Cachet et signature de l'acquéreur »…), comme sur le papier. Sur les contrats, dont l'intitulé est écrit au-dessus du cadre, ils restent à l'intérieur.",
     "L'aperçu à l'écran montre les signatures et les cachets exactement là où ils seront sur le document imprimé.",
+    "L'e-mail qui accompagne un document a été retravaillé : il appelle le client par son nom, porte les coordonnées du garage en signature, et invite à répondre puisque la réponse revient au garage.",
     "Une signature posée sans cachet occupe tout le cadre et tombe au milieu ; posés ensemble, la signature et le cachet gardent chacun leur moitié.",
     "Les exemples de Cerfa pré-remplis montrent désormais le cachet du garage et son numéro SIREN.",
     "Sur téléphone, l'écran ne zoome plus tout seul à la connexion, et la barre du haut prend les couleurs de l'écran affiché.",
@@ -9534,13 +9540,31 @@ function noterVersionVue(){
 
 /* Ouvre la note. Avec force=true, elle s'affiche meme si elle a deja
    ete vue : c'est ce que fait le bouton des reglages. */
+/* Le logiciel a-t-il deja servi sur ce poste ? On regarde s'il a laisse
+   la moindre trace : fiches, session, apparence, langue. */
+function logicielDejaUtilise(){
+  try{
+    for(let i = 0; i < localStorage.length; i++){
+      const cle = localStorage.key(i) || '';
+      if(cle === CLE_VERSION_VUE) continue;
+      if(cle.indexOf('autivio') === 0 || cle.indexOf('dossierVehicules') === 0) return true;
+    }
+  }catch(e){}
+  return false;
+}
+
 function afficherNoteMiseAJour(force){
   const lignes = NOTES_VERSION[VERSION];
   const deja = versionDejaVue();
   if(!force){
     if(deja === VERSION) return;      // note deja lue sur ce poste
     noterVersionVue();
-    if(!deja) return;                 // premiere installation : rien a annoncer
+    /* Aucun numero retenu : ou bien c'est une premiere installation —
+       rien a annoncer — ou bien le logiciel etait deja la mais ne
+       retenait pas encore le numero (versions anterieures a la 2.23).
+       Dans ce second cas, la presence de donnees le prouve, et la note
+       doit s'afficher. */
+    if(!deja && !logicielDejaUtilise()) return;
   }
   if(!lignes || !lignes.length) return;
   noterVersionVue();
@@ -21925,6 +21949,36 @@ function traduire(cle, lg){
   return (d && d[cle]) ? d[cle] : cle;
 }
 
+/* Le nom de la personne a qui le document est destine, selon le
+   document ouvert. Vide si le document ne le porte pas : le message
+   dit alors simplement « Bonjour, ». */
+function nomDestinataire(v, f){
+  try{
+    if(currentDoc === 'facture') return ((f && f.clientNom) || '').trim();
+    if(currentDoc === 'contrat'){
+      const c = (v && v.contrat) || {};
+      return [c.aNom, c.aPrenom].filter(Boolean).join(' ').trim();
+    }
+    if(currentDoc === 'cpro'){
+      const c = (v && v.contratPro) || {};
+      return (c.aRaison || c.aNom || '').trim();
+    }
+  }catch(e){}
+  return '';
+}
+
+/* Les coordonnees du garage, sous la signature. Elles figuraient dans
+   la version HTML du message mais pas dans la version texte : celui qui
+   lisait le message en texte simple ne voyait ni telephone ni adresse. */
+function piedMessage(d){
+  return [ (d && d.raisonSociale) || '',
+           [(d && d.adresse) || '',
+            (((d && d.cp) || '') + ' ' + ((d && d.ville) || '')).trim()]
+             .filter(Boolean).join(', '),
+           [(d && d.tel) || '', (d && d.email) || ''].filter(Boolean).join(' — ')
+         ].filter(Boolean).join('\n');
+}
+
 function poursuivreEnvoi(v, d, f, veh, dest){
   memoriserMail(dest);
 
@@ -21944,22 +21998,32 @@ function poursuivreEnvoi(v, d, f, veh, dest){
      restait en francais dans un message allemand. */
   const nomDoc = nomDocTraduit(lg) || doc;
   const objet = nomDoc + num + (auto ? ' — ' + auto : '') + (plaque ? ' (' + plaque + ')' : '');
+  /* Le message s'adresse a quelqu'un : on l'appelle par son nom quand
+     le document le porte. */
+  const qui = nomDestinataire(v, f);
+  const repondrePossible = !!(d && d.email);
+
   const lignes = [
-    tr('Bonjour,'),
+    tr('Bonjour') + (qui ? ' ' + qui : '') + ',',
     tr('Veuillez trouver ci-joint le document suivant :') + ' ' + nomDoc + num + '.',
-    auto ? tr('Véhicule') + ' : ' + auto + (plaque ? ' — ' + plaque : '') : '',
+    auto ? tr('Véhicule') + (lg === 'fr' ? ' : ' : ': ') + auto
+           + (plaque ? ' — ' + plaque : '') : '',
+    /* Repondre au message revient au garage : le dire est plus utile
+       que l'ancien « mail automatique, ne pas repondre », qui etait
+       faux. */
+    repondrePossible
+      ? tr('Pour toute question, vous pouvez répondre à ce message.')
+      : tr('Ceci est un mail automatique. Merci de ne pas répondre.'),
     tr('Cordialement,'),
-    '—',
-    tr('Ceci est un mail automatique. Merci de ne pas répondre.')
+    (d && d.representant) || (d && d.raisonSociale) || ''
   ].filter(Boolean);
 
   if(smtpDispo()){
     envoyerParSmtp(dest, objet, lignes, v, d);
     return;
   }
-  const corps = lignes.join('\n\n') + '\n'
-    + [ (d && d.raisonSociale) || '', (d && d.tel) || '', (d && d.email) || '' ]
-        .filter(Boolean).join('\n');
+  const pied = piedMessage(d);
+  const corps = lignes.join('\n\n') + (pied ? '\n\n—\n' + pied : '');
   // Un lien mailto ne peut pas porter de piece jointe : aucun navigateur
   // ne l'autorise. Le partage du systeme, lui, sait le faire — c'est le
   // chemin de l'iPhone. Le destinataire se tape dans l'application Mail,
@@ -22016,7 +22080,8 @@ function corpsHtmlMessage(lignes, d){
 }
 
 function envoyerParSmtp(dest, objet, lignes, v, d){
-  const corps = lignes.join('\n');
+  const pied = piedMessage(d);
+  const corps = lignes.join('\n\n') + (pied ? '\n\n—\n' + pied : '');
   const depart = Date.now();
   bandeau(t('Envoi en cours…'), 'attente');
   smtpAssurerDefaut()
