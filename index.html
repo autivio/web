@@ -9511,7 +9511,8 @@ const CLE_VERSION_VUE = LS_BASE + 'version-vue';
 
 const NOTES_VERSION = {
   '2.23': [
-    "Les signatures et les cachets se posent maintenant par-dessus l'intitulé du cadre (« Signature du vendeur », « Cachet et signature de l'acquéreur »…), comme sur le papier.",
+    "Sur les Cerfa, les signatures et les cachets se posent maintenant par-dessus l'intitulé du cadre (« Signature du vendeur », « Cachet et signature de l'acquéreur »…), comme sur le papier. Sur les contrats, dont l'intitulé est écrit au-dessus du cadre, ils restent à l'intérieur.",
+    "L'aperçu à l'écran montre les signatures et les cachets exactement là où ils seront sur le document imprimé.",
     "Une signature posée sans cachet occupe tout le cadre et tombe au milieu ; posés ensemble, la signature et le cachet gardent chacun leur moitié.",
     "Les exemples de Cerfa pré-remplis montrent désormais le cachet du garage et son numéro SIREN.",
     "Sur téléphone, l'écran ne zoome plus tout seul à la connexion, et la barre du haut prend les couleurs de l'écran affiché.",
@@ -12623,10 +12624,8 @@ function apercu13751(v){
   for(const k in D13751_SIGN){
     const img = (k === 'acq') ? val.signs.acq : val.signs.vd;
     if(!img) continue;
-    const z = D13751_SIGN[k];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('achat_' + k, v, D13751_SIGN[k]);
+    els += pieceApercu(img, z);
   }
   for(const k in D13751_QUALITE){
     const t = val.lines[k === 'acq' ? 'qualite' : 'v_qualite'];
@@ -13629,10 +13628,8 @@ function apercu13750(v){
   for(const k in D13750_SIGN){
     const img = val.signs[k];
     if(!img) continue;
-    const z = D13750_SIGN[k];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('immat_' + k, v, D13750_SIGN[k]);
+    els += pieceApercu(img, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['immat_lou', 'immat_loc']);
@@ -14281,10 +14278,8 @@ function apercu13749(v){
   for(const k in D13749_SIGN){
     const img = val.signs[k];
     if(!img) continue;
-    const z = D13749_SIGN[k];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('neuf_' + k, v, D13749_SIGN[k]);
+    els += pieceApercu(img, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['neuf_vente', 'neuf_lou', 'neuf_loc']);
@@ -15229,10 +15224,8 @@ function apercu13757(v){
          + (b.cy*ECH).toFixed(1) + 'px;font-size:' + ((b.r||2.6)*2.6*ECH/1.4).toFixed(1) + 'px">✕</span>';
   }
   if(val.sign){
-    const z = D13757_SIGN.sign;
-    els += '<img class="ap-sign" src="' + val.sign + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('mandat_sign', v, D13757_SIGN.sign);
+    els += pieceApercu(val.sign, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['mandat_sign']);
@@ -15775,10 +15768,8 @@ function apercuWGarage(v){
     });
   }
   if(val.sign){
-    const z = D13752_SIGN.sign;
-    els += '<img class="ap-sign" src="' + val.sign + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('wgarage_sign', v, D13752_SIGN.sign);
+    els += pieceApercu(val.sign, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['wgarage_sign']);
@@ -16335,10 +16326,8 @@ function apercu13753(v){
     });
   }
   if(val.sign){
-    const z = D13753_SIGN.sign;
-    els += '<img class="ap-sign" src="' + val.sign + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('perte_sign', v, D13753_SIGN.sign);
+    els += pieceApercu(val.sign, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['perte_sign']);
@@ -16885,10 +16874,8 @@ function apercu14365(v){
   for(const k in D14365_SIGN){
     const img = val.signs[k];
     if(!img) continue;
-    const z = D14365_SIGN[k];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('dst_' + k, v, D14365_SIGN[k]);
+    els += pieceApercu(img, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['dst_vhu', 'dst_ced', 'dst_acq']);
@@ -17388,10 +17375,8 @@ function apercu13756(v){
          + (b.cy*ECH).toFixed(1) + 'px;font-size:' + ((b.r||4.6)*2.6*ECH/1.4).toFixed(1) + 'px">✕</span>';
   }
   if(val.sign){
-    const z = D13756_SIGN.sig;
-    els += '<img class="ap-sign" src="' + val.sign + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('ret_sig', v, D13756_SIGN.sig);
+    els += pieceApercu(val.sign, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['ret_sig']);
@@ -17866,10 +17851,8 @@ function apercu14366(v){
   for(const k in D14366_SIGN){
     const img = val.signs[k];
     if(!img) continue;
-    const z = D14366_SIGN[k];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu(k === 'vhu' ? 'int_vhu' : 'int_sig', v, D14366_SIGN[k]);
+    els += pieceApercu(img, z);
   }
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['int_vhu', 'int_sig']);
@@ -18369,8 +18352,8 @@ const CONTRAT_GEO = {
     /* Ce contrat ne prevoit pas de cadre mais une LIGNE de
        signature : on signe au-dessus d'elle. Les deux colonnes
        sont a la meme hauteur, contrairement au contrat pro. */
-    signVendeur:  { x: 56.2, top: 484.3, w: 230.4, h: 65.2, ancre: 491 },
-    signAcheteur: { x: 307.4, top: 484.3, w: 230.5, h: 65.2, ancre: 491 }
+    signVendeur:  { x: 56.2, top: 500.8, w: 230.4, h: 48.7 },
+    signAcheteur: { x: 307.4, top: 500.8, w: 230.5, h: 48.7 }
 
   },
   nl: {
@@ -18415,8 +18398,8 @@ const CONTRAT_GEO = {
     /* Ce contrat ne prevoit pas de cadre mais une LIGNE de
        signature : on signe au-dessus d'elle. Les deux colonnes
        sont a la meme hauteur, contrairement au contrat pro. */
-    signVendeur:  { x: 56.2, top: 484.3, w: 230.4, h: 65.2, ancre: 491 },
-    signAcheteur: { x: 307.4, top: 484.3, w: 230.5, h: 65.2, ancre: 491 }
+    signVendeur:  { x: 56.2, top: 500.8, w: 230.4, h: 48.7 },
+    signAcheteur: { x: 307.4, top: 500.8, w: 230.5, h: 48.7 }
 
   },
   de: {
@@ -18461,8 +18444,8 @@ const CONTRAT_GEO = {
     /* Ce contrat ne prevoit pas de cadre mais une LIGNE de
        signature : on signe au-dessus d'elle. Les deux colonnes
        sont a la meme hauteur, contrairement au contrat pro. */
-    signVendeur:  { x: 56.2, top: 484.3, w: 230.4, h: 65.2, ancre: 491 },
-    signAcheteur: { x: 307.4, top: 484.3, w: 230.5, h: 65.2, ancre: 491 }
+    signVendeur:  { x: 56.2, top: 500.8, w: 230.4, h: 48.7 },
+    signAcheteur: { x: 307.4, top: 500.8, w: 230.5, h: 48.7 }
 
   },
   it: {
@@ -18507,8 +18490,8 @@ const CONTRAT_GEO = {
     /* Ce contrat ne prevoit pas de cadre mais une LIGNE de
        signature : on signe au-dessus d'elle. Les deux colonnes
        sont a la meme hauteur, contrairement au contrat pro. */
-    signVendeur:  { x: 56.2, top: 484.3, w: 230.4, h: 65.2, ancre: 491 },
-    signAcheteur: { x: 307.4, top: 484.3, w: 230.5, h: 65.2, ancre: 491 }
+    signVendeur:  { x: 56.2, top: 500.8, w: 230.4, h: 48.7 },
+    signAcheteur: { x: 307.4, top: 500.8, w: 230.5, h: 48.7 }
 
   },
   lb: {
@@ -18553,8 +18536,8 @@ const CONTRAT_GEO = {
     /* Ce contrat ne prevoit pas de cadre mais une LIGNE de
        signature : on signe au-dessus d'elle. Les deux colonnes
        sont a la meme hauteur, contrairement au contrat pro. */
-    signVendeur:  { x: 56.2, top: 513.1, w: 230.4, h: 65.2, ancre: 520 },
-    signAcheteur: { x: 307.4, top: 513.1, w: 230.5, h: 65.2, ancre: 520 }
+    signVendeur:  { x: 56.2, top: 529.6, w: 230.4, h: 48.7 },
+    signAcheteur: { x: 307.4, top: 529.6, w: 230.5, h: 48.7 }
 
   }
 };
@@ -18606,8 +18589,8 @@ const CPRO_GEO = {
     /* Les deux cadres sont maintenant au meme niveau : le modele a
        ete corrige, le cadre du vendeur descendu jusqu'a celui de
        l'acheteur. Les deux signatures s'alignent donc aussi. */
-    signVendeur:  { x: 59.1, top: 588.6, w: 225.6, h: 80.5, ancre: 604 },
-    signAcheteur: { x: 309.3, top: 588.6, w: 225.7, h: 80.5, ancre: 604 }
+    signVendeur:  { x: 59.1, top: 625.1, w: 225.6, h: 44.0 },
+    signAcheteur: { x: 309.3, top: 625.1, w: 225.7, h: 44.0 }
 
   },
   nl: {
@@ -18653,8 +18636,8 @@ const CPRO_GEO = {
     /* Les deux cadres sont maintenant au meme niveau : le modele a
        ete corrige, le cadre du vendeur descendu jusqu'a celui de
        l'acheteur. Les deux signatures s'alignent donc aussi. */
-    signVendeur:  { x: 59.1, top: 621.8, w: 225.6, h: 80.9, ancre: 637 },
-    signAcheteur: { x: 309.3, top: 621.8, w: 225.7, h: 80.9, ancre: 637 }
+    signVendeur:  { x: 59.1, top: 658.7, w: 225.6, h: 44.0 },
+    signAcheteur: { x: 309.3, top: 658.7, w: 225.7, h: 44.0 }
 
   },
   de: {
@@ -18700,8 +18683,8 @@ const CPRO_GEO = {
     /* Les deux cadres sont maintenant au meme niveau : le modele a
        ete corrige, le cadre du vendeur descendu jusqu'a celui de
        l'acheteur. Les deux signatures s'alignent donc aussi. */
-    signVendeur:  { x: 59.1, top: 621.8, w: 225.6, h: 97.2, ancre: 645 },
-    signAcheteur: { x: 309.3, top: 621.8, w: 225.7, h: 97.2, ancre: 645 }
+    signVendeur:  { x: 59.1, top: 675.0, w: 225.6, h: 44.0 },
+    signAcheteur: { x: 309.3, top: 675.0, w: 225.7, h: 44.0 }
 
   },
   it: {
@@ -18747,8 +18730,8 @@ const CPRO_GEO = {
     /* Les deux cadres sont maintenant au meme niveau : le modele a
        ete corrige, le cadre du vendeur descendu jusqu'a celui de
        l'acheteur. Les deux signatures s'alignent donc aussi. */
-    signVendeur:  { x: 59.1, top: 621.8, w: 225.6, h: 80.9, ancre: 637 },
-    signAcheteur: { x: 309.3, top: 621.8, w: 225.7, h: 80.9, ancre: 637 }
+    signVendeur:  { x: 59.1, top: 658.7, w: 225.6, h: 44.0 },
+    signAcheteur: { x: 309.3, top: 658.7, w: 225.7, h: 44.0 }
 
   },
   lb: {
@@ -18794,8 +18777,8 @@ const CPRO_GEO = {
     /* Les deux cadres sont maintenant au meme niveau : le modele a
        ete corrige, le cadre du vendeur descendu jusqu'a celui de
        l'acheteur. Les deux signatures s'alignent donc aussi. */
-    signVendeur:  { x: 59.1, top: 655.1, w: 225.6, h: 80.7, ancre: 670 },
-    signAcheteur: { x: 309.3, top: 655.1, w: 225.7, h: 80.7, ancre: 670 }
+    signVendeur:  { x: 59.1, top: 691.8, w: 225.6, h: 44.0 },
+    signAcheteur: { x: 309.3, top: 691.8, w: 225.7, h: 44.0 }
 
   }
 };
@@ -19212,10 +19195,8 @@ function apercuContrat(v){
   [['signVendeur', G.signVendeur], ['signAcheteur', G.signAcheteur]].forEach(function(p){
     const img = val[p[0]];
     if(!img) return;
-    const z = p[1];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu(p[0] === 'signVendeur' ? 'contrat_vend' : 'contrat_ach', v, p[1]);
+    els += pieceApercu(img, z);
   });
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['contrat_vend', 'contrat_ach']);
@@ -20735,10 +20716,8 @@ function apercuCPro(v){
   [['signVendeur', G.signVendeur], ['signAcheteur', G.signAcheteur]].forEach(function(p){
     const img = val[p[0]];
     if(!img) return;
-    const z = p[1];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu(p[0] === 'signVendeur' ? null : 'cpro_ach', v, p[1]);
+    els += pieceApercu(img, z);
   });
   els += cachetsApercu(v, ['cpro_ach']);
   return '<div class="apercu-zone"><div class="apercu-cadre" style="width:' + APERCU_LARGEUR
@@ -23754,36 +23733,135 @@ const ZONES_CACHET = {
 
 /* Rectangle de chaque zone de cachet, en points PDF. Les generateurs
    utilisent ces memes valeurs : l'apercu ne peut donc pas diverger. */
+/* Une signature ou un cachet dans l'apercu a l'ecran. La piece est
+   placee comme elle le sera dans le PDF : centree dans sa zone, ou
+   posee sur l'intitule quand la zone porte une ancre. Le calcul exact
+   demande la taille reelle de l'image, connue seulement une fois
+   chargee : c'est le role de poserPieceApercu. */
+function pieceApercu(src, z){
+  return '<img class="ap-sign" src="' + src + '" style="left:' + (z.x*ECH).toFixed(1)
+       + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
+       + 'px;height:' + (z.h*ECH).toFixed(1) + 'px"'
+       + (z.ancre !== undefined
+            ? ' data-ancre="' + z.ancre + '" data-zx="' + z.x + '" data-zt="' + z.top
+              + '" data-zw="' + z.w + '" data-zh="' + z.h + '"'
+              + ' onload="poserPieceApercu(this)"'
+            : '')
+       + '>';
+}
+
+function poserPieceApercu(img){
+  if(img.dataset.pose) return;          // une seule fois par image
+  if(!img.naturalWidth || !img.naturalHeight) return;
+  img.dataset.pose = '1';
+  const ancre = Number(img.dataset.ancre), zx = Number(img.dataset.zx),
+        zt = Number(img.dataset.zt), zw = Number(img.dataset.zw),
+        zh = Number(img.dataset.zh);
+  const e = Math.min(zw / img.naturalWidth, zh / img.naturalHeight);
+  const lw = img.naturalWidth * e, lh = img.naturalHeight * e;
+  let milieu = ancre + lh * 0.20;
+  const hautMini = zt - 6, basMaxi = zt + zh + 6;
+  if(milieu - lh/2 < hautMini) milieu = hautMini + lh/2;
+  if(milieu + lh/2 > basMaxi)  milieu = basMaxi - lh/2;
+  img.style.left   = ((zx + (zw - lw)/2) * ECH).toFixed(1) + 'px';
+  img.style.top    = ((milieu - lh/2) * ECH).toFixed(1) + 'px';
+  img.style.width  = (lw * ECH).toFixed(1) + 'px';
+  img.style.height = (lh * ECH).toFixed(1) + 'px';
+}
+
+/* Les deux moities d'un meme cadre : la signature et le cachet. Sert a
+   l'apercu, pour qu'il montre exactement ce que donnera le PDF — une
+   piece seule occupe tout le cadre, les deux se partagent la place. */
+const PAIRES_PIECES = {
+  cession_ap:   { sign: function(){ return CERFA_SIGN.ap; },
+                  img: function(v){ return (v.cession||{}).signAp; } },
+  cession_np:   { sign: function(){ return CERFA_SIGN.np; },
+                  img: function(v){ return (v.cession||{}).signNp; } },
+  achat_acq:    { sign: function(){ return D13751_SIGN.acq; },
+                  img: function(v){ return (v.achat13751||{}).signAcq; } },
+  achat_vd:     { sign: function(){ return D13751_SIGN.vd; },
+                  img: function(v){ return (v.achat13751||{}).signVd; } },
+  immat_lou:    { sign: function(){ return D13750_SIGN.lou; },
+                  img: function(v){ return (v.immat13750||{}).signLou; } },
+  immat_loc:    { sign: function(){ return D13750_SIGN.loc; },
+                  img: function(v){ return (v.immat13750||{}).signLoc; } },
+  neuf_vente:   { sign: function(){ return D13749_SIGN.vente; },
+                  img: function(v){ return (v.neuf13749||{}).signVente; } },
+  neuf_lou:     { sign: function(){ return D13749_SIGN.lou; },
+                  img: function(v){ return (v.neuf13749||{}).signLou; } },
+  neuf_loc:     { sign: function(){ return D13749_SIGN.loc; },
+                  img: function(v){ return (v.neuf13749||{}).signLoc; } },
+  mandat_sign:  { sign: function(){ return D13757_SIGN.sign; },
+                  img: function(v){ return (v.mandat13757||{}).signature; } },
+  wgarage_sign: { sign: function(){ return D13752_SIGN.sign; },
+                  img: function(v){ return (v.wgarage||{}).signature; } },
+  perte_sign:   { sign: function(){ return D13753_SIGN.sign; },
+                  img: function(v){ return (v.perte13753||{}).signature; } },
+  dst_vhu:      { sign: function(){ return D14365_SIGN.vhu; },
+                  img: function(v){ return (v.destruction14365||{}).signVhu; } },
+  dst_ced:      { sign: function(){ return D14365_SIGN.ced; },
+                  img: function(v){ return (v.destruction14365||{}).signCed; } },
+  dst_acq:      { sign: function(){ return D14365_SIGN.acq; },
+                  img: function(v){ return (v.destruction14365||{}).signAcq; } },
+  ret_sig:      { sign: function(){ return D13756_SIGN.sig; },
+                  img: function(v){ return (v.retrait13756||{}).signature; } },
+  int_vhu:      { sign: function(){ return D14366_SIGN.vhu; },
+                  img: function(v){ return (v.intention14366||{}).signVhu; } },
+  int_sig:      { sign: function(){ return D14366_SIGN.int; },
+                  img: function(v){ return (v.intention14366||{}).signInt; } },
+  cpro_ach:     { sign: function(v){ return (CPRO_GEO[cproLangue(v)] || CPRO_GEO.fr).signAcheteur; },
+                  img: function(v){ return (v.contratPro||{}).signAcheteur; } },
+  contrat_vend: { sign: function(v){ return (CONTRAT_GEO[contratLangue(v)] || CONTRAT_GEO.fr).signVendeur; },
+                  img: function(v){ return (v.contrat||{}).signVendeur; } },
+  contrat_ach:  { sign: function(v){ return (CONTRAT_GEO[contratLangue(v)] || CONTRAT_GEO.fr).signAcheteur; },
+                  img: function(v){ return (v.contrat||{}).signAcheteur; } }
+};
+
+/* La zone reellement occupee par une piece dans l'apercu : tout le
+   cadre si elle y est seule, sa moitie si l'autre piece l'accompagne. */
+function zonePieceApercu(cle, v, quoi){
+  const paire = PAIRES_PIECES[cle];
+  if(!paire) return null;
+  const zSign = paire.sign(v), zCachet = rectCachet(cle, v);
+  if(!zSign || !zCachet) return quoi === 'cachet' ? zCachet : zSign;
+  const sign = paire.img(v), cachet = cachetDeLaZone(v, cle);
+  if(sign && cachet) return quoi === 'cachet' ? zCachet : zSign;
+  if(memeCadre(zSign, zCachet)) return zoneReunie(zSign, zCachet);
+  return quoi === 'cachet' ? zCachet : zSign;
+}
+
 function rectCachet(cle, v){
   switch(cle){
     case 'cession_ap':  return CERFA_CACHET.ap;
     case 'cession_np':  return CERFA_CACHET.np;
     case 'achat_acq':   return D13751_CACHET.acq;
     case 'achat_vd':    return D13751_CACHET.vd;
-    case 'immat_lou':   return { x: 230,   top: 736, w: 60, h: 30 };
-    case 'immat_loc':   return { x: 364.5, top: 736, w: 60, h: 30 };
-    case 'neuf_vente':  return { x: D13749_SIGN.vente.x + 128, top: D13749_SIGN.vente.top + 6, w: 100, h: 92 };
-    case 'neuf_lou':    return { x: 230,   top: 748, w: 60, h: 29 };
-    case 'neuf_loc':    return { x: 364.5, top: 748, w: 60, h: 29 };
-    case 'mandat_sign': return { x: 443, top: 700, w: 118, h: 44 };
-    case 'wgarage_sign':return { x: 336, top: 610, w: 104, h: 44 };
+    case 'immat_lou':   return { x: 230,   top: 726, w: 60, h: 40, ancre: 732 };
+    case 'immat_loc':   return { x: 364.5, top: 726, w: 60, h: 40, ancre: 732 };
+    case 'neuf_vente':  return { x: D13749_SIGN.vente.x + 128, top: D13749_SIGN.vente.top + 6, w: 100, h: 92, ancre: 380 };
+    case 'neuf_lou':    return { x: 230,   top: 738, w: 60, h: 39, ancre: 744 };
+    case 'neuf_loc':    return { x: 364.5, top: 738, w: 60, h: 39, ancre: 744 };
+    case 'mandat_sign': return { x: 427, top: 700, w: 118, h: 44 };
+    case 'wgarage_sign':return { x: 452, top: 600, w: 80, h: 53, ancre: 612 };
     case 'perte_sign':  return D13753_CACHET.cachet;
-    case 'dst_vhu':     return { x: 434, top: 282, w: 56, h: 34 };
-    case 'dst_ced':     return { x: 434, top: 472, w: 56, h: 26 };
-    case 'dst_acq':     return { x: 428, top: 716, w: 56, h: 34 };
-    case 'ret_sig':     return { x: 451, top: 648, w: 52, h: 34 };
-    case 'int_vhu':     return { x: 428, top: 446, w: 56, h: 36 };
-    case 'int_sig':     return { x: 462, top: 726, w: 52, h: 34 };
+    case 'dst_vhu':     return { x: 434, top: 261, w: 56, h: 55, ancre: 267 };
+    case 'dst_ced':     return { x: 434, top: 439, w: 56, h: 59, ancre: 454 };
+    case 'dst_acq':     return { x: 428, top: 694, w: 56, h: 56, ancre: 700 };
+    case 'ret_sig':     return { x: 432, top: 614, w: 52, h: 68, ancre: 630 };
+    case 'int_vhu':     return { x: 428, top: 424, w: 56, h: 58, ancre: 430 };
+    case 'int_sig':     return { x: 447, top: 696, w: 52, h: 64, ancre: 704 };
     case 'cpro_ach': {
       const P = CPRO_GEO[cproLangue(v)] || CPRO_GEO.fr;
       const z = P.signAcheteur;
-      return { x: z.x + z.w * 0.55, top: z.top + 4, w: z.w * 0.42, h: z.h - 8 };
+      return { x: z.x + z.w * 0.55, top: z.top + 4, w: z.w * 0.42, h: z.h - 8,
+               ancre: z.ancre };
     }
     case 'contrat_vend':
     case 'contrat_ach': {
       const G = CONTRAT_GEO[contratLangue(v)] || CONTRAT_GEO.fr;
       const z = (cle === 'contrat_vend') ? G.signVendeur : G.signAcheteur;
-      return { x: z.x + z.w * 0.55, top: z.top + 4, w: z.w * 0.42, h: z.h - 8 };
+      return { x: z.x + z.w * 0.55, top: z.top + 4, w: z.w * 0.42, h: z.h - 8,
+               ancre: z.ancre };
     }
   }
   return null;
@@ -23795,13 +23873,18 @@ function cachetsApercu(v, cles){
   cles.forEach(function(cle){
     const img = cachetDeLaZone(v, cle);
     if(!img) return;
-    const z = rectCachet(cle, v);
+    const z = zonePieceApercu(cle, v, 'cachet') || rectCachet(cle, v);
     if(!z) return;
-    out += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    out += pieceApercu(img, z);
   });
   return out;
+}
+
+/* La zone d'une signature dans l'apercu, elle aussi elargie a tout le
+   cadre quand aucun cachet ne l'accompagne. */
+function zoneSignApercu(cle, v, parDefaut){
+  if(!cle) return parDefaut;
+  return zonePieceApercu(cle, v, 'sign') || parDefaut;
 }
 
 /* Le cachet d'une zone : soit une image choisie pour elle, soit celui
@@ -24237,10 +24320,8 @@ function apercuCerfa(v, d){
   for(const cle in CERFA_SIGN){
     const img = (cle === 'ap') ? c.signAp : c.signNp;
     if(!img) continue;
-    const z = CERFA_SIGN[cle];
-    els += '<img class="ap-sign" src="' + img + '" style="left:' + (z.x*ECH).toFixed(1)
-         + 'px;top:' + (z.top*ECH).toFixed(1) + 'px;width:' + (z.w*ECH).toFixed(1)
-         + 'px;height:' + (z.h*ECH).toFixed(1) + 'px">';
+    const z = zoneSignApercu('cession_' + cle, v, CERFA_SIGN[cle]);
+    els += pieceApercu(img, z);
   }
   for(const cle in CERFA_QUALITE){
     const t = (cle === 'ap') ? c.apQualite : c.npQualite;
