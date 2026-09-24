@@ -1672,9 +1672,18 @@
     .fiche-grille > div{grid-column:span 1 !important;}
   }
   #ficheAlerte:empty{display:none;}
-  .fiche-case{display:flex;align-items:flex-start;gap:8px;margin:10px 2px 2px;
+  /* La case et son texte : le texte prend la largeur restante et
+     revient a la ligne. Sans « min-width:0 », il debordait hors de la
+     fenetre et devenait illisible. */
+  .fiche-case{display:flex;align-items:flex-start;gap:8px;margin:12px 2px 2px;
     font-size:13.5px;color:var(--ink,#16233a);cursor:pointer;line-height:1.35;}
-  .fiche-case input{margin-top:2px;}
+  .fiche-case input{margin:2px 0 0;flex:0 0 auto;width:18px;height:18px;}
+  .fiche-case span{flex:1 1 auto;min-width:0;white-space:normal;}
+  /* Suppression de compte : une zone qu'on ne confond avec aucune autre */
+  .danger-titre{color:#b3261e;}
+  .btn-danger{background:#b3261e;color:#fff;border:0;border-radius:9px;
+    padding:10px 16px;font-size:14.5px;font-family:inherit;cursor:pointer;}
+  .btn-danger:hover{background:#8f1d17;}
 </style>
 </head>
 <body>
@@ -1944,20 +1953,15 @@ function ensureCession(v){
   const c = v.cession;
   if(!c.ap) c.ap = blankParty();
   if(!c.np) { c.np = blankParty(); c.np.neLe=''; c.np.neA=''; }
-  // pré-remplissage à la première ouverture uniquement
-  const d = dealer, ap = c.ap;
-  if(!ap.nom && d.raisonSociale) ap.nom = d.raisonSociale;
-  if(!ap.siret && d.siret) ap.siret = d.siret;
-  if(!ap.cp && d.cp) ap.cp = d.cp;
-  if(!ap.commune && d.ville) ap.commune = d.ville;
-  if(!ap.voieNum && !ap.voieNom && d.adresse) Object.assign(ap, splitAddress(d.adresse));
+  /* Aucun report automatique depuis la fiche garage : sur un Cerfa, on
+     n'est pas toujours du meme cote. Les coordonnees se proposent au
+     clic dans le champ (suggestion « Mon garage »). */
   const np = c.np, ve = v.vente;
   if(!np.nom && ve.acheteurNom) np.nom = ve.acheteurNom;
   if(!np.cp && ve.acheteurCp) np.cp = ve.acheteurCp;
   if(!np.commune && ve.acheteurVille) np.commune = ve.acheteurVille;
   if(!np.voieNum && !np.voieNom && ve.acheteurAdresse) Object.assign(np, splitAddress(ve.acheteurAdresse));
   if(!c.date && ve.dateVente) c.date = ve.dateVente;
-  if(!c.apQualite && dealer.signataire) c.apQualite = dealer.signataire;
   if(!c.apFaitLe && c.date) c.apFaitLe = c.date;
   if(!c.npFaitLe && c.date) c.npFaitLe = c.date;
   return c;
@@ -2210,6 +2214,19 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Supprimer mon compte": "Eliminare il mio account",
+    "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Il suo account, le schede e i documenti sono cancellati dal server. È definitivo: nulla si recupera in seguito.",
+    "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Il suo account, le schede e i documenti saranno cancellati dal server. È definitivo. I documenti già scaricati su questo dispositivo restano.",
+    "Confirmer la suppression": "Confermare l’eliminazione",
+    "Écrivez SUPPRIMER pour confirmer.": "Scriva SUPPRIMER per confermare.",
+    "Le mot ne correspond pas : rien n’a été supprimé.": "La parola non corrisponde: non è stato eliminato nulla.",
+    "Une raison ?": "Un motivo?",
+    "Facultatif. Cela nous aide à comprendre ce qui n’allait pas.": "Facoltativo. Ci aiuta a capire cosa non andava.",
+    "Suppression en cours…": "Eliminazione in corso…",
+    "La suppression a échoué. Réessayez, ou écrivez à l’administrateur.": "L’eliminazione non è riuscita. Riprovi o scriva all’amministratore.",
+    "Votre compte a été supprimé. Merci d’avoir utilisé Autivio.": "Il suo account è stato eliminato. Grazie di aver usato Autivio.",
+    "Cette action demande d’être connecté à votre compte.": "Questa azione richiede di essere connessi al proprio account.",
+    "Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.": "Riempiono il blocco « Venditore » delle sue fatture e le sono proposte con un clic nei campi dei moduli e dei contratti.",
     "Préparation du document…": "Preparazione del documento…",
     "Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.": "Impossibile aprire questa immagine. La salvi in JPEG e riprovi.",
     "Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.": "Questo PDF supera 1 MB e non può essere ridotto qui. Rifaccia la scansione in qualità normale, o fotografi il documento: la foto sarà convertita e compressa.",
@@ -3010,6 +3027,19 @@ const DICO = {
   },
 
   lb: {
+    "Supprimer mon compte": "Mäi Kont läschen",
+    "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Äre Kont, Är Fichen an Är Dokumenter ginn um Server geläscht. Dat ass definitiv: duerno kritt een näischt méi zréck.",
+    "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Äre Kont, Är Fichen an Är Dokumenter ginn um Server geläscht. Dat ass definitiv. Dokumenter, déi schonn op dësem Apparat gespäichert sinn, bleiwen.",
+    "Confirmer la suppression": "Läschung bestätegen",
+    "Écrivez SUPPRIMER pour confirmer.": "Schreift SUPPRIMER fir ze bestätegen.",
+    "Le mot ne correspond pas : rien n’a été supprimé.": "D’Wuert stëmmt net: et gouf näischt geläscht.",
+    "Une raison ?": "E Grond?",
+    "Facultatif. Cela nous aide à comprendre ce qui n’allait pas.": "Fakultativ. Dat hëlleft eis ze verstoen, wat net gepasst huet.",
+    "Suppression en cours…": "Gëtt geläscht…",
+    "La suppression a échoué. Réessayez, ou écrivez à l’administrateur.": "D’Läsche ass net gaang. Probéiert nach eng Kéier oder schreift dem Administrateur.",
+    "Votre compte a été supprimé. Merci d’avoir utilisé Autivio.": "Äre Kont gouf geläscht. Merci, datt Dir Autivio benotzt hutt.",
+    "Cette action demande d’être connecté à votre compte.": "Fir dës Aktioun musst Dir an Ärem Kont ugemellt sinn.",
+    "Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.": "Si fëllen de Block „Verkeefer“ vun Äre Rechnungen a ginn Iech mat engem Klick an de Felder vun de Formulairen a Kontrakter proposéiert.",
     "Préparation du document…": "D’Dokument gëtt virbereet…",
     "Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.": "Dëst Bild konnt net opgemaach ginn. Späichert et als JPEG a probéiert nach eng Kéier.",
     "Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.": "Dëse PDF ass méi grouss wéi 1 MB a kann hei net verklengert ginn. Scannt en nei an normaler Qualitéit, oder fotograféiert d’Dokument: d’Foto gëtt ëmgewandelt a kompriméiert.",
@@ -3809,6 +3839,19 @@ const DICO = {
   },
 
   en: {
+    "Supprimer mon compte": "Delete my account",
+    "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Your account, records and documents are erased from the server. This is final: nothing can be recovered afterwards.",
+    "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Your account, records and documents will be erased from the server. This is final: nothing can be recovered afterwards. Documents already downloaded on this device do stay.",
+    "Confirmer la suppression": "Confirm deletion",
+    "Écrivez SUPPRIMER pour confirmer.": "Type SUPPRIMER to confirm.",
+    "Le mot ne correspond pas : rien n’a été supprimé.": "The word does not match: nothing has been deleted.",
+    "Une raison ?": "A reason?",
+    "Facultatif. Cela nous aide à comprendre ce qui n’allait pas.": "Optional. It helps us understand what went wrong.",
+    "Suppression en cours…": "Deleting…",
+    "La suppression a échoué. Réessayez, ou écrivez à l’administrateur.": "The deletion failed. Try again, or write to the administrator.",
+    "Votre compte a été supprimé. Merci d’avoir utilisé Autivio.": "Your account has been deleted. Thank you for using Autivio.",
+    "Cette action demande d’être connecté à votre compte.": "This action requires being signed in to your account.",
+    "Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.": "They fill the “Seller” block of your invoices, and are offered in one tap in the fields of official forms and contracts.",
     "Préparation du document…": "Preparing the document…",
     "Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.": "This image could not be opened. Save it as JPEG and try again.",
     "Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.": "This PDF is over 1 MB and cannot be compressed here. Scan it again at normal quality, or photograph the document: the photo will be converted and compressed.",
@@ -4607,6 +4650,19 @@ const DICO = {
   },
 
   de: {
+    "Supprimer mon compte": "Mein Konto löschen",
+    "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Ihr Konto, Ihre Datenblätter und Dokumente werden vom Server gelöscht. Das ist endgültig: Nichts lässt sich danach wiederherstellen.",
+    "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Ihr Konto, Ihre Datenblätter und Dokumente werden vom Server gelöscht. Das ist endgültig. Bereits auf dieses Gerät heruntergeladene Dokumente bleiben erhalten.",
+    "Confirmer la suppression": "Löschung bestätigen",
+    "Écrivez SUPPRIMER pour confirmer.": "Geben Sie SUPPRIMER ein, um zu bestätigen.",
+    "Le mot ne correspond pas : rien n’a été supprimé.": "Das Wort stimmt nicht: Es wurde nichts gelöscht.",
+    "Une raison ?": "Ein Grund?",
+    "Facultatif. Cela nous aide à comprendre ce qui n’allait pas.": "Freiwillig. Das hilft uns zu verstehen, was nicht gepasst hat.",
+    "Suppression en cours…": "Wird gelöscht…",
+    "La suppression a échoué. Réessayez, ou écrivez à l’administrateur.": "Die Löschung ist fehlgeschlagen. Versuchen Sie es erneut oder schreiben Sie dem Administrator.",
+    "Votre compte a été supprimé. Merci d’avoir utilisé Autivio.": "Ihr Konto wurde gelöscht. Danke, dass Sie Autivio genutzt haben.",
+    "Cette action demande d’être connecté à votre compte.": "Für diese Aktion müssen Sie in Ihrem Konto angemeldet sein.",
+    "Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.": "Sie füllen den Block „Verkäufer“ Ihrer Rechnungen und werden in den Feldern der Formulare und Verträge mit einem Klick vorgeschlagen.",
     "Préparation du document…": "Dokument wird vorbereitet…",
     "Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.": "Dieses Bild konnte nicht geöffnet werden. Speichern Sie es als JPEG und versuchen Sie es erneut.",
     "Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.": "Dieses PDF ist größer als 1 MB und kann hier nicht verkleinert werden. Scannen Sie es in normaler Qualität erneut oder fotografieren Sie das Dokument: Das Foto wird umgewandelt und komprimiert.",
@@ -5421,6 +5477,19 @@ const DICO = {
   },
 
   nl: {
+    "Supprimer mon compte": "Mijn account verwijderen",
+    "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Uw account, fiches en documenten worden van de server gewist. Dit is definitief: niets kan nadien worden hersteld.",
+    "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Uw account, fiches en documenten worden van de server gewist. Dit is definitief. Documenten die al op dit toestel zijn gedownload, blijven wel.",
+    "Confirmer la suppression": "Verwijdering bevestigen",
+    "Écrivez SUPPRIMER pour confirmer.": "Typ SUPPRIMER om te bevestigen.",
+    "Le mot ne correspond pas : rien n’a été supprimé.": "Het woord komt niet overeen: er is niets verwijderd.",
+    "Une raison ?": "Een reden?",
+    "Facultatif. Cela nous aide à comprendre ce qui n’allait pas.": "Optioneel. Het helpt ons te begrijpen wat er misging.",
+    "Suppression en cours…": "Bezig met verwijderen…",
+    "La suppression a échoué. Réessayez, ou écrivez à l’administrateur.": "De verwijdering is mislukt. Probeer opnieuw of schrijf de beheerder.",
+    "Votre compte a été supprimé. Merci d’avoir utilisé Autivio.": "Uw account is verwijderd. Bedankt voor het gebruik van Autivio.",
+    "Cette action demande d’être connecté à votre compte.": "Voor deze actie moet u bij uw account aangemeld zijn.",
+    "Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.": "Ze vullen het blok „Verkoper” van uw facturen, en worden met één tik voorgesteld in de velden van formulieren en contracten.",
     "Préparation du document…": "Document wordt voorbereid…",
     "Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.": "Deze afbeelding kon niet worden geopend. Sla ze op als JPEG en probeer opnieuw.",
     "Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.": "Deze pdf is groter dan 1 MB en kan hier niet worden verkleind. Scan opnieuw in normale kwaliteit, of fotografeer het document: de foto wordt omgezet en gecomprimeerd.",
@@ -6229,7 +6298,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.25';
+const VERSION = '2.26';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -9994,6 +10063,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.26': { date: '24/09/2026', lignes: [
+    "Les réglages, rubrique « Coordonnées », permettent de supprimer votre compte : compte, fiches et documents sont effacés du serveur, et l'administrateur en est averti.",
+    "Les Cerfa ne se remplissent plus tout seuls avec vos coordonnées : elles se proposent au clic dans le champ, et vous choisissez. Seule la facture garde le bloc « Vendeur » rempli d'avance.",
+    "À l'import d'un document, le champ du nom s'ouvre vide : le nom du fichier d'origine n'est plus repris.",
+    "Un document s'enregistre même si la voiture n'a ni plaque ni numéro de châssis : il se range sous « SANS-PLAQUE », avec sa date.",
+    { pour: "pro", texte: "La case « Non assujetti à la TVA » affiche enfin son texte en entier : il débordait hors de la fenêtre." },
+  ] },
   '2.25': { date: '24/09/2026', lignes: [
     "Un bouton « Importer un document » range vos propres fichiers — facture de pneus, contrôle technique, photo — dans le dossier d'une voiture, sous le nom que vous leur donnez. Depuis un dossier ouvert, il n'y a même pas de voiture à choisir.",
     "Un bouton « Partager le document » crée un lien vers le document : le client l'ouvre sans compte, et le lien expire au bout de 30 jours.",
@@ -11981,7 +12057,7 @@ function vueReglages(){
   let panneau = '';
   if(ongletReglages === 'coordonnees'){
     panneau = '<h3>' + t('Coordonnées professionnelles') + '</h3>'
-      + '<div class="reg-intro">' + t("Ces informations remplissent automatiquement votre partie des formulaires officiels : nom, SIRET et adresse du cédant ou de l'acquéreur.") + '</div>'
+      + '<div class="reg-intro">' + t('Elles remplissent le bloc « Vendeur » de vos factures, et vous sont proposées d’un clic dans les champs des Cerfa et des contrats.') + '</div>'
       + '<div class="fields">'
       +   champ('s_raisonSociale', t('Raison sociale'), dealer.raisonSociale)
       +   champ('s_siret', t('N° SIRET'), dealer.siret)
@@ -11993,7 +12069,18 @@ function vueReglages(){
       +   champ('s_email', t('Email'), dealer.email)
       + '</div>'
       + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button>'
-      + '<span id="regMsg" class="dav-resultat"></span></div>';
+      + '<span id="regMsg" class="dav-resultat"></span></div>'
+      /* Le droit de s'en aller, a la suite de la fiche du compte.
+         Reserve aux comptes du serveur : un compte local ne vit que sur
+         cette machine, il se supprime dans la liste des comptes. */
+      + (serveurPret() && !estAdministrateur()
+          ? '<h3 style="margin-top:34px" class="danger-titre">' + t('Supprimer mon compte') + '</h3>'
+            + '<div class="reg-intro">'
+            +   t('Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.')
+            + '</div>'
+            + '<button type="button" class="btn-danger" id="btnSupprimerMonCompte">'
+            +   t('Supprimer mon compte') + '</button>'
+          : '');
   }
   else if(ongletReglages === 'signature'){
     panneau = '<h3>' + t('Cachet et signataire') + '</h3>'
@@ -12080,8 +12167,126 @@ function champ(id, libelle, valeur, span, exemple){
     + (exemple ? ' placeholder="' + esc(exemple) + '"' : '') + '></div>';
 }
 
+/* =====================================================================
+   SUPPRIMER SON PROPRE COMPTE
+   Le reglement europeen demande que l'effacement soit aussi simple que
+   l'inscription. Le bouton est donc dans les reglages, pas cache dans
+   un courrier a envoyer.
+   Trois garde-fous : on explique ce qui part, on demande d'ecrire
+   SUPPRIMER en toutes lettres, et le serveur ne supprime QUE le compte
+   de celui qui appelle — il n'accepte aucun autre identifiant.
+   ===================================================================== */
+async function prevenirAdminSuppression(profil, motif){
+  const adresse = (profil && profil.email) || (currentUser && currentUser.username) || '';
+  const pro = profil && profil.type_compte === 'professionnel';
+  const cadre = 'font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;'
+    + 'max-width:520px;margin:0 auto;padding:30px 24px;color:#101820';
+  const ligne = function(etiq, val){
+    return val ? '<tr><td style="padding:4px 14px 4px 0;color:#6b7a90;'
+      + 'font-size:13px;white-space:nowrap">' + esc(etiq) + '</td>'
+      + '<td style="padding:4px 0;font-size:13.5px">' + esc(val) + '</td></tr>' : '';
+  };
+  const html = '<div style="' + cadre + '">'
+    + '<div style="font-size:22px;font-weight:700;color:#123a6b">AUTIVIO</div>'
+    + '<div style="font-size:11.5px;color:#6b7a90;letter-spacing:.09em;'
+    +   'text-transform:uppercase;margin-bottom:26px">Immatriculation automobile</div>'
+    + '<div style="font-size:18px;font-weight:700;margin-bottom:14px">'
+    +   'Un compte a été supprimé par son titulaire</div>'
+    + '<table style="border-collapse:collapse;margin-bottom:18px">'
+    +   ligne('Adresse e-mail', adresse)
+    +   ligne('Nom', (profil && profil.nom) || '')
+    +   ligne('Type', pro ? 'Professionnel' : 'Particulier')
+    +   ligne('SIRET', (profil && profil.siret) || '')
+    +   ligne('Motif', motif || '—')
+    +   ligne('Date', new Date().toLocaleString('fr-FR'))
+    + '</table>'
+    + '<div style="font-size:13.5px;color:#3d4a5c;line-height:1.6">'
+    +   'Le compte, son profil et ses fiches ont été effacés du serveur. '
+    +   'Cette suppression a été demandée depuis l’application ; elle est définitive.</div>'
+    + '<div style="border-top:1px solid #e4e9f0;margin-top:26px;padding-top:14px;'
+    +   'font-size:11.5px;color:#93a0b3">Ceci est un message automatique, '
+    +   'merci de ne pas y repondre.</div></div>';
+  const texte = 'Un compte a été supprimé par son titulaire.\n\n'
+    + 'Adresse : ' + adresse + '\n'
+    + 'Type : ' + (pro ? 'Professionnel' : 'Particulier') + '\n'
+    + 'Motif : ' + (motif || '—') + '\n'
+    + 'Date : ' + new Date().toLocaleString('fr-FR');
+  try{
+    return await serveurExpedier(ADMIN_EMAIL,
+      'Autivio — compte supprimé : ' + (adresse || '—'), texte, html);
+  }catch(e){ return false; }
+}
+
+async function supprimerMonCompte(){
+  if(!serveurPret()){
+    await informer(t('Cette action demande d’être connecté à votre compte.'));
+    return;
+  }
+  const sur = await demander({
+    titre: t('Supprimer mon compte'),
+    texte: t('Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.'),
+    oui: t('Continuer'), non: t('Annuler'), danger: true
+  });
+  if(!sur) return;
+
+  /* Ecrire le mot en entier : on ne supprime pas un compte d'un doigt
+     qui glisse. */
+  const mot = await demanderTexte({
+    titre: t('Confirmer la suppression'),
+    texte: t('Écrivez SUPPRIMER pour confirmer.'),
+    valeur: '', oui: t('Supprimer'), danger: true
+  });
+  if(mot === null) return;
+  if(String(mot).trim().toUpperCase() !== 'SUPPRIMER'){
+    await informer(t('Le mot ne correspond pas : rien n’a été supprimé.'));
+    return;
+  }
+
+  const motif = await demanderTexte({
+    titre: t('Une raison ?'),
+    texte: t('Facultatif. Cela nous aide à comprendre ce qui n’allait pas.'),
+    valeur: '', oui: t('Supprimer mon compte'), danger: true
+  });
+  if(motif === null) return;
+
+  bandeau(t('Suppression en cours…'), 'attente');
+  let profil = null;
+  try{ profil = await serveurProfil(); }catch(e){}
+
+  try{
+    await serveurAppel('/rest/v1/rpc/supprimer_mon_compte', {
+      method: 'POST', body: { motif: String(motif || '').trim() || null }
+    });
+  }catch(e){
+    bandeau('', '');
+    await informer(t('La suppression a échoué. Réessayez, ou écrivez à l’administrateur.'));
+    return;
+  }
+
+  /* Le courriel part apres coup : si l'envoi echoue, le compte est
+     supprime quand meme — c'est ce que la personne a demande. */
+  await prevenirAdminSuppression(profil, String(motif || '').trim());
+
+  /* Plus rien a garder sur cette machine : session, fiches, reglages. */
+  try{
+    for(let i = localStorage.length - 1; i >= 0; i--){
+      const cle = localStorage.key(i) || '';
+      if(cle.indexOf('autivio') === 0 || cle.indexOf('dossierVehicules') === 0){
+        localStorage.removeItem(cle);
+      }
+    }
+  }catch(e){}
+  sessionServeur = null; currentUser = null;
+
+  await informer(t('Votre compte a été supprimé. Merci d’avoir utilisé Autivio.'));
+  location.reload();
+}
+
 function brancherReglages(){
   const page = document.getElementById('main');
+
+  const btSup = document.getElementById('btnSupprimerMonCompte');
+  if(btSup) btSup.onclick = supprimerMonCompte;
 
   document.querySelectorAll('[data-onglet]').forEach(function(bt){
     bt.onclick = function(){ ongletReglages = bt.dataset.onglet; renderMain(); };
@@ -13084,12 +13289,6 @@ function ensureAchat13751(v){
   if(!v.achat13751) v.achat13751 = blankAchat13751();
   const a = v.achat13751, d = dealer;
   if(!a.boxes) a.boxes = {};
-  // pré-remplissage à la première ouverture
-  if(!a.nom && d.raisonSociale) a.nom = d.raisonSociale;
-  if(!a.siren && d.siret) a.siren = (d.siret || '').replace(/\D/g,'').slice(0,9);
-  if(!a.cp && d.cp) a.cp = d.cp;
-  if(!a.commune && d.ville) a.commune = d.ville;
-  if(!a.voieNum && !a.voieNom && d.adresse) Object.assign(a, prefixer(splitAddress(d.adresse), ''));
   // le vendeur vient de la fiche d'achat
   const ac = v.achat;
   if(!a.v_nom && ac.vendeurNom) a.v_nom = ac.vendeurNom;
@@ -14159,7 +14358,6 @@ function ensureImmat13750(v){
     a.tit_voietype = d.voieType; a.tit_voienom = d.voieNom;
   }
   if(!a.dateAchat && ve.dateVente) a.dateAchat = ve.dateVente;
-  if(!a.lou_qualite && dealer.signataire) a.lou_qualite = dealer.signataire;
   return a;
 }
 
@@ -14811,7 +15009,6 @@ function ensureNeuf13749(v){
     a.dom_voietype = d.voieType; a.dom_voienom = d.voieNom;
   }
   if(!a.dateVente && ve.dateVente) a.dateVente = ve.dateVente;
-  if(!a.vend_soussigne && dealer.raisonSociale) a.vend_soussigne = dealer.raisonSociale;
   return a;
 }
 
@@ -15780,9 +15977,6 @@ function ensureMandat13757(v){
     a.voietype = d.voieType; a.voienom = d.voieNom;
   }
   if(!a.pays) a.pays = 'FRANCE';
-  if(!a.mandataire_nom && dealer.raisonSociale) a.mandataire_nom = dealer.raisonSociale;
-  if(!a.mandataire_siret && dealer.siret) a.mandataire_siret = dealer.siret;
-  if(!a.qualite && dealer.signataire) a.qualite = dealer.signataire;
   if(!a.operation) a.operation = "Changement de titulaire du certificat d'immatriculation";
   return a;
 }
@@ -16297,17 +16491,6 @@ function ensureWGarage(v){
   if(!v.wgarage) v.wgarage = blankWGarage();
   const a = v.wgarage;
   if(!a.boxes) a.boxes = {};
-  // le demandeur, c'est vous : on reprend vos coordonnees
-  if(!a.nom && dealer.raisonSociale) a.nom = dealer.raisonSociale;
-  if(!a.siren && dealer.siret) a.siren = dealer.siret.replace(/\D/g, '').slice(0, 9);
-  if(!a.cp && dealer.cp) a.cp = dealer.cp;
-  if(!a.commune && dealer.ville) a.commune = dealer.ville;
-  if(!a.voienum && !a.voienom && dealer.adresse){
-    const d = splitAddress(dealer.adresse);
-    a.voienum = d.voieNum; a.voieext = d.voieExt;
-    a.voietype = d.voieType; a.voienom = d.voieNom;
-  }
-  if(!a.qualite && dealer.signataire) a.qualite = dealer.signataire;
   return a;
 }
 
@@ -16813,18 +16996,6 @@ function ensurePerte13753(v){
   if(!v.perte13753) v.perte13753 = blankPerte13753();
   const a = v.perte13753;
   if(!a.boxes) a.boxes = {};
-  // le declarant est le titulaire du certificat : par defaut, vous
-  if(!a.nom && dealer.raisonSociale) a.nom = dealer.raisonSociale;
-  if(!a.siret && dealer.siret) a.siret = dealer.siret;
-  if(!a.cp && dealer.cp) a.cp = dealer.cp;
-  if(!a.commune && dealer.ville) a.commune = dealer.ville;
-  if(!a.voienum && !a.voienom && dealer.adresse){
-    const d = splitAddress(dealer.adresse);
-    a.voienum = d.voieNum; a.voieext = d.voieExt;
-    a.voietype = d.voieType; a.voienom = d.voieNom;
-  }
-  if(!a.qualite && dealer.signataire) a.qualite = dealer.signataire;
-  if(!a.faitA && dealer.ville) a.faitA = dealer.ville;
   // Aucune case n'est cochee d'avance : c'est a l'utilisateur de choisir
   // entre perte et vol, et entre personne physique et personne morale.
   return a;
@@ -17367,18 +17538,6 @@ function ensureDestruction14365(v){
   if(!v.destruction14365) v.destruction14365 = blankDestruction14365();
   const a = v.destruction14365;
   if(!a.boxes) a.boxes = {};
-  // le centre VHU, c'est vous : on reprend les coordonnees des reglages
-  if(!a.vhu_nom && dealer.raisonSociale) a.vhu_nom = dealer.raisonSociale;
-  if(!a.vhu_siren && dealer.siret) a.vhu_siren = String(dealer.siret).replace(/\D/g, '').slice(0, 9);
-  if(!a.vhu_cp && dealer.cp) a.vhu_cp = dealer.cp;
-  if(!a.vhu_commune && dealer.ville) a.vhu_commune = dealer.ville;
-  if(!a.vhu_voienum && !a.vhu_voienom && dealer.adresse){
-    const d = splitAddress(dealer.adresse);
-    a.vhu_voienum = d.voieNum; a.vhu_voieext = d.voieExt;
-    a.vhu_voietype = d.voieType; a.vhu_voienom = d.voieNom;
-  }
-  if(!a.vhu_faitA && dealer.ville) a.vhu_faitA = dealer.ville;
-  if(!a.ach_faitA && dealer.ville) a.ach_faitA = dealer.ville;
   // l'ancien proprietaire, c'est celui qui vous a vendu le vehicule
   const ac = v.achat || {};
   if(!a.anc_nom && ac.vendeurNom) a.anc_nom = ac.vendeurNom;
@@ -17906,17 +18065,6 @@ function ensureRetrait13756(v){
   if(!v.retrait13756) v.retrait13756 = blankRetrait13756();
   const a = v.retrait13756;
   if(!a.boxes) a.boxes = {};
-  // le declarant, c'est le detenteur du vehicule : vos coordonnees
-  if(!a.nom && dealer.raisonSociale) a.nom = dealer.raisonSociale;
-  if(!a.siren && dealer.siret) a.siren = String(dealer.siret).replace(/\D/g, '').slice(0, 9);
-  if(!a.cp && dealer.cp) a.cp = dealer.cp;
-  if(!a.commune && dealer.ville) a.commune = dealer.ville;
-  if(!a.voienum && !a.voienom && dealer.adresse){
-    const d = splitAddress(dealer.adresse);
-    a.voienum = d.voieNum; a.voieext = d.voieExt;
-    a.voietype = d.voieType; a.voienom = d.voieNom;
-  }
-  if(!a.faitA && dealer.ville) a.faitA = dealer.ville;
   // Aucune case n'est cochee d'avance : c'est a l'utilisateur de choisir.
   return a;
 }
@@ -18366,18 +18514,6 @@ function ensureIntention14366(v){
   if(!v.intention14366) v.intention14366 = blankIntention14366();
   const a = v.intention14366;
   if(!a.boxes) a.boxes = {};
-  // le centre VHU, c'est vous
-  if(!a.vhu_nom && dealer.raisonSociale) a.vhu_nom = dealer.raisonSociale;
-  if(!a.vhu_siren && dealer.siret) a.vhu_siren = String(dealer.siret).replace(/\D/g, '').slice(0, 9);
-  if(!a.vhu_cp && dealer.cp) a.vhu_cp = dealer.cp;
-  if(!a.vhu_commune && dealer.ville) a.vhu_commune = dealer.ville;
-  if(!a.vhu_voienum && !a.vhu_voienom && dealer.adresse){
-    const d = splitAddress(dealer.adresse);
-    a.vhu_voienum = d.voieNum; a.vhu_voieext = d.voieExt;
-    a.vhu_voietype = d.voieType; a.vhu_voienom = d.voieNom;
-  }
-  if(!a.vhu_faitA && dealer.ville) a.vhu_faitA = dealer.ville;
-  if(!a.int_faitA && dealer.ville) a.int_faitA = dealer.ville;
   // dates reprises de l'achat du vehicule
   const ac = v.achat || {};
   if(!a.dateAchatVeh && ac.dateAchat) a.dateAchatVeh = ac.dateAchat;
@@ -19692,19 +19828,12 @@ function ensureContrat(v){
   if(!a.km && veh.km) a.km = veh.km;
   if(!a.dateImmat && veh.dateFirstImmat) a.dateImmat = veh.dateFirstImmat;
   if(!a.prix && ve.prixVente) a.prix = ve.prixVente;
-  // le vendeur, c'est vous (Reglages)
-  if(!a.vNom && dealer.raisonSociale) a.vNom = dealer.raisonSociale;
-  if(!a.vAdresse && dealer.adresse) a.vAdresse = dealer.adresse;
-  if(!a.vCp && dealer.cp) a.vCp = dealer.cp;
-  if(!a.vVille && dealer.ville) a.vVille = dealer.ville;
-  if(!a.vTel && dealer.tel) a.vTel = dealer.tel;
   // l'acheteur vient de la partie Vente de la fiche
   if(!a.aNom && ve.acheteurNom) a.aNom = ve.acheteurNom;
   if(!a.aAdresse && ve.acheteurAdresse) a.aAdresse = ve.acheteurAdresse;
   if(!a.aCp && ve.acheteurCp) a.aCp = ve.acheteurCp;
   if(!a.aVille && ve.acheteurVille) a.aVille = ve.acheteurVille;
   if(!a.aTel && ve.acheteurTel) a.aTel = ve.acheteurTel;
-  if(!a.faitA && dealer.ville) a.faitA = dealer.ville;
   if(!a.faitLe && ve.dateVente) a.faitLe = ve.dateVente;
   return a;
 }
@@ -21255,14 +21384,6 @@ function ensureContratPro(v){
   if(!a.vCp && ac.vendeurCp) a.vCp = ac.vendeurCp;
   if(!a.vVille && ac.vendeurVille) a.vVille = ac.vendeurVille;
   if(!a.vTel && ac.vendeurTel) a.vTel = ac.vendeurTel;
-  // l'acheteur, c'est vous
-  if(!a.aDenom && dealer.raisonSociale) a.aDenom = dealer.raisonSociale;
-  if(!a.aSiret && dealer.siret) a.aSiret = dealer.siret;
-  if(!a.aAdresse && dealer.adresse) a.aAdresse = dealer.adresse;
-  if(!a.aCp && dealer.cp) a.aCp = dealer.cp;
-  if(!a.aVille && dealer.ville) a.aVille = dealer.ville;
-  if(!a.aTel && dealer.tel) a.aTel = dealer.tel;
-  if(!a.faitA && dealer.ville) a.faitA = dealer.ville;
   if(!a.faitLe && ac.dateAchat) a.faitLe = ac.dateAchat;
   return a;
 }
@@ -23058,11 +23179,9 @@ async function partagerLienDocument(v, d){
     await informer(t('Connectez-vous avec votre adresse e-mail pour créer un lien de partage.'));
     return;
   }
-  const sousDossier = sousDossierVehicule(v);
-  if(!sousDossier){
-    await informer(t('Renseignez la plaque ou le numéro de châssis : le document n’a pas de dossier où être rangé.'));
-    return;
-  }
+  /* Meme sans plaque ni chassis, le document part : il se range sous
+     « SANS-PLAQUE », et le lien fonctionne pareil. */
+  const sousDossier = dossierDuVehicule(v);
   const fabrique = PDF_IMPRESSION[currentDoc];
   if(!fabrique) return;
 
@@ -23196,6 +23315,13 @@ async function allegerPdf(fichier){
   return null;   // au-dela de ce qu'on sait faire
 }
 
+/* Le dossier d'une voiture. Sans plaque ni chassis, on ne renonce plus :
+   le document se range sous « SANS-PLAQUE », a portee de main, plutot
+   que de refuser l'enregistrement. */
+function dossierDuVehicule(v){
+  return sousDossierVehicule(v) || 'SANS-PLAQUE';
+}
+
 function nomPourFichier(texte){
   return String(texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'document';
@@ -23291,16 +23417,20 @@ async function importerPieceJointe(fichier, vehicule){
   if(!v) return;
 
   const d = descriptionVehicule(v);
-  const propose = fichier.name.replace(/\.[A-Za-z0-9]{1,8}$/, '');
+  /* Le champ s'ouvre vide : le nom du fichier d'origine — « IMG_4821 »,
+     « texte 6 » — ne dit rien de ce que le document contient. */
   const nom = await demanderTexte({
     titre: t('Nom du document'),
     texte: (d.titre ? d.titre + ' — ' : '') + t('Sous quel nom le retrouver ?'),
-    valeur: propose, exemple: t('Facture pneus'), oui: t('Enregistrer')
+    valeur: '', oui: t('Enregistrer')
   });
   if(nom === null) return;
-  const propre = String(nom).trim() || propose;
+  const propre = String(nom).trim() || t('Document');
 
-  const plaque = (d.plaque || d.vin || 'sans-plaque').replace(/[^A-Za-z0-9-]/g, '').toUpperCase();
+  /* Ni plaque ni chassis : le document se range quand meme, sous le nom
+     de la voiture ou, a defaut, dans un dossier « SANS-PLAQUE ». Il
+     suivra la fiche le jour ou la plaque sera saisie. */
+  const plaque = (d.plaque || d.vin || 'SANS-PLAQUE').replace(/[^A-Za-z0-9-]/g, '').toUpperCase();
   const jour = new Date().toISOString().slice(0, 10);
 
   /* Photo : elle devient un PDF allege. PDF : il passe tel quel s'il
@@ -23330,7 +23460,7 @@ async function importerPieceJointe(fichier, vehicule){
 
   const nomFichier = plaque + '_' + nomPourFichier(propre) + '_' + jour + (ext ? '.' + ext : '');
   bandeauEnvoi(t('Envoi en cours…'));
-  const ok = await envoyerEnLigne(nomFichier, b64, mime, false, sousDossierVehicule(v));
+  const ok = await envoyerEnLigne(nomFichier, b64, mime, false, dossierDuVehicule(v));
 
   /* La fiche garde la trace du document — nom, date, taille — sans le
      fichier lui-meme : les fiches se synchronisent entre appareils, et
