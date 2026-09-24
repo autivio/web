@@ -10064,6 +10064,8 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
   '2.26': { date: '24/09/2026', lignes: [
+    "La suggestion « Mon garage » ne disparaît plus au moindre défilement : elle suit le champ, y compris quand le clavier du téléphone s'ouvre.",
+    "La liste des marques, des modèles et des communes s'ouvre dès qu'on touche le champ, sans avoir à taper une lettre d'abord.",
     "Les réglages, rubrique « Coordonnées », permettent de supprimer votre compte : compte, fiches et documents sont effacés du serveur, et l'administrateur en est averti.",
     "Les Cerfa ne se remplissent plus tout seuls avec vos coordonnées : elles se proposent au clic dans le champ, et vous choisissez. Seule la facture garde le bloc « Vendeur » rempli d'avance.",
     "À l'import d'un document, le champ du nom s'ouvre vide : le nom du fichier d'origine n'est plus repris.",
@@ -23024,6 +23026,9 @@ function valeurGarage(nature){
 
 function suggestionGarage(el){
   if(!el || el.tagName !== 'INPUT') return '';
+  /* Ce champ a deja sa propre liste — marques, modeles, communes. Deux
+     listes l'une sur l'autre, on ne sait plus laquelle on touche. */
+  if(el.dataset.combo === '1') return '';
   const type = (el.type || 'text').toLowerCase();
   if(['checkbox','radio','date','number','file'].indexOf(type) !== -1) return '';
   const chemin = normaliserChemin(cheminChamp(el));
@@ -23054,11 +23059,9 @@ function ouvrirSuggestionGarage(el){
   b.innerHTML = '<div class="sugg-titre">' + esc(t('Mon garage')) + '</div>'
     + '<button type="button" class="sugg-choix">' + esc(valeur) + '</button>';
   document.body.appendChild(b);
-  b.style.left  = Math.max(8, Math.min(r.left, window.innerWidth - b.offsetWidth - 8)) + 'px';
-  b.style.top   = (r.bottom + 4) + 'px';
-  b.style.minWidth = Math.min(r.width, window.innerWidth - 16) + 'px';
   b.__champ = el;      // a quel champ cette bulle appartient
   bulleGarage = b;
+  placerSuggestion();
   b.querySelector('.sugg-choix').onmousedown = function(e){ e.preventDefault(); };
   b.querySelector('.sugg-choix').onclick = function(){
     el.value = valeur;
@@ -23067,6 +23070,28 @@ function ouvrirSuggestionGarage(el){
     fermerSuggestionGarage();
     el.focus();
   };
+}
+
+/* La bulle SUIT le champ quand la page defile, au lieu de disparaitre.
+   Sur telephone, l'ouverture du clavier fait defiler aussitot : avec
+   l'ancienne regle, la suggestion se refermait avant meme d'avoir ete
+   vue. Elle ne s'efface que si le champ sort de l'ecran. */
+function placerSuggestion(){
+  if(!bulleGarage || !bulleGarage.__champ) return;
+  const el = bulleGarage.__champ;
+  const r = el.getBoundingClientRect();
+  if(r.bottom < 0 || r.top > window.innerHeight || !r.width){
+    fermerSuggestionGarage();
+    return;
+  }
+  const b = bulleGarage;
+  b.style.minWidth = Math.min(r.width, window.innerWidth - 16) + 'px';
+  b.style.left = Math.max(8, Math.min(r.left, window.innerWidth - b.offsetWidth - 8)) + 'px';
+  /* Sous le champ, ou au-dessus quand le bas de l'ecran manque. */
+  const place = window.innerHeight - r.bottom;
+  b.style.top = (place > b.offsetHeight + 12 || r.top < b.offsetHeight + 12)
+    ? (r.bottom + 4) + 'px'
+    : (r.top - b.offsetHeight - 4) + 'px';
 }
 
 document.addEventListener('focusin', function(e){
@@ -23083,8 +23108,14 @@ document.addEventListener('focusout', function(e){
     if(bulleGarage && bulleGarage.__champ === champ) fermerSuggestionGarage();
   }, 150);
 });
-window.addEventListener('scroll', fermerSuggestionGarage, true);
-window.addEventListener('resize', fermerSuggestionGarage);
+window.addEventListener('scroll', placerSuggestion, true);
+window.addEventListener('resize', placerSuggestion);
+if(window.visualViewport){
+  /* Le clavier des telephones change la hauteur utile sans faire
+     defiler la page : c'est ce viewport-la qui le signale. */
+  window.visualViewport.addEventListener('resize', placerSuggestion);
+  window.visualViewport.addEventListener('scroll', placerSuggestion);
+}
 
 /* =====================================================================
    IMPORTER UN DOCUMENT DANS LE DOSSIER D'UNE VOITURE
@@ -25222,7 +25253,10 @@ function brancherListe(inp, source, messageVide, codeSeul, oubli){
     };
 
     inp.addEventListener('input', function(){ remplir(inp.value); });
-    inp.addEventListener('focus', function(){ if(inp.value) remplir(inp.value); });
+    /* La liste s'ouvre des qu'on touche le champ, meme vide : sur
+       telephone, on ne devine pas qu'il faut d'abord taper une lettre
+       pour voir les marques. */
+    inp.addEventListener('focus', function(){ remplir(inp.value); });
     inp.addEventListener('blur', function(){ setTimeout(fermer, 150); });
 
     inp.addEventListener('keydown', function(e){
