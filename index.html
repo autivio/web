@@ -1625,6 +1625,16 @@
   .notes-maj{margin:10px 0 4px;padding:0 0 0 20px;max-height:46vh;overflow-y:auto;}
   .notes-maj li{margin:0 0 9px;line-height:1.45;font-size:14px;color:var(--ink);}
   @media (pointer:coarse){ .notes-maj li{font-size:15px;} }
+  /* Suggestion « Mon garage » sous le champ en cours de saisie */
+  .sugg-garage{position:fixed;z-index:9000;background:var(--paper,#fff);
+    border:1px solid var(--line,#dfe4ec);border-radius:10px;
+    box-shadow:0 10px 26px rgba(15,25,45,.18);padding:6px;max-width:92vw;}
+  .sugg-titre{font-size:11px;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--muted,#7b8798);padding:2px 8px 4px;}
+  .sugg-choix{display:block;width:100%;text-align:left;border:0;background:transparent;
+    padding:8px 10px;border-radius:7px;font-size:15px;color:var(--ink,#16233a);cursor:pointer;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sugg-choix:hover,.sugg-choix:focus{background:var(--soft,#eef2fa);}
 </style>
 </head>
 <body>
@@ -2158,6 +2168,7 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Mon garage": "La mia officina",
     "Demande d'immatriculation d'un véhicule d'occasion": "Domanda di immatricolazione di un veicolo usato",
     "Demande d'immatriculation d'un véhicule neuf": "Domanda di immatricolazione di un veicolo nuovo",
     "Document établi avec Autivio": "Documento redatto con Autivio",
@@ -2914,6 +2925,7 @@ const DICO = {
   },
 
   lb: {
+    "Mon garage": "Meng Garage",
     "Demande d'immatriculation d'un véhicule d'occasion": "Ulaanfro fir d’Immatrikulatioun vun engem Occasiounsgefier",
     "Demande d'immatriculation d'un véhicule neuf": "Ulaanfro fir d’Immatrikulatioun vun engem neie Gefier",
     "Document établi avec Autivio": "Dokument erstallt mat Autivio",
@@ -3669,6 +3681,7 @@ const DICO = {
   },
 
   en: {
+    "Mon garage": "My garage",
     "Demande d'immatriculation d'un véhicule d'occasion": "Application to register a used vehicle",
     "Demande d'immatriculation d'un véhicule neuf": "Application to register a new vehicle",
     "Document établi avec Autivio": "Document produced with Autivio",
@@ -4423,6 +4436,7 @@ const DICO = {
   },
 
   de: {
+    "Mon garage": "Meine Werkstatt",
     "Demande d'immatriculation d'un véhicule d'occasion": "Zulassungsantrag für ein Gebrauchtfahrzeug",
     "Demande d'immatriculation d'un véhicule neuf": "Zulassungsantrag für ein Neufahrzeug",
     "Document établi avec Autivio": "Dokument erstellt mit Autivio",
@@ -5193,6 +5207,7 @@ const DICO = {
   },
 
   nl: {
+    "Mon garage": "Mijn garage",
     "Demande d'immatriculation d'un véhicule d'occasion": "Aanvraag tot inschrijving van een tweedehandsvoertuig",
     "Demande d'immatriculation d'un véhicule neuf": "Aanvraag tot inschrijving van een nieuw voertuig",
     "Document établi avec Autivio": "Document opgesteld met Autivio",
@@ -5957,7 +5972,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.23';
+const VERSION = '2.24';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6174,7 +6189,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '20/09/2026';
+const VERSION_DATE = '24/09/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -7546,6 +7561,8 @@ async function enterApp(){
   setTimeout(function(){ try{ afficherNoteMiseAJour(); }catch(e){} }, 900);
   // l'apparence enregistree dans le compte reprend la main
   apparenceDepuisServeur().catch(function(){});
+  // un logo choisi avant cette version, ou hors connexion, part en ligne
+  setTimeout(function(){ publierLogo().catch(function(){}); }, 2500);
   // Securite : on entre toujours avec le menu ferme.
   document.body.classList.remove('menu-ouvert');
   const barreEntree = document.getElementById('sidebar');
@@ -9535,10 +9552,12 @@ const CLE_VERSION_VUE = LS_BASE + 'version-vue';
 const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 
 const NOTES_VERSION = {
-  '2.23': [
+  '2.24': [
     "Sur les Cerfa, les signatures et les cachets se posent maintenant par-dessus l'intitulé du cadre (« Signature du vendeur », « Cachet et signature de l'acquéreur »…), comme sur le papier. Sur les contrats, dont l'intitulé est écrit au-dessus du cadre, ils restent à l'intérieur.",
     "L'aperçu à l'écran montre les signatures et les cachets exactement là où ils seront sur le document imprimé.",
     "L'e-mail qui accompagne un document a été retravaillé : il appelle le client par son nom, porte les coordonnées du garage en signature, et invite à répondre puisque la réponse revient au garage.",
+    "Dans les Cerfa et les contrats, cliquer dans un champ du garage (raison sociale, SIREN, adresse, ville, téléphone…) propose vos coordonnées : un tapotement remplit le champ, côté acheteur comme côté vendeur.",
+    "Les e-mails se terminent par une carte de signature aux couleurs de votre apparence : logo du garage (ou ses initiales), signataire, raison sociale et coordonnées.",
     "Chaque e-mail se termine par « Document établi avec Autivio — autivio.fr », avec le lien vers le site.",
     "L'e-mail d'une demande d'immatriculation précise s'il s'agit d'un véhicule neuf ou d'occasion : les deux portaient le même nom.",
     "Une signature posée sans cachet occupe tout le cadre et tombe au milieu ; posés ensemble, la signature et le cachet gardent chacun leur moitié.",
@@ -22108,24 +22127,342 @@ async function partagerParMail(v, d, dest, objet, corps){
    qu'un filtre anti-spam sanctionne — beaucoup de balises, peu de texte,
    du style en desordre. Le document part maintenant en piece jointe et
    le message se contente de l'annoncer. */
+/* =====================================================================
+   CARTE DE SIGNATURE DES E-MAILS
+   A gauche, un medaillon aux initiales du garage et le nom du
+   signataire ; a droite, un bandeau fonce avec la raison sociale et les
+   coordonnees. Les couleurs sont celles de l'apparence choisie dans le
+   logiciel : la carte change avec elle.
+   Tout est en tableaux et en styles ecrits sur chaque element : c'est la
+   seule mise en forme que Gmail, Outlook et Mail affichent a
+   l'identique. Pas d'image : les messageries bloquent celles qui sont
+   integrees au message, et la carte resterait trouee.
+   ===================================================================== */
+/* =====================================================================
+   LE LOGO EN LIGNE
+   Les messageries bloquent les images collees dans un e-mail. Le logo
+   du garage est donc depose sur le serveur, dans l'espace « logos »
+   (script supabase/14-logos.sql), et la carte de signature l'affiche
+   depuis son adresse internet.
+   Le logiciel retient une empreinte du logo envoye : tant qu'il ne
+   change pas, rien ne repart. Sans connexion, ou si l'espace n'existe
+   pas encore sur le serveur, la carte garde les initiales.
+   ===================================================================== */
+function empreinteTexte(texte){
+  const s = String(texte || '');
+  const pas = Math.max(1, Math.floor(s.length / 5000));
+  let h = 0;
+  for(let i = 0; i < s.length; i += pas) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return s.length + '-' + (h >>> 0).toString(36);
+}
+
+function dataUrlVersBlob(url){
+  const virgule = url.indexOf(',');
+  const type = (url.slice(0, virgule).match(/data:([^;,]+)/) || [])[1] || 'image/png';
+  const binaire = atob(url.slice(virgule + 1));
+  const octets = new Uint8Array(binaire.length);
+  for(let i = 0; i < binaire.length; i++) octets[i] = binaire.charCodeAt(i);
+  return { blob: new Blob([octets], { type: type }), type: type };
+}
+
+function dimensionsImage(url){
+  return new Promise(function(fin){
+    const im = new Image();
+    im.onload = function(){ fin({ w: im.naturalWidth, h: im.naturalHeight }); };
+    im.onerror = function(){ fin(null); };
+    im.src = url;
+  });
+}
+
+async function appelStockage(chemin, options, reessai){
+  const entetes = Object.assign({
+    'apikey': SUPABASE_CLE,
+    'Authorization': 'Bearer ' + sessionServeur.access_token
+  }, options.headers || {});
+  const r = await fetch(SUPABASE_URL + '/storage/v1/object/' + chemin,
+    { method: options.method || 'GET', headers: entetes, body: options.body });
+  if((r.status === 401 || r.status === 403) && !reessai && sessionServeur.refresh_token){
+    if(await serveurRenouveler()) return appelStockage(chemin, options, true);
+  }
+  return r;
+}
+
+let logoEnCoursDEnvoi = false;
+
+async function publierLogo(){
+  if(logoEnCoursDEnvoi) return false;
+  if(!serveurPret() || !sessionServeur || !sessionServeur.user || !sessionServeur.user.id) return false;
+  const chemin = 'logos/' + sessionServeur.user.id + '/logo';
+  logoEnCoursDEnvoi = true;
+  try{
+    // Logo retire de la fiche : on le retire aussi du serveur.
+    if(!dealer.logo){
+      if(dealer.logoUrl){
+        try{ await appelStockage(chemin, { method: 'DELETE' }); }catch(e){}
+        dealer.logoUrl = ''; dealer.logoEmpreinte = ''; dealer.logoDim = null;
+        await saveDealer();
+      }
+      return true;
+    }
+    const emp = empreinteTexte(dealer.logo);
+    if(dealer.logoUrl && dealer.logoEmpreinte === emp) return true;   // deja en ligne
+
+    const fichier = dataUrlVersBlob(dealer.logo);
+    const r = await appelStockage(chemin, {
+      method: 'POST', body: fichier.blob,
+      headers: { 'Content-Type': fichier.type, 'x-upsert': 'true', 'cache-control': '3600' }
+    });
+    if(!r.ok) return false;       // espace absent ou refus : les initiales restent
+
+    dealer.logoDim = await dimensionsImage(dealer.logo);
+    // le numero en fin d'adresse force les messageries a reprendre le
+    // nouveau logo au lieu de celui qu'elles gardent en memoire
+    dealer.logoUrl = SUPABASE_URL + '/storage/v1/object/public/' + chemin + '?v=' + Date.now();
+    dealer.logoEmpreinte = emp;
+    await saveDealer();
+    return true;
+  }catch(e){
+    return false;
+  }finally{
+    logoEnCoursDEnvoi = false;
+  }
+}
+
+/* =====================================================================
+   SUGGESTION « MON GARAGE » DANS LES DOCUMENTS
+   Les coordonnees saisies une fois dans les reglages se reproposent
+   partout : on clique dans un champ, une petite liste apparait sous
+   lui avec la valeur du garage, on la choisit, c'est rempli.
+   Le garage peut ainsi se mettre du cote acheteur comme du cote
+   vendeur, sans rien retaper : la suggestion suit le champ ou l'on
+   clique, pas un cote impose.
+   ===================================================================== */
+/* L'ordre compte : « voie.nom » doit etre reconnu comme le nom de la
+   voie, et non comme un nom de societe. Les regles les plus precises
+   passent donc en premier. */
+const CHAMPS_GARAGE = [
+  [/(^|[._])voie\.?num$/,  'voieNum'],
+  [/(^|[._])voie\.?ext$/,  'voieExt'],
+  [/(^|[._])voie\.?type$/, 'voieType'],
+  [/(^|[._])voie\.?nom$/,  'voieNom'],
+  [/(^|[._])siret$/,       'siret'],
+  [/(^|[._])siren$/,       'siren'],
+  [/(^|[._])tva$/,         'tva'],
+  [/(^|[._])(cp|code\.?postal)$/, 'cp'],
+  [/(^|[._])(ville|commune|fait\.?a)$/, 'ville'],
+  [/(^|[._])adresse$/,     'adresse'],
+  [/(^|[._])(tel|telephone)$/, 'tel'],
+  [/(^|[._])(email|mail|courriel)$/, 'email'],
+  [/(^|[._])(qualite|signataire|representant)$/, 'signataire'],
+  [/(^|[._])pays$/,        'pays'],
+  [/(^|[._])(raison\.?sociale|raison|societe)$/, 'raisonSociale'],
+  [/(^|[._])(nom|nom\.?usage)$/, 'raisonSociale']
+];
+
+/* « aSiret », « vTel », « clientNom » : un seul mot colle. On separe
+   les bosses avant de comparer, pour reconnaitre la nature du champ
+   quel que soit le document. */
+function normaliserChemin(chemin){
+  return String(chemin || '').replace(/([a-z0-9])([A-Z])/g, '$1.$2').toLowerCase();
+}
+
+/* Le chemin du champ, quel que soit le document : data-cess, data-ach,
+   data-ctr, data-cpro, data-fac... Les prefixes de partie (ap_, np_,
+   v_, a_) ne changent pas la nature du renseignement demande. */
+function cheminChamp(el){
+  for(const a of el.attributes){
+    if(a.name.indexOf('data-') === 0 && a.name !== 'data-key' && a.value) return a.value;
+  }
+  return '';
+}
+
+function valeurGarage(nature){
+  const d = dealer || {};
+  const adr = splitAddress(d.adresse || '');
+  switch(nature){
+    case 'raisonSociale': return d.raisonSociale || '';
+    case 'siret':         return (d.siret || '').replace(/\s/g, '');
+    case 'siren':         return (d.siret || '').replace(/\s/g, '').slice(0, 9);
+    case 'tva':           return d.tva || '';
+    case 'cp':            return d.cp || '';
+    case 'ville':         return d.ville || '';
+    case 'adresse':       return d.adresse || '';
+    case 'voieNum':       return adr.voieNum;
+    case 'voieExt':       return adr.voieExt;
+    case 'voieType':      return adr.voieType;
+    case 'voieNom':       return adr.voieNom;
+    case 'tel':           return d.tel || '';
+    case 'email':         return d.email || '';
+    case 'signataire':    return d.signataire || d.representant || '';
+    case 'pays':          return 'FRANCE';
+  }
+  return '';
+}
+
+function suggestionGarage(el){
+  if(!el || el.tagName !== 'INPUT') return '';
+  const type = (el.type || 'text').toLowerCase();
+  if(['checkbox','radio','date','number','file'].indexOf(type) !== -1) return '';
+  const chemin = normaliserChemin(cheminChamp(el));
+  if(!chemin) return '';
+  for(const [motif, nature] of CHAMPS_GARAGE){
+    if(motif.test(chemin)){
+      const val = valeurGarage(nature);
+      /* Deja la meme valeur : inutile de proposer. */
+      return (val && val !== el.value.trim()) ? val : '';
+    }
+  }
+  return '';
+}
+
+let bulleGarage = null;
+
+function fermerSuggestionGarage(){
+  if(bulleGarage){ bulleGarage.remove(); bulleGarage = null; }
+}
+
+function ouvrirSuggestionGarage(el){
+  fermerSuggestionGarage();
+  const valeur = suggestionGarage(el);
+  if(!valeur) return;
+  const r = el.getBoundingClientRect();
+  const b = document.createElement('div');
+  b.className = 'sugg-garage';
+  b.innerHTML = '<div class="sugg-titre">' + esc(t('Mon garage')) + '</div>'
+    + '<button type="button" class="sugg-choix">' + esc(valeur) + '</button>';
+  document.body.appendChild(b);
+  b.style.left  = Math.max(8, Math.min(r.left, window.innerWidth - b.offsetWidth - 8)) + 'px';
+  b.style.top   = (r.bottom + 4) + 'px';
+  b.style.minWidth = Math.min(r.width, window.innerWidth - 16) + 'px';
+  b.__champ = el;      // a quel champ cette bulle appartient
+  bulleGarage = b;
+  b.querySelector('.sugg-choix').onmousedown = function(e){ e.preventDefault(); };
+  b.querySelector('.sugg-choix').onclick = function(){
+    el.value = valeur;
+    el.dispatchEvent(new Event('input',  { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    fermerSuggestionGarage();
+    el.focus();
+  };
+}
+
+document.addEventListener('focusin', function(e){
+  const el = e.target;
+  if(el && el.tagName === 'INPUT') ouvrirSuggestionGarage(el);
+  else fermerSuggestionGarage();
+});
+/* On quitte un champ : sa bulle disparait. Mais si le clic suivant a
+   deja ouvert celle d'un autre champ, il ne faut pas la fermer — d'ou
+   la verification du champ auquel la bulle appartient. */
+document.addEventListener('focusout', function(e){
+  const champ = e.target;
+  setTimeout(function(){
+    if(bulleGarage && bulleGarage.__champ === champ) fermerSuggestionGarage();
+  }, 150);
+});
+window.addEventListener('scroll', fermerSuggestionGarage, true);
+window.addEventListener('resize', fermerSuggestionGarage);
+
+function initialesGarage(nom){
+  const mots = String(nom || '').toUpperCase()
+    .replace(/[^A-Z0-9À-Ÿ ]/g, ' ').split(/\s+/)
+    .filter(function(m){ return m && ['SAS','SARL','SA','EURL','SASU','SNC','ET','DE','DU','LA','LE','LES'].indexOf(m) < 0; });
+  return (mots.slice(0, 2).map(function(m){ return m[0]; }).join('') || 'A');
+}
+
+/* Le logo en ligne s'il existe, sinon les initiales dans un rond. La
+   taille du logo est ecrite en toutes lettres (largeur et hauteur) :
+   Outlook ignore les tailles maximales, et un logo tout en longueur
+   serait sinon deforme ou demesure. */
+function medaillonCarte(d, marque){
+  if(d.logoUrl){
+    const dim = d.logoDim || { w: 120, h: 64 };
+    const e = Math.min(120 / (dim.w || 120), 64 / (dim.h || 64), 1);
+    const w = Math.max(1, Math.round((dim.w || 120) * e));
+    const h = Math.max(1, Math.round((dim.h || 64) * e));
+    return '<img src="' + esc(d.logoUrl) + '" width="' + w + '" height="' + h + '" '
+      + 'alt="' + esc(d.raisonSociale || '') + '" '
+      + 'style="display:block;margin:0 auto;border:0;width:' + w + 'px;height:' + h + 'px">';
+  }
+  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>'
+    + '<td width="62" height="62" align="center" valign="middle" bgcolor="' + marque + '" '
+    +   'style="width:62px;height:62px;border-radius:31px;background:' + marque + ';'
+    +   'color:#ffffff;font-size:22px;font-weight:bold;letter-spacing:1px">'
+    +   esc(initialesGarage(d.raisonSociale)) + '</td>'
+    + '</tr></table>';
+}
+
+function carteSignatureHtml(d){
+  d = d || {};
+  const th = themeCourant();
+  const panneau = th.barre, texte = th.barreInk;
+  const accent = th.cta, accentInk = th.ctaInk, marque = th.brand;
+  /* Signataire : « M. DUPONT, gerant » donne le nom et la fonction. */
+  const signe = String(d.signataire || d.representant || '').trim();
+  const coupe = signe.indexOf(',');
+  const nomSigne = coupe > 0 ? signe.slice(0, coupe).trim() : signe;
+  const fonction = coupe > 0 ? signe.slice(coupe + 1).trim() : '';
+  const adresse = [d.adresse || '', ((d.cp || '') + ' ' + (d.ville || '')).trim()]
+    .filter(Boolean).join(', ');
+  const ligne = function(symbole, valeur, lien){
+    if(!valeur) return '';
+    const v = lien
+      ? '<a href="' + lien + '" style="color:' + texte + ';text-decoration:none">' + esc(valeur) + '</a>'
+      : esc(valeur);
+    return '<tr>'
+      + '<td valign="top" style="padding:3px 8px 3px 0;color:' + accent + ';font-size:13px;width:16px">' + symbole + '</td>'
+      + '<td style="padding:3px 0;color:' + texte + ';font-size:13px;line-height:1.4">' + v + '</td>'
+      + '</tr>';
+  };
+  const telLien = d.tel ? 'tel:' + String(d.tel).replace(/[^0-9+]/g, '') : '';
+  return ''
+    + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" '
+    +   'style="max-width:560px;margin:22px 0 0;border-collapse:separate;'
+    +   'border:1px solid ' + th.ligne + ';border-radius:12px;overflow:hidden;'
+    +   'font-family:Arial,Helvetica,sans-serif">'
+    + '<tr>'
+    /* --- partie claire : medaillon et signataire --- */
+    + '<td width="36%" valign="middle" align="center" bgcolor="#ffffff" '
+    +   'style="padding:20px 12px;background:#ffffff;border-right:5px solid ' + accent + '">'
+    +   medaillonCarte(d, marque)
+    +   (nomSigne
+        ? '<div style="margin:10px 0 0;font-size:15px;font-weight:bold;color:' + marque + ';'
+          + 'line-height:1.25">' + esc(nomSigne) + '</div>' : '')
+    +   (fonction
+        ? '<div style="margin:3px 0 0;font-size:12px;color:#6b7686">' + esc(fonction) + '</div>' : '')
+    + '</td>'
+    /* --- partie foncee : raison sociale et coordonnees --- */
+    + '<td valign="middle" bgcolor="' + panneau + '" '
+    +   'style="padding:18px 20px;background:' + panneau + '">'
+    +   (d.raisonSociale
+        ? '<div style="margin:0 0 12px"><span style="display:inline-block;padding:6px 12px;'
+          + 'background:' + accent + ';color:' + accentInk + ';font-size:13px;font-weight:bold;'
+          + 'letter-spacing:1.2px;text-transform:uppercase">' + esc(d.raisonSociale) + '</span></div>'
+        : '')
+    +   '<table role="presentation" cellpadding="0" cellspacing="0" border="0">'
+    +     ligne('&#9679;', adresse)
+    +     ligne('&#9742;', d.tel, telLien)
+    +     ligne('&#9993;', d.email, d.email ? 'mailto:' + d.email : '')
+    +     (d.siret ? ligne('&#9670;', 'SIRET ' + String(d.siret).replace(/(\d{3})(\d{3})(\d{3})(\d{5})/, '$1 $2 $3 $4')) : '')
+    +   '</table>'
+    + '</td>'
+    + '</tr></table>';
+}
+
 function corpsHtmlMessage(lignes, d){
-  const html = lignes.map(function(l){
+  /* La carte porte deja le nom du signataire : on ne le repete pas
+     sous « Cordialement ». */
+  const signe = d && (d.representant || d.raisonSociale);
+  const texte = (signe && lignes[lignes.length - 1] === signe) ? lignes.slice(0, -1) : lignes;
+  const html = texte.map(function(l){
     return '<p style="margin:0 0 10px">' + esc(l) + '</p>';
   }).join('');
-  const pied = [ (d && d.raisonSociale) || '',
-                 [(d && d.adresse) || '', (((d && d.cp) || '') + ' ' + ((d && d.ville) || '')).trim()]
-                   .filter(Boolean).join(', '),
-                 [(d && d.tel) || '', (d && d.email) || ''].filter(Boolean).join(' - ')
-               ].filter(Boolean);
   return '<!doctype html><html><head><meta charset="utf-8"></head>'
     + '<body style="margin:0;padding:0;background:#ffffff">'
     + '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;'
     +   'line-height:1.55;color:#1a2233;max-width:560px">'
     +   html
-    +   (pied.length
-        ? '<p style="margin:18px 0 0;font-size:12px;color:#5a6577">'
-          + pied.map(esc).join('<br>') + '</p>'
-        : '')
+    +   carteSignatureHtml(d)
     +   '<p style="margin:16px 0 0;padding-top:10px;border-top:1px solid #e4e9f0;'
     +     'font-size:11.5px;color:#93a0b3">'
     +     esc(t('Document établi avec Autivio')) + ' — '
@@ -25160,6 +25497,7 @@ function monterBlocLogo(bg, selecteur){
       try{
         dealer.logo = await preparerLogo(f);
         await saveDealer();
+        publierLogo();          // en ligne pour la signature des e-mails
         dessine();
         if(currentId && vehicles[currentId]) renderDoc(vehicles[currentId]);
       }catch(e){
@@ -25171,6 +25509,7 @@ function monterBlocLogo(bg, selecteur){
     if(bt) bt.onclick = async function(){
       dealer.logo = '';
       await saveDealer();
+      publierLogo();            // le retire aussi du serveur
       dessine();
       if(currentId && vehicles[currentId]) renderDoc(vehicles[currentId]);
     };
