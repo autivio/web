@@ -1697,6 +1697,57 @@
   .cg-val{grid-column:2;width:100%;box-sizing:border-box;padding:7px 9px;font-size:15px;
     border:1px solid var(--line,#dfe4ec);border-radius:7px;font-family:inherit;
     background:var(--paper,#fff);color:var(--ink,#16233a);}
+  /* Prise de vue guidee de la carte grise */
+  .cam-ecran{position:fixed;inset:0;z-index:9500;background:#05070c;overflow:hidden;}
+  .cam-video{width:100%;height:100%;object-fit:cover;}
+  .cam-voile{position:absolute;inset:0;}
+  .cam-cadre{position:absolute;border-radius:16px;
+    box-shadow:0 0 0 100vmax rgba(4,7,12,.62);
+    outline:2px solid rgba(255,255,255,.55);outline-offset:0;
+    transition:outline-color .25s;}
+  .cam-cadre.bon{outline-color:rgba(61,220,132,.9);}
+  /* Quatre equerres : l'oeil vise mieux des angles qu'un rectangle */
+  .cam-cadre .coin{position:absolute;width:30px;height:30px;
+    border:3px solid #fff;border-radius:4px;transition:border-color .25s;}
+  .cam-cadre.bon .coin{border-color:#3ddc84;}
+  .cam-cadre .hg{top:-3px;left:-3px;border-right:0;border-bottom:0;border-top-left-radius:14px;}
+  .cam-cadre .hd{top:-3px;right:-3px;border-left:0;border-bottom:0;border-top-right-radius:14px;}
+  .cam-cadre .bg{bottom:-3px;left:-3px;border-right:0;border-top:0;border-bottom-left-radius:14px;}
+  .cam-cadre .bd{bottom:-3px;right:-3px;border-left:0;border-top:0;border-bottom-right-radius:14px;}
+  .cam-haut{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;
+    justify-content:space-between;padding:14px 16px;
+    padding-top:calc(env(safe-area-inset-top, 0px) + 14px);
+    background:linear-gradient(to bottom, rgba(4,7,12,.78), rgba(4,7,12,0));}
+  .cam-titre{color:#fff;font-size:16px;font-weight:600;letter-spacing:.2px;}
+  .cam-croix{background:rgba(255,255,255,.14);border:0;color:#fff;width:36px;height:36px;
+    border-radius:50%;font-size:17px;line-height:1;cursor:pointer;font-family:inherit;}
+  .cam-etat{position:absolute;left:50%;transform:translateX(-50%);
+    top:calc(env(safe-area-inset-top, 0px) + 64px);
+    display:flex;align-items:center;gap:9px;
+    background:rgba(4,7,12,.72);color:#fff;font-size:15px;padding:10px 16px;border-radius:999px;
+    max-width:88%;text-align:left;line-height:1.3;backdrop-filter:blur(6px);
+    transition:background .25s;}
+  .cam-etat.bon{background:rgba(24,140,70,.94);}
+  .cam-point{width:9px;height:9px;border-radius:50%;background:#f3c14b;flex:0 0 auto;
+    animation:camBat 1.1s ease-in-out infinite;}
+  .cam-etat.bon .cam-point{background:#c9f7dc;animation:none;}
+  @keyframes camBat{0%,100%{opacity:.35;}50%{opacity:1;}}
+  .cam-barre{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;
+    justify-content:space-between;gap:10px;padding:18px 20px;
+    padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);
+    background:linear-gradient(to top, rgba(4,7,12,.82), rgba(4,7,12,0));}
+  .cam-galerie{background:rgba(255,255,255,.14);border:0;color:#fff;font-size:13px;
+    font-family:inherit;padding:10px 12px;border-radius:10px;cursor:pointer;
+    max-width:96px;line-height:1.25;}
+  .cam-declic{position:relative;width:72px;height:72px;border-radius:50%;background:#fff;
+    border:0;cursor:pointer;flex:0 0 auto;box-shadow:0 6px 20px rgba(0,0,0,.35);}
+  .cam-anneau{position:absolute;inset:-7px;border-radius:50%;
+    border:3px solid rgba(255,255,255,.5);transition:border-color .25s, transform .25s;}
+  .cam-declic.pret .cam-anneau{border-color:#3ddc84;transform:scale(1.06);}
+  .cam-aide{color:rgba(255,255,255,.78);font-size:12.5px;max-width:96px;text-align:right;
+    line-height:1.25;}
+  .cg-identite{margin:6px 0 2px;padding:7px 11px;border-radius:9px;font-size:13px;
+    background:var(--soft,#eef2fa);color:var(--brand,#14417f);font-weight:600;}
 </style>
 </head>
 <body>
@@ -2227,6 +2278,83 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Ce n’est pas la bonne photo": "Non è la foto giusta",
+    "C’est encore": "È di nuovo",
+    "retournez la pièce et photographiez l’autre côté.": "giri il documento e fotografi l’altro lato.",
+    "Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.": "Questa foto non sembra un documento d’identità. Inquadri l’intera carta, ben piatta.",
+    "la face à la bande de caractères": "il lato con la banda di caratteri",
+    "la face à l’adresse": "il lato con l’indirizzo",
+    "cette face": "questo lato",
+    "Recto et verso": "Fronte e retro",
+    "l’autre face de la pièce": "l’altro lato del documento",
+    "Autre face de la pièce": "Altro lato del documento",
+    "Photographiez maintenant :": "Fotografi ora:",
+    "la face qui porte la bande de caractères": "il lato con la banda di caratteri",
+    "la face qui porte l’adresse": "il lato con l’indirizzo",
+    "nouvelle carte d’identité (depuis 2021, format carte bancaire)": "nuova carta d’identità (dal 2021, formato carta)",
+    "ancienne carte d’identité (modèle 1995-2021)": "vecchia carta d’identità (modello 1995-2021)",
+    "carte d’identité au format carte bancaire": "carta d’identità formato carta",
+    "carte d’identité française": "carta d’identità francese",
+    "périmée": "scaduta",
+    "Relisez avant de valider : une lettre fausse fait refuser le dossier.": "Rilegga prima di confermare: una lettera sbagliata fa respingere la pratica.",
+    "🪪 Scanner une pièce d’identité": "🪪 Scansionare un documento d’identità",
+    "Pièce d’identité lue": "Documento d’identità letto",
+    "Pièce d’identité": "Documento d’identità",
+    "bande du bas visible": "banda in basso visibile",
+    "Relisez avant de valider. L’adresse ne figure pas sur une carte d’identité : elle reste à saisir.": "Rilegga prima di confermare. La carta d’identità non riporta l’indirizzo: va inserito a mano.",
+    "Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.": "Non è stato letto nulla. Inquadri la banda di caratteri in basso, piatta e senza riflessi.",
+    "lecture vérifiée": "lettura verificata",
+    "contrôles justes": "controlli corretti",
+    "Lecture de la pièce d’identité…": "Lettura del documento d’identità…",
+    "Date de naissance": "Data di nascita",
+    "Lieu de naissance": "Luogo di nascita",
+    "Département de naissance": "Dipartimento di nascita",
+    "Sexe": "Sesso",
+    "N° du document": "Numero del documento",
+    "Valable jusqu’au": "Valido fino al",
+    "Carte d’identité": "Carta d’identità",
+    "Passeport": "Passaporto",
+    "nouveau format SIV (depuis 2009)": "nuovo formato SIV (dal 2009)",
+    "ancien format FNI (avant 2009)": "vecchio formato FNI (prima del 2009)",
+    "Zulassungsbescheinigung (depuis octobre 2005)": "Zulassungsbescheinigung (da ottobre 2005)",
+    "ancien Fahrzeugschein (avant 2005)": "vecchio Fahrzeugschein (prima del 2005)",
+    "kentekencard, format carte (depuis 2014)": "kentekencard, formato carta (dal 2014)",
+    "papier, volets I A / I B / II (2004-2013)": "carta, parti I A / I B / II (2004-2013)",
+    "papier, trois volets (avant 2004)": "carta, tre parti (prima del 2004)",
+    "Ce document comporte plusieurs volets. Photographiez maintenant :": "Questo documento ha più parti. Fotografi ora:",
+    "Photographier": "Fotografare",
+    "Terminer": "Terminare",
+    "Recto": "Fronte",
+    "Verso": "Retro",
+    "Partie I (Teil I)": "Parte I (Teil I)",
+    "Partie II (Teil II)": "Parte II (Teil II)",
+    "Volet I A": "Parte I A",
+    "Volet I B": "Parte I B",
+    "Volet II": "Parte II",
+    "Carte grise française": "Carta di circolazione francese",
+    "Carte grise allemande": "Carta di circolazione tedesca",
+    "Carte grise néerlandaise": "Carta di circolazione olandese",
+    "Carte grise belge": "Carta di circolazione belga",
+    "Carte grise luxembourgeoise": "Carta di circolazione lussemburghese",
+    "Carte grise italienne": "Carta di circolazione italiana",
+    "Permis de circulation suisse": "Licenza di circolazione svizzera",
+    "supposée": "presunta",
+    "délivrée en": "rilasciata nel",
+    "SIV (depuis 2009)": "SIV (dal 2009)",
+    "FNI (avant 2009)": "FNI (prima del 2009)",
+    "Carte grise": "Carta di circolazione",
+    "Photo existante": "Foto esistente",
+    "Recherche du document…": "Ricerca del documento…",
+    "Trop sombre — cherchez la lumière": "Troppo scuro — cerchi più luce",
+    "Trop de reflet — inclinez légèrement": "Troppo riflesso — inclini leggermente",
+    "Approchez : remplissez le cadre": "Si avvicini: riempia il riquadro",
+    "Ne bougez plus — mise au point": "Non si muova — messa a fuoco",
+    "C’est bon — ne bougez plus": "Bene — non si muova",
+    "Prendre la photo": "Scattare la foto",
+    "Déclenche tout seul": "Scatta da solo",
+    "Photo floue": "Foto sfocata",
+    "Reprendre la photo": "Rifare la foto",
+    "Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.": "Questa foto è sfocata: il testo non sarebbe letto correttamente. La rifaccia con il documento ben piatto, ben illuminato, aspettando che la fotocamera metta a fuoco.",
     "📷 Scanner la carte grise": "📷 Scansionare la carta di circolazione",
     "Carte grise lue": "Carta di circolazione letta",
     "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Rilegga prima di confermare: una lettera sbagliata nel numero di telaio fa respingere la pratica.",
@@ -3051,6 +3179,83 @@ const DICO = {
   },
 
   lb: {
+    "Ce n’est pas la bonne photo": "Dat ass net dat richtegt Foto",
+    "C’est encore": "Dat ass nach eng Kéier",
+    "retournez la pièce et photographiez l’autre côté.": "dréint d’Dokument ëm a fotograféiert déi aner Säit.",
+    "Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.": "Dëst Foto gesäit net aus wéi en Ausweis. Kadréiert déi ganz Kaart, flaach.",
+    "la face à la bande de caractères": "d’Säit mat der Zeechebänn",
+    "la face à l’adresse": "d’Säit mat der Adress",
+    "cette face": "dës Säit",
+    "Recto et verso": "Vir- a Récksäit",
+    "l’autre face de la pièce": "déi aner Säit vum Dokument",
+    "Autre face de la pièce": "Aner Säit vum Dokument",
+    "Photographiez maintenant :": "Fotograféiert elo:",
+    "la face qui porte la bande de caractères": "d’Säit mat der Zeechebänn",
+    "la face qui porte l’adresse": "d’Säit mat der Adress",
+    "nouvelle carte d’identité (depuis 2021, format carte bancaire)": "neien Perso (zënter 2021, Kaartformat)",
+    "ancienne carte d’identité (modèle 1995-2021)": "alen Perso (Modell 1995-2021)",
+    "carte d’identité au format carte bancaire": "Perso am Kaartformat",
+    "carte d’identité française": "franséische Perso",
+    "périmée": "ofgelaf",
+    "Relisez avant de valider : une lettre fausse fait refuser le dossier.": "Kontrolléiert virum Bestätegen: ee falsche Buschtaf léisst den Dossier refuséieren.",
+    "🪪 Scanner une pièce d’identité": "🪪 Ausweis scannen",
+    "Pièce d’identité lue": "Ausweis gelies",
+    "Pièce d’identité": "Ausweis",
+    "bande du bas visible": "ënnescht Kodebänn siichtbar",
+    "Relisez avant de valider. L’adresse ne figure pas sur une carte d’identité : elle reste à saisir.": "Kontrolléiert virum Bestätegen. En Ausweis huet keng Adress: déi musst Dir aginn.",
+    "Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.": "Et konnt näischt gelies ginn. Kadréiert d’Zeechebänn ënnen, flaach an ouni Reflex.",
+    "lecture vérifiée": "Liesung gepréift",
+    "contrôles justes": "Kontrolle richteg",
+    "Lecture de la pièce d’identité…": "Den Ausweis gëtt gelies…",
+    "Date de naissance": "Gebuertsdatum",
+    "Lieu de naissance": "Gebuertsuert",
+    "Département de naissance": "Gebuertsdepartement",
+    "Sexe": "Geschlecht",
+    "N° du document": "Dokumentnummer",
+    "Valable jusqu’au": "Gëlteg bis",
+    "Carte d’identité": "Perso",
+    "Passeport": "Pass",
+    "nouveau format SIV (depuis 2009)": "neit SIV-Format (zënter 2009)",
+    "ancien format FNI (avant 2009)": "alt FNI-Format (virun 2009)",
+    "Zulassungsbescheinigung (depuis octobre 2005)": "Zulassungsbescheinigung (zënter Oktober 2005)",
+    "ancien Fahrzeugschein (avant 2005)": "alen Fahrzeugschäin (virun 2005)",
+    "kentekencard, format carte (depuis 2014)": "kentekencard, Kaartformat (zënter 2014)",
+    "papier, volets I A / I B / II (2004-2013)": "Pabeier, Deeler I A / I B / II (2004-2013)",
+    "papier, trois volets (avant 2004)": "Pabeier, dräi Deeler (virun 2004)",
+    "Ce document comporte plusieurs volets. Photographiez maintenant :": "Dëst Dokument huet méi Deeler. Fotograféiert elo:",
+    "Photographier": "Fotograféieren",
+    "Terminer": "Fäerdeg",
+    "Recto": "Virsäit",
+    "Verso": "Récksäit",
+    "Partie I (Teil I)": "Deel I (Teil I)",
+    "Partie II (Teil II)": "Deel II (Teil II)",
+    "Volet I A": "Deel I A",
+    "Volet I B": "Deel I B",
+    "Volet II": "Deel II",
+    "Carte grise française": "Franséische Fahrzeugschäin",
+    "Carte grise allemande": "Däitsch Zulassungsbescheinigung",
+    "Carte grise néerlandaise": "Hollännesche Fahrzeugschäin",
+    "Carte grise belge": "Belschen Fahrzeugschäin",
+    "Carte grise luxembourgeoise": "Lëtzebuerger Fahrzeugschäin",
+    "Carte grise italienne": "Italieneschen Fahrzeugschäin",
+    "Permis de circulation suisse": "Schwäizer Fahrzeugausweis",
+    "supposée": "ugeholl",
+    "délivrée en": "ausgestallt",
+    "SIV (depuis 2009)": "SIV (zënter 2009)",
+    "FNI (avant 2009)": "FNI (virun 2009)",
+    "Carte grise": "Fahrzeugschäin",
+    "Photo existante": "Bestehend Foto",
+    "Recherche du document…": "Dokument gëtt gesicht…",
+    "Trop sombre — cherchez la lumière": "Ze däischter — sicht méi Luucht",
+    "Trop de reflet — inclinez légèrement": "Ze vill Reflex — liicht kippen",
+    "Approchez : remplissez le cadre": "Kommt méi no: fëllt de Kader",
+    "Ne bougez plus — mise au point": "Stillhalen — scharf stellen",
+    "C’est bon — ne bougez plus": "Gutt — stillhalen",
+    "Prendre la photo": "Foto maachen",
+    "Déclenche tout seul": "Léist vun eleng aus",
+    "Photo floue": "Onschaarf Foto",
+    "Reprendre la photo": "Foto nei maachen",
+    "Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.": "Dëst Foto ass onschaarf: den Text géif net richteg gelies ginn. Maacht et nei, de Schäin flaach a gutt beliicht, a waart bis d’Kamera schaarf stellt.",
     "📷 Scanner la carte grise": "📷 Fahrzeugschäin scannen",
     "Carte grise lue": "Fahrzeugschäin gelies",
     "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Kontrolléiert virum Bestätegen: ee falsche Buschtaf an der Fahrgestellnummer léisst den Dossier refuséieren.",
@@ -3874,6 +4079,83 @@ const DICO = {
   },
 
   en: {
+    "Ce n’est pas la bonne photo": "This is not the right photo",
+    "C’est encore": "This is again",
+    "retournez la pièce et photographiez l’autre côté.": "turn the document over and photograph the other side.",
+    "Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.": "This photo does not look like an ID document. Frame the whole card, flat.",
+    "la face à la bande de caractères": "the side with the character strip",
+    "la face à l’adresse": "the side with the address",
+    "cette face": "this side",
+    "Recto et verso": "Front and back",
+    "l’autre face de la pièce": "the other side of the document",
+    "Autre face de la pièce": "Other side of the document",
+    "Photographiez maintenant :": "Now photograph:",
+    "la face qui porte la bande de caractères": "the side with the character strip",
+    "la face qui porte l’adresse": "the side with the address",
+    "nouvelle carte d’identité (depuis 2021, format carte bancaire)": "new ID card (since 2021, card format)",
+    "ancienne carte d’identité (modèle 1995-2021)": "old ID card (1995-2021 model)",
+    "carte d’identité au format carte bancaire": "ID card, card format",
+    "carte d’identité française": "French ID card",
+    "périmée": "expired",
+    "Relisez avant de valider : une lettre fausse fait refuser le dossier.": "Check before confirming: one wrong letter gets the file rejected.",
+    "🪪 Scanner une pièce d’identité": "🪪 Scan an ID document",
+    "Pièce d’identité lue": "ID document read",
+    "Pièce d’identité": "ID document",
+    "bande du bas visible": "bottom code strip visible",
+    "Relisez avant de valider. L’adresse ne figure pas sur une carte d’identité : elle reste à saisir.": "Check before confirming. An ID card carries no address: you still have to type it.",
+    "Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.": "Nothing could be read. Frame the character strip at the bottom, flat and without glare.",
+    "lecture vérifiée": "reading verified",
+    "contrôles justes": "checks passed",
+    "Lecture de la pièce d’identité…": "Reading the ID document…",
+    "Date de naissance": "Date of birth",
+    "Lieu de naissance": "Place of birth",
+    "Département de naissance": "Department of birth",
+    "Sexe": "Sex",
+    "N° du document": "Document number",
+    "Valable jusqu’au": "Valid until",
+    "Carte d’identité": "ID card",
+    "Passeport": "Passport",
+    "nouveau format SIV (depuis 2009)": "new SIV format (since 2009)",
+    "ancien format FNI (avant 2009)": "old FNI format (before 2009)",
+    "Zulassungsbescheinigung (depuis octobre 2005)": "Zulassungsbescheinigung (since October 2005)",
+    "ancien Fahrzeugschein (avant 2005)": "old Fahrzeugschein (before 2005)",
+    "kentekencard, format carte (depuis 2014)": "kentekencard, card format (since 2014)",
+    "papier, volets I A / I B / II (2004-2013)": "paper, parts I A / I B / II (2004-2013)",
+    "papier, trois volets (avant 2004)": "paper, three parts (before 2004)",
+    "Ce document comporte plusieurs volets. Photographiez maintenant :": "This document has several parts. Now photograph:",
+    "Photographier": "Photograph",
+    "Terminer": "Finish",
+    "Recto": "Front",
+    "Verso": "Back",
+    "Partie I (Teil I)": "Part I (Teil I)",
+    "Partie II (Teil II)": "Part II (Teil II)",
+    "Volet I A": "Part I A",
+    "Volet I B": "Part I B",
+    "Volet II": "Part II",
+    "Carte grise française": "French registration document",
+    "Carte grise allemande": "German registration document",
+    "Carte grise néerlandaise": "Dutch registration document",
+    "Carte grise belge": "Belgian registration document",
+    "Carte grise luxembourgeoise": "Luxembourg registration document",
+    "Carte grise italienne": "Italian registration document",
+    "Permis de circulation suisse": "Swiss registration document",
+    "supposée": "assumed",
+    "délivrée en": "issued in",
+    "SIV (depuis 2009)": "SIV (since 2009)",
+    "FNI (avant 2009)": "FNI (before 2009)",
+    "Carte grise": "Registration document",
+    "Photo existante": "Existing photo",
+    "Recherche du document…": "Looking for the document…",
+    "Trop sombre — cherchez la lumière": "Too dark — find more light",
+    "Trop de reflet — inclinez légèrement": "Too much glare — tilt slightly",
+    "Approchez : remplissez le cadre": "Come closer: fill the frame",
+    "Ne bougez plus — mise au point": "Hold still — focusing",
+    "C’est bon — ne bougez plus": "Good — hold still",
+    "Prendre la photo": "Take the photo",
+    "Déclenche tout seul": "Shoots by itself",
+    "Photo floue": "Blurred photo",
+    "Reprendre la photo": "Take the photo again",
+    "Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.": "This photo is blurred: the text would not be read correctly. Take it again with the document flat, well lit, and wait for the camera to focus.",
     "📷 Scanner la carte grise": "📷 Scan the registration document",
     "Carte grise lue": "Registration document read",
     "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Check before confirming: one wrong letter in a chassis number gets the file rejected.",
@@ -4696,6 +4978,83 @@ const DICO = {
   },
 
   de: {
+    "Ce n’est pas la bonne photo": "Das ist nicht das richtige Foto",
+    "C’est encore": "Das ist erneut",
+    "retournez la pièce et photographiez l’autre côté.": "drehen Sie das Dokument um und fotografieren Sie die andere Seite.",
+    "Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.": "Dieses Foto sieht nicht nach einem Ausweis aus. Erfassen Sie die ganze Karte, flach.",
+    "la face à la bande de caractères": "die Seite mit dem Zeichenstreifen",
+    "la face à l’adresse": "die Seite mit der Adresse",
+    "cette face": "diese Seite",
+    "Recto et verso": "Vorder- und Rückseite",
+    "l’autre face de la pièce": "die andere Seite des Dokuments",
+    "Autre face de la pièce": "Andere Seite des Dokuments",
+    "Photographiez maintenant :": "Fotografieren Sie jetzt:",
+    "la face qui porte la bande de caractères": "die Seite mit dem Zeichenstreifen",
+    "la face qui porte l’adresse": "die Seite mit der Adresse",
+    "nouvelle carte d’identité (depuis 2021, format carte bancaire)": "neuer Personalausweis (seit 2021, Kartenformat)",
+    "ancienne carte d’identité (modèle 1995-2021)": "alter Personalausweis (Modell 1995-2021)",
+    "carte d’identité au format carte bancaire": "Personalausweis im Kartenformat",
+    "carte d’identité française": "französischer Personalausweis",
+    "périmée": "abgelaufen",
+    "Relisez avant de valider : une lettre fausse fait refuser le dossier.": "Prüfen Sie vor dem Bestätigen: Ein falscher Buchstabe führt zur Ablehnung.",
+    "🪪 Scanner une pièce d’identité": "🪪 Ausweis scannen",
+    "Pièce d’identité lue": "Ausweis gelesen",
+    "Pièce d’identité": "Ausweis",
+    "bande du bas visible": "unterer Codestreifen sichtbar",
+    "Relisez avant de valider. L’adresse ne figure pas sur une carte d’identité : elle reste à saisir.": "Prüfen Sie vor dem Bestätigen. Ein Ausweis enthält keine Adresse: Sie müssen sie eingeben.",
+    "Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.": "Es konnte nichts gelesen werden. Erfassen Sie den Zeichenstreifen unten, flach und ohne Spiegelung.",
+    "lecture vérifiée": "Lesung geprüft",
+    "contrôles justes": "Prüfziffern korrekt",
+    "Lecture de la pièce d’identité…": "Ausweis wird gelesen…",
+    "Date de naissance": "Geburtsdatum",
+    "Lieu de naissance": "Geburtsort",
+    "Département de naissance": "Geburtsdepartement",
+    "Sexe": "Geschlecht",
+    "N° du document": "Dokumentnummer",
+    "Valable jusqu’au": "Gültig bis",
+    "Carte d’identité": "Personalausweis",
+    "Passeport": "Reisepass",
+    "nouveau format SIV (depuis 2009)": "neues SIV-Format (seit 2009)",
+    "ancien format FNI (avant 2009)": "altes FNI-Format (vor 2009)",
+    "Zulassungsbescheinigung (depuis octobre 2005)": "Zulassungsbescheinigung (seit Oktober 2005)",
+    "ancien Fahrzeugschein (avant 2005)": "alter Fahrzeugschein (vor 2005)",
+    "kentekencard, format carte (depuis 2014)": "kentekencard, Kartenformat (seit 2014)",
+    "papier, volets I A / I B / II (2004-2013)": "Papier, Teile I A / I B / II (2004-2013)",
+    "papier, trois volets (avant 2004)": "Papier, drei Teile (vor 2004)",
+    "Ce document comporte plusieurs volets. Photographiez maintenant :": "Dieses Dokument hat mehrere Teile. Fotografieren Sie jetzt:",
+    "Photographier": "Fotografieren",
+    "Terminer": "Fertig",
+    "Recto": "Vorderseite",
+    "Verso": "Rückseite",
+    "Partie I (Teil I)": "Teil I",
+    "Partie II (Teil II)": "Teil II",
+    "Volet I A": "Teil I A",
+    "Volet I B": "Teil I B",
+    "Volet II": "Teil II",
+    "Carte grise française": "Französischer Fahrzeugschein",
+    "Carte grise allemande": "Deutsche Zulassungsbescheinigung",
+    "Carte grise néerlandaise": "Niederländischer Fahrzeugschein",
+    "Carte grise belge": "Belgischer Fahrzeugschein",
+    "Carte grise luxembourgeoise": "Luxemburgischer Fahrzeugschein",
+    "Carte grise italienne": "Italienischer Fahrzeugschein",
+    "Permis de circulation suisse": "Schweizer Fahrzeugausweis",
+    "supposée": "vermutet",
+    "délivrée en": "ausgestellt",
+    "SIV (depuis 2009)": "SIV (seit 2009)",
+    "FNI (avant 2009)": "FNI (vor 2009)",
+    "Carte grise": "Fahrzeugschein",
+    "Photo existante": "Vorhandenes Foto",
+    "Recherche du document…": "Dokument wird gesucht…",
+    "Trop sombre — cherchez la lumière": "Zu dunkel — mehr Licht suchen",
+    "Trop de reflet — inclinez légèrement": "Zu viel Spiegelung — leicht neigen",
+    "Approchez : remplissez le cadre": "Näher herangehen: Rahmen ausfüllen",
+    "Ne bougez plus — mise au point": "Still halten — Fokus",
+    "C’est bon — ne bougez plus": "Gut — still halten",
+    "Prendre la photo": "Foto aufnehmen",
+    "Déclenche tout seul": "Löst von selbst aus",
+    "Photo floue": "Unscharfes Foto",
+    "Reprendre la photo": "Foto erneut aufnehmen",
+    "Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.": "Dieses Foto ist unscharf: Der Text würde nicht richtig gelesen. Nehmen Sie es erneut auf, den Schein flach und gut beleuchtet, und warten Sie, bis die Kamera scharf stellt.",
     "📷 Scanner la carte grise": "📷 Fahrzeugschein scannen",
     "Carte grise lue": "Fahrzeugschein gelesen",
     "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Prüfen Sie vor dem Bestätigen: Ein falscher Buchstabe in der Fahrgestellnummer führt zur Ablehnung.",
@@ -5534,6 +5893,83 @@ const DICO = {
   },
 
   nl: {
+    "Ce n’est pas la bonne photo": "Dit is niet de juiste foto",
+    "C’est encore": "Dit is opnieuw",
+    "retournez la pièce et photographiez l’autre côté.": "draai het document om en fotografeer de andere zijde.",
+    "Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.": "Deze foto lijkt niet op een identiteitsbewijs. Kader de hele kaart, plat.",
+    "la face à la bande de caractères": "de zijde met de tekenstrook",
+    "la face à l’adresse": "de zijde met het adres",
+    "cette face": "deze zijde",
+    "Recto et verso": "Voor- en achterzijde",
+    "l’autre face de la pièce": "de andere zijde van het document",
+    "Autre face de la pièce": "Andere zijde van het document",
+    "Photographiez maintenant :": "Fotografeer nu:",
+    "la face qui porte la bande de caractères": "de zijde met de tekenstrook",
+    "la face qui porte l’adresse": "de zijde met het adres",
+    "nouvelle carte d’identité (depuis 2021, format carte bancaire)": "nieuwe identiteitskaart (sinds 2021, kaartformaat)",
+    "ancienne carte d’identité (modèle 1995-2021)": "oude identiteitskaart (model 1995-2021)",
+    "carte d’identité au format carte bancaire": "identiteitskaart in kaartformaat",
+    "carte d’identité française": "Franse identiteitskaart",
+    "périmée": "verlopen",
+    "Relisez avant de valider : une lettre fausse fait refuser le dossier.": "Controleer voor u bevestigt: één verkeerde letter doet het dossier afwijzen.",
+    "🪪 Scanner une pièce d’identité": "🪪 Identiteitsbewijs scannen",
+    "Pièce d’identité lue": "Identiteitsbewijs gelezen",
+    "Pièce d’identité": "Identiteitsbewijs",
+    "bande du bas visible": "onderste codestrook zichtbaar",
+    "Relisez avant de valider. L’adresse ne figure pas sur une carte d’identité : elle reste à saisir.": "Controleer voor u bevestigt. Een identiteitskaart bevat geen adres: dat moet u zelf invullen.",
+    "Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.": "Er kon niets worden gelezen. Kader de tekenstrook onderaan, plat en zonder weerspiegeling.",
+    "lecture vérifiée": "lezing geverifieerd",
+    "contrôles justes": "controles correct",
+    "Lecture de la pièce d’identité…": "Identiteitsbewijs wordt gelezen…",
+    "Date de naissance": "Geboortedatum",
+    "Lieu de naissance": "Geboorteplaats",
+    "Département de naissance": "Departement van geboorte",
+    "Sexe": "Geslacht",
+    "N° du document": "Documentnummer",
+    "Valable jusqu’au": "Geldig tot",
+    "Carte d’identité": "Identiteitskaart",
+    "Passeport": "Paspoort",
+    "nouveau format SIV (depuis 2009)": "nieuw SIV-formaat (sinds 2009)",
+    "ancien format FNI (avant 2009)": "oud FNI-formaat (voor 2009)",
+    "Zulassungsbescheinigung (depuis octobre 2005)": "Zulassungsbescheinigung (sinds oktober 2005)",
+    "ancien Fahrzeugschein (avant 2005)": "oude Fahrzeugschein (voor 2005)",
+    "kentekencard, format carte (depuis 2014)": "kentekencard (sinds 2014)",
+    "papier, volets I A / I B / II (2004-2013)": "papier, delen I A / I B / II (2004-2013)",
+    "papier, trois volets (avant 2004)": "papier, drie delen (voor 2004)",
+    "Ce document comporte plusieurs volets. Photographiez maintenant :": "Dit document heeft meerdere delen. Fotografeer nu:",
+    "Photographier": "Fotograferen",
+    "Terminer": "Klaar",
+    "Recto": "Voorzijde",
+    "Verso": "Achterzijde",
+    "Partie I (Teil I)": "Deel I (Teil I)",
+    "Partie II (Teil II)": "Deel II (Teil II)",
+    "Volet I A": "Deel I A",
+    "Volet I B": "Deel I B",
+    "Volet II": "Deel II",
+    "Carte grise française": "Frans kentekenbewijs",
+    "Carte grise allemande": "Duits kentekenbewijs",
+    "Carte grise néerlandaise": "Nederlands kentekenbewijs",
+    "Carte grise belge": "Belgisch inschrijvingsbewijs",
+    "Carte grise luxembourgeoise": "Luxemburgs kentekenbewijs",
+    "Carte grise italienne": "Italiaans kentekenbewijs",
+    "Permis de circulation suisse": "Zwitsers kentekenbewijs",
+    "supposée": "vermoedelijk",
+    "délivrée en": "afgegeven in",
+    "SIV (depuis 2009)": "SIV (sinds 2009)",
+    "FNI (avant 2009)": "FNI (voor 2009)",
+    "Carte grise": "Kentekenbewijs",
+    "Photo existante": "Bestaande foto",
+    "Recherche du document…": "Document zoeken…",
+    "Trop sombre — cherchez la lumière": "Te donker — zoek meer licht",
+    "Trop de reflet — inclinez légèrement": "Te veel weerspiegeling — kantel lichtjes",
+    "Approchez : remplissez le cadre": "Kom dichterbij: vul het kader",
+    "Ne bougez plus — mise au point": "Stil houden — scherpstellen",
+    "C’est bon — ne bougez plus": "Goed — stil houden",
+    "Prendre la photo": "Foto maken",
+    "Déclenche tout seul": "Maakt vanzelf de foto",
+    "Photo floue": "Wazige foto",
+    "Reprendre la photo": "Foto opnieuw maken",
+    "Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.": "Deze foto is wazig: de tekst zou niet correct worden gelezen. Maak ze opnieuw met het document plat en goed verlicht, en wacht tot de camera scherpstelt.",
     "📷 Scanner la carte grise": "📷 Kentekenbewijs scannen",
     "Carte grise lue": "Kentekenbewijs gelezen",
     "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Controleer voor u bevestigt: één verkeerde letter in een chassisnummer doet het dossier afwijzen.",
@@ -6366,7 +6802,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.26';
+const VERSION = '2.27';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -6583,7 +7019,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '24/09/2026';
+const VERSION_DATE = '25/09/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -10133,14 +10569,19 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.27': { date: '25/09/2026', lignes: [
+        "Le scan d’une pièce d’identité lit le recto et le verso, reconnaît le modèle — nouvelle carte depuis 2021, ancienne 1995-2021, passeport — et refuse une photo qui n’est pas une pièce, ou la même face photographiée deux fois.",
+    "Le scan reconnaît le pays, la génération du document et son année : SIV depuis 2009 ou ancien FNI, Zulassungsbescheinigung depuis octobre 2005 ou ancien Fahrzeugschein, kentekencard depuis 2014 ou papier. Les volets sont demandés un par un.",
+        "Le scan de la carte grise ouvre la caméra avec un cadre à l'écran : le logiciel dit en direct si c'est trop sombre, trop loin ou flou, et déclenche tout seul quand c'est bon.",
+        "Un bouton « Scanner la carte grise » lit la photo du certificat sur votre appareil et remplit le véhicule et l'ancien propriétaire, après relecture de votre part. Il n'apparaît que sur les Cerfa qui s'appuient sur la carte grise, et une photo floue est refusée avant la lecture.",
+        { pour: "pro", texte: "La facture a été remise en couleurs : elle prend celles de votre apparence — titre, bandeau du tableau, total et mention fiscale — au lieu du gris." },
+        { pour: "pro", texte: "La fiche garage se retient : la fenêtre s'ouvrait avant le chargement des données, si bien que ce qui venait d'être enregistré était aussitôt écrasé et redemandé à chaque ouverture." },
+        "La suggestion se place juste sous le champ, ou au-dessus quand le bas de l'écran manque : le clavier de l'iPhone la faisait partir tout en haut de la page.",
+        "La suggestion « Mon garage » ne disparaît plus au moindre défilement : elle suit le champ, y compris quand le clavier du téléphone s'ouvre.",
+        "La liste des marques, des modèles et des communes s'ouvre dès qu'on touche le champ, sans avoir à taper une lettre d'abord.",
+        "Les réglages, rubrique « Coordonnées », permettent de supprimer votre compte : compte, fiches et documents sont effacés du serveur, et l'administrateur en est averti."
+  ] },
   '2.26': { date: '24/09/2026', lignes: [
-    "Un bouton « Scanner la carte grise » lit la photo du certificat sur votre appareil et remplit le véhicule et l'ancien propriétaire, après relecture de votre part.",
-    { pour: "pro", texte: "La facture a été remise en couleurs : elle prend celles de votre apparence — titre, bandeau du tableau, total et mention fiscale — au lieu du gris." },
-    { pour: "pro", texte: "La fiche garage se retient : la fenêtre s'ouvrait avant le chargement des données, si bien que ce qui venait d'être enregistré était aussitôt écrasé et redemandé à chaque ouverture." },
-    "La suggestion se place juste sous le champ, ou au-dessus quand le bas de l'écran manque : le clavier de l'iPhone la faisait partir tout en haut de la page.",
-    "La suggestion « Mon garage » ne disparaît plus au moindre défilement : elle suit le champ, y compris quand le clavier du téléphone s'ouvre.",
-    "La liste des marques, des modèles et des communes s'ouvre dès qu'on touche le champ, sans avoir à taper une lettre d'abord.",
-    "Les réglages, rubrique « Coordonnées », permettent de supprimer votre compte : compte, fiches et documents sont effacés du serveur, et l'administrateur en est averti.",
     "Les Cerfa ne se remplissent plus tout seuls avec vos coordonnées : elles se proposent au clic dans le champ, et vous choisissez. Seule la facture garde le bloc « Vendeur » rempli d'avance.",
     "À l'import d'un document, le champ du nom s'ouvre vide : le nom du fichier d'origine n'est plus repris.",
     "Un document s'enregistre même si la voiture n'a ni plaque ni numéro de châssis : il se range sous « SANS-PLAQUE », avec sa date.",
@@ -12511,9 +12952,17 @@ function renderMain(){
        voiture le document se rattache. */
     +     '<button type="button" class="btn-sec" id="btPartagerLien">'
     +       '<span>' + esc(t('🔗 Partager le document')) + '</span></button>'
-    +     '<label class="btn-sec btn-import-doc" id="scanCG">'
-    +       '<span>' + esc(t('📷 Scanner la carte grise')) + '</span>'
-    +       '<input type="file" accept="image/*" capture="environment" style="display:none"></label>'
+    +     (docLitLIdentite()
+            ? '<label class="btn-sec btn-import-doc" id="scanID">'
+              + '<span>' + esc(t('🪪 Scanner une pièce d’identité')) + '</span>'
+              + '<input type="file" accept="image/*" capture="environment" style="display:none"></label>'
+            : '')
+    +     (docLitLaCarteGrise()
+            ? '<label class="btn-sec btn-import-doc" id="scanCG">'
+              + '<span>' + esc(t('📷 Scanner la carte grise')) + '</span>'
+              + '<input type="file" accept="image/*" capture="environment" style="display:none"></label>'
+              + '<button type="button" class="btn-sec" id="scanCGguide" style="display:none"></button>'
+            : '')
     +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
     +       '<span>' + esc(t('📎 Importer un document')) + '</span>'
     +       '<input type="file" style="display:none"></label>'
@@ -12575,6 +13024,24 @@ function renderMain(){
   const btLien = document.getElementById('btPartagerLien');
   if(btLien) btLien.onclick = function(){ partagerLienDocument(v, dealer); };
 
+  const sid = document.getElementById('scanID');
+  if(sid){
+    const champ = sid.querySelector('input');
+    champ.onchange = function(){
+      const f = champ.files && champ.files[0];
+      champ.value = '';
+      if(f) scannerIdentite(f, v).catch(function(e){ informer(e.message); });
+    };
+    if(cameraDisponible()){
+      sid.onclick = async function(e){
+        e.preventDefault();
+        const photo = await prendrePhotoCadree(t('Pièce d’identité') + ' — ' + t('bande du bas visible'));
+        if(photo === 'sans-camera'){ champ.click(); return; }
+        if(photo) scannerIdentite(photo, v, true).catch(function(er){ informer(er.message); });
+      };
+    }
+  }
+
   const scg = document.getElementById('scanCG');
   if(scg){
     const champ = scg.querySelector('input');
@@ -12583,6 +13050,16 @@ function renderMain(){
       champ.value = '';
       if(f) scannerCarteGrise(f, v).catch(function(e){ informer(e.message); });
     };
+    /* Camera guidee si l'appareil la propose ; sinon le clic ouvre
+       l'appareil photo ordinaire, comme avant. */
+    if(cameraDisponible()){
+      scg.onclick = async function(e){
+        e.preventDefault();
+        const photo = await prendrePhotoCadree();
+        if(photo === 'sans-camera'){ champ.click(); return; }
+        if(photo) scannerCarteGrise(photo, v, true).catch(function(er){ informer(er.message); });
+      };
+    }
   }
 
   const pjF = document.getElementById('pjFiche');
@@ -23502,6 +23979,31 @@ function dossierDuVehicule(v){
    leur case a cocher, et c'est vous qui validez. Une lettre fausse dans
    un numero de chassis, et c'est un dossier refuse en prefecture.
    ===================================================================== */
+/* Les Cerfa qui s'appuient sur la carte grise. Ailleurs — W garage,
+   vehicule neuf, perte du certificat (il n'y en a plus), facture,
+   contrats — le bouton n'aurait rien a lire. */
+const DOCS_CARTE_GRISE = [
+  'cession',          // 15776 — certificat de cession
+  'achat',            // 13751 — declaration d'achat
+  'immatriculation',  // 13750 — demande de carte grise
+  'mandat',           // 13757 — mandat d'immatriculation
+  'retrait',          // 13756 — retrait de la circulation
+  'destruction',      // 14365 — cession pour destruction
+  'intention'         // 14366 — intention de destruction
+];
+
+function docLitLaCarteGrise(){
+  return DOCS_CARTE_GRISE.indexOf(currentDoc) !== -1;
+}
+
+/* Les documents ou une piece d'identite sert : ceux qui demandent
+   l'etat civil d'une personne physique. */
+const DOCS_IDENTITE = ['immatriculation', 'cession', 'achat', 'contrat'];
+
+function docLitLIdentite(){
+  return DOCS_IDENTITE.indexOf(currentDoc) !== -1;
+}
+
 const MOTEUR_OCR = [
   'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
   'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js'
@@ -23529,6 +24031,51 @@ async function moteurOcrPret(){
 /* Photo de carte grise : redressee en taille, passee en gris et
    contrastee. Un moteur libre lit bien mieux une image nette et
    contrastee qu'une photo brute. */
+/* --- La photo est-elle nette ? --------------------------------------
+   Une photo floue donne un texte illisible, et l'on ne s'en apercoit
+   qu'apres l'attente de la lecture. On la mesure donc AVANT : sur une
+   image nette, la valeur d'un point differe franchement de celle de
+   ses voisins, et ces ecarts sont grands. Sur une photo floue, tout se
+   fond et les ecarts s'effondrent. C'est la variance du laplacien, la
+   mesure habituelle de la nettete.
+   Seule la partie centrale est examinee : les bords d'une photo prise
+   a la main sont souvent flous sans que le document le soit. */
+/* Seuil regle sur des essais : une carte grise nette donne une valeur
+   de l'ordre de 40, un leger flou 15, un flou franc tombe a 0. En
+   dessous de 12, le texte ne se lit plus. */
+const NETTETE_MINIMALE = 12;
+
+function nettetePhoto(toile){
+  try{
+    const l = toile.width, h = toile.height;
+    const x0 = Math.round(l * 0.15), y0 = Math.round(h * 0.15);
+    const lc = Math.max(8, Math.round(l * 0.7)), hc = Math.max(8, Math.round(h * 0.7));
+    const d = toile.getContext('2d').getImageData(x0, y0, lc, hc).data;
+    const gris = function(x, y){ return d[(y * lc + x) * 4]; };
+    let somme = 0, sommeCarres = 0, n = 0;
+    /* Un point sur deux suffit : c'est deux fois plus rapide et la
+       mesure ne bouge pas. */
+    for(let y = 1; y < hc - 1; y += 2){
+      for(let x = 1; x < lc - 1; x += 2){
+        const v = gris(x - 1, y) + gris(x + 1, y) + gris(x, y - 1) + gris(x, y + 1)
+                  - 4 * gris(x, y);
+        somme += v; sommeCarres += v * v; n++;
+      }
+    }
+    if(!n) return 999;
+    const moyenne = somme / n;
+    return sommeCarres / n - moyenne * moyenne;
+  }catch(e){ return 999; }   // dans le doute, on laisse passer
+}
+
+async function photoFloue(toile){
+  const net = nettetePhoto(toile);
+  if(net >= NETTETE_MINIMALE) return false;
+  await informer(t('Cette photo est floue : le texte ne serait pas lu correctement. Reprenez-la en posant la carte à plat, bien éclairée, et en attendant que l’appareil fasse le point.'),
+    { titre: t('Photo floue'), oui: t('Reprendre la photo') });
+  return true;
+}
+
 function preparerImageOcr(fichier){
   return new Promise(function(ok, non){
     const url = URL.createObjectURL(fichier);
@@ -23572,6 +24119,150 @@ function nettoyerLigneOcr(s){
   return String(s || '').replace(/\s+/g, ' ').trim();
 }
 
+/* =====================================================================
+   QUEL DOCUMENT AI-JE SOUS LES YEUX ?
+   Une carte grise francaise se lit recto-verso ; une allemande se
+   presente en deux parties (Teil I et Teil II) ; une belge et une
+   neerlandaise ont plusieurs volets. Le logiciel reconnait donc le pays
+   et le type avant de reclamer les photos qui manquent.
+   Bonne nouvelle pour la lecture : la directive europeenne 1999/37/CE
+   impose les MEMES reperes partout — A pour l'immatriculation, B pour
+   la premiere mise en circulation, E pour le numero de chassis, D.1
+   pour la marque. Seuls les intitules changent de langue : les codes,
+   eux, sont communs. Le meme lecteur sert donc pour tous ces pays.
+   ===================================================================== */
+const TYPES_CARTE_GRISE = [
+  { id:'de', pays:'DE', nom:'Carte grise allemande',
+    mots:['ZULASSUNGSBESCHEINIGUNG','FAHRZEUGSCHEIN','KRAFTFAHRT-BUNDESAMT','BUNDESREPUBLIK DEUTSCHLAND'],
+    volets:['Partie I (Teil I)','Partie II (Teil II)'] },
+  { id:'nl', pays:'NL', nom:'Carte grise néerlandaise',
+    mots:['KENTEKENBEWIJS','RIJKSDIENST','TENAAMSTELLING','WEGVERKEER'],
+    volets:['Volet I A','Volet I B','Volet II'] },
+  { id:'be', pays:'BE', nom:'Carte grise belge',
+    mots:['INSCHRIJVINGSBEWIJS','BELGIQUE','BELGIE','BELGIË','D.I.V.','DIV '],
+    volets:['Recto','Verso'] },
+  { id:'lu', pays:'LU', nom:'Carte grise luxembourgeoise',
+    mots:['LUXEMBOURG','GRAND-DUCHE','SNCA'],
+    volets:['Recto','Verso'] },
+  { id:'it', pays:'IT', nom:'Carte grise italienne',
+    mots:['CARTA DI CIRCOLAZIONE','MOTORIZZAZIONE','REPUBBLICA ITALIANA'],
+    volets:['Recto','Verso'] },
+  { id:'ch', pays:'CH', nom:'Permis de circulation suisse',
+    mots:['PERMIS DE CIRCULATION','FAHRZEUGAUSWEIS','CONFEDERATION SUISSE'],
+    volets:['Recto','Verso'] },
+  { id:'fr', pays:'FR', nom:'Carte grise française',
+    mots:['CERTIFICAT D','REPUBLIQUE FRANCAISE','RÉPUBLIQUE FRANÇAISE','MINISTERE DE L','PREFECTURE','IMMATRICULATION'],
+    volets:['Recto','Verso'] }
+];
+
+/* Majuscules sans accents, mais en GARDANT espaces et ponctuation.
+   Le logiciel a deja un « sansAccents » qui, lui, enleve tout sauf les
+   lettres et les chiffres : pratique pour comparer des mots, inutilisable
+   pour reconnaitre un debut de ligne comme « Ne(e) le : ». */
+function majuscules(s){
+  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+}
+
+function typeCarteGrise(texte){
+  const t = majuscules(texte);
+  for(const type of TYPES_CARTE_GRISE){
+    const touches = type.mots.filter(function(m){ return t.indexOf(majuscules(m)) !== -1; });
+    if(touches.length) return Object.assign({}, type, { certitude: touches.length });
+  }
+  /* Rien de reconnaissable : on suppose une francaise, la plus
+     courante ici, et on le dit dans la fenetre de relecture. */
+  return Object.assign({}, TYPES_CARTE_GRISE[TYPES_CARTE_GRISE.length - 1],
+                       { certitude: 0, suppose: true });
+}
+
+/* L'annee du document, et son format. En France, le repere I porte la
+   date de delivrance du certificat ; a defaut on prend l'annee de
+   premiere mise en circulation, qui la precede toujours. */
+/* --- Quelle GENERATION de document ? ---------------------------------
+   « Une 2005 » ou « une nouvelle depuis 2014 » ne veut pas dire la meme
+   chose selon le pays. Chaque pays a sa date de bascule, et le document
+   la porte : soit par son intitule — « Zulassungsbescheinigung » n'existe
+   pas avant octobre 2005 —, soit par sa date de delivrance.
+   Les reperes sont des faits verifiables :
+     France : SIV le 15 avril 2009 ; avant, FNI (plaque 123 AB 59).
+     Allemagne : Zulassungsbescheinigung Teil I et II le 1er octobre
+       2005, en remplacement du Fahrzeugschein et du Fahrzeugbrief.
+     Pays-Bas : kentekencard, au format carte bancaire, le 1er janvier
+       2014 ; avant, papier en volets I A / I B / II, et trois volets
+       avant le 1er juin 2004.
+   ---------------------------------------------------------------------- */
+const GENERATIONS_CARTE_GRISE = {
+  FR: [
+    { depuis: 2009, nom: 'nouveau format SIV (depuis 2009)' },
+    { depuis: 0,    nom: 'ancien format FNI (avant 2009)' }
+  ],
+  DE: [
+    { depuis: 2005, nom: 'Zulassungsbescheinigung (depuis octobre 2005)' },
+    { depuis: 0,    nom: 'ancien Fahrzeugschein (avant 2005)' }
+  ],
+  NL: [
+    { depuis: 2014, nom: 'kentekencard, format carte (depuis 2014)' },
+    { depuis: 2004, nom: 'papier, volets I A / I B / II (2004-2013)' },
+    { depuis: 0,    nom: 'papier, trois volets (avant 2004)' }
+  ]
+};
+
+/* Certains intitules valent mieux qu'une date : ils n'ont existe qu'a
+   partir d'une annee donnee. */
+const INDICES_GENERATION = [
+  { pays:'DE', mots:['ZULASSUNGSBESCHEINIGUNG'], nom:'Zulassungsbescheinigung (depuis octobre 2005)' },
+  { pays:'DE', mots:['FAHRZEUGSCHEIN','FAHRZEUGBRIEF'], nom:'ancien Fahrzeugschein (avant 2005)', siSeul:true },
+  { pays:'NL', mots:['KENTEKENCARD','TENAAMSTELLINGSCODE'], nom:'kentekencard, format carte (depuis 2014)' },
+  { pays:'NL', mots:['OVERSCHRIJVINGSBEWIJS'], nom:'papier, volets I A / I B / II (2004-2013)', siSeul:true },
+  { pays:'FR', mots:['ANTS','AGENCE NATIONALE DES TITRES'], nom:'nouveau format SIV (depuis 2009)' }
+];
+
+function generationCarteGrise(lu, texte, type){
+  const pays = (type && type.pays) || 'FR';
+  const t = majuscules(texte);
+
+  /* 1. Ce qui est ecrit sur le document l'emporte sur une date. */
+  for(const ind of INDICES_GENERATION){
+    if(ind.pays !== pays) continue;
+    const vu = ind.mots.some(function(m){ return t.indexOf(majuscules(m)) !== -1; });
+    if(!vu) continue;
+    if(ind.siSeul){
+      /* « Fahrzeugschein » figure aussi, entre parentheses, sur les
+         documents recents : il ne prouve l'ancien format que s'il est
+         seul. */
+      const recent = (pays === 'DE') ? t.indexOf('ZULASSUNGSBESCHEINIGUNG') !== -1
+                                     : t.indexOf('KENTEKENCARD') !== -1;
+      if(recent) continue;
+    }
+    return ind.nom;
+  }
+
+  /* 2. A defaut, la date de delivrance du certificat. */
+  const table = GENERATIONS_CARTE_GRISE[pays];
+  const an = parseInt(String(lu.dateCertif || '').slice(0, 4), 10);
+  if(table && an){
+    for(const g of table){ if(an >= g.depuis) return g.nom; }
+  }
+  /* 3. En France, la plaque suffit : le SIV date de 2009. */
+  if(pays === 'FR' && lu.immat){
+    if(/^[A-Z]{2}-\d{3}-[A-Z]{2}$/.test(lu.immat)) return 'nouveau format SIV (depuis 2009)';
+    if(/^\d{1,4} [A-Z]{2,3} \d{2,3}$/.test(lu.immat)) return 'ancien format FNI (avant 2009)';
+  }
+  return '';
+}
+
+function anneeEtFormat(lu, texte, type){
+  const res = {};
+  const d = lu.dateCertif || lu.dateFirstImmat || '';
+  const an = String(d).match(/^(\d{4})/);
+  if(an) res.annee = an[1];
+  /* SIV et FNI sont des formats FRANCAIS. Une plaque belge « 1 ABC 123 »
+     ressemble a l'ancien format francais : sans cette reserve, elle
+     etait annoncee comme une carte grise d'avant 2009. */
+  res.generation = generationCarteGrise(lu, texte, type);
+  return res;
+}
+
 function lireCarteGrise(texte){
   const lignes = String(texte || '').split('\n').map(nettoyerLigneOcr).filter(Boolean);
   const tout = lignes.join('\n');
@@ -23583,10 +24274,16 @@ function lireCarteGrise(texte){
      circulation. */
   const champs = {};
   lignes.forEach(function(l){
-    const m = l.match(/^([A-Z])\s*\.?\s*(\d)?\s*[a-z]?[)\s:.\-]+(.{2,})$/);
+    /* Jusqu'a trois niveaux : A, C.1, C.1.3 — l'Allemagne detaille le
+        titulaire en C.1.1 (nom), C.1.2 (prenom) et C.1.3 (adresse). */
+    /* Le point est OBLIGATOIRE devant le chiffre d'un sous-repere.
+       Sans cela, « B 12.05.2018 » — la date de premiere mise en
+       circulation — etait lu comme un repere « B.1.2 » suivi de
+       « 05.2018 », et la date disparaissait. */
+    const m = l.match(/^([A-Z])\s*(?:\.\s*(\d)\s*(?:\.\s*(\d))?)?\s*[a-z]?[)\s:.\-]+(.{2,})$/);
     if(!m) return;
-    const code = m[1].toUpperCase() + (m[2] ? '.' + m[2] : '');
-    const val = nettoyerLigneOcr(m[3]);
+    const code = m[1].toUpperCase() + (m[2] ? '.' + m[2] : '') + (m[3] ? '.' + m[3] : '');
+    const val = nettoyerLigneOcr(m[4]);
     if(val && !champs[code]) champs[code] = val;
   });
 
@@ -23603,7 +24300,14 @@ function lireCarteGrise(texte){
     m = String(s || '').match(/\b(\d{1,4})\s?([A-Z]{2,3})\s?(\d{2,3})\b/);
     return m ? (m[1] + ' ' + m[2] + ' ' + m[3]).toUpperCase() : '';
   };
-  res.immat = plaque(champs['A']) || plaque(tout);
+  /* Le repere A porte l'immatriculation, dans TOUS les pays. Si elle ne
+     ressemble a aucun format francais — « M-AB 1234 » en Allemagne,
+     « 12-AB-34 » aux Pays-Bas, « 1-ABC-123 » en Belgique — on la garde
+     telle quelle plutot que de la deformer. */
+  const brutA = (champs['A'] || '').replace(/\s{2,}/g, ' ').trim();
+  res.immat = plaque(champs['A'])
+    || (/^[A-Z0-9][A-Z0-9 .\-]{3,11}$/i.test(brutA) ? brutA.toUpperCase() : '')
+    || plaque(tout);
 
   /* Numero de chassis : 17 caracteres sans I, O ni Q. */
   const vin = function(s){
@@ -23613,11 +24317,14 @@ function lireCarteGrise(texte){
   res.vin = vin(champs['E']) || vin(tout.replace(/\n/g, ' '));
 
   res.dateFirstImmat = date(champs['B']);
-  if(champs['C.1']){
-    res.nom = champs['C.1'].replace(/^(M|MME|MLLE|MR)\b[\s.]*/i, '').trim();
+  const nomBrut = champs['C.1'] ||
+    [champs['C.1.1'], champs['C.1.2']].filter(Boolean).join(' ');
+  if(nomBrut){
+    res.nom = nomBrut.replace(/^(M|MME|MLLE|MR|HERR|FRAU)\b[\s.]*/i, '').trim();
   }
-  if(champs['C.3']){
-    const adresse = champs['C.3'];
+  const adresseBrute = champs['C.3'] || champs['C.1.3'] || '';
+  if(adresseBrute){
+    const adresse = adresseBrute;
     const cp = adresse.match(/\b(\d{5})\b\s*(.*)$/);
     if(cp){
       res.cp = cp[1];
@@ -23629,6 +24336,8 @@ function lireCarteGrise(texte){
   }
   if(champs['D.1']) res.marque = champs['D.1'].toUpperCase();
   if(champs['D.3']) res.modele = champs['D.3'];
+  /* Repere I : la date de delivrance du certificat lui-meme. */
+  res.dateCertif = date(champs['I']);
 
   /* Rien ne sert de proposer un champ vide. */
   Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
@@ -23648,14 +24357,21 @@ const CHAMPS_CARTE_GRISE = [
   ['ville',         'Commune']
 ];
 
-function fenetreCarteGrise(lu, v){
+function fenetreCarteGrise(lu, v, type){
   return new Promise(function(resolve){
     const trouves = CHAMPS_CARTE_GRISE.filter(function(c){ return lu[c[0]]; });
+    /* Ce que le document est, en une ligne : pays, format, annee. */
+    const identite = [
+      type ? (t(type.nom) + (type.suppose ? ' (' + t('supposée') + ')' : '')) : '',
+      lu.generation ? t(lu.generation) : '',
+      lu.annee ? t('délivrée en') + ' ' + lu.annee : ''
+    ].filter(Boolean).join(' · ');
     document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
     const fond = document.createElement('div');
     fond.className = 'dlg-fond';
     fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
       + '<div class="dlg-titre">' + esc(t('Carte grise lue')) + '</div>'
+      + (identite ? '<div class="cg-identite">' + esc(identite) + '</div>' : '')
       + '<div class="dlg-texte">'
       +   esc(trouves.length
             ? t('Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.')
@@ -23704,20 +24420,43 @@ function remplirDepuisCarteGrise(v, lu){
   if(lu.dateFirstImmat) veh.dateFirstImmat = lu.dateFirstImmat;
 
   const adr = splitAddress(lu.adresse || '');
+
+  /* Le titulaire de la carte grise est l'ancien proprietaire : selon le
+     document, il s'appelle le cedant, le vendeur, le titulaire ou
+     l'ancien proprietaire, et ses champs ne portent pas le meme nom.
+     On indique donc pour chaque Cerfa quel bloc remplir et avec quels
+     prefixes ; ainsi le scan sert partout ou la carte grise sert. */
+  const AILLEURS = {
+    achat:           { fiche: ensureAchat13751, p: 'v_', voie: 'majuscule' },
+    immatriculation: { fiche: ensureImmat13750, p: 'tit_', voie: 'minuscule' },
+    mandat:          { fiche: ensureMandat13757, p: '', nom: 'mandant_nom', voie: 'minuscule' },
+    retrait:         { fiche: ensureRetrait13756, p: '', voie: 'minuscule' },
+    destruction:     { fiche: ensureDestruction14365, p: 'anc_', voie: 'minuscule' },
+    intention:       { fiche: ensureIntention14366, p: 'anc_', voie: 'minuscule' }
+  };
+
   if(currentDoc === 'cession'){
     const c = ensureCession(v), ap = c.ap;
     if(lu.nom) ap.nom = lu.nom;
     if(lu.cp) ap.cp = lu.cp;
     if(lu.ville) ap.commune = lu.ville;
     if(lu.adresse) Object.assign(ap, adr);
-  }else if(currentDoc === 'achat'){
-    const a = ensureAchat13751(v);
-    if(lu.nom) a.v_nom = lu.nom;
-    if(lu.cp) a.v_cp = lu.cp;
-    if(lu.ville) a.v_commune = lu.ville;
-    if(lu.adresse){
-      a.v_voieNum = adr.voieNum; a.v_voieExt = adr.voieExt;
-      a.v_voieType = adr.voieType; a.v_voieNom = adr.voieNom;
+  }else if(AILLEURS[currentDoc]){
+    const r = AILLEURS[currentDoc];
+    let a = null;
+    try{ a = r.fiche(v); }catch(e){ a = null; }
+    if(a){
+      const maj = (r.voie === 'majuscule');
+      const cle = function(suffixe){ return r.p + suffixe; };
+      if(lu.nom) a[r.nom || cle('nom')] = lu.nom;
+      if(lu.cp) a[cle('cp')] = lu.cp;
+      if(lu.ville) a[cle(maj ? 'commune' : 'commune')] = lu.ville;
+      if(lu.adresse){
+        a[cle(maj ? 'voieNum'  : 'voienum')]  = adr.voieNum;
+        a[cle(maj ? 'voieExt'  : 'voieext')]  = adr.voieExt;
+        a[cle(maj ? 'voieType' : 'voietype')] = adr.voieType;
+        a[cle(maj ? 'voieNom'  : 'voienom')]  = adr.voieNom;
+      }
     }
   }
   v.updatedAt = Date.now();
@@ -23725,19 +24464,765 @@ function remplirDepuisCarteGrise(v, lu){
   renderMain();
 }
 
-async function scannerCarteGrise(fichier, v){
+/* Reprendre la photo : on rouvre l'appareil, sans avoir a retrouver le
+   bouton. */
+function rouvrirAppareilPhoto(){
+  const bt = document.getElementById('scanCG');
+  const champ = bt && bt.querySelector('input');
+  if(champ) setTimeout(function(){ champ.click(); }, 300);
+}
+
+/* =====================================================================
+   CADRAGE EN DIRECT, COMME DANS LES APPLICATIONS BANCAIRES
+   Plutot que de photographier a l'aveugle puis d'apprendre que c'est
+   rate, la camera reste ouverte, un cadre indique ou poser la carte, et
+   le logiciel dit en continu ce qui ne va pas : trop sombre, trop loin,
+   flou. Quand tout est bon deux mesures de suite, il declenche seul.
+   Trois mesures, dans l'ordre ou elles genent :
+     - la lumiere : une carte dans l'ombre ne se lit pas ;
+     - le remplissage : le cadre doit etre nettement plus clair que son
+       pourtour, signe que le document l'occupe vraiment ;
+     - la nettete, la meme mesure que pour une photo importee.
+   ===================================================================== */
+let camera = null;      // le flux en cours, pour pouvoir l'eteindre
+
+function cameraDisponible(){
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+
+function eteindreCamera(){
+  if(camera){
+    try{ camera.getTracks().forEach(function(p){ p.stop(); }); }catch(e){}
+    camera = null;
+  }
+}
+
+/* Mesures faites sur une petite image : 480 points de large suffisent
+   pour juger, et le telephone n'a pas a peiner vingt fois par seconde. */
+function mesurerCadrage(video, guide){
+  const toile = document.createElement('canvas');
+  const l = 480, h = Math.round(480 * (video.videoHeight / video.videoWidth || 0.75));
+  toile.width = l; toile.height = h;
+  const c = toile.getContext('2d');
+  c.drawImage(video, 0, 0, l, h);
+  const d = c.getImageData(0, 0, l, h).data;
+  const gris = function(x, y){
+    const i = (y * l + x) * 4;
+    return 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+  };
+
+  /* Le cadre, en proportions de l'image. */
+  const gx = Math.round(l * guide.x), gy = Math.round(h * guide.y);
+  const gl = Math.round(l * guide.l), gh = Math.round(h * guide.h);
+
+  let dedans = 0, nDedans = 0, autour = 0, nAutour = 0;
+  for(let y = 2; y < h - 2; y += 3){
+    for(let x = 2; x < l - 2; x += 3){
+      const v = gris(x, y);
+      const estDedans = (x > gx && x < gx + gl && y > gy && y < gy + gh);
+      if(estDedans){ dedans += v; nDedans++; }
+      else { autour += v; nAutour++; }
+    }
+  }
+  const clarteDedans = nDedans ? dedans / nDedans : 0;
+  const clarteAutour = nAutour ? autour / nAutour : 0;
+
+  /* Nettete : variance du laplacien, au centre du cadre. */
+  let somme = 0, carres = 0, n = 0;
+  for(let y = gy + 4; y < gy + gh - 4; y += 2){
+    for(let x = gx + 4; x < gx + gl - 4; x += 2){
+      const v = gris(x - 1, y) + gris(x + 1, y) + gris(x, y - 1) + gris(x, y + 1)
+                - 4 * gris(x, y);
+      somme += v; carres += v * v; n++;
+    }
+  }
+  const nettete = n ? (carres / n - (somme / n) * (somme / n)) : 0;
+  return { clarte: clarteDedans, contraste: clarteDedans - clarteAutour, nettete: nettete };
+}
+
+function verdictCadrage(m){
+  if(m.clarte < 55) return { ok: false, texte: 'Trop sombre — cherchez la lumière' };
+  if(m.clarte > 235) return { ok: false, texte: 'Trop de reflet — inclinez légèrement' };
+  if(m.contraste < 12) return { ok: false, texte: 'Approchez : remplissez le cadre' };
+  if(m.nettete < 18) return { ok: false, texte: 'Ne bougez plus — mise au point' };
+  return { ok: true, texte: 'C’est bon — ne bougez plus' };
+}
+
+/* Ouvre la camera et rend la photo cadree, ou null si l'on renonce. */
+function prendrePhotoCadree(){
+  return new Promise(async function(resolve){
+    const guide = { x: 0.06, y: 0.20, l: 0.88, h: 0.56 };   // proportions d'une carte grise depliee
+    let flux;
+    try{
+      flux = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' },
+                 width: { ideal: 1920 }, height: { ideal: 1080 } },
+        audio: false
+      });
+    }catch(e){
+      resolve('sans-camera');   // refus, ou pas de camera : on repassera par la photo
+      return;
+    }
+    camera = flux;
+
+    const ecran = document.createElement('div');
+    ecran.className = 'cam-ecran';
+    ecran.innerHTML =
+        '<video class="cam-video" playsinline autoplay muted></video>'
+      /* Le voile sombre est porte par le cadre lui-meme (une ombre
+         demesuree) : la zone utile reste donc parfaitement nette,
+         sans decoupe compliquee. */
+      + '<div class="cam-voile">'
+      +   '<div class="cam-cadre">'
+      +     '<i class="coin hg"></i><i class="coin hd"></i>'
+      +     '<i class="coin bg"></i><i class="coin bd"></i>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="cam-haut">'
+      +   '<span class="cam-titre">' + esc(t('Carte grise')) + '</span>'
+      +   '<button type="button" class="cam-croix" id="camFermer" aria-label="'
+      +     esc(t('Annuler')) + '">✕</button>'
+      + '</div>'
+      + '<div class="cam-etat" id="camEtat">'
+      +   '<span class="cam-point"></span><span id="camTexte">'
+      +   esc(t('Recherche du document…')) + '</span></div>'
+      + '<div class="cam-barre">'
+      +   '<button type="button" class="cam-galerie" id="camGalerie">'
+      +     esc(t('Photo existante')) + '</button>'
+      +   '<button type="button" class="cam-declic" id="camDeclic" aria-label="'
+      +     esc(t('Prendre la photo')) + '"><span class="cam-anneau"></span></button>'
+      +   '<span class="cam-aide">' + esc(t('Déclenche tout seul')) + '</span>'
+      + '</div>';
+    document.body.appendChild(ecran);
+
+    const video = ecran.querySelector('.cam-video');
+    const cadre = ecran.querySelector('.cam-cadre');
+    const etat  = ecran.querySelector('#camEtat');
+    const texte = ecran.querySelector('#camTexte');
+    const declic = ecran.querySelector('#camDeclic');
+    cadre.style.cssText = 'left:' + (guide.x * 100) + '%;top:' + (guide.y * 100)
+      + '%;width:' + (guide.l * 100) + '%;height:' + (guide.h * 100) + '%;';
+    video.srcObject = flux;
+
+    let bons = 0, minuteur = null, fini = false;
+
+    const capturer = function(){
+      if(fini) return;
+      fini = true;
+      clearInterval(minuteur);
+      const L = video.videoWidth, H = video.videoHeight;
+      /* On ne garde que le cadre, avec une marge : le reste ne sert a
+         rien et ferait travailler le lecteur pour rien. */
+      const marge = 0.03;
+      const x = Math.max(0, Math.round(L * (guide.x - marge)));
+      const y = Math.max(0, Math.round(H * (guide.y - marge)));
+      const w = Math.min(L - x, Math.round(L * (guide.l + marge * 2)));
+      const hh = Math.min(H - y, Math.round(H * (guide.h + marge * 2)));
+      const toile = document.createElement('canvas');
+      toile.width = w; toile.height = hh;
+      toile.getContext('2d').drawImage(video, x, y, w, hh, 0, 0, w, hh);
+      fermer();
+      toile.toBlob(function(blob){
+        resolve(blob ? new File([blob], 'carte-grise.jpg', { type: 'image/jpeg' }) : null);
+      }, 'image/jpeg', 0.92);
+    };
+
+    const fermer = function(res){
+      clearInterval(minuteur);
+      eteindreCamera();
+      ecran.remove();
+      if(res === 'annule'){ fini = true; resolve(null); }
+    };
+
+    ecran.querySelector('#camFermer').onclick = function(){ fermer('annule'); };
+    declic.onclick = capturer;
+    /* Une photo deja prise — un scan recu par message, par exemple. */
+    ecran.querySelector('#camGalerie').onclick = function(){
+      fermer('annule');
+      const bt = document.getElementById('scanCG');
+      const champ = bt && bt.querySelector('input');
+      if(champ) setTimeout(function(){ champ.click(); }, 250);
+    };
+
+    video.onloadedmetadata = function(){
+      video.play().catch(function(){});
+      minuteur = setInterval(function(){
+        if(fini || !video.videoWidth) return;
+        let v;
+        try{ v = verdictCadrage(mesurerCadrage(video, guide)); }
+        catch(e){ return; }
+        texte.textContent = t(v.texte);
+        etat.classList.toggle('bon', v.ok);
+        cadre.classList.toggle('bon', v.ok);
+        /* Deux mesures bonnes de suite : la main est stable, on prend.
+           L'anneau du declencheur se remplit pendant ce temps : on voit
+           venir la photo au lieu d'etre surpris par elle. */
+        bons = v.ok ? bons + 1 : 0;
+        declic.classList.toggle('pret', bons >= 1);
+        if(bons >= 2) capturer();
+      }, 350);
+    };
+  });
+}
+
+/* Lit UN volet et rend le texte trouve. */
+async function lireUnVolet(fichier, parLaCamera){
+  const toile = await preparerImageOcr(fichier);
+  bandeau('', '');
+  if(await photoFloue(toile)){
+    if(!parLaCamera){ rouvrirAppareilPhoto(); return null; }
+    const encore = await prendrePhotoCadree();
+    if(!encore || encore === 'sans-camera') return null;
+    return lireUnVolet(encore, true);
+  }
+  bandeau(t('Lecture de la carte grise…'), 'attente');
+  await moteurOcrPret();
+  const sortie = await Tesseract.recognize(toile, 'fra');
+  bandeau('', '');
+  const texte = (sortie && sortie.data && sortie.data.text) || '';
+  return { texte: texte, lu: lireCarteGrise(texte) };
+}
+
+/* Les volets se completent : le premier donne souvent le vehicule, le
+   suivant le titulaire. Une valeur deja trouvee n'est pas remplacee —
+   la premiere photo est celle qu'on a cadree avec soin, les suivantes
+   viennent en complement. */
+function fusionnerVolets(a, b){
+  const r = Object.assign({}, b || {});
+  Object.keys(a || {}).forEach(function(k){ if(a[k]) r[k] = a[k]; });
+  return r;
+}
+
+async function scannerCarteGrise(fichier, v, parLaCamera){
   if(!fichier) return;
   bandeau(t('Lecture de la carte grise…'), 'attente');
   try{
-    await moteurOcrPret();
-    const toile = await preparerImageOcr(fichier);
-    const sortie = await Tesseract.recognize(toile, 'fra');
-    const texte = (sortie && sortie.data && sortie.data.text) || '';
-    bandeau('', '');
-    const lu = lireCarteGrise(texte);
-    const gardes = await fenetreCarteGrise(lu, v);
+    const premier = await lireUnVolet(fichier, parLaCamera);
+    if(!premier) return;
+
+    /* Le pays et le type sont reconnus sur le premier volet ; ils
+       decident du nombre de photos a demander ensuite. */
+    const type = typeCarteGrise(premier.texte);
+    let lu = premier.lu;
+    let texteTotal = premier.texte;
+
+    for(let n = 1; n < type.volets.length; n++){
+      const suite = await demander({
+        titre: t(type.nom),
+        texte: t('Ce document comporte plusieurs volets. Photographiez maintenant :')
+               + ' ' + t(type.volets[n]),
+        oui: t('Photographier'), non: t('Terminer')
+      });
+      if(!suite) break;
+      let photo = null;
+      if(cameraDisponible()){
+        photo = await prendrePhotoCadree(type.nom + ' — ' + t(type.volets[n]));
+        if(photo === 'sans-camera') photo = null;
+      }
+      if(!photo) break;
+      const volet = await lireUnVolet(photo, true);
+      if(!volet) break;
+      lu = fusionnerVolets(lu, volet.lu);
+      texteTotal += '\n' + volet.texte;
+    }
+
+    Object.assign(lu, anneeEtFormat(lu, texteTotal, type));
+    const gardes = await fenetreCarteGrise(lu, v, type);
     if(gardes && Object.keys(gardes).length){
       remplirDepuisCarteGrise(v, gardes);
+      bandeau(t('Document rempli'), 'ok');
+    }
+  }catch(e){
+    bandeau('', '');
+    await informer(e.message || t('La lecture a échoué.'));
+  }
+}
+
+/* =====================================================================
+   LIRE UNE PIECE D'IDENTITE
+   Plus sur que la carte grise, et pour une bonne raison : toute piece
+   d'identite porte au bas une BANDE NORMALISEE — la zone de lecture
+   automatique, ces deux ou trois lignes de majuscules et de chevrons.
+   Sa disposition est fixee au caractere pres par l'OACI, et chaque
+   donnee est suivie d'une CLE DE CONTROLE : un chiffre calcule a partir
+   des caracteres qui precedent. Si la lecture se trompe d'un signe, la
+   cle ne tombe plus juste et le logiciel le sait.
+   Trois dispositions couvrent ce qu'on rencontre ici :
+     TD1  : 3 lignes de 30 — carte d'identite francaise depuis 2021,
+            cartes europeennes au format carte bancaire.
+     TD3  : 2 lignes de 44 — passeports.
+     CNI  : 2 lignes de 36 — ancienne carte d'identite francaise
+            (1995-2021), disposition propre a la France.
+   ===================================================================== */
+function chiffreControle(chaine){
+  const poids = [7, 3, 1];
+  let somme = 0;
+  for(let i = 0; i < chaine.length; i++){
+    const c = chaine[i];
+    let v;
+    if(c >= '0' && c <= '9') v = c.charCodeAt(0) - 48;
+    else if(c >= 'A' && c <= 'Z') v = c.charCodeAt(0) - 55;
+    else v = 0;                       // le chevron vaut zero
+    somme += v * poids[i % 3];
+  }
+  return somme % 10;
+}
+
+function bonneCle(valeur, cle){
+  if(!/^\d$/.test(String(cle))) return false;
+  return chiffreControle(valeur) === Number(cle);
+}
+
+/* AAMMJJ vers une date complete. Le siecle n'est pas ecrit : une
+   naissance ne peut pas etre dans l'avenir, une validite ne peut pas
+   etre loin dans le passe. */
+function dateBande(aamm, naissance){
+  const m = String(aamm || '').match(/^(\d{2})(\d{2})(\d{2})$/);
+  if(!m) return '';
+  const an = Number(m[1]), annee = new Date().getFullYear() % 100;
+  const siecle = naissance ? (an > annee ? 1900 : 2000) : (an < 70 ? 2000 : 1900);
+  return (siecle + an) + '-' + m[2] + '-' + m[3];
+}
+
+function nomsBande(champ){
+  const parts = String(champ || '').split('<<');
+  const nom = (parts[0] || '').replace(/</g, ' ').trim();
+  const prenoms = (parts[1] || '').replace(/</g, ' ').trim();
+  return { nom: nom, prenom: prenoms.split(/\s+/)[0] || '', prenoms: prenoms };
+}
+
+function lignesBande(texte){
+  return String(texte || '').toUpperCase().split('\n')
+    .map(function(l){ return l.replace(/\s/g, '').replace(/[^A-Z0-9<]/g, ''); })
+    .filter(function(l){ return l.length >= 28 && l.indexOf('<') !== -1; });
+}
+
+function lireBandeIdentite(texte){
+  const l = lignesBande(texte);
+  const res = { controles: 0, controlesOk: 0 };
+
+  /* --- TD3 : passeport, 2 lignes de 44 --- */
+  const td3 = l.filter(function(x){ return x.length >= 42 && x.length <= 46; });
+  if(td3.length >= 2 && /^P/.test(td3[0])){
+    const a = (td3[0] + '<'.repeat(44)).slice(0, 44);
+    const b = (td3[1] + '<'.repeat(44)).slice(0, 44);
+    Object.assign(res, nomsBande(a.slice(5)));
+    res.piece = 'Passeport'; res.disposition = 'TD3';
+    res.numero = b.slice(0, 9).replace(/</g, '');
+    res.nationalite = b.slice(10, 13).replace(/</g, '');
+    res.naissance = dateBande(b.slice(13, 19), true);
+    res.sexe = b[20] === 'F' ? 'F' : (b[20] === 'M' ? 'M' : '');
+    res.expire = dateBande(b.slice(21, 27), false);
+    res.controles = 3;
+    res.controlesOk = [bonneCle(b.slice(0, 9), b[9]),
+                       bonneCle(b.slice(13, 19), b[19]),
+                       bonneCle(b.slice(21, 27), b[27])].filter(Boolean).length;
+    return res;
+  }
+
+  /* --- TD1 : carte d'identite au format carte bancaire, 3 x 30 --- */
+  const td1 = l.filter(function(x){ return x.length >= 28 && x.length <= 32; });
+  if(td1.length >= 3){
+    const a = (td1[0] + '<'.repeat(30)).slice(0, 30);
+    const b = (td1[1] + '<'.repeat(30)).slice(0, 30);
+    const c = (td1[2] + '<'.repeat(30)).slice(0, 30);
+    Object.assign(res, nomsBande(c));
+    res.piece = a.slice(0, 2).indexOf('I') === 0 ? 'Carte d’identité' : 'Pièce d’identité';
+    res.disposition = 'TD1';
+    res.pays = a.slice(2, 5).replace(/</g, '');
+    res.numero = a.slice(5, 14).replace(/</g, '');
+    res.naissance = dateBande(b.slice(0, 6), true);
+    res.sexe = b[7] === 'F' ? 'F' : (b[7] === 'M' ? 'M' : '');
+    res.expire = dateBande(b.slice(8, 14), false);
+    res.nationalite = b.slice(15, 18).replace(/</g, '');
+    res.controles = 3;
+    res.controlesOk = [bonneCle(a.slice(5, 14), a[14]),
+                       bonneCle(b.slice(0, 6), b[6]),
+                       bonneCle(b.slice(8, 14), b[14])].filter(Boolean).length;
+    return res;
+  }
+
+  /* --- Ancienne carte d'identite francaise : 2 lignes de 36 ---
+     Disposition propre a la France : la premiere ligne porte le nom, la
+     seconde le prenom, la date de naissance et le departement. */
+  const cni = l.filter(function(x){ return x.length >= 34 && x.length <= 38; });
+  if(cni.length >= 2 && /^ID?FRA/.test(cni[0])){
+    const a = (cni[0] + '<'.repeat(36)).slice(0, 36);
+    const b = (cni[1] + '<'.repeat(36)).slice(0, 36);
+    res.piece = 'Carte d’identité';
+    res.disposition = 'CNI';
+    res.pays = 'FRA';
+    res.nom = a.slice(5, 30).replace(/</g, ' ').trim();
+    /* Le numero du titre occupe la FIN de la premiere ligne, pas son
+       debut : au debut se trouvent « IDFRA » puis le nom. */
+    res.numero = a.slice(30, 36).replace(/</g, '');
+    res.prenoms = b.slice(13, 27).replace(/</g, ' ').trim();
+    res.prenom = res.prenoms.split(/\s+/)[0] || '';
+    res.naissance = dateBande(b.slice(27, 33), true);
+    res.sexe = b[34] === 'F' ? 'F' : 'M';
+    res.departement = b.slice(0, 2);
+    res.controles = 1;
+    res.controlesOk = bonneCle(b.slice(27, 33), b[33]) ? 1 : 0;
+    return res;
+  }
+  return null;
+}
+
+/* Sans bande lisible, on retombe sur le texte imprime : moins sur,
+   mais mieux que rien. */
+function lireIdentiteTexte(texte){
+  const res = {};
+  const l = String(texte || '').split('\n').map(nettoyerLigneOcr).filter(Boolean);
+  const apres = function(mots){
+    for(let i = 0; i < l.length; i++){
+      const ligne = majuscules(l[i]);
+      if(mots.some(function(m){ return ligne.indexOf(m) === 0; })){
+        const suite = l[i].replace(/^[^:]*:?/, '').trim();
+        if(suite.length > 1) return suite;
+        if(l[i + 1]) return l[i + 1];
+      }
+    }
+    return '';
+  };
+  res.nom = apres(['NOM', 'SURNAME']);
+  res.prenom = (apres(['PRENOM', 'GIVEN NAME']) || '').split(/[,\s]+/)[0] || '';
+  const d = (apres(['NE(E) LE', 'NE LE', 'DATE DE NAISS']) || '')
+              .match(/(\d{2})[\/.\- ](\d{2})[\/.\- ](\d{4})/);
+  if(d) res.naissance = d[3] + '-' + d[2] + '-' + d[1];
+  res.lieuNaissance = apres(['A ', 'LIEU DE NAISS', 'NE(E) A']);
+  Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
+  return res;
+}
+
+/* --- L'ADRESSE, ET QUEL MODELE DE CARTE ------------------------------
+   La carte d'identite francaise PORTE une adresse, au verso : l'ancienne
+   comme la nouvelle. La nouvelle en accepte meme deux, pour les enfants
+   en garde alternee. Elle ne figure pas dans la bande normalisee — qui
+   ne contient que l'etat civil — il faut donc la lire sur le texte
+   imprime.
+   ---------------------------------------------------------------------- */
+function lireAdresseIdentite(texte){
+  const l = String(texte || '').split('\n').map(nettoyerLigneOcr).filter(Boolean);
+  const res = {};
+  const lignes = [];
+  for(let i = 0; i < l.length; i++){
+    const haut = majuscules(l[i]);
+    if(haut.indexOf('ADRESSE') !== 0 && haut.indexOf('DOMICILE') !== 0) continue;
+    /* Ce qui suit le mot sur la meme ligne, puis les lignes d'apres,
+       jusqu'au code postal — qui termine toujours une adresse. */
+    const reste = l[i].replace(/^[^:]*:?/, '').trim();
+    if(reste.length > 2) lignes.push(reste);
+    for(let j = i + 1; j < Math.min(l.length, i + 5); j++){
+      lignes.push(l[j]);
+      if(/\b\d{5}\b/.test(l[j])) break;
+    }
+    break;
+  }
+  const bloc = lignes.join(' ').replace(/\s{2,}/g, ' ').trim();
+  if(!bloc) return res;
+  const cp = bloc.match(/\b(\d{5})\b\s*(.*)$/);
+  if(cp){
+    res.cp = cp[1];
+    res.ville = nettoyerLigneOcr(cp[2]).replace(/^[-–,]\s*/, '');
+    res.adresse = nettoyerLigneOcr(bloc.slice(0, cp.index));
+  }else{
+    res.adresse = bloc;
+  }
+  Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
+  return res;
+}
+
+/* Quel modele ? La disposition de la bande le dit a elle seule :
+     3 lignes de 30  -> carte au format carte bancaire, donc la nouvelle
+        carte francaise, deployee partout depuis le 2 aout 2021, valable
+        10 ans et non plus 15 ;
+     2 lignes de 36  -> l'ancienne carte francaise, modele de 1995,
+        delivree jusqu'en 2021, valable 15 ans pour un majeur ;
+     2 lignes de 44  -> un passeport.
+   A defaut de bande, un indice imprime : le QR code de la nouvelle
+   carte (le « cachet electronique visuel ») n'existe pas sur l'ancienne. */
+function modeleIdentite(lu, texte){
+  const t = majuscules(texte || '');
+  if(lu && lu.disposition === 'TD3') return 'Passeport';
+  if(lu && lu.disposition === 'TD1'){
+    return (lu.pays === 'FRA' || !lu.pays)
+      ? 'nouvelle carte d’identité (depuis 2021, format carte bancaire)'
+      : 'carte d’identité au format carte bancaire';
+  }
+  if(lu && lu.disposition === 'CNI') return 'ancienne carte d’identité (modèle 1995-2021)';
+  if(t.indexOf('CACHET ELECTRONIQUE') !== -1) return 'nouvelle carte d’identité (depuis 2021, format carte bancaire)';
+  if(t.indexOf('CARTE NATIONALE D') !== -1) return 'carte d’identité française';
+  return '';
+}
+
+/* La validite decoule du modele : 10 ans sur la nouvelle carte, 15 sur
+   l'ancienne pour un majeur. On ne l'invente pas — on la lit — mais
+   elle permet de signaler une piece perimee. */
+function identitePerimee(lu){
+  if(!lu || !lu.expire) return false;
+  return new Date(lu.expire) < new Date();
+}
+
+const CHAMPS_IDENTITE_LUS = [
+  ['adresse',       'Adresse'],
+  ['cp',            'Code postal'],
+  ['ville',         'Commune'],
+  ['nom',           'Nom'],
+  ['prenom',        'Prénom'],
+  ['naissance',     'Date de naissance'],
+  ['lieuNaissance', 'Lieu de naissance'],
+  ['departement',   'Département de naissance'],
+  ['sexe',          'Sexe'],
+  ['numero',        'N° du document'],
+  ['expire',        'Valable jusqu’au']
+];
+
+function typeDocLu(lu){
+  const bouts = [];
+  if(lu.modele) bouts.push(t(lu.modele));
+  else if(lu.piece) bouts.push(t(lu.piece));
+  if(lu.pays || lu.nationalite) bouts.push(lu.pays || lu.nationalite);
+  if(identitePerimee(lu)) bouts.push(t('périmée'));
+  if(lu.controles){
+    bouts.push(lu.controlesOk === lu.controles
+      ? t('lecture vérifiée')
+      : (lu.controlesOk + '/' + lu.controles + ' ' + t('contrôles justes')));
+  }
+  return bouts.join(' · ');
+}
+
+function fenetreIdentite(lu){
+  return new Promise(function(resolve){
+    const trouves = CHAMPS_IDENTITE_LUS.filter(function(c){ return lu[c[0]]; });
+    document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+    const fond = document.createElement('div');
+    fond.className = 'dlg-fond';
+    fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+      + '<div class="dlg-titre">' + esc(t('Pièce d’identité lue')) + '</div>'
+      + (trouves.length ? '<div class="cg-identite">' + esc(typeDocLu(lu)) + '</div>' : '')
+      + '<div class="dlg-texte">' + esc(trouves.length
+          ? t('Relisez avant de valider : une lettre fausse fait refuser le dossier.')
+          : t('Rien n’a pu être lu. Cadrez la bande de caractères du bas, bien à plat et sans reflet.')) + '</div>'
+      + '<div class="cg-liste">'
+      +   trouves.map(function(c){
+            return '<label class="cg-ligne"><input type="checkbox" checked data-cg="' + c[0] + '">'
+              + '<span class="cg-nom">' + esc(t(c[1])) + '</span>'
+              + '<input class="cg-val" data-val="' + c[0] + '" value="' + esc(lu[c[0]]) + '"></label>';
+          }).join('')
+      + '</div>'
+      + '<div class="dlg-actions">'
+      +   '<button type="button" class="dlg-non" id="idNon">' + esc(t('Annuler')) + '</button>'
+      +   (trouves.length ? '<button type="button" class="dlg-oui" id="idOui">'
+            + esc(t('Remplir le document')) + '</button>' : '')
+      + '</div></div>';
+    document.body.appendChild(fond);
+    const fermer = function(res){ fond.remove(); resolve(res || null); };
+    fond.querySelector('#idNon').onclick = function(){ fermer(null); };
+    fond.onclick = function(e){ if(e.target === fond) fermer(null); };
+    const oui = fond.querySelector('#idOui');
+    if(oui) oui.onclick = function(){
+      const gardes = {};
+      fond.querySelectorAll('[data-cg]').forEach(function(cas){
+        if(!cas.checked) return;
+        const champ = fond.querySelector('[data-val="' + cas.dataset.cg + '"]');
+        const val = champ ? champ.value.trim() : '';
+        if(val) gardes[cas.dataset.cg] = val;
+      });
+      fermer(gardes);
+    };
+  });
+}
+
+/* Le titulaire, selon le document ouvert. */
+function remplirDepuisIdentite(v, lu){
+  const nomComplet = [lu.nom, lu.prenom].filter(Boolean).join(' ');
+  const adr = splitAddress(lu.adresse || '');
+  if(currentDoc === 'immatriculation'){
+    const a = ensureImmat13750(v);
+    if(lu.nom) a.tit_nom = lu.nom;
+    if(lu.naissance) a.tit_ne = lu.naissance;
+    if(lu.lieuNaissance) a.tit_necommune = lu.lieuNaissance;
+    if(lu.departement) a.tit_nedept = lu.departement;
+    if(lu.pays === 'FRA' || lu.nationalite === 'FRA') a.tit_nepays = a.tit_nepays || 'FRANCE';
+    if(lu.adresse){
+      a.tit_voienum = adr.voieNum; a.tit_voieext = adr.voieExt;
+      a.tit_voietype = adr.voieType; a.tit_voienom = adr.voieNom;
+    }
+    if(lu.cp) a.tit_cp = lu.cp;
+    if(lu.ville) a.tit_commune = lu.ville;
+  }else if(currentDoc === 'cession'){
+    const c = ensureCession(v);
+    if(nomComplet) c.np.nom = nomComplet;
+    if(lu.naissance) c.np.neLe = lu.naissance;
+    if(lu.lieuNaissance) c.np.neA = lu.lieuNaissance;
+    if(lu.adresse) Object.assign(c.np, adr);
+    if(lu.cp) c.np.cp = lu.cp;
+    if(lu.ville) c.np.commune = lu.ville;
+  }else if(currentDoc === 'achat'){
+    const a = ensureAchat13751(v);
+    if(nomComplet) a.v_nom = nomComplet;
+    if(lu.adresse){
+      a.v_voieNum = adr.voieNum; a.v_voieExt = adr.voieExt;
+      a.v_voieType = adr.voieType; a.v_voieNom = adr.voieNom;
+    }
+    if(lu.cp) a.v_cp = lu.cp;
+    if(lu.ville) a.v_commune = lu.ville;
+  }else if(currentDoc === 'contrat'){
+    const a = ensureContrat(v);
+    if(lu.nom) a.aNom = lu.nom;
+    if(lu.prenom) a.aPrenom = lu.prenom;
+    if(lu.adresse) a.aAdresse = lu.adresse;
+    if(lu.cp) a.aCp = lu.cp;
+    if(lu.ville) a.aVille = lu.ville;
+  }
+  v.updatedAt = Date.now();
+  saveVehicle(v);
+  renderMain();
+}
+
+/* --- QUELLE FACE VIENT-ON DE PHOTOGRAPHIER ? -------------------------
+   Le logiciel le reconnait a ce qu'il trouve : la bande de caracteres
+   ne figure que d'un cote, la photo et la mention « CARTE NATIONALE »
+   de l'autre. Il peut donc dire « ce n'est pas la bonne photo » quand
+   on refait deux fois la meme face, ou quand l'image n'est pas une
+   piece d'identite du tout.
+   ---------------------------------------------------------------------- */
+/* La photo suivante, quel que soit le chemin : camera guidee si
+   l'appareil la propose, sinon l'appareil photo ordinaire — et dans ce
+   cas il faut attendre le fichier, d'ou cette promesse. */
+function photoParFichier(id){
+  return new Promise(function(resoudre){
+    const bt = document.getElementById(id);
+    const champ = bt && bt.querySelector('input');
+    if(!champ){ resoudre(null); return; }
+    const ancien = champ.onchange;
+    champ.onchange = function(){
+      const f = champ.files && champ.files[0];
+      champ.value = '';
+      champ.onchange = ancien;
+      resoudre(f || null);
+    };
+    champ.click();
+  });
+}
+
+async function photoSuivanteIdentite(libelle){
+  if(cameraDisponible()){
+    const p = await prendrePhotoCadree(libelle);
+    if(p !== 'sans-camera') return p;
+  }
+  return photoParFichier('scanID');
+}
+
+function faceIdentite(texte){
+  const bande = lireBandeIdentite(texte);
+  if(bande) return 'bande';
+  const t = majuscules(texte || '');
+  const motsPiece = ['CARTE NATIONALE', 'IDENTITE', 'IDENTITY', 'PERSONALAUSWEIS',
+                     'PASSEPORT', 'PASSPORT', 'REPUBLIQUE FRANCAISE'];
+  const vuPiece = motsPiece.some(function(m){ return t.indexOf(m) !== -1; });
+  const adresse = lireAdresseIdentite(texte);
+  if(adresse.adresse || adresse.cp) return 'adresse';
+  if(vuPiece) return 'autre';
+  return 'inconnue';
+}
+
+function nomDeLaFace(face){
+  if(face === 'bande') return t('la face à la bande de caractères');
+  if(face === 'adresse') return t('la face à l’adresse');
+  return t('cette face');
+}
+
+/* Ce qu'une face apporte : l'etat civil vient de la bande, l'adresse du
+   texte imprime. Sur la carte francaise les deux sont au verso, mais
+   pas toujours ailleurs — et une photo ne montre qu'une face. */
+function lireUneFaceIdentite(texte){
+  const lu = lireBandeIdentite(texte) || lireIdentiteTexte(texte) || {};
+  Object.assign(lu, lireAdresseIdentite(texte));
+  return lu;
+}
+
+function manqueApresIdentite(lu){
+  if(!lu.nom && !lu.naissance) return 'bande';     // pas d'etat civil
+  if(!lu.adresse) return 'adresse';
+  return '';
+}
+
+async function scannerIdentite(fichier, v, parLaCamera){
+  if(!fichier) return;
+  bandeau(t('Lecture de la pièce d’identité…'), 'attente');
+  try{
+    const premiere = await lireUnVolet(fichier, parLaCamera);
+    if(!premiere) return;
+    let lu = lireUneFaceIdentite(premiere.texte);
+    let texteTotal = premiere.texte;
+    let premiereFace = faceIdentite(premiere.texte);
+
+    /* Rien qui ressemble a une piece d'identite : on le dit tout de
+       suite plutot que d'ouvrir une fenetre de relecture vide. */
+    if(premiereFace === 'inconnue'){
+      const reprendre = await demander({
+        titre: t('Ce n’est pas la bonne photo'),
+        texte: t('Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.'),
+        oui: t('Reprendre la photo'), non: t('Annuler')
+      });
+      if(!reprendre) return;
+      const encore = await photoSuivanteIdentite(t('Pièce d’identité'));
+      if(encore) return scannerIdentite(encore, v, cameraDisponible());
+      return;
+    }
+
+    /* LES DEUX FACES SONT TOUJOURS DEMANDEES. Une piece d'identite se
+       lit recto ET verso : l'etat civil d'un cote, l'adresse et la
+       bande de l'autre selon le modele. Ce qui manque encore est
+       rappele dans la question, mais la seconde photo est reclamee meme
+       quand la premiere semble avoir tout donne — l'oeil du logiciel
+       n'est pas le votre, et une carte peut cacher une mention qu'il
+       n'a pas comprise. */
+    const manque = manqueApresIdentite(lu);
+    const precision = manque === 'bande' ? t('la face qui porte la bande de caractères')
+                    : manque === 'adresse' ? t('la face qui porte l’adresse')
+                    : t('l’autre face de la pièce');
+    const suite = await demander({
+      titre: t('Recto et verso'),
+      texte: t('Photographiez maintenant :') + ' ' + precision,
+      oui: t('Photographier'), non: t('Terminer')
+    });
+    /* On accepte jusqu'a trois essais pour la seconde face : le temps
+       de retourner la carte, pas davantage. */
+    let veut = suite, essais = 0;
+    while(veut && essais < 3){
+      essais++;
+      const photo = await photoSuivanteIdentite(t('Pièce d’identité') + ' — ' + precision);
+      if(!photo) break;
+      const seconde = await lireUnVolet(photo, true);
+      if(!seconde) break;
+
+      const face = faceIdentite(seconde.texte);
+      const memeFace = (face !== 'inconnue' && face === premiereFace);
+      if(face === 'inconnue' || memeFace){
+        veut = await demander({
+          titre: t('Ce n’est pas la bonne photo'),
+          texte: memeFace
+            ? t('C’est encore') + ' ' + nomDeLaFace(face) + ' — '
+              + t('retournez la pièce et photographiez l’autre côté.')
+            : t('Cette photo ne ressemble pas à une pièce d’identité. Cadrez la carte entière, bien à plat.'),
+          oui: t('Reprendre la photo'), non: t('Terminer')
+        });
+        continue;
+      }
+      lu = fusionnerVolets(lu, lireUneFaceIdentite(seconde.texte));
+      texteTotal += '\n' + seconde.texte;
+      break;
+    }
+
+    lu.modele = modeleIdentite(lu, texteTotal);
+    const gardes = await fenetreIdentite(lu);
+    if(gardes && Object.keys(gardes).length){
+      /* Le pays n'est pas une ligne a cocher, mais il sert a remplir le
+         pays de naissance : on le joint a ce qui a ete valide. */
+      remplirDepuisIdentite(v, Object.assign(
+        { pays: (lu && lu.pays) || '', nationalite: (lu && lu.nationalite) || '' }, gardes));
       bandeau(t('Document rempli'), 'ok');
     }
   }catch(e){
