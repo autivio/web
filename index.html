@@ -1759,6 +1759,9 @@
   .etiq-beta{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
     background:#f4c430;color:#3a2c00;font-size:10.5px;font-weight:700;
     letter-spacing:.6px;text-transform:uppercase;vertical-align:middle;}
+  .cam-galerie{position:relative;overflow:hidden;}
+  .cam-fichier{position:absolute;inset:0;width:100%;height:100%;opacity:0;
+    cursor:pointer;font-size:0;}
 </style>
 </head>
 <body>
@@ -10657,7 +10660,8 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 const NOTES_VERSION = {
   '2.29': { date: '25/09/2026', lignes: [
         "Le trait d’union des prénoms composés est retrouvé : la bande écrit « YA SIN », le texte imprimé « ya-sin » — c’est l’orthographe imprimée qui est retenue.",
-        "Le recto et le verso d’une carte d’identité ne sont plus confondus : le logiciel compare les deux photos entre elles et ne réclame la seconde face que si elle apporte vraiment autre chose.",
+        "« Photo existante » ouvre la pellicule : le champ de fichier est maintenant posé dans le bouton lui-même, seul moyen d’y arriver sur iPhone.",
+    "Le recto et le verso ne sont plus confondus : seule la comparaison des deux photos décide, et le logiciel ne refuse une photo que s’il a vraiment lu quelque chose des deux côtés.",
         "Les confusions de lecture sont corrigées : dans une plaque, un numéro de châssis ou une date, le logiciel sait quelles positions portent des chiffres et lesquelles des lettres, et redresse les O pris pour des zéros, les B pour des 8, les I pour des 1.",
         "Les prénoms composés ne sont plus coupés : « ya-sin » était lu « YA », la bande ne distinguant pas le trait d’union de l’espace.",
         "La commune et le département de naissance sont lus sur le texte imprimé, que la bande ne contient pas.",
@@ -24713,9 +24717,15 @@ function prendrePhotoCadree(libelle, source){
       +   '<span class="cam-point"></span><span id="camTexte">'
       +   esc(t('Recherche du document…')) + '</span></div>'
       + '<div class="cam-barre">'
-      +   '<label class="cam-galerie" id="camGalerie" for="'
-      +     esc((source || 'scanCG') + 'fichier') + '">'
-      +     esc(t('Photo existante')) + '</label>'
+      /* Le champ de fichier est POSE DANS le bouton, transparent et
+         etendu dessus : le doigt tombe sur le champ lui-meme, et
+         l'iPhone ouvre la pellicule sans discuter. Pointer vers un
+         champ situe ailleurs dans la page — meme par une etiquette —
+         ne marchait pas sur iOS. */
+      +   '<label class="cam-galerie" id="camGalerie">'
+      +     '<span>' + esc(t('Photo existante')) + '</span>'
+      +     '<input type="file" accept="image/*" class="cam-fichier">'
+      +   '</label>'
       +   '<button type="button" class="cam-declic" id="camDeclic" aria-label="'
       +     esc(t('Prendre la photo')) + '"><span class="cam-anneau"></span></button>'
       +   '<span class="cam-aide">' + esc(t('Appuyez quand le cadre est vert')) + '</span>'
@@ -24764,11 +24774,17 @@ function prendrePhotoCadree(libelle, source){
     ecran.querySelector('#camFermer').onclick = function(){ fermer('annule'); };
     declic.onclick = capturer;
     /* Une photo deja prise — un scan recu par message, par exemple. */
-    /* L'etiquette ouvre elle-meme la pellicule — un iPhone refuse qu'un
-       programme le fasse a la place du doigt, et le bouton restait sans
-       effet. On se contente de refermer la camera derriere. */
-    ecran.querySelector('#camGalerie').onclick = function(){
-      setTimeout(function(){ fermer('annule'); }, 60);
+    /* La photo choisie dans la pellicule est rendue directement : la
+       camera se ferme et le scan continue avec elle, sans repasser par
+       les boutons de la page. */
+    ecran.querySelector('.cam-fichier').onchange = function(){
+      const f = this.files && this.files[0];
+      if(!f) return;
+      fini = true;
+      clearInterval(minuteur);
+      eteindreCamera();
+      ecran.remove();
+      resolve(f);
     };
 
     video.onloadedmetadata = function(){
@@ -25526,10 +25542,18 @@ async function scannerIdentite(fichier, v, parLaCamera){
 
       const face = faceIdentite(seconde.texte);
       const proche = ressemblance(premiere.texte, seconde.texte);
-      /* Plus de la moitie des mots en commun : c'est la meme face. Deux
-         faces d'une meme carte partagent le nom, mais pas davantage. */
-      const memeFace = proche > 0.55
-        || (face === 'bande' && premiereFace === 'bande');
+      /* SEULE la comparaison des deux textes decide. L'ancien repli
+         « les deux photos montrent une bande, donc c'est la meme face »
+         se declenchait a tort : sur une photo brouillee, le recto
+         produit lui aussi des lignes qui ressemblent a une bande.
+         Et pour accuser quelqu'un d'avoir repris la meme face, encore
+         faut-il avoir lu quelque chose des deux cotes. Cinq mots
+         suffisent : une bande normalisee n'en produit que sept ou
+         huit, ses lignes etant tres longues. En dessous, on se tait et
+         on accepte la photo. */
+      const assezLu = motsUtiles(premiere.texte).length >= 5
+                   && motsUtiles(seconde.texte).length >= 5;
+      const memeFace = assezLu && proche > 0.55;
       if(face === 'inconnue' || memeFace){
         veut = await demander({
           titre: t('Ce n’est pas la bonne photo'),
