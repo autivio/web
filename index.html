@@ -894,13 +894,15 @@
      « touch-action:none » sur le corps bloquait aussi la carte
      elle-meme : sur un petit ecran, le bas du formulaire devenait
      inaccessible. Seul le corps est fige, la carte reste parcourable. */
-  body.avant-connexion{overflow:hidden !important;position:fixed;
-    top:0;left:0;right:0;bottom:0;width:100%;height:100%;
-    margin:0;padding:0;overscroll-behavior:none;}
-  body.avant-connexion #authScreen{position:absolute;top:0;left:0;right:0;bottom:0;
-    overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;
-    display:flex;align-items:center;justify-content:center;padding:16px;
-    box-sizing:border-box;}
+  /* La page elle-meme defile, tout simplement. Figer le corps et faire
+     defiler un cadre a l'interieur marchait sur ordinateur mais pas
+     toujours sur iPhone : selon la version de Safari, le cadre interne
+     refusait de bouger et le bas du formulaire restait hors de portee.
+     Une page qui defile normalement ne connait pas ce probleme. */
+  body.avant-connexion{position:static;overflow-y:auto;min-height:100%;
+    margin:0;padding:0;-webkit-overflow-scrolling:touch;}
+  body.avant-connexion #authScreen{position:static;min-height:100vh;
+    display:block;padding:16px;box-sizing:border-box;}
   .auth-lien{background:none;border:0;color:var(--brand);cursor:pointer;
     width:100%;margin-top:10px;font-size:13.5px;text-decoration:underline;
     padding:6px;font-family:inherit;}
@@ -1621,8 +1623,8 @@
      hauteur de l'ecran. Plus haute que l'ecran, elle etait tassee et le
      bas (auteur, version) debordait, sombre sur fond sombre. Le cadre
      grandit desormais avec son contenu, et tout se fait defiler. */
-  body.avant-connexion #authScreen{display:block;
-    padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 24px);}
+  body.avant-connexion #authScreen{
+    padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 28px);}
   body.avant-connexion .auth-wrap{min-height:100%;box-sizing:border-box;}
   body.avant-connexion .auth-wrap > *{flex-shrink:0;}
   /* Note de mise a jour : la liste des nouveautes */
@@ -1748,6 +1750,15 @@
     line-height:1.25;}
   .cg-identite{margin:6px 0 2px;padding:7px 11px;border-radius:9px;font-size:13px;
     background:var(--soft,#eef2fa);color:var(--brand,#14417f);font-weight:600;}
+  /* Un champ de fichier doit rester PRESENT pour qu'une etiquette
+     puisse l'ouvrir : sur iPhone, « display:none » le rend
+     inatteignable, et le bouton « Photo existante » ne faisait rien. */
+  .champ-cache{position:absolute;width:1px;height:1px;opacity:0;
+    pointer-events:none;left:-9999px;}
+  /* Mention d'essai sur les fonctions de lecture automatique */
+  .etiq-beta{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
+    background:#f4c430;color:#3a2c00;font-size:10.5px;font-weight:700;
+    letter-spacing:.6px;text-transform:uppercase;vertical-align:middle;}
 </style>
 </head>
 <body>
@@ -2278,6 +2289,7 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "bêta": "beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "il lato con le righe di lettere e chevron (<<<)",
     "le côté avec l’adresse": "il lato con l’indirizzo",
     "l’autre côté de la carte": "l’altro lato della carta",
@@ -3193,6 +3205,7 @@ const DICO = {
   },
 
   lb: {
+    "bêta": "Beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "d’Säit mat de Reie Buschtawen a Feeler (<<<)",
     "le côté avec l’adresse": "d’Säit mat der Adress",
     "l’autre côté de la carte": "déi aner Säit vun der Kaart",
@@ -4107,6 +4120,7 @@ const DICO = {
   },
 
   en: {
+    "bêta": "beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "the side with the rows of letters and chevrons (<<<)",
     "le côté avec l’adresse": "the side with the address",
     "l’autre côté de la carte": "the other side of the card",
@@ -5020,6 +5034,7 @@ const DICO = {
   },
 
   de: {
+    "bêta": "Beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "die Seite mit den Zeilen aus Buchstaben und Pfeilen (<<<)",
     "le côté avec l’adresse": "die Seite mit der Adresse",
     "l’autre côté de la carte": "die andere Seite der Karte",
@@ -5949,6 +5964,7 @@ const DICO = {
   },
 
   nl: {
+    "bêta": "bèta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "de zijde met de regels letters en punthaken (<<<)",
     "le côté avec l’adresse": "de zijde met het adres",
     "l’autre côté de la carte": "de andere zijde van de kaart",
@@ -6872,7 +6888,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.28';
+const VERSION = '2.29';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10639,11 +10655,21 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.29': { date: '25/09/2026', lignes: [
+        "Le trait d’union des prénoms composés est retrouvé : la bande écrit « YA SIN », le texte imprimé « ya-sin » — c’est l’orthographe imprimée qui est retenue.",
+        "Le recto et le verso d’une carte d’identité ne sont plus confondus : le logiciel compare les deux photos entre elles et ne réclame la seconde face que si elle apporte vraiment autre chose.",
+        "Les confusions de lecture sont corrigées : dans une plaque, un numéro de châssis ou une date, le logiciel sait quelles positions portent des chiffres et lesquelles des lettres, et redresse les O pris pour des zéros, les B pour des 8, les I pour des 1.",
+        "Les prénoms composés ne sont plus coupés : « ya-sin » était lu « YA », la bande ne distinguant pas le trait d’union de l’espace.",
+        "La commune et le département de naissance sont lus sur le texte imprimé, que la bande ne contient pas.",
+        "Les dates s’affichent en français, 14/03/1992, au lieu du format des ordinateurs.",
+        "Les deux boutons de scan portent la mention « bêta » : la lecture automatique peut se tromper, la relecture reste nécessaire.",
+        "L’écran de connexion se fait défiler sur iPhone : la page entière défile désormais, au lieu d’un cadre interne que Safari refusait de faire bouger.",
+        "Le verso d’une carte d’identité n’est plus refusé quand sa bande est mal lue, et les messages du scan parlent de ce qu’on voit sur la carte plutôt que de termes techniques.",
+        "Le bouton « Photo existante » ouvre enfin la pellicule : sur iPhone, un programme n'a pas le droit de l'ouvrir à la place du doigt."
+  ] },
   '2.28': { date: '25/09/2026', lignes: [
     "Le scan ne déclenche plus tout seul : c'est vous qui appuyez, quand le cadre est vert. L'appareil prenait la photo avant la mise au point, et la lecture s'en ressentait.",
     "Une photo qui n'est pas le bon document est refusée : le logiciel exige plusieurs signes concordants avant d'annoncer une plaque, au lieu d'en inventer une à partir d'une photo de volant.",
-    "Le verso d’une carte d’identité n’est plus refusé quand sa bande est mal lue, et les messages du scan parlent de ce qu’on voit sur la carte plutôt que de termes techniques.",
-    "Le bouton « Photo existante » ouvre enfin la pellicule : sur iPhone, un programme n'a pas le droit de l'ouvrir à la place du doigt.",
     "Le bouton « Scanner une pièce d'identité » ouvrait le scan de la carte grise dès qu'on passait par « Photo existante » ou par une reprise : chaque scan reste maintenant sur son propre bouton.",
     "La photo est lue en plus haute définition, avec des réglages adaptés à un document imprimé."
   ] },
@@ -13032,16 +13058,18 @@ function renderMain(){
     +       '<span>' + esc(t('🔗 Partager le document')) + '</span></button>'
     +     (docLitLIdentite()
             ? '<label class="btn-sec btn-import-doc" id="scanID">'
-              + '<span>' + esc(t('🪪 Scanner une pièce d’identité')) + '</span>'
+              + '<span>' + esc(t('🪪 Scanner une pièce d’identité'))
+              + ' <b class="etiq-beta">' + esc(t('bêta')) + '</b></span>'
               /* Sans « capture », l'iPhone propose la pellicule ET
                  l'appareil photo ; avec, il impose l'appareil photo et
                  « Photo existante » n'a plus de sens. */
-              + '<input type="file" id="scanIDfichier" accept="image/*" style="display:none"></label>'
+              + '<input type="file" id="scanIDfichier" accept="image/*" class="champ-cache"></label>'
             : '')
     +     (docLitLaCarteGrise()
             ? '<label class="btn-sec btn-import-doc" id="scanCG">'
-              + '<span>' + esc(t('📷 Scanner la carte grise')) + '</span>'
-              + '<input type="file" id="scanCGfichier" accept="image/*" style="display:none"></label>'
+              + '<span>' + esc(t('📷 Scanner la carte grise'))
+              + ' <b class="etiq-beta">' + esc(t('bêta')) + '</b></span>'
+              + '<input type="file" id="scanCGfichier" accept="image/*" class="champ-cache"></label>'
               + '<button type="button" class="btn-sec" id="scanCGguide" style="display:none"></button>'
             : '')
     +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
@@ -24379,10 +24407,14 @@ function lireCarteGrise(texte){
   /* Immatriculation : d'abord le repere A, sinon le premier format de
      plaque rencontre — SIV (AB-123-CD) ou ancien (123 AB 45). */
   const plaque = function(s){
-    let m = String(s || '').match(/\b([A-Z]{2})[\s.\-]?(\d{3})[\s.\-]?([A-Z]{2})\b/);
-    if(m) return (m[1] + '-' + m[2] + '-' + m[3]).toUpperCase();
-    m = String(s || '').match(/\b(\d{1,4})\s?([A-Z]{2,3})\s?(\d{2,3})\b/);
-    return m ? (m[1] + ' ' + m[2] + ' ' + m[3]).toUpperCase() : '';
+    /* Une plaque SIV s'ecrit lettres-chiffres-lettres : on redresse
+       chaque morceau selon sa nature, ce qui corrige d'un coup les
+       confusions entre O et 0, B et 8, I et 1. */
+    const x = majuscules(s || '');
+    let m = x.match(/\b([A-Z0-9]{2})[\s.\-]?([A-Z0-9]{3})[\s.\-]?([A-Z0-9]{2})\b/);
+    if(m) return enLettres(m[1]) + '-' + enChiffres(m[2]) + '-' + enLettres(m[3]);
+    m = x.match(/\b([A-Z0-9]{1,4})\s?([A-Z]{2,3})\s?([A-Z0-9]{2,3})\b/);
+    return m ? (enChiffres(m[1]) + ' ' + enLettres(m[2]) + ' ' + enChiffres(m[3])) : '';
   };
   /* Le repere A porte l'immatriculation, dans TOUS les pays. Si elle ne
      ressemble a aucun format francais — « M-AB 1234 » en Allemagne,
@@ -24395,8 +24427,13 @@ function lireCarteGrise(texte){
 
   /* Numero de chassis : 17 caracteres sans I, O ni Q. */
   const vin = function(s){
-    const m = String(s || '').replace(/\s/g, '').match(/\b([A-HJ-NPR-Z0-9]{17})\b/);
-    return m ? m[1].toUpperCase() : '';
+    /* Un numero de chassis ne contient JAMAIS de I, de O ni de Q : la
+       norme les exclut pour eviter la confusion avec 1 et 0. Tout I lu
+       est donc un 1, tout O ou Q un zero — la regle est sure. */
+    const x = majuscules(s || '').replace(/\s/g, '')
+      .replace(/[IOQ]/g, function(c){ return c === 'I' ? '1' : '0'; });
+    const m = x.match(/\b([A-HJ-NPR-Z0-9]{17})\b/);
+    return m ? m[1] : '';
   };
   res.vin = vin(champs['E']) || vin(tout.replace(/\n/g, ' '));
 
@@ -24813,6 +24850,15 @@ async function lireUnVolet(fichier, parLaCamera, source){
 function fusionnerVolets(a, b){
   const r = Object.assign({}, b || {});
   Object.keys(a || {}).forEach(function(k){ if(a[k]) r[k] = a[k]; });
+  /* Une face donne la bande, l'autre le texte imprime : si les deux
+     ecrivent le meme nom, on retient celui qui porte les traits
+     d'union et les accents. */
+  ['nom', 'prenom'].forEach(function(k){
+    const x = (a || {})[k], y = (b || {})[k];
+    if(x && y && memeNomAuxSeparateurs(x, y)){
+      r[k] = /[-']/.test(y) ? y : (/[-']/.test(x) ? x : r[k]);
+    }
+  });
   return r;
 }
 
@@ -24928,12 +24974,51 @@ function nomsBande(champ){
   const parts = String(champ || '').split('<<');
   const nom = (parts[0] || '').replace(/</g, ' ').trim();
   const prenoms = (parts[1] || '').replace(/</g, ' ').trim();
-  return { nom: nom, prenom: prenoms.split(/\s+/)[0] || '', prenoms: prenoms };
+  /* La bande ne distingue pas l'espace du trait d'union : « YA-SIN »
+     s'y ecrit « YA<SIN », exactement comme deux prenoms. Ne garder que
+     le premier morceau coupait donc les prenoms composes en deux —
+     « ya-sin » devenait « YA ». On garde TOUT, et c'est a la relecture
+     de remettre le trait d'union s'il le faut. */
+  return { nom: nom, prenom: prenoms, prenoms: prenoms };
+}
+
+/* --- CORRIGER CE QUE LE LECTEUR CONFOND ------------------------------
+   Dans la bande normalisee, chaque position a une nature connue :
+   telle zone ne contient QUE des chiffres, telle autre QUE des lettres.
+   Un lecteur confond O et 0, I et 1, S et 5, B et 8, G et 6, Z et 2 —
+   mais puisqu'on sait ce qui doit se trouver la, on redresse.
+   C'est la correction qui fait le plus gagner : sans elle, une date de
+   naissance sur deux comportait un O a la place d'un zero.
+   ---------------------------------------------------------------------- */
+const VERS_CHIFFRE = { 'O':'0', 'Q':'0', 'D':'0', 'I':'1', 'L':'1', 'Z':'2',
+                       'S':'5', 'B':'8', 'G':'6', 'T':'7', 'A':'4', 'E':'8' };
+const VERS_LETTRE  = { '0':'O', '1':'I', '2':'Z', '5':'S', '8':'B', '6':'G',
+                       '4':'A', '7':'T' };
+
+function enChiffres(s){
+  return String(s || '').split('').map(function(c){
+    return VERS_CHIFFRE[c] || c;
+  }).join('');
+}
+
+function enLettres(s){
+  return String(s || '').split('').map(function(c){
+    return VERS_LETTRE[c] || c;
+  }).join('');
+}
+
+/* Le chevron est le signe le plus malmene : il devient c, k, x, «, ou
+   un espace. On le retablit avant toute analyse. */
+function chevrons(ligne){
+  return majuscules(ligne || '')
+    .replace(/[«»<>‹›^]/g, '<')
+    .replace(/\s/g, '<')
+    .replace(/[KX](?=[KX]{2,})/g, '<');
 }
 
 function lignesBande(texte){
-  return String(texte || '').toUpperCase().split('\n')
-    .map(function(l){ return l.replace(/\s/g, '').replace(/[^A-Z0-9<]/g, ''); })
+  return String(texte || '').split('\n')
+    .map(function(l){ return chevrons(l).replace(/[^A-Z0-9<]/g, ''); })
     .filter(function(l){ return l.length >= 28 && l.indexOf('<') !== -1; });
 }
 
@@ -24949,14 +25034,14 @@ function lireBandeIdentite(texte){
     Object.assign(res, nomsBande(a.slice(5)));
     res.piece = 'Passeport'; res.disposition = 'TD3';
     res.numero = b.slice(0, 9).replace(/</g, '');
-    res.nationalite = b.slice(10, 13).replace(/</g, '');
-    res.naissance = dateBande(b.slice(13, 19), true);
+    res.nationalite = enLettres(b.slice(10, 13)).replace(/</g, '');
+    res.naissance = dateBande(enChiffres(b.slice(13, 19)), true);
     res.sexe = b[20] === 'F' ? 'F' : (b[20] === 'M' ? 'M' : '');
-    res.expire = dateBande(b.slice(21, 27), false);
+    res.expire = dateBande(enChiffres(b.slice(21, 27)), false);
     res.controles = 3;
-    res.controlesOk = [bonneCle(b.slice(0, 9), b[9]),
-                       bonneCle(b.slice(13, 19), b[19]),
-                       bonneCle(b.slice(21, 27), b[27])].filter(Boolean).length;
+    res.controlesOk = [bonneCle(b.slice(0, 9), enChiffres(b[9])),
+                       bonneCle(enChiffres(b.slice(13, 19)), enChiffres(b[19])),
+                       bonneCle(enChiffres(b.slice(21, 27)), enChiffres(b[27]))].filter(Boolean).length;
     return res;
   }
 
@@ -24971,14 +25056,14 @@ function lireBandeIdentite(texte){
     res.disposition = 'TD1';
     res.pays = a.slice(2, 5).replace(/</g, '');
     res.numero = a.slice(5, 14).replace(/</g, '');
-    res.naissance = dateBande(b.slice(0, 6), true);
+    res.naissance = dateBande(enChiffres(b.slice(0, 6)), true);
     res.sexe = b[7] === 'F' ? 'F' : (b[7] === 'M' ? 'M' : '');
-    res.expire = dateBande(b.slice(8, 14), false);
-    res.nationalite = b.slice(15, 18).replace(/</g, '');
+    res.expire = dateBande(enChiffres(b.slice(8, 14)), false);
+    res.nationalite = enLettres(b.slice(15, 18)).replace(/</g, '');
     res.controles = 3;
-    res.controlesOk = [bonneCle(a.slice(5, 14), a[14]),
-                       bonneCle(b.slice(0, 6), b[6]),
-                       bonneCle(b.slice(8, 14), b[14])].filter(Boolean).length;
+    res.controlesOk = [bonneCle(a.slice(5, 14), enChiffres(a[14])),
+                       bonneCle(enChiffres(b.slice(0, 6)), enChiffres(b[6])),
+                       bonneCle(enChiffres(b.slice(8, 14)), enChiffres(b[14]))].filter(Boolean).length;
     return res;
   }
 
@@ -24998,11 +25083,11 @@ function lireBandeIdentite(texte){
     res.numero = a.slice(30, 36).replace(/</g, '');
     res.prenoms = b.slice(13, 27).replace(/</g, ' ').trim();
     res.prenom = res.prenoms.split(/\s+/)[0] || '';
-    res.naissance = dateBande(b.slice(27, 33), true);
+    res.naissance = dateBande(enChiffres(b.slice(27, 33)), true);
     res.sexe = b[34] === 'F' ? 'F' : 'M';
-    res.departement = b.slice(0, 2);
+    res.departement = enChiffres(b.slice(0, 2));
     res.controles = 1;
-    res.controlesOk = bonneCle(b.slice(27, 33), b[33]) ? 1 : 0;
+    res.controlesOk = bonneCle(enChiffres(b.slice(27, 33)), enChiffres(b[33])) ? 1 : 0;
     return res;
   }
   return null;
@@ -25025,11 +25110,26 @@ function lireIdentiteTexte(texte){
     return '';
   };
   res.nom = apres(['NOM', 'SURNAME']);
-  res.prenom = (apres(['PRENOM', 'GIVEN NAME']) || '').split(/[,\s]+/)[0] || '';
+  /* Tous les prenoms, pas seulement le premier : « CLAIRE MARIE » reste
+     entier, et « ya-sin » ne devient pas « ya ». */
+  res.prenom = nettoyerLigneOcr(apres(['PRENOM', 'GIVEN NAME']));
   const d = (apres(['NE(E) LE', 'NE LE', 'DATE DE NAISS']) || '')
               .match(/(\d{2})[\/.\- ](\d{2})[\/.\- ](\d{4})/);
   if(d) res.naissance = d[3] + '-' + d[2] + '-' + d[1];
-  res.lieuNaissance = apres(['A ', 'LIEU DE NAISS', 'NE(E) A']);
+  /* « Ne(e) le ... a LILLE (59) » : le lieu suit souvent la date sur la
+     MEME ligne, et le departement entre parentheses. */
+  res.lieuNaissance = apres(['LIEU DE NAISS', 'NE(E) A', 'NEE A', 'NE A', 'A ']);
+  if(!res.lieuNaissance){
+    for(const ligne of l){
+      const m = majuscules(ligne).match(/\d{2}[\/.\- ]\d{2}[\/.\- ]\d{4}\s+A\s+(.{2,40})$/);
+      if(m){ res.lieuNaissance = nettoyerLigneOcr(m[1]); break; }
+    }
+  }
+  if(res.lieuNaissance){
+    const dept = res.lieuNaissance.match(/\((\d{2,3})\)/);
+    if(dept){ res.departement = dept[1]; }
+    res.lieuNaissance = res.lieuNaissance.replace(/\s*\(\d{2,3}\)\s*$/, '').trim();
+  }
   Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
   return res;
 }
@@ -25131,6 +25231,20 @@ function typeDocLu(lu){
   return bouts.join(' · ');
 }
 
+/* Les dates se montrent a la francaise — 14/03/1992 — et repartent au
+   format interne des champs de formulaire. Le logiciel affichait
+   « 1992-03-14 », ce qui a l'air d'une erreur pour qui ne connait pas
+   la convention des ordinateurs. */
+function dateFrancaise(valeur){
+  const m = String(valeur || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? (m[3] + '/' + m[2] + '/' + m[1]) : String(valeur || '');
+}
+
+function dateInterne(valeur){
+  const m = String(valeur || '').match(/^(\d{2})[\/.\-](\d{2})[\/.\-](\d{4})$/);
+  return m ? (m[3] + '-' + m[2] + '-' + m[1]) : String(valeur || '');
+}
+
 function fenetreIdentite(lu){
   return new Promise(function(resolve){
     const trouves = CHAMPS_IDENTITE_LUS.filter(function(c){ return lu[c[0]]; });
@@ -25147,7 +25261,8 @@ function fenetreIdentite(lu){
       +   trouves.map(function(c){
             return '<label class="cg-ligne"><input type="checkbox" checked data-cg="' + c[0] + '">'
               + '<span class="cg-nom">' + esc(t(c[1])) + '</span>'
-              + '<input class="cg-val" data-val="' + c[0] + '" value="' + esc(lu[c[0]]) + '"></label>';
+              + '<input class="cg-val" data-val="' + c[0] + '" value="'
+              + esc(dateFrancaise(lu[c[0]])) + '"></label>';
           }).join('')
       + '</div>'
       + '<div class="dlg-actions">'
@@ -25165,7 +25280,7 @@ function fenetreIdentite(lu){
       fond.querySelectorAll('[data-cg]').forEach(function(cas){
         if(!cas.checked) return;
         const champ = fond.querySelector('[data-val="' + cas.dataset.cg + '"]');
-        const val = champ ? champ.value.trim() : '';
+        const val = champ ? dateInterne(champ.value.trim()) : '';
         if(val) gardes[cas.dataset.cg] = val;
       });
       fermer(gardes);
@@ -25265,16 +25380,15 @@ function faceIdentite(texte){
      n'est pas une piece d'identite — le verso etait refuse pour cela.
      On reconnait donc la bande a son allure : de longues lignes de
      majuscules serrees, souvent semees de chevrons. */
+  /* Une ligne de bande est LONGUE et pleine de chevrons. Se contenter
+     de « longue ligne de majuscules » faisait passer le recto — ou
+     figure « CARTE NATIONALE D'IDENTITE » — pour le cote de la bande,
+     et le logiciel croyait ensuite qu'on lui redonnait la meme face. */
   const allure = String(texte || '').split('\n').filter(function(l){
-    /* On compare en majuscules : un lecteur rend souvent les chevrons
-       sous forme de « c » ou de « k » minuscules, et la ligne perdait
-       alors son allure de bande. */
-    const x = majuscules(l).replace(/\s/g, '');
-    if(x.length < 22) return false;
-    const signes = (x.match(/[A-Z0-9<]/g) || []).length;
-    return signes / x.length > 0.8;
+    const x = chevrons(l).replace(/[^A-Z0-9<]/g, '');
+    return x.length >= 26 && (x.match(/</g) || []).length >= 4;
   }).length;
-  if(allure >= 2 || (String(texte || '').match(/</g) || []).length >= 8) return 'bande';
+  if(allure >= 2) return 'bande';
   const motsPiece = ['CARTE NATIONALE', 'IDENTITE', 'IDENTITY', 'PERSONALAUSWEIS',
                      'PASSEPORT', 'PASSPORT', 'REPUBLIQUE FRANCAISE'];
   const vuPiece = motsPiece.some(function(m){ return t.indexOf(m) !== -1; });
@@ -25296,10 +25410,62 @@ function nomDeLaFace(face){
 /* Ce qu'une face apporte : l'etat civil vient de la bande, l'adresse du
    texte imprime. Sur la carte francaise les deux sont au verso, mais
    pas toujours ailleurs — et une photo ne montre qu'une face. */
+/* --- LE TRAIT D'UNION DES NOMS COMPOSES ------------------------------
+   La bande normalisee ecrit « YA<SIN » : impossible d'y savoir si le
+   chevron remplace un espace ou un trait d'union. Le texte imprime, lui,
+   ecrit « ya-sin » en toutes lettres. Quand les deux disent la meme
+   chose aux separateurs pres, on garde l'ORTHOGRAPHE IMPRIMEE — elle
+   porte le trait d'union — et la bande sert de verification.
+   ---------------------------------------------------------------------- */
+function memeNomAuxSeparateurs(a, b){
+  const nu = function(s){
+    return majuscules(s || '').replace(/[^A-Z0-9]/g, '');
+  };
+  const x = nu(a), y = nu(b);
+  return !!x && x === y;
+}
+
+function accorderOrthographe(deLaBande, deLImprime){
+  if(!deLaBande) return deLImprime || '';
+  if(!deLImprime) return deLaBande;
+  return memeNomAuxSeparateurs(deLaBande, deLImprime) ? deLImprime : deLaBande;
+}
+
 function lireUneFaceIdentite(texte){
-  const lu = lireBandeIdentite(texte) || lireIdentiteTexte(texte) || {};
+  /* La bande donne l'etat civil sur ; le texte imprime donne ce qu'elle
+     ne contient pas — lieu de naissance, adresse. On lit donc LES DEUX,
+     la bande gardant le dernier mot sur ce qu'elle sait. */
+  const imprime = lireIdentiteTexte(texte) || {};
+  const bande = lireBandeIdentite(texte);
+  const lu = Object.assign({}, imprime);
+  if(bande){
+    Object.keys(bande).forEach(function(k){ if(bande[k] !== '' && bande[k] !== undefined) lu[k] = bande[k]; });
+    /* Le nom et le prenom gardent l'orthographe imprimee quand elle
+       correspond : « YA SIN » redevient « ya-sin ». */
+    lu.nom = accorderOrthographe(bande.nom, imprime.nom);
+    lu.prenom = accorderOrthographe(bande.prenom, imprime.prenom);
+  }
   Object.assign(lu, lireAdresseIdentite(texte));
   return lu;
+}
+
+/* Deux photos du MEME cote donnent presque le meme texte. On compare
+   donc les mots retenus de part et d'autre : c'est plus fiable que de
+   deviner quelle face on regarde, surtout quand la lecture est
+   partielle. */
+function motsUtiles(texte){
+  const mots = majuscules(texte || '').split(/[^A-Z0-9<]+/)
+    .filter(function(m){ return m.length >= 4; });
+  return mots.slice(0, 120);
+}
+
+function ressemblance(a, b){
+  const A = motsUtiles(a), B = motsUtiles(b);
+  if(!A.length || !B.length) return 0;
+  const dansB = {};
+  B.forEach(function(m){ dansB[m] = true; });
+  const communs = A.filter(function(m){ return dansB[m]; }).length;
+  return communs / Math.min(A.length, B.length);
 }
 
 function manqueApresIdentite(lu){
@@ -25359,7 +25525,11 @@ async function scannerIdentite(fichier, v, parLaCamera){
       if(!seconde) break;
 
       const face = faceIdentite(seconde.texte);
-      const memeFace = (face !== 'inconnue' && face === premiereFace);
+      const proche = ressemblance(premiere.texte, seconde.texte);
+      /* Plus de la moitie des mots en commun : c'est la meme face. Deux
+         faces d'une meme carte partagent le nom, mais pas davantage. */
+      const memeFace = proche > 0.55
+        || (face === 'bande' && premiereFace === 'bande');
       if(face === 'inconnue' || memeFace){
         veut = await demander({
           titre: t('Ce n’est pas la bonne photo'),
