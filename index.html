@@ -1428,15 +1428,18 @@
   .fac-tete{display:flex;justify-content:space-between;gap:24px;margin-bottom:22px;}
   .fac-emetteur{line-height:1.55;}
   .fac-titre{text-align:right;line-height:1.5;}
-  .fac-titre h2{margin:0 0 6px;font-size:19px;}
-  .fac-client{border:1px solid #bbb;border-radius:4px;padding:10px 12px;
+  .fac-titre h2{margin:0 0 6px;font-size:19px;color:var(--brand,#14417f);
+    border-bottom:2px solid var(--brand,#14417f);display:inline-block;padding-bottom:3px;}
+  .fac-client{border:1px solid #d7dde8;border-radius:6px;padding:10px 12px;
     width:52%;margin:0 0 20px auto;line-height:1.5;}
   .fac-etiq{font-size:10px;letter-spacing:.09em;text-transform:uppercase;
     color:#666;margin-bottom:4px;}
   .fac-table{width:100%;border-collapse:collapse;margin-bottom:2px;}
-  .fac-table th{background:#eceff3;border:1px solid #b9c0cb;padding:6px 7px;
+  .fac-table th{background:var(--brand,#14417f);color:#fff;border:1px solid var(--brand,#14417f);padding:6px 7px;
     font-size:11px;text-align:center;font-weight:700;}
-  .fac-table td{border:1px solid #b9c0cb;padding:8px 7px;text-align:center;vertical-align:top;}
+  .fac-table td{border:1px solid #d7dde8;padding:8px 7px;text-align:center;vertical-align:top;}
+  /* La ligne du vehicule, en teinte tres pale de la couleur du logiciel */
+  .fac-table tbody tr:first-child td{background:color-mix(in srgb, var(--brand,#14417f) 6%, #fff);}
   .fac-table .g{text-align:left;}
   /* sept colonnes tiennent large : on garde la designation majoritaire
      et on serre les colonnes de chiffres, dont le contenu est court */
@@ -1450,8 +1453,9 @@
   .fac-detail{margin-top:5px;font-size:11.5px;color:#333;line-height:1.5;}
   .fac-totaux{margin:10px 0 0 auto;width:270px;font-size:12.5px;}
   .fac-totaux div{display:flex;justify-content:space-between;padding:3px 0;}
-  .fac-totaux .grand{border-top:1px solid #999;margin-top:4px;padding-top:6px;font-size:14px;}
-  .fac-mention{margin:16px 0;padding:8px 10px;border-left:3px solid #999;
+  .fac-totaux .grand{margin-top:6px;padding:7px 10px;font-size:14px;border-radius:5px;
+    background:var(--brand,#14417f);color:#fff;font-weight:700;}
+  .fac-mention{margin:16px 0;padding:8px 10px;border-left:3px solid var(--brand,#14417f);
     background:#f6f7f9;font-size:11.5px;line-height:1.5;}
   .fac-mention b{display:block;margin-bottom:3px;font-size:12.5px;letter-spacing:.01em;}
   .fac-garantie{border-left-color:#1a8f4c;}
@@ -1626,7 +1630,7 @@
   .notes-maj li{margin:0 0 9px;line-height:1.45;font-size:14px;color:var(--ink);}
   @media (pointer:coarse){ .notes-maj li{font-size:15px;} }
   /* Suggestion « Mon garage » sous le champ en cours de saisie */
-  .sugg-garage{position:fixed;z-index:9000;background:var(--paper,#fff);
+  .sugg-garage{position:absolute;z-index:9000;background:var(--paper,#fff);
     border:1px solid var(--line,#dfe4ec);border-radius:10px;
     box-shadow:0 10px 26px rgba(15,25,45,.18);padding:6px;max-width:92vw;}
   .sugg-titre{font-size:11px;letter-spacing:.4px;text-transform:uppercase;
@@ -1684,6 +1688,15 @@
   .btn-danger{background:#b3261e;color:#fff;border:0;border-radius:9px;
     padding:10px 16px;font-size:14.5px;font-family:inherit;cursor:pointer;}
   .btn-danger:hover{background:#8f1d17;}
+  /* Relecture d'une carte grise scannee */
+  .cg-liste{max-height:46vh;overflow-y:auto;margin:8px 0 4px;display:flex;
+    flex-direction:column;gap:7px;}
+  .cg-ligne{display:grid;grid-template-columns:18px 1fr;gap:4px 8px;align-items:center;
+    padding:7px 9px;border:1px solid var(--line,#e2e8f2);border-radius:9px;}
+  .cg-nom{font-size:12px;color:var(--muted,#7b8798);}
+  .cg-val{grid-column:2;width:100%;box-sizing:border-box;padding:7px 9px;font-size:15px;
+    border:1px solid var(--line,#dfe4ec);border-radius:7px;font-family:inherit;
+    background:var(--paper,#fff);color:var(--ink,#16233a);}
 </style>
 </head>
 <body>
@@ -2214,6 +2227,17 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "📷 Scanner la carte grise": "📷 Scansionare la carta di circolazione",
+    "Carte grise lue": "Carta di circolazione letta",
+    "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Rilegga prima di confermare: una lettera sbagliata nel numero di telaio fa respingere la pratica.",
+    "Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.": "Non è stato possibile leggere nulla da questa foto. La rifaccia ben piatta, senza riflessi, riempiendo lo schermo.",
+    "Remplir le document": "Compilare il documento",
+    "Lecture de la carte grise…": "Lettura della carta di circolazione…",
+    "Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.": "Impossibile scaricare il lettore. Si colleghi a Internet una prima volta: poi la scansione funziona offline.",
+    "Document rempli": "Documento compilato",
+    "La lecture a échoué.": "La lettura non è riuscita.",
+    "Nom du titulaire": "Nome dell’intestatario",
+    "Dénomination commerciale": "Denominazione commerciale",
     "Supprimer mon compte": "Eliminare il mio account",
     "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Il suo account, le schede e i documenti sono cancellati dal server. È definitivo: nulla si recupera in seguito.",
     "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Il suo account, le schede e i documenti saranno cancellati dal server. È definitivo. I documenti già scaricati su questo dispositivo restano.",
@@ -3027,6 +3051,17 @@ const DICO = {
   },
 
   lb: {
+    "📷 Scanner la carte grise": "📷 Fahrzeugschäin scannen",
+    "Carte grise lue": "Fahrzeugschäin gelies",
+    "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Kontrolléiert virum Bestätegen: ee falsche Buschtaf an der Fahrgestellnummer léisst den Dossier refuséieren.",
+    "Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.": "Op dësem Foto konnt näischt gelies ginn. Maacht et nei, flaach, ouni Reflex, bildfëllend.",
+    "Remplir le document": "D’Dokument ausfëllen",
+    "Lecture de la carte grise…": "De Fahrzeugschäin gëtt gelies…",
+    "Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.": "De Liese-Programm konnt net erofgelueden ginn. Gitt eng Kéier online: duerno funktionéiert de Scan offline.",
+    "Document rempli": "Dokument ausgefëllt",
+    "La lecture a échoué.": "D’Liese ass net gaang.",
+    "Nom du titulaire": "Numm vum Halter",
+    "Dénomination commerciale": "Handelsbezeechnung",
     "Supprimer mon compte": "Mäi Kont läschen",
     "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Äre Kont, Är Fichen an Är Dokumenter ginn um Server geläscht. Dat ass definitiv: duerno kritt een näischt méi zréck.",
     "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Äre Kont, Är Fichen an Är Dokumenter ginn um Server geläscht. Dat ass definitiv. Dokumenter, déi schonn op dësem Apparat gespäichert sinn, bleiwen.",
@@ -3839,6 +3874,17 @@ const DICO = {
   },
 
   en: {
+    "📷 Scanner la carte grise": "📷 Scan the registration document",
+    "Carte grise lue": "Registration document read",
+    "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Check before confirming: one wrong letter in a chassis number gets the file rejected.",
+    "Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.": "Nothing could be read from this photo. Take it again flat, without glare, filling the screen.",
+    "Remplir le document": "Fill in the document",
+    "Lecture de la carte grise…": "Reading the registration document…",
+    "Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.": "The reader could not be downloaded. Connect to the Internet once: afterwards, scanning works offline.",
+    "Document rempli": "Document filled in",
+    "La lecture a échoué.": "Reading failed.",
+    "Nom du titulaire": "Holder’s name",
+    "Dénomination commerciale": "Commercial name",
     "Supprimer mon compte": "Delete my account",
     "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Your account, records and documents are erased from the server. This is final: nothing can be recovered afterwards.",
     "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Your account, records and documents will be erased from the server. This is final: nothing can be recovered afterwards. Documents already downloaded on this device do stay.",
@@ -4650,6 +4696,17 @@ const DICO = {
   },
 
   de: {
+    "📷 Scanner la carte grise": "📷 Fahrzeugschein scannen",
+    "Carte grise lue": "Fahrzeugschein gelesen",
+    "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Prüfen Sie vor dem Bestätigen: Ein falscher Buchstabe in der Fahrgestellnummer führt zur Ablehnung.",
+    "Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.": "Auf diesem Foto war nichts lesbar. Fotografieren Sie erneut flach, ohne Spiegelung, bildfüllend.",
+    "Remplir le document": "Dokument ausfüllen",
+    "Lecture de la carte grise…": "Fahrzeugschein wird gelesen…",
+    "Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.": "Der Leser konnte nicht geladen werden. Gehen Sie einmal online: danach funktioniert das Scannen offline.",
+    "Document rempli": "Dokument ausgefüllt",
+    "La lecture a échoué.": "Das Lesen ist fehlgeschlagen.",
+    "Nom du titulaire": "Name des Halters",
+    "Dénomination commerciale": "Handelsbezeichnung",
     "Supprimer mon compte": "Mein Konto löschen",
     "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Ihr Konto, Ihre Datenblätter und Dokumente werden vom Server gelöscht. Das ist endgültig: Nichts lässt sich danach wiederherstellen.",
     "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Ihr Konto, Ihre Datenblätter und Dokumente werden vom Server gelöscht. Das ist endgültig. Bereits auf dieses Gerät heruntergeladene Dokumente bleiben erhalten.",
@@ -5477,6 +5534,17 @@ const DICO = {
   },
 
   nl: {
+    "📷 Scanner la carte grise": "📷 Kentekenbewijs scannen",
+    "Carte grise lue": "Kentekenbewijs gelezen",
+    "Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.": "Controleer voor u bevestigt: één verkeerde letter in een chassisnummer doet het dossier afwijzen.",
+    "Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.": "Er kon niets van deze foto worden gelezen. Maak ze opnieuw, plat, zonder weerspiegeling, beeldvullend.",
+    "Remplir le document": "Document invullen",
+    "Lecture de la carte grise…": "Kentekenbewijs wordt gelezen…",
+    "Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.": "De lezer kon niet worden gedownload. Ga één keer online: daarna werkt het scannen offline.",
+    "Document rempli": "Document ingevuld",
+    "La lecture a échoué.": "Het lezen is mislukt.",
+    "Nom du titulaire": "Naam van de houder",
+    "Dénomination commerciale": "Handelsbenaming",
     "Supprimer mon compte": "Mijn account verwijderen",
     "Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.": "Uw account, fiches en documenten worden van de server gewist. Dit is definitief: niets kan nadien worden hersteld.",
     "Votre compte, vos fiches et vos documents seront effacés du serveur. C’est définitif : rien ne se récupère ensuite. Vos documents déjà téléchargés sur cet appareil, eux, restent.": "Uw account, fiches en documenten worden van de server gewist. Dit is definitief. Documenten die al op dit toestel zijn gedownload, blijven wel.",
@@ -8047,18 +8115,6 @@ async function enterApp(){
   if(appOuvert) appOuvert.classList.remove('app-ferme');
   dezoomer();
   majCouleurBarre();
-  // la note des nouveautes, une fois la page affichee
-  setTimeout(function(){ try{ afficherNoteMiseAJour(); }catch(e){} }, 900);
-  // l'apparence enregistree dans le compte reprend la main
-  apparenceDepuisServeur().catch(function(){});
-  // raison sociale, SIRET et TVA donnes a l'inscription : ils
-  // descendent dans la fiche garage si elle est encore vide, puis on
-  // propose de completer ce que le compte ne connait pas
-  garageDepuisCompte()
-    .catch(function(){ return false; })
-    .then(function(){ setTimeout(proposerFicheGarage, 1400); });
-  // un logo choisi avant cette version, ou hors connexion, part en ligne
-  setTimeout(function(){ publierLogo().catch(function(){}); }, 2500);
   // Securite : on entre toujours avec le menu ferme.
   document.body.classList.remove('menu-ouvert');
   const barreEntree = document.getElementById('sidebar');
@@ -8075,6 +8131,20 @@ async function enterApp(){
   authEl().style.display = 'none';
   document.getElementById('app').style.display = 'grid';
   await loadAll();
+
+  /* TOUT CE QUI TOUCHE A LA FICHE GARAGE VIENT APRES loadAll().
+     loadAll remet la fiche a zero avant de la relire : lancee avant, la
+     fenetre « Completez votre fiche garage » s'ouvrait sur du vide,
+     enregistrait, et le chargement ecrasait aussitot. D'ou une fiche
+     qui semblait ne jamais se retenir, redemandee a chaque ouverture.
+     La fenetre attend en plus la premiere synchronisation : la fiche
+     peut arriver d'un autre appareil. */
+  setTimeout(function(){ try{ afficherNoteMiseAJour(); }catch(e){} }, 900);
+  apparenceDepuisServeur().catch(function(){});
+  garageDepuisCompte()
+    .catch(function(){ return false; })
+    .then(function(){ setTimeout(proposerFicheGarage, 3200); });
+  setTimeout(function(){ publierLogo().catch(function(){}); }, 4000);
 
   /* Une fois les fiches chargees, on rejoint le serveur.
 
@@ -10064,6 +10134,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
   '2.26': { date: '24/09/2026', lignes: [
+    "Un bouton « Scanner la carte grise » lit la photo du certificat sur votre appareil et remplit le véhicule et l'ancien propriétaire, après relecture de votre part.",
+    { pour: "pro", texte: "La facture a été remise en couleurs : elle prend celles de votre apparence — titre, bandeau du tableau, total et mention fiscale — au lieu du gris." },
+    { pour: "pro", texte: "La fiche garage se retient : la fenêtre s'ouvrait avant le chargement des données, si bien que ce qui venait d'être enregistré était aussitôt écrasé et redemandé à chaque ouverture." },
+    "La suggestion se place juste sous le champ, ou au-dessus quand le bas de l'écran manque : le clavier de l'iPhone la faisait partir tout en haut de la page.",
     "La suggestion « Mon garage » ne disparaît plus au moindre défilement : elle suit le champ, y compris quand le clavier du téléphone s'ouvre.",
     "La liste des marques, des modèles et des communes s'ouvre dès qu'on touche le champ, sans avoir à taper une lettre d'abord.",
     "Les réglages, rubrique « Coordonnées », permettent de supprimer votre compte : compte, fiches et documents sont effacés du serveur, et l'administrateur en est averti.",
@@ -12437,6 +12511,9 @@ function renderMain(){
        voiture le document se rattache. */
     +     '<button type="button" class="btn-sec" id="btPartagerLien">'
     +       '<span>' + esc(t('🔗 Partager le document')) + '</span></button>'
+    +     '<label class="btn-sec btn-import-doc" id="scanCG">'
+    +       '<span>' + esc(t('📷 Scanner la carte grise')) + '</span>'
+    +       '<input type="file" accept="image/*" capture="environment" style="display:none"></label>'
     +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
     +       '<span>' + esc(t('📎 Importer un document')) + '</span>'
     +       '<input type="file" style="display:none"></label>'
@@ -12497,6 +12574,16 @@ function renderMain(){
      donner, la voiture est celle qu'on a sous les yeux. */
   const btLien = document.getElementById('btPartagerLien');
   if(btLien) btLien.onclick = function(){ partagerLienDocument(v, dealer); };
+
+  const scg = document.getElementById('scanCG');
+  if(scg){
+    const champ = scg.querySelector('input');
+    champ.onchange = function(){
+      const f = champ.files && champ.files[0];
+      champ.value = '';
+      if(f) scannerCarteGrise(f, v).catch(function(e){ informer(e.message); });
+    };
+  }
 
   const pjF = document.getElementById('pjFiche');
   if(pjF){
@@ -22308,6 +22395,25 @@ function pdfLignes(txt, font, taille, largeur){
   return out.length ? out : [''];
 }
 
+/* Une couleur de l'application (#rrggbb) vers une couleur PDF.
+   « minFonce » garantit un fond assez sombre pour porter du texte
+   blanc ; « pale » donne au contraire un fond tres clair. */
+function teintePdf(rgb, hex, seuil, pale){
+  const s = String(hex || '').replace('#', '');
+  let r = parseInt(s.slice(0, 2), 16) / 255,
+      v = parseInt(s.slice(2, 4), 16) / 255,
+      b = parseInt(s.slice(4, 6), 16) / 255;
+  if(isNaN(r) || isNaN(v) || isNaN(b)) return rgb(0.08, 0.25, 0.50);
+  if(pale) return rgb(1 - (1 - r) * seuil, 1 - (1 - v) * seuil, 1 - (1 - b) * seuil);
+  /* Clarte percue : l'oeil voit le vert bien plus que le bleu. */
+  const clarte = 0.299 * r + 0.587 * v + 0.114 * b;
+  if(clarte > seuil){
+    const k = seuil / clarte;
+    r *= k; v *= k; b *= k;
+  }
+  return rgb(r, v, b);
+}
+
 async function genererFacturePdfBrut(v, d){
   if(typeof PDFLib === 'undefined'){
     informer(t('La bibliothèque PDF est introuvable.'));
@@ -22322,10 +22428,19 @@ async function genererFacturePdfBrut(v, d){
 
   const page = pdf.addPage([595.28, 841.89]);
   const L = 595.28, MG = 40, LARG = L - MG * 2;
+  /* La facture prend les couleurs de l'apparence choisie : le bandeau du
+     tableau, le filet du titre et le total portent la couleur de la
+     maison, le reste garde l'encre et les gris d'un document imprime.
+     Une couleur trop claire serait illisible en blanc par-dessus : on
+     fonce alors ce qu'il faut. */
+  const th = (typeof themeCourant === 'function') ? themeCourant() : null;
+  const couleurMarque = teintePdf(rgb, (th && th.brand) || '#14417f', 0.62);
   const encre = rgb(0.09, 0.11, 0.16);
   const doux = rgb(0.42, 0.47, 0.56);
-  const trait = rgb(0.72, 0.75, 0.80);
-  const fondTete = rgb(0.93, 0.94, 0.96);
+  const trait = rgb(0.78, 0.81, 0.86);
+  const fondTete = couleurMarque;
+  const blanc = rgb(1, 1, 1);
+  const fondPair = teintePdf(rgb, (th && th.brand) || '#14417f', 0.06, true);
   const vert = rgb(0.10, 0.56, 0.30);
   let y = 841.89 - MG;
 
@@ -22373,7 +22488,9 @@ async function genererFacturePdfBrut(v, d){
 
   /* --- Titre et dates, alignes a droite ---------------------------- */
   const num = f.numero || t('(attribué à la génération)');
-  droite(t('Facture') + ' N° ' + num, L - MG, y - 13, 17, gras);
+  droite(t('Facture') + ' N° ' + num, L - MG, y - 13, 17, gras, couleurMarque);
+  page.drawLine({ start: { x: L - MG - 120, y: y - 20 }, end: { x: L - MG, y: y - 20 },
+    thickness: 2, color: couleurMarque });
   droite(t('Date de création') + ' : ' + fmtDate(f.dateFacture), L - MG, y - 31, 9, normal, doux);
   droite(t('Date de vente') + ' : ' + fmtDate(f.dateVente), L - MG, y - 44, 9, normal, doux);
 
@@ -22418,10 +22535,10 @@ async function genererFacturePdfBrut(v, d){
     }else ecrireA(s, X[i] + 6, yy, taille, p, couleur);
   };
 
-  const enTeteH = 22;
+  const enTeteH = 23;
   page.drawRectangle({ x: MG, y: y - enTeteH, width: LARG, height: enTeteH,
-    color: fondTete, borderColor: trait, borderWidth: 0.8 });
-  COL.forEach(function(c, i){ cellule(i, c.t, y - 14.5, 7.6, gras); });
+    color: fondTete });
+  COL.forEach(function(c, i){ cellule(i, c.t, y - 15, 7.6, gras, blanc); });
   y -= enTeteH;
 
   /* Ligne du vehicule : la designation porte tout le detail dessous. */
@@ -22445,7 +22562,7 @@ async function genererFacturePdfBrut(v, d){
   const hauteurVeh = 12 + titre.length * 12 + corps.length * 10.5 + 8;
 
   page.drawRectangle({ x: MG, y: y - hauteurVeh, width: LARG, height: hauteurVeh,
-    borderColor: trait, borderWidth: 0.8 });
+    color: fondPair, borderColor: trait, borderWidth: 0.6 });
   let yv = y - 15;
   titre.forEach(function(l){ ecrireA(l, X[0] + 6, yv, 9.5, gras); yv -= 12; });
   corps.forEach(function(l){ ecrireA(l, X[0] + 6, yv, 8.2, normal, doux); yv -= 10.5; });
@@ -22488,12 +22605,14 @@ async function genererFacturePdfBrut(v, d){
       droite(r[1], L - MG, y, 9.5, gras);
       y -= 15;
     });
-  page.drawLine({ start: { x: xTot, y: y + 5 }, end: { x: L - MG, y: y + 5 },
-    thickness: 0.8, color: trait });
   y -= 6;
-  ecrireA(t('Total TTC'), xTot, y, 11.5, gras);
-  droite(euro(m.ttc), L - MG, y, 11.5, gras);
-  y -= 26;
+  /* Le total, en blanc sur la couleur de la maison : c'est la ligne que
+     le client cherche des qu'il ouvre la facture. */
+  page.drawRectangle({ x: xTot - 10, y: y - 7, width: L - MG - xTot + 10,
+    height: 26, color: couleurMarque });
+  ecrireA(t('Total TTC'), xTot, y, 11.5, gras, blanc);
+  droite(euro(m.ttc), L - MG - 8, y, 11.5, gras, blanc);
+  y -= 32;
 
   /* --- Mention fiscale ---------------------------------------------- */
   const marge = f.tva !== 'total';
@@ -22516,9 +22635,9 @@ async function genererFacturePdfBrut(v, d){
   }
   const ligM = pdfLignes(corpsM, normal, 8, LARG - 24);
   const hM = 30 + ligM.length * 10;
-  page.drawRectangle({ x: MG, y: y - hM, width: LARG, height: hM, color: rgb(0.965, 0.97, 0.98) });
-  page.drawRectangle({ x: MG, y: y - hM, width: 2.5, height: hM, color: doux });
-  ecrireA(titreM, MG + 12, y - 16, 9, gras);
+  page.drawRectangle({ x: MG, y: y - hM, width: LARG, height: hM, color: fondPair });
+  page.drawRectangle({ x: MG, y: y - hM, width: 3, height: hM, color: couleurMarque });
+  ecrireA(titreM, MG + 12, y - 16, 9, gras, couleurMarque);
   let ym = y - 29;
   ligM.forEach(function(l){ ecrireA(l, MG + 12, ym, 8, normal); ym -= 10; });
   y -= hM + 20;
@@ -23080,18 +23199,37 @@ function placerSuggestion(){
   if(!bulleGarage || !bulleGarage.__champ) return;
   const el = bulleGarage.__champ;
   const r = el.getBoundingClientRect();
-  if(r.bottom < 0 || r.top > window.innerHeight || !r.width){
+
+  /* Sur iPhone, le clavier ne retrecit pas la fenetre : il DECALE la
+     partie visible. Une bulle en position « fixe » s'accrochait alors
+     au haut de la page et partait se coller sous l'heure, loin du
+     champ. On la pose donc dans le document, aux coordonnees de la
+     page, et on lit la partie reellement visible pour decider si elle
+     tient au-dessous ou s'il faut la mettre au-dessus. */
+  const vue = window.visualViewport;
+  const decalageHaut = vue ? vue.offsetTop : 0;
+  const decalageG    = vue ? vue.offsetLeft : 0;
+  const hauteurVue   = vue ? vue.height : window.innerHeight;
+  const largeurVue   = vue ? vue.width : window.innerWidth;
+
+  const hautVisible = r.top - decalageHaut;
+  const basVisible  = r.bottom - decalageHaut;
+  if(basVisible < 0 || hautVisible > hauteurVue || !r.width){
     fermerSuggestionGarage();
     return;
   }
+
   const b = bulleGarage;
-  b.style.minWidth = Math.min(r.width, window.innerWidth - 16) + 'px';
-  b.style.left = Math.max(8, Math.min(r.left, window.innerWidth - b.offsetWidth - 8)) + 'px';
-  /* Sous le champ, ou au-dessus quand le bas de l'ecran manque. */
-  const place = window.innerHeight - r.bottom;
-  b.style.top = (place > b.offsetHeight + 12 || r.top < b.offsetHeight + 12)
-    ? (r.bottom + 4) + 'px'
-    : (r.top - b.offsetHeight - 4) + 'px';
+  b.style.minWidth = Math.min(r.width, largeurVue - 16) + 'px';
+  const gauche = Math.max(decalageG + 8,
+    Math.min(r.left, decalageG + largeurVue - b.offsetWidth - 8));
+  b.style.left = (gauche + window.scrollX) + 'px';
+
+  /* Sous le champ si la place y est, sinon au-dessus. */
+  const placeDessous = hauteurVue - basVisible;
+  const placeDessus  = hautVisible;
+  const dessous = placeDessous > b.offsetHeight + 12 || placeDessus < b.offsetHeight + 12;
+  b.style.top = (dessous ? r.bottom + 4 : r.top - b.offsetHeight - 4) + window.scrollY + 'px';
 }
 
 document.addEventListener('focusin', function(e){
@@ -23351,6 +23489,261 @@ async function allegerPdf(fichier){
    que de refuser l'enregistrement. */
 function dossierDuVehicule(v){
   return sousDossierVehicule(v) || 'SANS-PLAQUE';
+}
+
+/* =====================================================================
+   LIRE UNE CARTE GRISE EN PHOTO
+   La reconnaissance se fait SUR L'APPAREIL : la photo d'une carte grise
+   porte un nom, une adresse et un numero de chassis — elle n'a rien a
+   faire chez un tiers. Le moteur de lecture (Tesseract, libre) est
+   telecharge au premier scan, puis garde par le telephone.
+
+   Rien n'est ecrit en silence : les champs reconnus sont montres, avec
+   leur case a cocher, et c'est vous qui validez. Une lettre fausse dans
+   un numero de chassis, et c'est un dossier refuse en prefecture.
+   ===================================================================== */
+const MOTEUR_OCR = [
+  'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+  'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js'
+];
+
+function chargerScript(url){
+  return new Promise(function(ok, non){
+    const s = document.createElement('script');
+    s.src = url; s.async = true;
+    s.onload = ok;
+    s.onerror = function(){ non(new Error('script')); };
+    document.head.appendChild(s);
+  });
+}
+
+async function moteurOcrPret(){
+  if(typeof Tesseract !== 'undefined') return true;
+  for(const url of MOTEUR_OCR){
+    try{ await chargerScript(url); if(typeof Tesseract !== 'undefined') return true; }
+    catch(e){}
+  }
+  throw new Error(t('Le lecteur n’a pas pu être téléchargé. Connectez-vous à Internet une première fois : ensuite, le scan fonctionne hors ligne.'));
+}
+
+/* Photo de carte grise : redressee en taille, passee en gris et
+   contrastee. Un moteur libre lit bien mieux une image nette et
+   contrastee qu'une photo brute. */
+function preparerImageOcr(fichier){
+  return new Promise(function(ok, non){
+    const url = URL.createObjectURL(fichier);
+    const im = new Image();
+    im.onload = function(){
+      URL.revokeObjectURL(url);
+      const grand = Math.max(im.naturalWidth, im.naturalHeight);
+      const k = grand > 1800 ? 1800 / grand : 1;
+      const toile = document.createElement('canvas');
+      toile.width = Math.round(im.naturalWidth * k);
+      toile.height = Math.round(im.naturalHeight * k);
+      const c = toile.getContext('2d');
+      c.drawImage(im, 0, 0, toile.width, toile.height);
+      try{
+        const d = c.getImageData(0, 0, toile.width, toile.height);
+        const p = d.data;
+        for(let i = 0; i < p.length; i += 4){
+          const g = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
+          /* Contraste renforce autour du gris moyen. */
+          const v = Math.max(0, Math.min(255, (g - 128) * 1.45 + 128));
+          p[i] = p[i + 1] = p[i + 2] = v;
+        }
+        c.putImageData(d, 0, 0);
+      }catch(e){}
+      ok(toile);
+    };
+    im.onerror = function(){
+      URL.revokeObjectURL(url);
+      non(new Error(t('Cette image n’a pas pu être ouverte. Enregistrez-la en JPEG et réessayez.')));
+    };
+    im.src = url;
+  });
+}
+
+/* --- Lecture des reperes de la carte grise ---------------------------
+   Le certificat d'immatriculation est tres codifie : chaque donnee est
+   precedee de son repere (A, B, C.1, C.3, D.1, E...). On cherche donc
+   ces reperes dans le texte lu, plutot que de deviner par la position —
+   une photo de travers deplace tout, les reperes, eux, restent. */
+function nettoyerLigneOcr(s){
+  return String(s || '').replace(/\s+/g, ' ').trim();
+}
+
+function lireCarteGrise(texte){
+  const lignes = String(texte || '').split('\n').map(nettoyerLigneOcr).filter(Boolean);
+  const tout = lignes.join('\n');
+  const res = {};
+
+  /* Les reperes sont lus LIGNE PAR LIGNE, et seulement en debut de
+     ligne. Cherches n'importe ou dans le texte, le « B » de la plaque
+     AB-123-CD passait pour le repere B, date de premiere mise en
+     circulation. */
+  const champs = {};
+  lignes.forEach(function(l){
+    const m = l.match(/^([A-Z])\s*\.?\s*(\d)?\s*[a-z]?[)\s:.\-]+(.{2,})$/);
+    if(!m) return;
+    const code = m[1].toUpperCase() + (m[2] ? '.' + m[2] : '');
+    const val = nettoyerLigneOcr(m[3]);
+    if(val && !champs[code]) champs[code] = val;
+  });
+
+  const date = function(s){
+    const d = String(s || '').match(/(\d{2})[\/.\-](\d{2})[\/.\-](\d{4})/);
+    return d ? (d[3] + '-' + d[2] + '-' + d[1]) : '';
+  };
+
+  /* Immatriculation : d'abord le repere A, sinon le premier format de
+     plaque rencontre — SIV (AB-123-CD) ou ancien (123 AB 45). */
+  const plaque = function(s){
+    let m = String(s || '').match(/\b([A-Z]{2})[\s.\-]?(\d{3})[\s.\-]?([A-Z]{2})\b/);
+    if(m) return (m[1] + '-' + m[2] + '-' + m[3]).toUpperCase();
+    m = String(s || '').match(/\b(\d{1,4})\s?([A-Z]{2,3})\s?(\d{2,3})\b/);
+    return m ? (m[1] + ' ' + m[2] + ' ' + m[3]).toUpperCase() : '';
+  };
+  res.immat = plaque(champs['A']) || plaque(tout);
+
+  /* Numero de chassis : 17 caracteres sans I, O ni Q. */
+  const vin = function(s){
+    const m = String(s || '').replace(/\s/g, '').match(/\b([A-HJ-NPR-Z0-9]{17})\b/);
+    return m ? m[1].toUpperCase() : '';
+  };
+  res.vin = vin(champs['E']) || vin(tout.replace(/\n/g, ' '));
+
+  res.dateFirstImmat = date(champs['B']);
+  if(champs['C.1']){
+    res.nom = champs['C.1'].replace(/^(M|MME|MLLE|MR)\b[\s.]*/i, '').trim();
+  }
+  if(champs['C.3']){
+    const adresse = champs['C.3'];
+    const cp = adresse.match(/\b(\d{5})\b\s*(.*)$/);
+    if(cp){
+      res.cp = cp[1];
+      res.ville = nettoyerLigneOcr(cp[2]);
+      res.adresse = nettoyerLigneOcr(adresse.slice(0, cp.index));
+    }else{
+      res.adresse = adresse;
+    }
+  }
+  if(champs['D.1']) res.marque = champs['D.1'].toUpperCase();
+  if(champs['D.3']) res.modele = champs['D.3'];
+
+  /* Rien ne sert de proposer un champ vide. */
+  Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
+  return res;
+}
+
+/* --- La fenetre de relecture ---------------------------------------- */
+const CHAMPS_CARTE_GRISE = [
+  ['immat',         'Immatriculation'],
+  ['vin',           'N° de châssis'],
+  ['dateFirstImmat','1re mise en circulation'],
+  ['marque',        'Marque'],
+  ['modele',        'Dénomination commerciale'],
+  ['nom',           'Nom du titulaire'],
+  ['adresse',       'Adresse'],
+  ['cp',            'Code postal'],
+  ['ville',         'Commune']
+];
+
+function fenetreCarteGrise(lu, v){
+  return new Promise(function(resolve){
+    const trouves = CHAMPS_CARTE_GRISE.filter(function(c){ return lu[c[0]]; });
+    document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+    const fond = document.createElement('div');
+    fond.className = 'dlg-fond';
+    fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+      + '<div class="dlg-titre">' + esc(t('Carte grise lue')) + '</div>'
+      + '<div class="dlg-texte">'
+      +   esc(trouves.length
+            ? t('Relisez avant de valider : une lettre fausse dans un numéro de châssis fait refuser le dossier.')
+            : t('Rien n’a pu être lu sur cette photo. Reprenez-la bien à plat, sans reflet, en remplissant l’écran.'))
+      + '</div>'
+      + '<div class="cg-liste">'
+      +   trouves.map(function(c){
+            return '<label class="cg-ligne"><input type="checkbox" checked data-cg="' + c[0] + '">'
+              + '<span class="cg-nom">' + esc(t(c[1])) + '</span>'
+              + '<input class="cg-val" data-val="' + c[0] + '" value="' + esc(lu[c[0]]) + '"></label>';
+          }).join('')
+      + '</div>'
+      + '<div class="dlg-actions">'
+      +   '<button type="button" class="dlg-non" id="cgNon">' + esc(t('Annuler')) + '</button>'
+      +   (trouves.length ? '<button type="button" class="dlg-oui" id="cgOui">'
+            + esc(t('Remplir le document')) + '</button>' : '')
+      + '</div></div>';
+    document.body.appendChild(fond);
+    const fermer = function(res){ fond.remove(); resolve(res || null); };
+    fond.querySelector('#cgNon').onclick = function(){ fermer(null); };
+    fond.onclick = function(e){ if(e.target === fond) fermer(null); };
+    const oui = fond.querySelector('#cgOui');
+    if(oui) oui.onclick = function(){
+      const gardes = {};
+      fond.querySelectorAll('[data-cg]').forEach(function(cas){
+        if(!cas.checked) return;
+        const cle = cas.dataset.cg;
+        const champ = fond.querySelector('[data-val="' + cle + '"]');
+        const val = champ ? champ.value.trim() : '';
+        if(val) gardes[cle] = val;
+      });
+      fermer(gardes);
+    };
+  });
+}
+
+/* Ou ecrire ? Le vehicule, toujours. Le titulaire de la carte grise est
+   l'ancien proprietaire : le cedant sur un certificat de cession, le
+   vendeur sur une declaration d'achat. */
+function remplirDepuisCarteGrise(v, lu){
+  const veh = v.vehicule || (v.vehicule = {});
+  if(lu.immat) veh.immat = lu.immat;
+  if(lu.vin) veh.vin = lu.vin;
+  if(lu.marque) veh.marque = lu.marque;
+  if(lu.modele) veh.modele = lu.modele;
+  if(lu.dateFirstImmat) veh.dateFirstImmat = lu.dateFirstImmat;
+
+  const adr = splitAddress(lu.adresse || '');
+  if(currentDoc === 'cession'){
+    const c = ensureCession(v), ap = c.ap;
+    if(lu.nom) ap.nom = lu.nom;
+    if(lu.cp) ap.cp = lu.cp;
+    if(lu.ville) ap.commune = lu.ville;
+    if(lu.adresse) Object.assign(ap, adr);
+  }else if(currentDoc === 'achat'){
+    const a = ensureAchat13751(v);
+    if(lu.nom) a.v_nom = lu.nom;
+    if(lu.cp) a.v_cp = lu.cp;
+    if(lu.ville) a.v_commune = lu.ville;
+    if(lu.adresse){
+      a.v_voieNum = adr.voieNum; a.v_voieExt = adr.voieExt;
+      a.v_voieType = adr.voieType; a.v_voieNom = adr.voieNom;
+    }
+  }
+  v.updatedAt = Date.now();
+  saveVehicle(v);
+  renderMain();
+}
+
+async function scannerCarteGrise(fichier, v){
+  if(!fichier) return;
+  bandeau(t('Lecture de la carte grise…'), 'attente');
+  try{
+    await moteurOcrPret();
+    const toile = await preparerImageOcr(fichier);
+    const sortie = await Tesseract.recognize(toile, 'fra');
+    const texte = (sortie && sortie.data && sortie.data.text) || '';
+    bandeau('', '');
+    const lu = lireCarteGrise(texte);
+    const gardes = await fenetreCarteGrise(lu, v);
+    if(gardes && Object.keys(gardes).length){
+      remplirDepuisCarteGrise(v, gardes);
+      bandeau(t('Document rempli'), 'ok');
+    }
+  }catch(e){
+    bandeau('', '');
+    await informer(e.message || t('La lecture a échoué.'));
+  }
 }
 
 function nomPourFichier(texte){
