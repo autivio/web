@@ -2278,6 +2278,8 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Appuyez quand le cadre est vert": "Prema quando il riquadro è verde",
+    "Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.": "Questa foto non sembra una carta di circolazione. Inquadri tutto il documento, piatto e senza riflessi.",
     "Ce n’est pas la bonne photo": "Non è la foto giusta",
     "C’est encore": "È di nuovo",
     "retournez la pièce et photographiez l’autre côté.": "giri il documento e fotografi l’altro lato.",
@@ -3179,6 +3181,8 @@ const DICO = {
   },
 
   lb: {
+    "Appuyez quand le cadre est vert": "Dréckt, wann de Kader gréng ass",
+    "Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.": "Dëst Foto gesäit net aus wéi e Fahrzeugschäin. Kadréiert dat ganzt Dokument, flaach an ouni Reflex.",
     "Ce n’est pas la bonne photo": "Dat ass net dat richtegt Foto",
     "C’est encore": "Dat ass nach eng Kéier",
     "retournez la pièce et photographiez l’autre côté.": "dréint d’Dokument ëm a fotograféiert déi aner Säit.",
@@ -4079,6 +4083,8 @@ const DICO = {
   },
 
   en: {
+    "Appuyez quand le cadre est vert": "Press when the frame turns green",
+    "Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.": "This photo does not look like a registration document. Frame the whole document, flat and without glare.",
     "Ce n’est pas la bonne photo": "This is not the right photo",
     "C’est encore": "This is again",
     "retournez la pièce et photographiez l’autre côté.": "turn the document over and photograph the other side.",
@@ -4978,6 +4984,8 @@ const DICO = {
   },
 
   de: {
+    "Appuyez quand le cadre est vert": "Drücken, wenn der Rahmen grün wird",
+    "Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.": "Dieses Foto sieht nicht nach einem Fahrzeugschein aus. Erfassen Sie das ganze Dokument, flach und ohne Spiegelung.",
     "Ce n’est pas la bonne photo": "Das ist nicht das richtige Foto",
     "C’est encore": "Das ist erneut",
     "retournez la pièce et photographiez l’autre côté.": "drehen Sie das Dokument um und fotografieren Sie die andere Seite.",
@@ -5893,6 +5901,8 @@ const DICO = {
   },
 
   nl: {
+    "Appuyez quand le cadre est vert": "Druk wanneer het kader groen wordt",
+    "Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.": "Deze foto lijkt niet op een kentekenbewijs. Kader het hele document, plat en zonder weerspiegeling.",
     "Ce n’est pas la bonne photo": "Dit is niet de juiste foto",
     "C’est encore": "Dit is opnieuw",
     "retournez la pièce et photographiez l’autre côté.": "draai het document om en fotografeer de andere zijde.",
@@ -6802,7 +6812,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.27';
+const VERSION = '2.28';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10569,6 +10579,12 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.28': { date: '25/09/2026', lignes: [
+    "Le scan ne déclenche plus tout seul : c'est vous qui appuyez, quand le cadre est vert. L'appareil prenait la photo avant la mise au point, et la lecture s'en ressentait.",
+    "Une photo qui n'est pas le bon document est refusée : le logiciel exige plusieurs signes concordants avant d'annoncer une plaque, au lieu d'en inventer une à partir d'une photo de volant.",
+    "Le bouton « Scanner une pièce d'identité » ouvrait le scan de la carte grise dès qu'on passait par « Photo existante » ou par une reprise : chaque scan reste maintenant sur son propre bouton.",
+    "La photo est lue en plus haute définition, avec des réglages adaptés à un document imprimé."
+  ] },
   '2.27': { date: '25/09/2026', lignes: [
         "Le scan d’une pièce d’identité lit le recto et le verso, reconnaît le modèle — nouvelle carte depuis 2021, ancienne 1995-2021, passeport — et refuse une photo qui n’est pas une pièce, ou la même face photographiée deux fois.",
     "Le scan reconnaît le pays, la génération du document et son année : SIV depuis 2009 ou ancien FNI, Zulassungsbescheinigung depuis octobre 2005 ou ancien Fahrzeugschein, kentekencard depuis 2014 ou papier. Les volets sont demandés un par un.",
@@ -13035,7 +13051,7 @@ function renderMain(){
     if(cameraDisponible()){
       sid.onclick = async function(e){
         e.preventDefault();
-        const photo = await prendrePhotoCadree(t('Pièce d’identité') + ' — ' + t('bande du bas visible'));
+        const photo = await prendrePhotoCadree(t('Pièce d’identité') + ' — ' + t('bande du bas visible'), 'scanID');
         if(photo === 'sans-camera'){ champ.click(); return; }
         if(photo) scannerIdentite(photo, v, true).catch(function(er){ informer(er.message); });
       };
@@ -13055,7 +13071,7 @@ function renderMain(){
     if(cameraDisponible()){
       scg.onclick = async function(e){
         e.preventDefault();
-        const photo = await prendrePhotoCadree();
+        const photo = await prendrePhotoCadree(t('Carte grise'), 'scanCG');
         if(photo === 'sans-camera'){ champ.click(); return; }
         if(photo) scannerCarteGrise(photo, v, true).catch(function(er){ informer(er.message); });
       };
@@ -24082,8 +24098,11 @@ function preparerImageOcr(fichier){
     const im = new Image();
     im.onload = function(){
       URL.revokeObjectURL(url);
+      /* 2600 points au lieu de 1800 : sur un texte de carte grise, les
+         caracteres faisaient moins de 20 points de haut, la limite en
+         dessous de laquelle un lecteur libre devine plus qu'il ne lit. */
       const grand = Math.max(im.naturalWidth, im.naturalHeight);
-      const k = grand > 1800 ? 1800 / grand : 1;
+      const k = grand > 2600 ? 2600 / grand : 1;
       const toile = document.createElement('canvas');
       toile.width = Math.round(im.naturalWidth * k);
       toile.height = Math.round(im.naturalHeight * k);
@@ -24466,8 +24485,8 @@ function remplirDepuisCarteGrise(v, lu){
 
 /* Reprendre la photo : on rouvre l'appareil, sans avoir a retrouver le
    bouton. */
-function rouvrirAppareilPhoto(){
-  const bt = document.getElementById('scanCG');
+function rouvrirAppareilPhoto(source){
+  const bt = document.getElementById(source || 'scanCG');
   const champ = bt && bt.querySelector('input');
   if(champ) setTimeout(function(){ champ.click(); }, 300);
 }
@@ -24549,7 +24568,12 @@ function verdictCadrage(m){
 }
 
 /* Ouvre la camera et rend la photo cadree, ou null si l'on renonce. */
-function prendrePhotoCadree(){
+/* « libelle » s'affiche en en-tete, « source » dit a quel bouton la
+   camera appartient — scanCG pour la carte grise, scanID pour la piece
+   d'identite. Sans cela, « Photo existante » rouvrait toujours le
+   selecteur de la carte grise : on demandait une piece d'identite et le
+   logiciel lisait une carte grise. */
+function prendrePhotoCadree(libelle, source){
   return new Promise(async function(resolve){
     const guide = { x: 0.06, y: 0.20, l: 0.88, h: 0.56 };   // proportions d'une carte grise depliee
     let flux;
@@ -24579,7 +24603,7 @@ function prendrePhotoCadree(){
       +   '</div>'
       + '</div>'
       + '<div class="cam-haut">'
-      +   '<span class="cam-titre">' + esc(t('Carte grise')) + '</span>'
+      +   '<span class="cam-titre">' + esc(libelle || t('Carte grise')) + '</span>'
       +   '<button type="button" class="cam-croix" id="camFermer" aria-label="'
       +     esc(t('Annuler')) + '">✕</button>'
       + '</div>'
@@ -24591,7 +24615,7 @@ function prendrePhotoCadree(){
       +     esc(t('Photo existante')) + '</button>'
       +   '<button type="button" class="cam-declic" id="camDeclic" aria-label="'
       +     esc(t('Prendre la photo')) + '"><span class="cam-anneau"></span></button>'
-      +   '<span class="cam-aide">' + esc(t('Déclenche tout seul')) + '</span>'
+      +   '<span class="cam-aide">' + esc(t('Appuyez quand le cadre est vert')) + '</span>'
       + '</div>';
     document.body.appendChild(ecran);
 
@@ -24639,7 +24663,7 @@ function prendrePhotoCadree(){
     /* Une photo deja prise — un scan recu par message, par exemple. */
     ecran.querySelector('#camGalerie').onclick = function(){
       fermer('annule');
-      const bt = document.getElementById('scanCG');
+      const bt = document.getElementById(source || 'scanCG');
       const champ = bt && bt.querySelector('input');
       if(champ) setTimeout(function(){ champ.click(); }, 250);
     };
@@ -24654,30 +24678,63 @@ function prendrePhotoCadree(){
         texte.textContent = t(v.texte);
         etat.classList.toggle('bon', v.ok);
         cadre.classList.toggle('bon', v.ok);
-        /* Deux mesures bonnes de suite : la main est stable, on prend.
-           L'anneau du declencheur se remplit pendant ce temps : on voit
-           venir la photo au lieu d'etre surpris par elle. */
+        /* AUCUN declenchement automatique : c'est vous qui appuyez.
+           L'appareil prenait la photo des que le cadre semblait bon,
+           souvent avant la mise au point, et la lecture s'en
+           ressentait. L'anneau vert dit seulement que le moment est
+           favorable. */
         bons = v.ok ? bons + 1 : 0;
-        declic.classList.toggle('pret', bons >= 1);
-        if(bons >= 2) capturer();
+        declic.classList.toggle('pret', v.ok);
       }, 350);
     };
   });
 }
 
 /* Lit UN volet et rend le texte trouve. */
-async function lireUnVolet(fichier, parLaCamera){
+/* --- EST-CE VRAIMENT UNE CARTE GRISE ? -------------------------------
+   Une photo de volant ou de tableau de bord contient assez de lettres
+   et de chiffres pour qu'une suite ressemble a une plaque. Le logiciel
+   exige donc PLUSIEURS signes concordants avant d'annoncer quoi que ce
+   soit — un seul ne prouve rien.
+   ---------------------------------------------------------------------- */
+function signesCarteGrise(texte){
+  const t = majuscules(texte || '');
+  let n = 0;
+  const mots = ['CERTIFICAT', 'IMMATRICULATION', 'ZULASSUNG', 'KENTEKEN',
+                'CARTA DI CIRCOLAZIONE', 'FAHRZEUG', 'VEHICULE', 'VEHICLE',
+                'REPUBLIQUE', 'PREFECTURE', 'TITULAIRE'];
+  if(mots.some(function(m){ return t.indexOf(m) !== -1; })) n += 2;
+  const lignes = String(texte || '').split('\n').map(nettoyerLigneOcr);
+  const reperes = lignes.filter(function(l){
+    return /^[A-Z]\s*(\.\s*\d)?\s*[)\s:.\-]+\S/.test(majuscules(l));
+  }).length;
+  if(reperes >= 3) n += 2;
+  else if(reperes === 2) n += 1;
+  if(/\b[A-HJ-NPR-Z0-9]{17}\b/.test(t.replace(/\s/g, ''))) n += 2;
+  return n;
+}
+
+async function lireUnVolet(fichier, parLaCamera, source){
   const toile = await preparerImageOcr(fichier);
   bandeau('', '');
   if(await photoFloue(toile)){
-    if(!parLaCamera){ rouvrirAppareilPhoto(); return null; }
-    const encore = await prendrePhotoCadree();
+    if(!parLaCamera){ rouvrirAppareilPhoto(source); return null; }
+    const encore = await prendrePhotoCadree('', source);
     if(!encore || encore === 'sans-camera') return null;
-    return lireUnVolet(encore, true);
+    return lireUnVolet(encore, true, source);
   }
-  bandeau(t('Lecture de la carte grise…'), 'attente');
+  bandeau(t('Lecture en cours…'), 'attente');
   await moteurOcrPret();
-  const sortie = await Tesseract.recognize(toile, 'fra');
+  /* Page entiere avec detection de l'orientation, et une liste de
+     caracteres attendus : sans elle, le lecteur proposait des symboles
+     qu'un formulaire ne contient pas, et confondait 0 avec O. */
+  const sortie = await Tesseract.recognize(toile, 'fra', {
+    tessedit_pageseg_mode: '1',
+    preserve_interword_spaces: '1',
+    tessedit_char_whitelist:
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' +
+      'ÀÂÄÇÉÈÊËÎÏÔÖÙÛÜàâäçéèêëîïôöùûü .,-/:()<>'
+  });
   bandeau('', '');
   const texte = (sortie && sortie.data && sortie.data.text) || '';
   return { texte: texte, lu: lireCarteGrise(texte) };
@@ -24697,8 +24754,25 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
   if(!fichier) return;
   bandeau(t('Lecture de la carte grise…'), 'attente');
   try{
-    const premier = await lireUnVolet(fichier, parLaCamera);
+    const premier = await lireUnVolet(fichier, parLaCamera, 'scanCG');
     if(!premier) return;
+
+    /* Deux signes concordants au minimum. En dessous, ce n'est pas une
+       carte grise : on refuse au lieu d'inventer une plaque a partir
+       d'une photo de volant. */
+    if(signesCarteGrise(premier.texte) < 2){
+      const reprendre = await demander({
+        titre: t('Ce n’est pas la bonne photo'),
+        texte: t('Cette photo ne ressemble pas à une carte grise. Cadrez le document entier, bien à plat et sans reflet.'),
+        oui: t('Reprendre la photo'), non: t('Annuler')
+      });
+      if(!reprendre) return;
+      const encore = cameraDisponible()
+        ? await prendrePhotoCadree(t('Carte grise'), 'scanCG')
+        : await photoParFichier('scanCG');
+      if(encore && encore !== 'sans-camera') return scannerCarteGrise(encore, v, cameraDisponible());
+      return;
+    }
 
     /* Le pays et le type sont reconnus sur le premier volet ; ils
        decident du nombre de photos a demander ensuite. */
@@ -24716,11 +24790,11 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
       if(!suite) break;
       let photo = null;
       if(cameraDisponible()){
-        photo = await prendrePhotoCadree(type.nom + ' — ' + t(type.volets[n]));
+        photo = await prendrePhotoCadree(type.nom + ' — ' + t(type.volets[n]), 'scanCG');
         if(photo === 'sans-camera') photo = null;
       }
       if(!photo) break;
-      const volet = await lireUnVolet(photo, true);
+      const volet = await lireUnVolet(photo, true, 'scanCG');
       if(!volet) break;
       lu = fusionnerVolets(lu, volet.lu);
       texteTotal += '\n' + volet.texte;
@@ -25108,7 +25182,7 @@ function photoParFichier(id){
 
 async function photoSuivanteIdentite(libelle){
   if(cameraDisponible()){
-    const p = await prendrePhotoCadree(libelle);
+    const p = await prendrePhotoCadree(libelle, 'scanID');
     if(p !== 'sans-camera') return p;
   }
   return photoParFichier('scanID');
@@ -25152,7 +25226,7 @@ async function scannerIdentite(fichier, v, parLaCamera){
   if(!fichier) return;
   bandeau(t('Lecture de la pièce d’identité…'), 'attente');
   try{
-    const premiere = await lireUnVolet(fichier, parLaCamera);
+    const premiere = await lireUnVolet(fichier, parLaCamera, 'scanID');
     if(!premiere) return;
     let lu = lireUneFaceIdentite(premiere.texte);
     let texteTotal = premiere.texte;
@@ -25195,7 +25269,7 @@ async function scannerIdentite(fichier, v, parLaCamera){
       essais++;
       const photo = await photoSuivanteIdentite(t('Pièce d’identité') + ' — ' + precision);
       if(!photo) break;
-      const seconde = await lireUnVolet(photo, true);
+      const seconde = await lireUnVolet(photo, true, 'scanID');
       if(!seconde) break;
 
       const face = faceIdentite(seconde.texte);
