@@ -2292,6 +2292,8 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».": "È un documento d’identità, non una carta di circolazione. Chiuda e usi il pulsante « Scansionare un documento d’identità ».",
+    "C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».": "È una carta di circolazione, non un documento d’identità. Chiuda e usi il pulsante « Scansionare la carta di circolazione ».",
     "bêta": "beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "il lato con le righe di lettere e chevron (<<<)",
     "le côté avec l’adresse": "il lato con l’indirizzo",
@@ -3208,6 +3210,8 @@ const DICO = {
   },
 
   lb: {
+    "C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».": "Dat ass en Ausweis, kee Fahrzeugschäin. Maacht zou an huelt de Knäppchen „Ausweis scannen“.",
+    "C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».": "Dat ass e Fahrzeugschäin, keen Ausweis. Maacht zou an huelt de Knäppchen „Fahrzeugschäin scannen“.",
     "bêta": "Beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "d’Säit mat de Reie Buschtawen a Feeler (<<<)",
     "le côté avec l’adresse": "d’Säit mat der Adress",
@@ -4123,6 +4127,8 @@ const DICO = {
   },
 
   en: {
+    "C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».": "This is an ID document, not a registration document. Close, then use the “Scan an ID document” button.",
+    "C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».": "This is a registration document, not an ID. Close, then use the “Scan the registration document” button.",
     "bêta": "beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "the side with the rows of letters and chevrons (<<<)",
     "le côté avec l’adresse": "the side with the address",
@@ -5037,6 +5043,8 @@ const DICO = {
   },
 
   de: {
+    "C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».": "Das ist ein Ausweis, kein Fahrzeugschein. Schließen Sie und nutzen Sie die Schaltfläche „Ausweis scannen“.",
+    "C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».": "Das ist ein Fahrzeugschein, kein Ausweis. Schließen Sie und nutzen Sie die Schaltfläche „Fahrzeugschein scannen“.",
     "bêta": "Beta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "die Seite mit den Zeilen aus Buchstaben und Pfeilen (<<<)",
     "le côté avec l’adresse": "die Seite mit der Adresse",
@@ -5967,6 +5975,8 @@ const DICO = {
   },
 
   nl: {
+    "C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».": "Dit is een identiteitsbewijs, geen kentekenbewijs. Sluit en gebruik de knop “Identiteitsbewijs scannen”.",
+    "C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».": "Dit is een kentekenbewijs, geen identiteitsbewijs. Sluit en gebruik de knop “Kentekenbewijs scannen”.",
     "bêta": "bèta",
     "le côté avec les lignes de lettres et de chevrons (<<<)": "de zijde met de regels letters en punthaken (<<<)",
     "le côté avec l’adresse": "de zijde met het adres",
@@ -10660,7 +10670,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 const NOTES_VERSION = {
   '2.29': { date: '25/09/2026', lignes: [
         "Le trait d’union des prénoms composés est retrouvé : la bande écrit « YA SIN », le texte imprimé « ya-sin » — c’est l’orthographe imprimée qui est retenue.",
-        "« Photo existante » ouvre la pellicule : le champ de fichier est maintenant posé dans le bouton lui-même, seul moyen d’y arriver sur iPhone.",
+        "Avant la lecture, le document est détouré de ce qui l’entoure, redressé s’il est de travers, et posé sur fond blanc : le lecteur n’a plus à déchiffrer la table ni le canapé.",
+    "Une pièce d’identité photographiée sous le bouton de la carte grise est reconnue et renvoyée au bon bouton, au lieu d’en tirer une plaque au hasard — et inversement.",
+    "« Photo existante » ouvre la pellicule : le champ de fichier est maintenant posé dans le bouton lui-même, seul moyen d’y arriver sur iPhone.",
     "Le recto et le verso ne sont plus confondus : seule la comparaison des deux photos décide, et le logiciel ne refuse une photo que s’il a vraiment lu quelque chose des deux côtés.",
         "Les confusions de lecture sont corrigées : dans une plaque, un numéro de châssis ou une date, le logiciel sait quelles positions portent des chiffres et lesquelles des lettres, et redresse les O pris pour des zéros, les B pour des 8, les I pour des 1.",
         "Les prénoms composés ne sont plus coupés : « ya-sin » était lu « YA », la bande ne distinguant pas le trait d’union de l’espace.",
@@ -24189,6 +24201,192 @@ async function photoFloue(toile){
   return true;
 }
 
+/* =====================================================================
+   DETOURER LE DOCUMENT AVANT DE LIRE
+   Une photo contient le document ET tout ce qui l'entoure : une table,
+   un volant, un canape. Le lecteur essaie de dechiffrer ce fouillis et
+   s'y perd. On isole donc le document d'abord.
+   Trois temps, sans aucune bibliotheque :
+     1. SEPARER — le papier est plus clair et plus uniforme que ce qui
+        l'entoure. Un seuil calcule sur l'image (methode d'Otsu : celui
+        qui separe le mieux les clairs des sombres) donne un masque.
+     2. REDRESSER — la forme du document donne son inclinaison, par
+        l'orientation de son axe principal. On tourne d'autant.
+     3. BLANCHIR — tout ce qui n'est pas le document devient blanc, et
+        l'image est recadree sur lui.
+   ===================================================================== */
+function seuilOtsu(histogramme, total){
+  let sommeTotale = 0;
+  for(let i = 0; i < 256; i++) sommeTotale += i * histogramme[i];
+  let sommeFond = 0, poidsFond = 0, meilleur = 0, seuil = 128;
+  for(let i = 0; i < 256; i++){
+    poidsFond += histogramme[i];
+    if(!poidsFond) continue;
+    const poidsObjet = total - poidsFond;
+    if(!poidsObjet) break;
+    sommeFond += i * histogramme[i];
+    const moyFond = sommeFond / poidsFond;
+    const moyObjet = (sommeTotale - sommeFond) / poidsObjet;
+    const ecart = poidsFond * poidsObjet * (moyFond - moyObjet) * (moyFond - moyObjet);
+    if(ecart > meilleur){ meilleur = ecart; seuil = i; }
+  }
+  return seuil;
+}
+
+/* La plus grande tache claire de l'image : le document, presque
+   toujours. On la suit de proche en proche depuis chaque point non
+   encore visite — sans recursion, une photo ferait deborder la pile. */
+function plusGrandeTache(masque, l, h){
+  const vu = new Uint8Array(l * h);
+  let meilleure = null;
+  const pile = new Int32Array(l * h);
+  for(let depart = 0; depart < l * h; depart++){
+    if(!masque[depart] || vu[depart]) continue;
+    let sommet = 0; pile[sommet++] = depart; vu[depart] = 1;
+    const points = [];
+    let x0 = l, x1 = 0, y0 = h, y1 = 0;
+    while(sommet){
+      const i = pile[--sommet];
+      const x = i % l, y = (i - x) / l;
+      points.push(x, y);
+      if(x < x0) x0 = x; if(x > x1) x1 = x;
+      if(y < y0) y0 = y; if(y > y1) y1 = y;
+      const voisins = [i - 1, i + 1, i - l, i + l];
+      for(let k = 0; k < 4; k++){
+        const j = voisins[k];
+        if(j < 0 || j >= l * h || vu[j] || !masque[j]) continue;
+        if(k === 0 && x === 0) continue;
+        if(k === 1 && x === l - 1) continue;
+        vu[j] = 1; pile[sommet++] = j;
+      }
+    }
+    const taille = points.length / 2;
+    if(!meilleure || taille > meilleure.taille){
+      meilleure = { taille: taille, points: points, x0: x0, x1: x1, y0: y0, y1: y1 };
+    }
+  }
+  return meilleure;
+}
+
+/* L'inclinaison de la tache : l'orientation de son axe le plus long.
+   Un document pose de travers de quelques degres redevient droit. */
+function inclinaison(tache){
+  const p = tache.points, n = p.length / 2;
+  if(n < 50) return 0;
+  let mx = 0, my = 0;
+  for(let i = 0; i < p.length; i += 2){ mx += p[i]; my += p[i + 1]; }
+  mx /= n; my /= n;
+  let sxx = 0, syy = 0, sxy = 0;
+  for(let i = 0; i < p.length; i += 2){
+    const dx = p[i] - mx, dy = p[i + 1] - my;
+    sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+  }
+  const angle = 0.5 * Math.atan2(2 * sxy, sxx - syy);
+  /* Au-dela de 20 degres, ce n'est plus une photo de travers : c'est
+     autre chose, et mieux vaut ne rien tourner. */
+  return Math.abs(angle) > 0.35 ? 0 : angle;
+}
+
+/* Ou est le document dans cette image ? Rend la tache claire la plus
+   grande, en coordonnees de l'image d'origine, ou rien du tout. */
+function tacheDuDocument(toile){
+  const L = toile.width, H = toile.height;
+  /* L'analyse se fait en petit — 320 points de large suffisent — puis
+     le resultat s'applique a l'image entiere. */
+  const l = 320, h = Math.max(8, Math.round(320 * H / L));
+  const petite = document.createElement('canvas');
+  petite.width = l; petite.height = h;
+  const pc = petite.getContext('2d');
+  pc.drawImage(toile, 0, 0, l, h);
+  const d = pc.getImageData(0, 0, l, h).data;
+
+  const gris = new Uint8Array(l * h);
+  const histo = new Uint32Array(256);
+  for(let i = 0, j = 0; i < d.length; i += 4, j++){
+    const g = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) | 0;
+    gris[j] = g; histo[g]++;
+  }
+  const seuil = seuilOtsu(histo, l * h);
+  const masque = new Uint8Array(l * h);
+  for(let j = 0; j < gris.length; j++) masque[j] = gris[j] > seuil ? 1 : 0;
+
+  const tache = plusGrandeTache(masque, l, h);
+  if(!tache) return null;
+  tache.part = tache.taille / (l * h);
+  tache.echelle = L / l;
+  return tache;
+}
+
+function detourerDocument(toile){
+  try{
+    const L = toile.width, H = toile.height;
+    const tache = tacheDuDocument(toile);
+    if(!tache) return toile;
+    /* Trop petite ou presque toute l'image : on ne touche a rien. Dans
+       le premier cas on couperait le document, dans le second il n'y a
+       rien a detourer. */
+    const part = tache.part;
+    if(part < 0.12 || part > 0.94) return toile;
+
+    const angle = inclinaison(tache);
+    const k = tache.echelle;   // du petit vers le grand
+
+    /* L'image redressee, sur fond blanc. */
+    const diag = Math.ceil(Math.sqrt(L * L + H * H));
+    const tournee = document.createElement('canvas');
+    tournee.width = diag; tournee.height = diag;
+    const tc = tournee.getContext('2d');
+    /* Fond NOIR pendant la rotation : sur fond blanc, la seconde
+       detection confondait le fond ajoute avec le papier et gardait
+       toute l'image. Le noir, lui, se distingue nettement du document,
+       et les coins noirs seront blanchis a la fin. */
+    tc.fillStyle = '#000000'; tc.fillRect(0, 0, diag, diag);
+    tc.translate(diag / 2, diag / 2);
+    tc.rotate(-angle);
+    tc.drawImage(toile, -L / 2, -H / 2);
+
+    /* Le document est maintenant droit : on le cherche une SECONDE fois
+       sur l'image redressee. Reporter le cadre d'avant la rotation
+       laissait tout le tour de la photo — le cadre d'un rectangle
+       incline est bien plus grand que le rectangle lui-meme. */
+    const apres = tacheDuDocument(tournee);
+    if(!apres) return toile;
+    const ka = apres.echelle;
+    let nx0 = apres.x0 * ka, nx1 = apres.x1 * ka;
+    let ny0 = apres.y0 * ka, ny1 = apres.y1 * ka;
+    const marge = Math.round(Math.min(nx1 - nx0, ny1 - ny0) * 0.02);
+    nx0 = Math.max(0, Math.round(nx0 - marge));
+    ny0 = Math.max(0, Math.round(ny0 - marge));
+    nx1 = Math.min(diag, Math.round(nx1 + marge));
+    ny1 = Math.min(diag, Math.round(ny1 + marge));
+    const lf = nx1 - nx0, hf = ny1 - ny0;
+    if(lf < 60 || hf < 40) return toile;
+
+    const fin = document.createElement('canvas');
+    fin.width = lf; fin.height = hf;
+    const fc = fin.getContext('2d');
+    fc.fillStyle = '#ffffff'; fc.fillRect(0, 0, lf, hf);
+    fc.drawImage(tournee, nx0, ny0, lf, hf, 0, 0, lf, hf);
+
+    /* Les coins laisses par la rotation sont d'un noir parfait, que
+       l'appareil photo ne produit jamais : on les blanchit sans
+       toucher au texte, qui est gris fonce. */
+    try{
+      const img = fc.getImageData(0, 0, lf, hf);
+      const q = img.data;
+      for(let i = 0; i < q.length; i += 4){
+        if(q[i] < 8 && q[i + 1] < 8 && q[i + 2] < 8){
+          q[i] = q[i + 1] = q[i + 2] = 255;
+        }
+      }
+      fc.putImageData(img, 0, 0);
+    }catch(e){}
+    return fin;
+  }catch(e){
+    return toile;    // au moindre doute, l'image d'origine
+  }
+}
+
 function preparerImageOcr(fichier){
   return new Promise(function(ok, non){
     const url = URL.createObjectURL(fichier);
@@ -24203,10 +24401,15 @@ function preparerImageOcr(fichier){
       const toile = document.createElement('canvas');
       toile.width = Math.round(im.naturalWidth * k);
       toile.height = Math.round(im.naturalHeight * k);
-      const c = toile.getContext('2d');
+      let c = toile.getContext('2d');
       c.drawImage(im, 0, 0, toile.width, toile.height);
+      /* Le document est isole de ce qui l'entoure AVANT tout le reste :
+         le lecteur n'a plus a dechiffrer la table ni le canape. */
+      const detouree = detourerDocument(toile);
+      const cible = detouree;
+      c = cible.getContext('2d');
       try{
-        const d = c.getImageData(0, 0, toile.width, toile.height);
+        const d = c.getImageData(0, 0, cible.width, cible.height);
         const p = d.data;
         for(let i = 0; i < p.length; i += 4){
           const g = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
@@ -24216,7 +24419,7 @@ function preparerImageOcr(fichier){
         }
         c.putImageData(d, 0, 0);
       }catch(e){}
-      ok(toile);
+      ok(cible);
     };
     im.onerror = function(){
       URL.revokeObjectURL(url);
@@ -24816,20 +25019,46 @@ function prendrePhotoCadree(libelle, source){
    exige donc PLUSIEURS signes concordants avant d'annoncer quoi que ce
    soit — un seul ne prouve rien.
    ---------------------------------------------------------------------- */
+/* Une piece d'identite porte « REPUBLIQUE FRANCAISE » comme une carte
+   grise : ce mot ne prouve donc rien. Il faut des preuves propres au
+   document — son intitule, ses reperes, un numero de chassis — et
+   l'absence de signes de l'autre document. */
+function estPieceIdentite(texte){
+  const t = majuscules(texte || '');
+  if(lireBandeIdentite(texte)) return true;
+  return ['CARTE NATIONALE D', 'CARTE D\u2019IDENTITE', "CARTE D'IDENTITE",
+          'IDENTITY CARD', 'PASSEPORT', 'PASSPORT', 'PERSONALAUSWEIS',
+          'IDENTITEITSKAART', 'NATIONALITE FRANCAISE']
+    .some(function(m){ return t.indexOf(m) !== -1; });
+}
+
 function signesCarteGrise(texte){
   const t = majuscules(texte || '');
+  /* Une piece d'identite n'est jamais une carte grise : on arrete la. */
+  if(estPieceIdentite(texte)) return 0;
+
   let n = 0;
-  const mots = ['CERTIFICAT', 'IMMATRICULATION', 'ZULASSUNG', 'KENTEKEN',
-                'CARTA DI CIRCOLAZIONE', 'FAHRZEUG', 'VEHICULE', 'VEHICLE',
-                'REPUBLIQUE', 'PREFECTURE', 'TITULAIRE'];
-  if(mots.some(function(m){ return t.indexOf(m) !== -1; })) n += 2;
+  /* Des intitules qui n'existent QUE sur un certificat d'immatriculation.
+     « REPUBLIQUE » et « PREFECTURE » ont ete retires : ils figurent
+     aussi sur une carte d'identite, et suffisaient a faire accepter la
+     photo — d'ou une plaque inventee sur une piece d'identite. */
+  const propres = ["CERTIFICAT D'IMMATRICULATION", 'CERTIFICAT D\u2019IMMATRICULATION',
+                   'ZULASSUNGSBESCHEINIGUNG', 'FAHRZEUGSCHEIN', 'KENTEKENBEWIJS',
+                   'CARTA DI CIRCOLAZIONE', 'INSCHRIJVINGSBEWIJS',
+                   'PERMIS DE CIRCULATION', 'CERTIFICAT DE CESSION'];
+  const fort = propres.some(function(m){ return t.indexOf(m) !== -1; });
+  if(fort) n += 2;
+
   const lignes = String(texte || '').split('\n').map(nettoyerLigneOcr);
   const reperes = lignes.filter(function(l){
     return /^[A-Z]\s*(\.\s*\d)?\s*[)\s:.\-]+\S/.test(majuscules(l));
   }).length;
-  if(reperes >= 3) n += 2;
-  else if(reperes === 2) n += 1;
-  if(/\b[A-HJ-NPR-Z0-9]{17}\b/.test(t.replace(/\s/g, ''))) n += 2;
+  if(reperes >= 4) n += 2;
+  else if(reperes >= 2) n += 1;
+
+  /* Un numero de chassis a 17 caracteres : forte presomption, mais qui
+     ne suffit plus a elle seule. */
+  if(/\b[A-HJ-NPR-Z0-9]{17}\b/.test(t.replace(/\s/g, '')) && (fort || reperes >= 1)) n += 2;
   return n;
 }
 
@@ -24888,10 +25117,13 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
     /* Deux signes concordants au minimum. En dessous, ce n'est pas une
        carte grise : on refuse au lieu d'inventer une plaque a partir
        d'une photo de volant. */
-    if(signesCarteGrise(premier.texte) < 2){
+    if(signesCarteGrise(premier.texte) < 3){
+      const piece = estPieceIdentite(premier.texte);
       const reprendre = await demander({
         titre: t('Ce n’est pas la bonne photo'),
-        texte: t('Je ne reconnais pas de carte grise sur cette photo. Posez le document à plat, dépliez-le s’il est plié, et remplissez le rectangle avec.'),
+        texte: piece
+          ? t('C’est une pièce d’identité, pas une carte grise. Fermez, puis utilisez le bouton « Scanner une pièce d’identité ».')
+          : t('Je ne reconnais pas de carte grise sur cette photo. Posez le document à plat, dépliez-le s’il est plié, et remplissez le rectangle avec.'),
         oui: t('Reprendre la photo'), non: t('Annuler')
       });
       if(!reprendre) return;
@@ -25502,10 +25734,13 @@ async function scannerIdentite(fichier, v, parLaCamera){
 
     /* Rien qui ressemble a une piece d'identite : on le dit tout de
        suite plutot que d'ouvrir une fenetre de relecture vide. */
-    if(premiereFace === 'inconnue'){
+    if(premiereFace === 'inconnue' || (signesCarteGrise(premiere.texte) >= 3 && !estPieceIdentite(premiere.texte))){
+      const carteGrise = signesCarteGrise(premiere.texte) >= 3;
       const reprendre = await demander({
         titre: t('Ce n’est pas la bonne photo'),
-        texte: t('Je ne reconnais pas de carte d’identité sur cette photo. Posez la carte à plat sur une table et remplissez le rectangle avec, sans rien d’autre autour.'),
+        texte: carteGrise
+          ? t('C’est une carte grise, pas une pièce d’identité. Fermez, puis utilisez le bouton « Scanner la carte grise ».')
+          : t('Je ne reconnais pas de carte d’identité sur cette photo. Posez la carte à plat sur une table et remplissez le rectangle avec, sans rien d’autre autour.'),
         oui: t('Reprendre la photo'), non: t('Annuler')
       });
       if(!reprendre) return;
