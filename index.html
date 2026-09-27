@@ -1762,6 +1762,13 @@
   .cam-galerie{position:relative;overflow:hidden;}
   .cam-fichier{position:absolute;inset:0;width:100%;height:100%;opacity:0;
     cursor:pointer;font-size:0;}
+  /* Supprimer un document en ligne */
+  .doss-titre{display:flex;align-items:center;gap:8px;}
+  .doss-fichier{display:flex;align-items:center;gap:8px;}
+  .doss-croix{margin-left:auto;background:none;border:0;color:#b3261e;font-size:15px;
+    line-height:1;cursor:pointer;padding:4px 6px;border-radius:6px;flex:0 0 auto;}
+  .doss-croix:hover{background:rgba(179,38,30,.1);}
+  .doss-croix:disabled{opacity:.4;cursor:default;}
 </style>
 </head>
 <body>
@@ -2292,6 +2299,11 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Supprimer ce document ?": "Eliminare questo documento?",
+    "Supprimer tout le dossier ?": "Eliminare tutta la cartella?",
+    "Supprimer tout le dossier": "Eliminare tutta la cartella",
+    "Le document est effacé du serveur. C’est définitif.": "Il documento è cancellato dal server. È definitivo.",
+    "Les documents déposés sur le serveur seront effacés eux aussi.": "Anche i documenti depositati sul server saranno cancellati.",
     "Partie 1 — recto": "Parte 1 — fronte",
     "Partie 1 — verso": "Parte 1 — retro",
     "Partie 2 — recto": "Parte 2 — fronte",
@@ -3239,6 +3251,11 @@ const DICO = {
   },
 
   lb: {
+    "Supprimer ce document ?": "Dëst Dokument läschen?",
+    "Supprimer tout le dossier ?": "De ganzen Dossier läschen?",
+    "Supprimer tout le dossier": "De ganzen Dossier läschen",
+    "Le document est effacé du serveur. C’est définitif.": "D’Dokument gëtt um Server geläscht. Dat ass definitiv.",
+    "Les documents déposés sur le serveur seront effacés eux aussi.": "D’Dokumenter um Server ginn och geläscht.",
     "Partie 1 — recto": "Deel 1 — Virsäit",
     "Partie 1 — verso": "Deel 1 — Récksäit",
     "Partie 2 — recto": "Deel 2 — Virsäit",
@@ -4185,6 +4202,11 @@ const DICO = {
   },
 
   en: {
+    "Supprimer ce document ?": "Delete this document?",
+    "Supprimer tout le dossier ?": "Delete the whole folder?",
+    "Supprimer tout le dossier": "Delete the whole folder",
+    "Le document est effacé du serveur. C’est définitif.": "The document is erased from the server. This is final.",
+    "Les documents déposés sur le serveur seront effacés eux aussi.": "Documents stored on the server will be erased too.",
     "Partie 1 — recto": "Part 1 — front",
     "Partie 1 — verso": "Part 1 — back",
     "Partie 2 — recto": "Part 2 — front",
@@ -5130,6 +5152,11 @@ const DICO = {
   },
 
   de: {
+    "Supprimer ce document ?": "Dieses Dokument löschen?",
+    "Supprimer tout le dossier ?": "Den ganzen Ordner löschen?",
+    "Supprimer tout le dossier": "Ganzen Ordner löschen",
+    "Le document est effacé du serveur. C’est définitif.": "Das Dokument wird vom Server gelöscht. Das ist endgültig.",
+    "Les documents déposés sur le serveur seront effacés eux aussi.": "Die auf dem Server abgelegten Dokumente werden ebenfalls gelöscht.",
     "Partie 1 — recto": "Teil 1 — Vorderseite",
     "Partie 1 — verso": "Teil 1 — Rückseite",
     "Partie 2 — recto": "Teil 2 — Vorderseite",
@@ -6091,6 +6118,11 @@ const DICO = {
   },
 
   nl: {
+    "Supprimer ce document ?": "Dit document verwijderen?",
+    "Supprimer tout le dossier ?": "De hele map verwijderen?",
+    "Supprimer tout le dossier": "Hele map verwijderen",
+    "Le document est effacé du serveur. C’est définitif.": "Het document wordt van de server gewist. Dit is definitief.",
+    "Les documents déposés sur le serveur seront effacés eux aussi.": "De documenten op de server worden eveneens gewist.",
     "Partie 1 — recto": "Deel 1 — voorzijde",
     "Partie 1 — verso": "Deel 1 — achterzijde",
     "Partie 2 — recto": "Deel 2 — voorzijde",
@@ -10814,8 +10846,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
   '2.33': { date: '27/09/2026', lignes: [
+    "« Mes documents en ligne » permet de supprimer un document ou tout un dossier, et supprimer une fiche efface désormais ses documents du serveur : ils y restaient sans qu’on puisse les atteindre.",
     "L'adresse est retrouvée même quand son intitulé n'a pas été lu : le logiciel part du code postal et remonte d'une ou deux lignes.",
-    "Le fond de la photo est effacé, pas seulement recadré : tout ce qui entoure le document devient blanc, même les coins de table ou de tissu autour d'une carte posée de travers.",
+    "Le fond de la photo est effacé en partant des bords de l’image, ce qui ne troue plus le document : la photographie du titulaire, la puce et la bande de caractères restent intactes.",
     "Le redressement était faux : le logiciel mesurait bien l'inclinaison mais tournait parfois du mauvais côté, ce qui la doublait. Les deux sens sont maintenant essayés, et le plus droit l'emporte.",
     "La carte grise belge est reconnue en deux parties : quatre photos demandées — recto et verso de chaque partie — et un PDF de deux pages, une partie par feuille.",
     "Les générations de carte grise belge sont reconnues : deux parties depuis septembre 2013, modèle 2019, feuille A4 de 2011 à 2013, ancienne bande rose avant."
@@ -11145,7 +11178,11 @@ async function supprimerFiches(ids){
      Sans cela il n'y a rien a effacer sur Drive. */
   await rafraichirDriveRelie();
   const surDrive = !!syncDispo();
-  if(dossiers.length || (surDrive && sousDossiers.length)){
+  /* Les documents deposes sur le serveur comptent aussi : sans cela,
+     ils restaient dans « Mes documents en ligne » apres la suppression
+     de la fiche, et l'on ne pouvait plus les atteindre. */
+  const surServeur = serveurPret() && sousDossiers.length > 0;
+  if(dossiers.length || (surDrive && sousDossiers.length) || surServeur){
     const total = dossiers.reduce(function(a, d){ return a + d.nb; }, 0);
     const effacer = await demander({
       titre: t('Effacer aussi les documents de ce véhicule ?')
@@ -11157,7 +11194,9 @@ async function supprimerFiches(ids){
         : sousDossiers.join('\n')),
       detail: surDrive
         ? t('Le dossier sera aussi mis à la corbeille de votre Drive, où Google le garde trente jours.')
-        : t('Répondez Non pour garder les PDF dans vos dossiers.'),
+        : (surServeur
+            ? t('Les documents déposés sur le serveur seront effacés eux aussi.')
+            : t('Répondez Non pour garder les PDF dans vos dossiers.')),
       oui: t('Oui, effacer'), non: t('Non, garder les PDF'), danger: true
     });
     if(effacer){
@@ -11172,6 +11211,9 @@ async function supprimerFiches(ids){
             await driveSupprimerDossier(sd);
           }
         }
+      }
+      if(surServeur){
+        for(const sd of sousDossiers){ await serveurSupprimerDocuments(sd); }
       }
     }
   }
@@ -11414,6 +11456,34 @@ async function serveurTelechargerDocument(dossier, nom){
   return new Uint8Array(await r.arrayBuffer());
 }
 
+/* Efface sur le serveur tous les documents d'un vehicule, ou un seul
+   fichier. Le stockage n'a pas de « dossier » a proprement parler : on
+   liste ce qui commence par ce chemin, et on supprime ces objets. */
+async function serveurSupprimerDocuments(sousDossier, nomFichier){
+  if(!serveurPret() || !sousDossier) return 0;
+  const racine = 'Autivio/' + nomCompteDossier() + '/' + sousDossier;
+  try{
+    if(nomFichier){
+      await serveurAppel('/storage/v1/object/documents', {
+        method: 'DELETE', body: { prefixes: [racine + '/' + nomFichier] }
+      });
+      return 1;
+    }
+    const fichiers = await serveurAppel('/storage/v1/object/list/documents', {
+      method: 'POST', body: { prefix: racine + '/', limit: 500 }
+    });
+    const chemins = [];
+    for(const f of (fichiers || [])){
+      if(f.id) chemins.push(racine + '/' + f.name);
+    }
+    if(!chemins.length) return 0;
+    await serveurAppel('/storage/v1/object/documents', {
+      method: 'DELETE', body: { prefixes: chemins }
+    });
+    return chemins.length;
+  }catch(e){ return 0; }
+}
+
 async function fenetreDossiers(){
   if(!serveurPret()){
     fenetreSync('erreur',
@@ -11457,15 +11527,45 @@ async function fenetreDossiers(){
     const cle = f.dossier || t('Divers');
     (parDossier[cle] = parDossier[cle] || []).push(f.nom);
   }
-  zone.innerHTML = Object.keys(parDossier).sort().map(function(d){
-    return '<div class="doss-groupe">'
-      + '<div class="doss-titre">' + esc(d)
-      +   ' <span>' + parDossier[d].length + '</span></div>'
-      + parDossier[d].map(function(n){
-          return '<div class="doss-fichier">' + esc(n) + '</div>';
-        }).join('')
-      + '</div>';
-  }).join('');
+  const dessiner = function(){
+    zone.innerHTML = Object.keys(parDossier).sort().map(function(d){
+      if(!parDossier[d].length) return '';
+      return '<div class="doss-groupe">'
+        + '<div class="doss-titre">' + esc(d)
+        +   ' <span>' + parDossier[d].length + '</span>'
+        +   '<button type="button" class="doss-croix" data-dossier="' + esc(d)
+        +     '" title="' + esc(t('Supprimer tout le dossier')) + '">✕</button></div>'
+        + parDossier[d].map(function(n){
+            return '<div class="doss-fichier">' + esc(n)
+              + '<button type="button" class="doss-croix" data-dossier="' + esc(d)
+              +   '" data-fichier="' + esc(n) + '" title="' + esc(t('Supprimer'))
+              +   '">✕</button></div>';
+          }).join('')
+        + '</div>';
+    }).join('') || '<div class="partage-vide">'
+        + esc(t('Aucun document sur le serveur.')) + '</div>';
+
+    zone.querySelectorAll('.doss-croix').forEach(function(bt){
+      bt.onclick = async function(){
+        const d = bt.dataset.dossier, f = bt.dataset.fichier || '';
+        const sur = await demander({
+          titre: f ? t('Supprimer ce document ?') : t('Supprimer tout le dossier ?'),
+          texte: f ? f : (d + ' — ' + parDossier[d].length + ' '
+                          + t(parDossier[d].length > 1 ? 'fichiers' : 'fichier')),
+          detail: t('Le document est effacé du serveur. C’est définitif.'),
+          oui: t('Supprimer'), non: t('Annuler'), danger: true
+        });
+        /* La fenetre de confirmation a ferme la liste — elle ferme
+           toujours ce qui est ouvert. On la rouvre donc apres, avec le
+           contenu relu sur le serveur : c'est aussi la preuve que la
+           suppression a bien eu lieu. */
+        if(!sur){ fenetreDossiers(); return; }
+        await serveurSupprimerDocuments(d, f);
+        fenetreDossiers();
+      };
+    });
+  };
+  dessiner();
 
   btnZip.disabled = false;
   btnZip.onclick = async function(){
@@ -24500,7 +24600,33 @@ function tacheDuDocument(toile, ignorerNoir){
     if(ignorerNoir && g < 14) continue;
     histo[g]++; comptes++;
   }
-  const seuil = seuilOtsu(histo, comptes || (l * h));
+  let seuil = seuilOtsu(histo, comptes || (l * h));
+  const compterAuDessus = function(s){
+    let n = 0;
+    for(let j = 0; j < gris.length; j++){
+      if(ignorerNoir && gris[j] < 14) continue;   // le fond ajoute ne compte pas
+      if(gris[j] > s) n++;
+    }
+    return n;
+  };
+  const total = comptes || (l * h);
+  /* UN SECOND SEUIL QUAND LE PREMIER NE TRANCHE PAS. Sur une carte
+     posee sur un tissu clair, le premier seuil separe seulement les
+     zones tres sombres — la photographie du titulaire, la bande de
+     caracteres — du reste : le tissu ET la carte se retrouvent du meme
+     cote, et la « tache » couvre alors toute l'image. On recalcule
+     donc un seuil sur les seuls points clairs, ce qui separe enfin le
+     papier de ce qui l'entoure. */
+  if(compterAuDessus(seuil) > 0.85 * total){
+    const histoClair = new Uint32Array(256);
+    let clairs = 0;
+    for(let j = 0; j < gris.length; j++){
+      if(gris[j] <= seuil) continue;
+      if(ignorerNoir && gris[j] < 14) continue;
+      histoClair[gris[j]]++; clairs++;
+    }
+    if(clairs > 0.2 * total) seuil = seuilOtsu(histoClair, clairs);
+  }
   const masque = new Uint8Array(l * h);
   for(let j = 0; j < gris.length; j++){
     masque[j] = (gris[j] > seuil && !(ignorerNoir && gris[j] < 14)) ? 1 : 0;
@@ -24516,30 +24642,85 @@ function tacheDuDocument(toile, ignorerNoir){
 /* Blanchit, dans l'image recadree, tout ce qui se trouve hors de la
    tache du document. Le masque a ete calcule en petit : on le relit en
    place, en ramenant chaque point de l'image a sa case d'origine. */
-function effacerAutour(toile, tache, decalX, decalY, k){
+/* --- EFFACER LE FOND EN PARTANT DES BORDS ----------------------------
+   Raisonner ligne par ligne sur le masque laissait des coins de tissu
+   des qu'il restait un degre d'inclinaison. On procede donc autrement,
+   comme on viderait un bassin : on part des BORDS de l'image et l'on
+   avance de proche en proche tant que la couleur ressemble a celle du
+   bord. Le document arrete la progression, puisque sa couleur en
+   differe. Et ce qui est A L'INTERIEUR du document — la photographie,
+   la puce, la bande de caracteres — n'est jamais atteint, n'etant pas
+   relie au bord : c'est ce qui trouait la carte auparavant.
+   ---------------------------------------------------------------------- */
+function effacerAutour(toile){
   try{
-    const l = toile.width, h = toile.height;
-    /* Le masque de la tache, sous forme de grille. */
-    const petiteL = Math.round(tache.x1 - tache.x0) + 1;
-    const dans = {};
-    const p = tache.points;
-    for(let i = 0; i < p.length; i += 2){
-      dans[p[i] + ':' + p[i + 1]] = 1;
+    const L = toile.width, H = toile.height;
+    /* L'analyse se fait sur une image reduite : 480 points suffisent
+       pour suivre un contour, et le telephone n'a pas a parcourir huit
+       millions de points. */
+    const l = Math.min(480, L), h = Math.max(8, Math.round(l * H / L));
+    const petite = document.createElement('canvas');
+    petite.width = l; petite.height = h;
+    const pc = petite.getContext('2d');
+    pc.drawImage(toile, 0, 0, l, h);
+    const d = pc.getImageData(0, 0, l, h).data;
+
+    const couleur = function(i){ return [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]]; };
+    const proche = function(a, b, tolerance){
+      return Math.abs(a[0] - b[0]) < tolerance
+          && Math.abs(a[1] - b[1]) < tolerance
+          && Math.abs(a[2] - b[2]) < tolerance;
+    };
+
+    /* UNE SEULE REFERENCE : la couleur moyenne des bords. Comparer
+       chaque point a son VOISIN laissait la progression deriver de
+       proche en proche — du tissu jusqu'au papier, dont la couleur
+       n'est pas si eloignee — et la carte se vidait de son fond blanc.
+       Avec une reference fixe, le papier arrete net la progression. */
+    let rr = 0, rv = 0, rb = 0, n = 0;
+    const ajouterRef = function(i){
+      rr += d[i * 4]; rv += d[i * 4 + 1]; rb += d[i * 4 + 2]; n++;
+    };
+    for(let x = 0; x < l; x++){ ajouterRef(x); ajouterRef((h - 1) * l + x); }
+    for(let y = 0; y < h; y++){ ajouterRef(y * l); ajouterRef(y * l + l - 1); }
+    const reference = [rr / n, rv / n, rb / n];
+
+    const fond = new Uint8Array(l * h);
+    const pile = new Int32Array(l * h);
+    let sommet = 0;
+    const pousser = function(i){
+      if(fond[i]) return;
+      if(!proche(couleur(i), reference, 40)) return;
+      fond[i] = 1; pile[sommet++] = i;
+    };
+
+    for(let x = 0; x < l; x++){ pousser(x); pousser((h - 1) * l + x); }
+    for(let y = 0; y < h; y++){ pousser(y * l); pousser(y * l + l - 1); }
+
+    while(sommet){
+      const i = pile[--sommet];
+      const x = i % l, y = (i - x) / l;
+      if(x > 0) pousser(i - 1);
+      if(x < l - 1) pousser(i + 1);
+      if(y > 0) pousser(i - l);
+      if(y < h - 1) pousser(i + l);
     }
+
+    /* Si presque tout a ete atteint, c'est que le document se confond
+       avec le fond : mieux vaut ne rien effacer que tout effacer. */
+    let atteints = 0;
+    for(let i = 0; i < fond.length; i++) atteints += fond[i];
+    if(atteints > 0.92 * l * h) return toile;
+
     const c = toile.getContext('2d');
-    const img = c.getImageData(0, 0, l, h);
+    const img = c.getImageData(0, 0, L, H);
     const q = img.data;
-    for(let y = 0; y < h; y++){
-      const py = Math.round((y + decalY) / k);
-      for(let x = 0; x < l; x++){
-        const px = Math.round((x + decalX) / k);
-        if(dans[px + ':' + py]) continue;
-        /* Hors du document : blanc. On regarde aussi les cases
-           voisines, le masque etant huit fois plus grossier que
-           l'image. */
-        if(dans[(px - 1) + ':' + py] || dans[(px + 1) + ':' + py] ||
-           dans[px + ':' + (py - 1)] || dans[px + ':' + (py + 1)]) continue;
-        const i = (y * l + x) * 4;
+    for(let y = 0; y < H; y++){
+      const py = Math.min(h - 1, Math.round(y * h / H));
+      for(let x = 0; x < L; x++){
+        const px = Math.min(l - 1, Math.round(x * l / L));
+        if(!fond[py * l + px]) continue;
+        const i = (y * L + x) * 4;
         q[i] = q[i + 1] = q[i + 2] = 255;
       }
     }
@@ -24548,26 +24729,44 @@ function effacerAutour(toile, tache, decalX, decalY, k){
   return toile;
 }
 
+/* Le cadre de ce qui n'est PAS blanc. Une fois le fond efface, c'est
+   la facon la plus simple et la plus sure de retrouver le document :
+   plus de seuil a calculer, plus de tache a suivre. */
+function cadreNonBlanc(toile){
+  try{
+    const L = toile.width, H = toile.height;
+    const l = Math.min(400, L), h = Math.max(8, Math.round(l * H / L));
+    const petite = document.createElement('canvas');
+    petite.width = l; petite.height = h;
+    petite.getContext('2d').drawImage(toile, 0, 0, l, h);
+    const d = petite.getContext('2d').getImageData(0, 0, l, h).data;
+    let x0 = l, y0 = h, x1 = -1, y1 = -1;
+    for(let y = 0; y < h; y++){
+      for(let x = 0; x < l; x++){
+        const i = (y * l + x) * 4;
+        if(d[i] > 244 && d[i + 1] > 244 && d[i + 2] > 244) continue;
+        if(x < x0) x0 = x; if(x > x1) x1 = x;
+        if(y < y0) y0 = y; if(y > y1) y1 = y;
+      }
+    }
+    if(x1 < 0) return null;
+    return { x0: x0 * L / l, x1: (x1 + 1) * L / l,
+             y0: y0 * H / h, y1: (y1 + 1) * H / h };
+  }catch(e){ return null; }
+}
+
 function detourerDocument(toile){
   try{
     const L = toile.width, H = toile.height;
     const tache = tacheDuDocument(toile);
     if(!tache) return toile;
-    /* Trop petite ou presque toute l'image : on ne touche a rien. Dans
-       le premier cas on couperait le document, dans le second il n'y a
-       rien a detourer. */
     if(tache.part < 0.08 || tache.part > 0.94) return toile;
 
     const k = tache.echelle;
     const angle = inclinaison(tache);
 
-    /* 1. ON RECADRE D'ABORD, sur la tache trouvee, avec un peu de
-       marge. C'est l'ordre qui compte : en tournant avant de recadrer,
-       la seconde recherche voyait le fond de la photo comme la plus
-       grande zone claire, et gardait tout — le tissu restait. */
-    /* Une marge tres mince : 6 % laissaient un lisere du tissu tout
-       autour du document. */
-    const marge = Math.round(Math.min(tache.x1 - tache.x0, tache.y1 - tache.y0) * k * 0.012);
+    /* 1. RECADRER largement autour du document. */
+    const marge = Math.round(Math.min(tache.x1 - tache.x0, tache.y1 - tache.y0) * k * 0.06);
     const cx0 = Math.max(0, Math.round(tache.x0 * k) - marge);
     const cy0 = Math.max(0, Math.round(tache.y0 * k) - marge);
     const cx1 = Math.min(L, Math.round(tache.x1 * k) + marge);
@@ -24578,70 +24777,62 @@ function detourerDocument(toile){
     const cadree = document.createElement('canvas');
     cadree.width = lc; cadree.height = hc;
     cadree.getContext('2d').drawImage(toile, cx0, cy0, lc, hc, 0, 0, lc, hc);
-    /* Le fond ne s'efface qu'APRES la rotation : blanchi trop tot, il
-       faisait disparaitre le seul indice qui permet de choisir le bon
-       sens — le contraste entre le papier et ce qui l'entoure. */
-    if(!angle){
-      effacerAutour(cadree, tache, cx0, cy0, k);
-      return blanchirCoins(cadree);
+
+    /* 2. EFFACER LE FOND, en partant des bords — qui sont forcement du
+       fond, puisqu'on a garde une marge autour du document. */
+    effacerAutour(cadree);
+
+    /* 3. REDRESSER, sur fond BLANC cette fois : le fond efface et le
+       fond ajoute se confondent, ce qui simplifie la suite. */
+    let droit = cadree;
+    if(angle){
+      const diag = Math.ceil(Math.sqrt(lc * lc + hc * hc));
+      const tourner = function(a){
+        const x = document.createElement('canvas');
+        x.width = diag; x.height = diag;
+        const c = x.getContext('2d');
+        c.fillStyle = '#ffffff'; c.fillRect(0, 0, diag, diag);
+        c.translate(diag / 2, diag / 2);
+        c.rotate(a);
+        c.drawImage(cadree, -lc / 2, -hc / 2);
+        return x;
+      };
+      /* Les deux sens sont essayes : la mesure donne un angle, pas un
+         sens. On garde celui qui rend le document le plus compact. */
+      let aireMin = Infinity;
+      for(const sens of [-angle, angle]){
+        const essai = tourner(sens);
+        const cadre = cadreNonBlanc(essai);
+        if(!cadre) continue;
+        const aire = (cadre.x1 - cadre.x0) * (cadre.y1 - cadre.y0);
+        if(aire < aireMin){ aireMin = aire; droit = essai; }
+      }
     }
 
-    /* 2. ON REDRESSE, sur fond noir : les coins laisses par la rotation
-       se distinguent ainsi du papier, et la seconde recherche ne peut
-       plus les confondre avec lui.
-       LES DEUX SENS SONT ESSAYES. La mesure donne un angle, pas un
-       sens : tourner du mauvais cote doublait l'inclinaison au lieu de
-       la corriger, et la carte restait de travers. On garde le sens qui
-       rend le document le plus droit — celui dont le cadre est le plus
-       petit. */
-    const diag = Math.ceil(Math.sqrt(lc * lc + hc * hc));
-    const tourner = function(a){
-      const t = document.createElement('canvas');
-      t.width = diag; t.height = diag;
-      const c = t.getContext('2d');
-      c.fillStyle = '#000000'; c.fillRect(0, 0, diag, diag);
-      c.translate(diag / 2, diag / 2);
-      c.rotate(a);
-      c.drawImage(cadree, -lc / 2, -hc / 2);
-      return t;
-    };
-    let tournee = null, apres = null, plusPetit = Infinity;
-    for(const sens of [-angle, angle]){
-      const essai = tourner(sens);
-      const tache2 = tacheDuDocument(essai, true);
-      if(!tache2) continue;
-      const aire = (tache2.x1 - tache2.x0) * (tache2.y1 - tache2.y0);
-      if(aire < plusPetit){ plusPetit = aire; tournee = essai; apres = tache2; }
-    }
-
-    /* 3. ON RECOUPE au ras du document redresse. */
-    if(!tournee || !apres) return blanchirCoins(cadree);
-    const ka = apres.echelle;
-    const m2 = Math.round(Math.min(apres.x1 - apres.x0, apres.y1 - apres.y0) * ka * 0.02);
-    const nx0 = Math.max(0, Math.round(apres.x0 * ka) - m2);
-    const ny0 = Math.max(0, Math.round(apres.y0 * ka) - m2);
-    const nx1 = Math.min(diag, Math.round(apres.x1 * ka) + m2);
-    const ny1 = Math.min(diag, Math.round(apres.y1 * ka) + m2);
-    const lf = nx1 - nx0, hf = ny1 - ny0;
+    /* 4. RECOUPER au ras de ce qui n'est pas blanc. */
+    const cadre = cadreNonBlanc(droit);
+    if(!cadre) return blanchirCoins(cadree);
+    const m = Math.round(Math.min(cadre.x1 - cadre.x0, cadre.y1 - cadre.y0) * 0.01);
+    const nx0 = Math.max(0, Math.round(cadre.x0) - m);
+    const ny0 = Math.max(0, Math.round(cadre.y0) - m);
+    const lf = Math.min(droit.width - nx0, Math.round(cadre.x1 - cadre.x0) + m * 2);
+    const hf = Math.min(droit.height - ny0, Math.round(cadre.y1 - cadre.y0) + m * 2);
     if(lf < 60 || hf < 40) return blanchirCoins(cadree);
 
     const fin = document.createElement('canvas');
     fin.width = lf; fin.height = hf;
     const fc = fin.getContext('2d');
     fc.fillStyle = '#ffffff'; fc.fillRect(0, 0, lf, hf);
-    fc.drawImage(tournee, nx0, ny0, lf, hf, 0, 0, lf, hf);
-    /* TOUT CE QUI N'EST PAS LE DOCUMENT DEVIENT BLANC : meme droit, un
-       document laisse un peu de tissu dans les coins. */
-    effacerAutour(fin, apres, nx0, ny0, ka);
+    fc.drawImage(droit, nx0, ny0, lf, hf, 0, 0, lf, hf);
+    /* Un dernier passage : la rotation laisse parfois reapparaitre un
+       coin de fond dans le nouveau cadre. */
+    effacerAutour(fin);
     return blanchirCoins(fin);
   }catch(e){
-    return toile;    // au moindre doute, l'image d'origine
+    return toile;
   }
 }
 
-/* Les coins laisses par une rotation sont d'un noir parfait, que
-   l'appareil photo ne produit jamais : on les blanchit sans toucher au
-   texte, qui est gris fonce. */
 function blanchirCoins(toile){
   try{
     const c = toile.getContext('2d');
