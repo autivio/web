@@ -7096,7 +7096,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.34';
+const VERSION = '2.35';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10863,6 +10863,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.35': { date: '27/09/2026', lignes: [
+    "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé."
+  ] },
   '2.34': { date: '27/09/2026', lignes: [
     "La barre des boutons d'un document se fait défiler quand elle dépasse : sur PC, « Scanner la carte grise » et « Scanner une pièce d'identité » se trouvaient hors de l'écran, sans moyen de les atteindre.",
     "Un PDF peut être lu comme une photo : carte grise ou pièce d'identité reçue par e-mail, le logiciel en dessine la page et la lit de la même façon.",
@@ -24677,60 +24680,54 @@ function tacheDuDocument(toile, ignorerNoir){
    la puce, la bande de caracteres — n'est jamais atteint, n'etant pas
    relie au bord : c'est ce qui trouait la carte auparavant.
    ---------------------------------------------------------------------- */
-function effacerAutour(toile){
+/* --- OU S'ARRETE LE DOCUMENT ? ---------------------------------------
+   On part des BORDS de l'image et l'on avance tant que la couleur n'est
+   pas celle du papier. Ce qui reste, c'est le document.
+   CE MASQUE NE SERT QU'A MESURER : on ne l'emploie plus pour effacer
+   des points. C'etait l'erreur precedente — la progression entrait dans
+   la carte par ses zones pales, la photographie du titulaire surtout,
+   et la trouait. On en tire seulement un CADRE, et l'on decoupe
+   dedans : tout ce qui est a l'interieur reste intact, quelle que soit
+   sa couleur.
+   ---------------------------------------------------------------------- */
+function cadreDuDocument(toile){
   try{
     const L = toile.width, H = toile.height;
-    /* L'analyse se fait sur une image reduite : 480 points suffisent
-       pour suivre un contour, et le telephone n'a pas a parcourir huit
-       millions de points. */
-    const l = Math.min(480, L), h = Math.max(8, Math.round(l * H / L));
+    const l = Math.min(420, L), h = Math.max(8, Math.round(l * H / L));
     const petite = document.createElement('canvas');
     petite.width = l; petite.height = h;
     const pc = petite.getContext('2d');
     pc.drawImage(toile, 0, 0, l, h);
     const d = pc.getImageData(0, 0, l, h).data;
 
-    const couleur = function(i){ return [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]]; };
-    const proche = function(a, b, tolerance){
-      return Math.abs(a[0] - b[0]) < tolerance
-          && Math.abs(a[1] - b[1]) < tolerance
-          && Math.abs(a[2] - b[2]) < tolerance;
-    };
-
-    /* LE CRITERE EST INVERSE : on n'efface plus « ce qui ressemble au
-       bord » — un tissu n'est jamais uniforme, ses ombres et son grain
-       arretaient la progression et laissaient des plaques — mais TOUT
-       CE QUI N'EST PAS LA COULEUR DU PAPIER. Le papier, lui, est
-       uniforme : c'est lui qui sert de reference, relevee au centre de
-       l'image, la ou le document se trouve forcement.
-       La progression part des bords et s'arrete net au bord du
-       document ; l'interieur de la carte, non relie au bord, n'est
-       jamais atteint. */
+    /* La couleur du papier, relevee au centre : le document s'y trouve
+       forcement. */
     let rr = 0, rv = 0, rb = 0, n = 0;
-    const x0 = Math.round(l * 0.35), x1 = Math.round(l * 0.65);
-    const y0 = Math.round(h * 0.35), y1 = Math.round(h * 0.65);
-    for(let y = y0; y < y1; y++){
-      for(let x = x0; x < x1; x++){
-        const i = y * l + x;
-        rr += d[i * 4]; rv += d[i * 4 + 1]; rb += d[i * 4 + 2]; n++;
+    const ax = Math.round(l * 0.4), bx = Math.round(l * 0.6);
+    const ay = Math.round(h * 0.4), by = Math.round(h * 0.6);
+    for(let y = ay; y < by; y++){
+      for(let x = ax; x < bx; x++){
+        const i = (y * l + x) * 4;
+        rr += d[i]; rv += d[i + 1]; rb += d[i + 2]; n++;
       }
     }
-    if(!n) return toile;
+    if(!n) return null;
     const papier = [rr / n, rv / n, rb / n];
+    const loinDuPapier = function(i){
+      return Math.abs(d[i * 4] - papier[0]) > 34
+          || Math.abs(d[i * 4 + 1] - papier[1]) > 34
+          || Math.abs(d[i * 4 + 2] - papier[2]) > 34;
+    };
 
     const fond = new Uint8Array(l * h);
     const pile = new Int32Array(l * h);
     let sommet = 0;
     const pousser = function(i){
-      if(fond[i]) return;
-      /* Ni la couleur du papier, ni une nuance proche : c'est du fond. */
-      if(proche(couleur(i), papier, 38)) return;
+      if(fond[i] || !loinDuPapier(i)) return;
       fond[i] = 1; pile[sommet++] = i;
     };
-
     for(let x = 0; x < l; x++){ pousser(x); pousser((h - 1) * l + x); }
     for(let y = 0; y < h; y++){ pousser(y * l); pousser(y * l + l - 1); }
-
     while(sommet){
       const i = pile[--sommet];
       const x = i % l, y = (i - x) / l;
@@ -24740,173 +24737,99 @@ function effacerAutour(toile){
       if(y < h - 1) pousser(i + l);
     }
 
-    /* Si presque tout a ete atteint, c'est que le document se confond
-       avec le fond : mieux vaut ne rien effacer que tout effacer. */
-    let atteints = 0;
-    for(let i = 0; i < fond.length; i++) atteints += fond[i];
-    if(atteints > 0.92 * l * h) return toile;
-
-    const c = toile.getContext('2d');
-    const img = c.getImageData(0, 0, L, H);
-    const q = img.data;
-    for(let y = 0; y < H; y++){
-      const py = Math.min(h - 1, Math.round(y * h / H));
-      for(let x = 0; x < L; x++){
-        const px = Math.min(l - 1, Math.round(x * l / L));
-        if(!fond[py * l + px]) continue;
-        const i = (y * L + x) * 4;
-        q[i] = q[i + 1] = q[i + 2] = 255;
-      }
-    }
-    c.putImageData(img, 0, 0);
-  }catch(e){}
-  return toile;
-}
-
-/* Le cadre de ce qui n'est PAS blanc. Une fois le fond efface, c'est
-   la facon la plus simple et la plus sure de retrouver le document :
-   plus de seuil a calculer, plus de tache a suivre. */
-/* L'inclinaison mesuree sur ce qui n'est PAS blanc. Une fois le fond
-   efface, la forme restante est le document lui-meme : c'est la mesure
-   la plus fiable. Sur le masque de depart, qui contenait encore le
-   tissu, l'angle trouve etait nul et l'image restait de travers. */
-function inclinaisonNonBlanc(toile){
-  try{
-    const L = toile.width, H = toile.height;
-    const l = Math.min(320, L), h = Math.max(8, Math.round(l * H / L));
-    const petite = document.createElement('canvas');
-    petite.width = l; petite.height = h;
-    petite.getContext('2d').drawImage(toile, 0, 0, l, h);
-    const d = petite.getContext('2d').getImageData(0, 0, l, h).data;
-    const points = [];
+    /* Le cadre de ce qui n'est PAS du fond. Les fuites eventuelles a
+       l'interieur du document ne changent rien : on ne retient que les
+       extremes. */
+    let x0 = l, y0 = h, x1 = -1, y1 = -1, dedans = 0;
     for(let y = 0; y < h; y++){
       for(let x = 0; x < l; x++){
-        const i = (y * l + x) * 4;
-        if(d[i] > 244 && d[i + 1] > 244 && d[i + 2] > 244) continue;
-        points.push(x, y);
-      }
-    }
-    if(points.length < 200) return 0;
-    let mx = 0, my = 0;
-    for(let i = 0; i < points.length; i += 2){ mx += points[i]; my += points[i + 1]; }
-    mx /= points.length / 2; my /= points.length / 2;
-    let meilleur = 0, plusPetit = Infinity;
-    for(let deg = -25; deg <= 25; deg++){
-      const a = deg * Math.PI / 180;
-      const cos = Math.cos(a), sin = Math.sin(a);
-      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-      for(let i = 0; i < points.length; i += 8){
-        const dx = points[i] - mx, dy = points[i + 1] - my;
-        const x = dx * cos - dy * sin, y = dx * sin + dy * cos;
-        if(x < x0) x0 = x; if(x > x1) x1 = x;
-        if(y < y0) y0 = y; if(y > y1) y1 = y;
-      }
-      const aire = (x1 - x0) * (y1 - y0);
-      if(aire < plusPetit){ plusPetit = aire; meilleur = a; }
-    }
-    return meilleur;
-  }catch(e){ return 0; }
-}
-
-function cadreNonBlanc(toile){
-  try{
-    const L = toile.width, H = toile.height;
-    const l = Math.min(400, L), h = Math.max(8, Math.round(l * H / L));
-    const petite = document.createElement('canvas');
-    petite.width = l; petite.height = h;
-    petite.getContext('2d').drawImage(toile, 0, 0, l, h);
-    const d = petite.getContext('2d').getImageData(0, 0, l, h).data;
-    let x0 = l, y0 = h, x1 = -1, y1 = -1;
-    for(let y = 0; y < h; y++){
-      for(let x = 0; x < l; x++){
-        const i = (y * l + x) * 4;
-        if(d[i] > 244 && d[i + 1] > 244 && d[i + 2] > 244) continue;
+        if(fond[y * l + x]) continue;
+        dedans++;
         if(x < x0) x0 = x; if(x > x1) x1 = x;
         if(y < y0) y0 = y; if(y > y1) y1 = y;
       }
     }
-    if(x1 < 0) return null;
+    if(x1 < 0 || dedans < 0.04 * l * h) return null;
     return { x0: x0 * L / l, x1: (x1 + 1) * L / l,
-             y0: y0 * H / h, y1: (y1 + 1) * H / h };
+             y0: y0 * H / h, y1: (y1 + 1) * H / h,
+             part: dedans / (l * h) };
   }catch(e){ return null; }
 }
 
+/* Decoupe une zone de l'image, sur fond blanc. */
+function decouper(toile, cadre){
+  const l = Math.max(8, Math.round(cadre.x1 - cadre.x0));
+  const h = Math.max(8, Math.round(cadre.y1 - cadre.y0));
+  const t = document.createElement('canvas');
+  t.width = l; t.height = h;
+  const c = t.getContext('2d');
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, l, h);
+  c.drawImage(toile, Math.round(cadre.x0), Math.round(cadre.y0), l, h, 0, 0, l, h);
+  return t;
+}
+
+/* La rotation se fait sur fond NOIR : le blanc se confondrait avec le
+   papier, et la mesure du cadre ne verrait plus rien. Les coins noirs
+   sont blanchis a la toute fin. */
+function tournerSurBlanc(toile, angle){
+  const l = toile.width, h = toile.height;
+  const diag = Math.ceil(Math.sqrt(l * l + h * h));
+  const t = document.createElement('canvas');
+  t.width = diag; t.height = diag;
+  const c = t.getContext('2d');
+  c.fillStyle = '#000000'; c.fillRect(0, 0, diag, diag);
+  c.translate(diag / 2, diag / 2);
+  c.rotate(angle);
+  c.drawImage(toile, -l / 2, -h / 2);
+  return t;
+}
+
+/* DETOURER : trouver le document, le redresser, le decouper au ras.
+   Le fond disparait parce qu'il est COUPE, jamais parce qu'on a
+   blanchi des points a l'interieur de l'image — c'est ce qui trouait
+   la carte. Ce qui est dans le cadre reste intact, quelle que soit sa
+   couleur. */
 function detourerDocument(toile){
   try{
-    const L = toile.width, H = toile.height;
-    const tache = tacheDuDocument(toile);
-    if(!tache) return toile;
-    if(tache.part < 0.08 || tache.part > 0.94) return toile;
+    const premier = cadreDuDocument(toile);
+    /* Rien trouve, ou le document occupe deja toute l'image : on ne
+       touche a rien. */
+    if(!premier || premier.part > 0.97) return toile;
 
-    const k = tache.echelle;
+    let cadree = decouper(toile, premier);
 
-    /* 1. RECADRER largement autour du document. */
-    const marge = Math.round(Math.min(tache.x1 - tache.x0, tache.y1 - tache.y0) * k * 0.06);
-    const cx0 = Math.max(0, Math.round(tache.x0 * k) - marge);
-    const cy0 = Math.max(0, Math.round(tache.y0 * k) - marge);
-    const cx1 = Math.min(L, Math.round(tache.x1 * k) + marge);
-    const cy1 = Math.min(H, Math.round(tache.y1 * k) + marge);
-    const lc = cx1 - cx0, hc = cy1 - cy0;
-    if(lc < 60 || hc < 40) return toile;
-
-    const cadree = document.createElement('canvas');
-    cadree.width = lc; cadree.height = hc;
-    cadree.getContext('2d').drawImage(toile, cx0, cy0, lc, hc, 0, 0, lc, hc);
-
-    /* 2. EFFACER LE FOND, en partant des bords — qui sont forcement du
-       fond, puisqu'on a garde une marge autour du document. */
-    effacerAutour(cadree);
-
-    /* L'INCLINAISON SE MESURE MAINTENANT, sur la forme restante : le
-       document seul. Mesuree avant, sur un masque ou le tissu figurait
-       encore, elle ressortait nulle et l'image restait de travers. */
-    const angle = inclinaisonNonBlanc(cadree);
-
-    /* 3. REDRESSER, sur fond BLANC cette fois : le fond efface et le
-       fond ajoute se confondent, ce qui simplifie la suite. */
-    let droit = cadree;
-    if(angle){
-      const diag = Math.ceil(Math.sqrt(lc * lc + hc * hc));
-      const tourner = function(a){
-        const x = document.createElement('canvas');
-        x.width = diag; x.height = diag;
-        const c = x.getContext('2d');
-        c.fillStyle = '#ffffff'; c.fillRect(0, 0, diag, diag);
-        c.translate(diag / 2, diag / 2);
-        c.rotate(a);
-        c.drawImage(cadree, -lc / 2, -hc / 2);
-        return x;
-      };
-      /* Les deux sens sont essayes : la mesure donne un angle, pas un
-         sens. On garde celui qui rend le document le plus compact. */
-      let aireMin = Infinity;
-      for(const sens of [-angle, angle]){
-        const essai = tourner(sens);
-        const cadre = cadreNonBlanc(essai);
-        if(!cadre) continue;
-        const aire = (cadre.x1 - cadre.x0) * (cadre.y1 - cadre.y0);
-        if(aire < aireMin){ aireMin = aire; droit = essai; }
+    /* L'ANGLE : celui qui rend le cadre du document le plus petit. Un
+       rectangle droit tient dans un cadre serre ; incline, il en
+       demande un plus grand. On balaie de trois en trois degres, puis
+       on affine d'un degre. */
+    const aireDe = function(t){
+      const c = cadreDuDocument(t);
+      return c ? { aire: (c.x1 - c.x0) * (c.y1 - c.y0), cadre: c } : null;
+    };
+    let meilleur = { deg: 0, aire: Infinity, toile: cadree, cadre: null };
+    const essayer = function(deg){
+      const t = deg ? tournerSurBlanc(cadree, deg * Math.PI / 180) : cadree;
+      const m = aireDe(t);
+      if(m && m.aire < meilleur.aire){
+        meilleur = { deg: deg, aire: m.aire, toile: t, cadre: m.cadre };
       }
+    };
+    for(let deg = -15; deg <= 15; deg += 3) essayer(deg);
+    for(let deg = meilleur.deg - 2; deg <= meilleur.deg + 2; deg++){
+      if(deg % 3 !== 0) essayer(deg);
     }
 
-    /* 4. RECOUPER au ras de ce qui n'est pas blanc. */
-    const cadre = cadreNonBlanc(droit);
+    const droit = meilleur.toile;
+    const cadre = meilleur.cadre || cadreDuDocument(droit);
     if(!cadre) return blanchirCoins(cadree);
-    const m = Math.round(Math.min(cadre.x1 - cadre.x0, cadre.y1 - cadre.y0) * 0.01);
-    const nx0 = Math.max(0, Math.round(cadre.x0) - m);
-    const ny0 = Math.max(0, Math.round(cadre.y0) - m);
-    const lf = Math.min(droit.width - nx0, Math.round(cadre.x1 - cadre.x0) + m * 2);
-    const hf = Math.min(droit.height - ny0, Math.round(cadre.y1 - cadre.y0) + m * 2);
-    if(lf < 60 || hf < 40) return blanchirCoins(cadree);
 
-    const fin = document.createElement('canvas');
-    fin.width = lf; fin.height = hf;
-    const fc = fin.getContext('2d');
-    fc.fillStyle = '#ffffff'; fc.fillRect(0, 0, lf, hf);
-    fc.drawImage(droit, nx0, ny0, lf, hf, 0, 0, lf, hf);
-    /* Un dernier passage : la rotation laisse parfois reapparaitre un
-       coin de fond dans le nouveau cadre. */
-    effacerAutour(fin);
+    /* Une marge d'un demi pour cent : on ne veut pas rogner le bord du
+       document, mais rien de plus. */
+    const m = Math.round(Math.min(cadre.x1 - cadre.x0, cadre.y1 - cadre.y0) * 0.005);
+    const fin = decouper(droit, {
+      x0: Math.max(0, cadre.x0 - m), y0: Math.max(0, cadre.y0 - m),
+      x1: Math.min(droit.width, cadre.x1 + m), y1: Math.min(droit.height, cadre.y1 + m)
+    });
     return blanchirCoins(fin);
   }catch(e){
     return toile;
