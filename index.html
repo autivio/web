@@ -132,7 +132,17 @@
   input:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:0;}
   textarea{resize:vertical;min-height:50px;}
 
-  .doc-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  /* Sur un ecran etroit, cette barre debordait a droite sans qu'on
+     puisse l'atteindre : les boutons de scan y etaient invisibles. Elle
+     se fait defiler, et une barre de defilement bien visible le dit. */
+  .doc-toolbar{display:flex;justify-content:flex-start;align-items:center;
+    margin-bottom:10px;gap:8px;overflow-x:auto;overflow-y:hidden;
+    padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;}
+  .doc-toolbar > *{flex:0 0 auto;}
+  .doc-toolbar::-webkit-scrollbar{height:8px;}
+  .doc-toolbar::-webkit-scrollbar-track{background:var(--soft,#eef2f8);border-radius:99px;}
+  .doc-toolbar::-webkit-scrollbar-thumb{background:var(--brand,#14417f);border-radius:99px;opacity:.6;}
+  .doc-toolbar::-webkit-scrollbar-thumb:hover{background:var(--brand,#14417f);}
   .print-btn{background:var(--brand);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;}
   .official-btn{background:var(--ok);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;}
   .pdf-frame{width:100%;max-width:820px;height:1000px;border:1px solid var(--line);border-radius:6px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.06);}
@@ -656,7 +666,10 @@
     .tb-grille,.archives{grid-template-columns:1fr;}
     .tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}
     .tab{white-space:nowrap;}
-    .doc-toolbar{flex-wrap:wrap;gap:8px;}
+    /* Sur telephone, les boutons reviennent a la ligne : il y a la
+       place en hauteur, et le defilement lateral n'est pas naturel. */
+    .doc-toolbar{flex-wrap:wrap;overflow-x:visible;padding-bottom:0;}
+    .doc-toolbar > *{flex:1 1 auto;}
     .official-btn,.print-btn{flex:1;min-width:150px;}
     .dlg{padding:18px 16px 14px;}
     .dlg-actions button{flex:1;min-width:120px;}
@@ -2299,6 +2312,7 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.": "Impossibile scaricare il lettore PDF. Si colleghi a Internet una prima volta.",
     "Supprimer ce document ?": "Eliminare questo documento?",
     "Supprimer tout le dossier ?": "Eliminare tutta la cartella?",
     "Supprimer tout le dossier": "Eliminare tutta la cartella",
@@ -3251,6 +3265,7 @@ const DICO = {
   },
 
   lb: {
+    "Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.": "De PDF-Liesprogramm konnt net erofgelueden ginn. Gitt eng Kéier online.",
     "Supprimer ce document ?": "Dëst Dokument läschen?",
     "Supprimer tout le dossier ?": "De ganzen Dossier läschen?",
     "Supprimer tout le dossier": "De ganzen Dossier läschen",
@@ -4202,6 +4217,7 @@ const DICO = {
   },
 
   en: {
+    "Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.": "The PDF reader could not be downloaded. Connect to the Internet once.",
     "Supprimer ce document ?": "Delete this document?",
     "Supprimer tout le dossier ?": "Delete the whole folder?",
     "Supprimer tout le dossier": "Delete the whole folder",
@@ -5152,6 +5168,7 @@ const DICO = {
   },
 
   de: {
+    "Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.": "Der PDF-Leser konnte nicht geladen werden. Gehen Sie einmal online.",
     "Supprimer ce document ?": "Dieses Dokument löschen?",
     "Supprimer tout le dossier ?": "Den ganzen Ordner löschen?",
     "Supprimer tout le dossier": "Ganzen Ordner löschen",
@@ -6118,6 +6135,7 @@ const DICO = {
   },
 
   nl: {
+    "Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.": "De pdf-lezer kon niet worden gedownload. Ga één keer online.",
     "Supprimer ce document ?": "Dit document verwijderen?",
     "Supprimer tout le dossier ?": "De hele map verwijderen?",
     "Supprimer tout le dossier": "Hele map verwijderen",
@@ -7078,7 +7096,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.33';
+const VERSION = '2.34';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10845,6 +10863,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.34': { date: '27/09/2026', lignes: [
+    "La barre des boutons d'un document se fait défiler quand elle dépasse : sur PC, « Scanner la carte grise » et « Scanner une pièce d'identité » se trouvaient hors de l'écran, sans moyen de les atteindre.",
+    "Un PDF peut être lu comme une photo : carte grise ou pièce d'identité reçue par e-mail, le logiciel en dessine la page et la lit de la même façon.",
+    "La bande d'une pièce d'identité est relue à part, agrandie, quand la première lecture l'a manquée : c'est elle qui porte le nom, le prénom et la date de naissance.",
+    "Les valeurs proposées sont nettoyées des débris de lecture, et la commune s'arrête à son vrai nom.",
+    "Une carte grise belge est reconnue : ses repères sont écrits entre parenthèses — (A), (D.1) — et la mention « Communauté européenne » vaut preuve."
+  ] },
   '2.33': { date: '27/09/2026', lignes: [
     "« Mes documents en ligne » permet de supprimer un document ou tout un dossier, et supprimer une fiche efface désormais ses documents du serveur : ils y restaient sans qu’on puisse les atteindre.",
     "L'adresse est retrouvée même quand son intitulé n'a pas été lu : le logiciel part du code postal et remonte d'une ou deux lignes.",
@@ -13350,13 +13375,13 @@ function renderMain(){
               /* Sans « capture », l'iPhone propose la pellicule ET
                  l'appareil photo ; avec, il impose l'appareil photo et
                  « Photo existante » n'a plus de sens. */
-              + '<input type="file" id="scanIDfichier" accept="image/*" class="champ-cache"></label>'
+              + '<input type="file" id="scanIDfichier" accept="image/*,application/pdf" class="champ-cache"></label>'
             : '')
     +     (docLitLaCarteGrise()
             ? '<label class="btn-sec btn-import-doc" id="scanCG">'
               + '<span>' + esc(t('📷 Scanner la carte grise'))
               + ' <b class="etiq-beta">' + esc(t('bêta')) + '</b></span>'
-              + '<input type="file" id="scanCGfichier" accept="image/*" class="champ-cache"></label>'
+              + '<input type="file" id="scanCGfichier" accept="image/*,application/pdf" class="champ-cache"></label>'
               + '<button type="button" class="btn-sec" id="scanCGguide" style="display:none"></button>'
             : '')
     +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
@@ -24672,25 +24697,34 @@ function effacerAutour(toile){
           && Math.abs(a[2] - b[2]) < tolerance;
     };
 
-    /* UNE SEULE REFERENCE : la couleur moyenne des bords. Comparer
-       chaque point a son VOISIN laissait la progression deriver de
-       proche en proche — du tissu jusqu'au papier, dont la couleur
-       n'est pas si eloignee — et la carte se vidait de son fond blanc.
-       Avec une reference fixe, le papier arrete net la progression. */
+    /* LE CRITERE EST INVERSE : on n'efface plus « ce qui ressemble au
+       bord » — un tissu n'est jamais uniforme, ses ombres et son grain
+       arretaient la progression et laissaient des plaques — mais TOUT
+       CE QUI N'EST PAS LA COULEUR DU PAPIER. Le papier, lui, est
+       uniforme : c'est lui qui sert de reference, relevee au centre de
+       l'image, la ou le document se trouve forcement.
+       La progression part des bords et s'arrete net au bord du
+       document ; l'interieur de la carte, non relie au bord, n'est
+       jamais atteint. */
     let rr = 0, rv = 0, rb = 0, n = 0;
-    const ajouterRef = function(i){
-      rr += d[i * 4]; rv += d[i * 4 + 1]; rb += d[i * 4 + 2]; n++;
-    };
-    for(let x = 0; x < l; x++){ ajouterRef(x); ajouterRef((h - 1) * l + x); }
-    for(let y = 0; y < h; y++){ ajouterRef(y * l); ajouterRef(y * l + l - 1); }
-    const reference = [rr / n, rv / n, rb / n];
+    const x0 = Math.round(l * 0.35), x1 = Math.round(l * 0.65);
+    const y0 = Math.round(h * 0.35), y1 = Math.round(h * 0.65);
+    for(let y = y0; y < y1; y++){
+      for(let x = x0; x < x1; x++){
+        const i = y * l + x;
+        rr += d[i * 4]; rv += d[i * 4 + 1]; rb += d[i * 4 + 2]; n++;
+      }
+    }
+    if(!n) return toile;
+    const papier = [rr / n, rv / n, rb / n];
 
     const fond = new Uint8Array(l * h);
     const pile = new Int32Array(l * h);
     let sommet = 0;
     const pousser = function(i){
       if(fond[i]) return;
-      if(!proche(couleur(i), reference, 40)) return;
+      /* Ni la couleur du papier, ni une nuance proche : c'est du fond. */
+      if(proche(couleur(i), papier, 38)) return;
       fond[i] = 1; pile[sommet++] = i;
     };
 
@@ -24732,6 +24766,48 @@ function effacerAutour(toile){
 /* Le cadre de ce qui n'est PAS blanc. Une fois le fond efface, c'est
    la facon la plus simple et la plus sure de retrouver le document :
    plus de seuil a calculer, plus de tache a suivre. */
+/* L'inclinaison mesuree sur ce qui n'est PAS blanc. Une fois le fond
+   efface, la forme restante est le document lui-meme : c'est la mesure
+   la plus fiable. Sur le masque de depart, qui contenait encore le
+   tissu, l'angle trouve etait nul et l'image restait de travers. */
+function inclinaisonNonBlanc(toile){
+  try{
+    const L = toile.width, H = toile.height;
+    const l = Math.min(320, L), h = Math.max(8, Math.round(l * H / L));
+    const petite = document.createElement('canvas');
+    petite.width = l; petite.height = h;
+    petite.getContext('2d').drawImage(toile, 0, 0, l, h);
+    const d = petite.getContext('2d').getImageData(0, 0, l, h).data;
+    const points = [];
+    for(let y = 0; y < h; y++){
+      for(let x = 0; x < l; x++){
+        const i = (y * l + x) * 4;
+        if(d[i] > 244 && d[i + 1] > 244 && d[i + 2] > 244) continue;
+        points.push(x, y);
+      }
+    }
+    if(points.length < 200) return 0;
+    let mx = 0, my = 0;
+    for(let i = 0; i < points.length; i += 2){ mx += points[i]; my += points[i + 1]; }
+    mx /= points.length / 2; my /= points.length / 2;
+    let meilleur = 0, plusPetit = Infinity;
+    for(let deg = -25; deg <= 25; deg++){
+      const a = deg * Math.PI / 180;
+      const cos = Math.cos(a), sin = Math.sin(a);
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for(let i = 0; i < points.length; i += 8){
+        const dx = points[i] - mx, dy = points[i + 1] - my;
+        const x = dx * cos - dy * sin, y = dx * sin + dy * cos;
+        if(x < x0) x0 = x; if(x > x1) x1 = x;
+        if(y < y0) y0 = y; if(y > y1) y1 = y;
+      }
+      const aire = (x1 - x0) * (y1 - y0);
+      if(aire < plusPetit){ plusPetit = aire; meilleur = a; }
+    }
+    return meilleur;
+  }catch(e){ return 0; }
+}
+
 function cadreNonBlanc(toile){
   try{
     const L = toile.width, H = toile.height;
@@ -24763,7 +24839,6 @@ function detourerDocument(toile){
     if(tache.part < 0.08 || tache.part > 0.94) return toile;
 
     const k = tache.echelle;
-    const angle = inclinaison(tache);
 
     /* 1. RECADRER largement autour du document. */
     const marge = Math.round(Math.min(tache.x1 - tache.x0, tache.y1 - tache.y0) * k * 0.06);
@@ -24781,6 +24856,11 @@ function detourerDocument(toile){
     /* 2. EFFACER LE FOND, en partant des bords — qui sont forcement du
        fond, puisqu'on a garde une marge autour du document. */
     effacerAutour(cadree);
+
+    /* L'INCLINAISON SE MESURE MAINTENANT, sur la forme restante : le
+       document seul. Mesuree avant, sur un masque ou le tissu figurait
+       encore, elle ressortait nulle et l'image restait de travers. */
+    const angle = inclinaisonNonBlanc(cadree);
 
     /* 3. REDRESSER, sur fond BLANC cette fois : le fond efface et le
        fond ajoute se confondent, ce qui simplifie la suite. */
@@ -24848,7 +24928,112 @@ function blanchirCoins(toile){
   return toile;
 }
 
-function preparerImageOcr(fichier){
+/* =====================================================================
+   LIRE UN PDF
+   Une carte grise arrive souvent en PDF : le vendeur l'a scannee, ou
+   elle vient d'un e-mail. Le lecteur de texte, lui, ne sait regarder
+   qu'une image. On dessine donc la page du PDF sur une toile, et tout
+   le reste — detourage, redressement, lecture — se deroule comme pour
+   une photo.
+   Le moteur de rendu (pdf.js) est telecharge au premier PDF, puis garde
+   par le telephone, exactement comme le lecteur de texte.
+   ===================================================================== */
+const MOTEUR_PDF = [
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
+];
+const OUVRIER_PDF = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+function estPdf(fichier){
+  if(!fichier) return false;
+  const nom = String(fichier.name || '').toLowerCase();
+  return (fichier.type === 'application/pdf') || /\.pdf$/.test(nom);
+}
+
+async function moteurPdfPret(){
+  if(window.pdfjsLib) return true;
+  for(const url of MOTEUR_PDF){
+    try{
+      await chargerScript(url);
+      if(window.pdfjsLib){
+        try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc = OUVRIER_PDF; }catch(e){}
+        return true;
+      }
+    }catch(e){}
+  }
+  throw new Error(t('Le lecteur de PDF n’a pas pu être téléchargé. Connectez-vous à Internet une première fois.'));
+}
+
+/* Dessine une page du PDF sur une toile, assez grande pour etre lue. */
+async function pdfEnToile(fichier, numeroPage){
+  await moteurPdfPret();
+  const octets = new Uint8Array(await fichier.arrayBuffer());
+  const doc = await window.pdfjsLib.getDocument({ data: octets }).promise;
+  const page = await doc.getPage(Math.min(numeroPage || 1, doc.numPages));
+  const base = page.getViewport({ scale: 1 });
+  /* On vise 2000 points de large : en dessous, les petits caracteres
+     d'un formulaire ne se lisent pas. */
+  const echelle = Math.min(4, Math.max(1.5, 2000 / base.width));
+  const vue = page.getViewport({ scale: echelle });
+  const toile = document.createElement('canvas');
+  toile.width = Math.round(vue.width);
+  toile.height = Math.round(vue.height);
+  const c = toile.getContext('2d');
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, toile.width, toile.height);
+  await page.render({ canvasContext: c, viewport: vue }).promise;
+  toile.__pages = doc.numPages;
+  return toile;
+}
+
+/* Une image ou un PDF, rendus de la meme facon : une toile. */
+async function toileDuFichier(fichier, numeroPage){
+  if(estPdf(fichier)) return await pdfEnToile(fichier, numeroPage);
+  const im = await chargerImage(fichier);
+  const t = document.createElement('canvas');
+  t.width = im.naturalWidth || im.width;
+  t.height = im.naturalHeight || im.height;
+  t.getContext('2d').drawImage(im, 0, 0);
+  return t;
+}
+
+/* La preparation commune, qu'on vienne d'une photo ou d'un PDF :
+   ramener a une taille lisible, detourer le document de ce qui
+   l'entoure, puis pousser le contraste. */
+function preparerToileOcr(depart){
+  /* 2600 points : en dessous, les caracteres d'une carte grise font
+     moins de 20 points de haut, et un lecteur libre devine plus qu'il
+     ne lit. */
+  const grand = Math.max(depart.width, depart.height);
+  const k = grand > 2600 ? 2600 / grand : 1;
+  let toile = depart;
+  if(k < 1){
+    toile = document.createElement('canvas');
+    toile.width = Math.round(depart.width * k);
+    toile.height = Math.round(depart.height * k);
+    toile.getContext('2d').drawImage(depart, 0, 0, toile.width, toile.height);
+  }
+  const cible = detourerDocument(toile);
+  const c = cible.getContext('2d');
+  try{
+    const d = c.getImageData(0, 0, cible.width, cible.height);
+    const p = d.data;
+    for(let i = 0; i < p.length; i += 4){
+      const g = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
+      const v = Math.max(0, Math.min(255, (g - 128) * 1.45 + 128));
+      p[i] = p[i + 1] = p[i + 2] = v;
+    }
+    c.putImageData(d, 0, 0);
+  }catch(e){}
+  return cible;
+}
+
+function preparerImageOcr(fichier, numeroPage){
+  /* Un PDF passe par le moteur de rendu, puis suit le meme chemin. */
+  if(estPdf(fichier)){
+    return pdfEnToile(fichier, numeroPage).then(function(toile){
+      return preparerToileOcr(toile);
+    });
+  }
   return new Promise(function(ok, non){
     const url = URL.createObjectURL(fichier);
     const im = new Image();
@@ -24857,30 +25042,10 @@ function preparerImageOcr(fichier){
       /* 2600 points au lieu de 1800 : sur un texte de carte grise, les
          caracteres faisaient moins de 20 points de haut, la limite en
          dessous de laquelle un lecteur libre devine plus qu'il ne lit. */
-      const grand = Math.max(im.naturalWidth, im.naturalHeight);
-      const k = grand > 2600 ? 2600 / grand : 1;
-      const toile = document.createElement('canvas');
-      toile.width = Math.round(im.naturalWidth * k);
-      toile.height = Math.round(im.naturalHeight * k);
-      let c = toile.getContext('2d');
-      c.drawImage(im, 0, 0, toile.width, toile.height);
-      /* Le document est isole de ce qui l'entoure AVANT tout le reste :
-         le lecteur n'a plus a dechiffrer la table ni le canape. */
-      const detouree = detourerDocument(toile);
-      const cible = detouree;
-      c = cible.getContext('2d');
-      try{
-        const d = c.getImageData(0, 0, cible.width, cible.height);
-        const p = d.data;
-        for(let i = 0; i < p.length; i += 4){
-          const g = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
-          /* Contraste renforce autour du gris moyen. */
-          const v = Math.max(0, Math.min(255, (g - 128) * 1.45 + 128));
-          p[i] = p[i + 1] = p[i + 2] = v;
-        }
-        c.putImageData(d, 0, 0);
-      }catch(e){}
-      ok(cible);
+      const depart = document.createElement('canvas');
+      depart.width = im.naturalWidth; depart.height = im.naturalHeight;
+      depart.getContext('2d').drawImage(im, 0, 0);
+      ok(preparerToileOcr(depart));
     };
     im.onerror = function(){
       URL.revokeObjectURL(url);
@@ -25071,7 +25236,9 @@ function lireCarteGrise(texte){
        Sans cela, « B 12.05.2018 » — la date de premiere mise en
        circulation — etait lu comme un repere « B.1.2 » suivi de
        « 05.2018 », et la date disparaissait. */
-    const m = l.match(/^([A-Z])\s*(?:\.\s*(\d)\s*(?:\.\s*(\d))?)?\s*[a-z]?[)\s:.\-]+(.{2,})$/);
+    /* Le repere peut etre ENTRE PARENTHESES — « (A) 1-ABC-123 », comme
+       sur un certificat belge — ou nu, comme en France. */
+    const m = l.replace(/^\(/, '').match(/^([A-Z])\s*(?:\.\s*(\d)\s*(?:\.\s*(\d))?)?\s*[a-z]?[)\s:.\-]+(.{2,})$/);
     if(!m) return;
     const code = m[1].toUpperCase() + (m[2] ? '.' + m[2] : '') + (m[3] ? '.' + m[3] : '');
     const val = nettoyerLigneOcr(m[4]);
@@ -25086,14 +25253,22 @@ function lireCarteGrise(texte){
   /* Immatriculation : d'abord le repere A, sinon le premier format de
      plaque rencontre — SIV (AB-123-CD) ou ancien (123 AB 45). */
   const plaque = function(s){
-    /* Une plaque SIV s'ecrit lettres-chiffres-lettres : on redresse
-       chaque morceau selon sa nature, ce qui corrige d'un coup les
-       confusions entre O et 0, B et 8, I et 1. */
+    /* UN MOT N'EST PAS UNE PLAQUE. Sans separateur, on n'accepte que la
+       forme exacte du SIV — deux lettres, trois CHIFFRES, deux lettres.
+       Sans cette reserve, « ROYAUME DE BELGIQUE » donnait la plaque
+       « RO-Y4U-ME ». Avec separateurs, chaque morceau est redresse
+       selon sa nature : O devient 0 la ou l'on attend un chiffre. */
     const x = majuscules(s || '');
-    let m = x.match(/\b([A-Z0-9]{2})[\s.\-]?([A-Z0-9]{3})[\s.\-]?([A-Z0-9]{2})\b/);
+    let m = x.match(/\b([A-Z0-9]{2})[\s.\-]([A-Z0-9]{3})[\s.\-]([A-Z0-9]{2})\b/);
     if(m) return enLettres(m[1]) + '-' + enChiffres(m[2]) + '-' + enLettres(m[3]);
-    m = x.match(/\b([A-Z0-9]{1,4})\s?([A-Z]{2,3})\s?([A-Z0-9]{2,3})\b/);
-    return m ? (enChiffres(m[1]) + ' ' + enLettres(m[2]) + ' ' + enChiffres(m[3])) : '';
+    m = x.match(/\b([A-Z]{2})(\d{3})([A-Z]{2})\b/);
+    if(m) return m[1] + '-' + m[2] + '-' + m[3];
+    /* On garde le separateur d'origine : une plaque belge s'ecrit
+       « 1-ABC-123 », une ancienne francaise « 1234 AB 59 ». */
+    m = x.match(/\b(\d{1,4})([\s\-]?)([A-Z]{2,3})([\s\-]?)(\d{2,3})\b/);
+    if(!m) return '';
+    const sep = (m[2] === '-' || m[4] === '-') ? '-' : ' ';
+    return m[1] + sep + m[3] + sep + m[5];
   };
   /* Le repere A porte l'immatriculation, dans TOUS les pays. Si elle ne
      ressemble a aucun format francais — « M-AB 1234 » en Allemagne,
@@ -25408,7 +25583,7 @@ function prendrePhotoCadree(libelle, source){
          ne marchait pas sur iOS. */
       +   '<label class="cam-galerie" id="camGalerie">'
       +     '<span>' + esc(t('Photo existante')) + '</span>'
-      +     '<input type="file" accept="image/*" class="cam-fichier">'
+      +     '<input type="file" accept="image/*,application/pdf" class="cam-fichier">'
       +   '</label>'
       +   '<button type="button" class="cam-declic" id="camDeclic" aria-label="'
       +     esc(t('Prendre la photo')) + '"><span class="cam-anneau"></span></button>'
@@ -25527,9 +25702,16 @@ function estPieceIdentite(texte){
    porte. */
 function certificatEvident(texte){
   const t = majuscules(texte || '');
+  /* « Communaute europeenne » et ses traductions figurent en tete de
+     TOUT certificat d'immatriculation de l'Union : c'est une preuve
+     aussi sure que l'intitule, et elle survit mieux a une lecture
+     difficile — deux mots au lieu d'un long titre. */
   return ["CERTIFICAT D'IMMATRICULATION", 'CERTIFICAT D’IMMATRICULATION',
           'ZULASSUNGSBESCHEINIGUNG', 'FAHRZEUGSCHEIN', 'KENTEKENBEWIJS',
-          'CARTA DI CIRCOLAZIONE', 'INSCHRIJVINGSBEWIJS', 'PERMIS DE CIRCULATION']
+          'CARTA DI CIRCOLAZIONE', 'INSCHRIJVINGSBEWIJS', 'PERMIS DE CIRCULATION',
+          'COMMUNAUTE EUROPEENNE', 'EUROPESE GEMEENSCHAP', 'EUROPAISCHE GEMEINSCHAFT',
+          'EUROPEAN COMMUNITY', "DIRECTION POUR L'IMMATRICULATION",
+          'DIRECTIE VOOR DE INSCHRIJVING']
     .some(function(m){ return t.indexOf(m) !== -1; });
 }
 
@@ -25539,20 +25721,18 @@ function signesCarteGrise(texte){
   if(estPieceIdentite(texte)) return 0;
 
   let n = 0;
-  /* Des intitules qui n'existent QUE sur un certificat d'immatriculation.
-     « REPUBLIQUE » et « PREFECTURE » ont ete retires : ils figurent
-     aussi sur une carte d'identite, et suffisaient a faire accepter la
-     photo — d'ou une plaque inventee sur une piece d'identite. */
-  const propres = ["CERTIFICAT D'IMMATRICULATION", 'CERTIFICAT D\u2019IMMATRICULATION',
-                   'ZULASSUNGSBESCHEINIGUNG', 'FAHRZEUGSCHEIN', 'KENTEKENBEWIJS',
-                   'CARTA DI CIRCOLAZIONE', 'INSCHRIJVINGSBEWIJS',
-                   'PERMIS DE CIRCULATION', 'CERTIFICAT DE CESSION'];
-  const fort = propres.some(function(m){ return t.indexOf(m) !== -1; });
+  /* La preuve, c'est l'intitule du document ou la mention europeenne :
+     la meme liste que « certificatEvident », pour n'avoir qu'un seul
+     endroit a tenir a jour. « REPUBLIQUE » et « PREFECTURE » en ont ete
+     retires : ils figurent aussi sur une carte d'identite. */
+  const fort = certificatEvident(texte);
   if(fort) n += 2;
 
   const lignes = String(texte || '').split('\n').map(nettoyerLigneOcr);
+  /* Le repere peut etre entre parentheses — « (A) », « (D.1) » — comme
+     sur un certificat belge ou neerlandais. */
   const reperes = lignes.filter(function(l){
-    return /^[A-Z]\s*(\.\s*\d)?\s*[)\s:.\-]+\S/.test(majuscules(l));
+    return /^\(?[A-Z]\s*(\.\s*\d)?\s*[)\s:.\-]+\S/.test(majuscules(l));
   }).length;
   if(reperes >= 4) n += 2;
   else if(reperes >= 2) n += 1;
@@ -25677,6 +25857,46 @@ async function lireDansLeBonSens(toile){
   return texte;
 }
 
+/* Relit le tiers inferieur de l'image, agrandi, en n'acceptant que les
+   caracteres d'une bande normalisee. C'est le seul endroit ou l'on peut
+   se permettre une liste aussi etroite : une bande ne contient que des
+   majuscules, des chiffres et des chevrons. */
+async function relireLaBande(toile){
+  try{
+    const L = toile.width, H = toile.height;
+    const hautDebut = Math.round(H * 0.62);
+    const hb = H - hautDebut;
+    if(hb < 40) return '';
+    /* Agrandi deux fois : une bande fait quelques dizaines de points de
+       haut sur une photo, trop peu pour un lecteur. */
+    const zoom = 2;
+    const bande = document.createElement('canvas');
+    bande.width = L * zoom; bande.height = hb * zoom;
+    const c = bande.getContext('2d');
+    c.imageSmoothingQuality = 'high';
+    c.drawImage(toile, 0, hautDebut, L, hb, 0, 0, bande.width, bande.height);
+    /* Contraste pousse : sur une bande, il n'y a que du noir et du
+       blanc, les nuances ne servent a rien. */
+    try{
+      const img = c.getImageData(0, 0, bande.width, bande.height);
+      const q = img.data;
+      for(let i = 0; i < q.length; i += 4){
+        const g = 0.299 * q[i] + 0.587 * q[i + 1] + 0.114 * q[i + 2];
+        const v = g > 150 ? 255 : (g < 105 ? 0 : (g - 105) * 255 / 45);
+        q[i] = q[i + 1] = q[i + 2] = v;
+      }
+      c.putImageData(img, 0, 0);
+    }catch(e){}
+
+    if(typeof Tesseract === 'undefined') return '';
+    const sortie = await Tesseract.recognize(bande, 'fra', {
+      tessedit_pageseg_mode: '6',          // un bloc de lignes regulieres
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<'
+    });
+    return (sortie && sortie.data && sortie.data.text) || '';
+  }catch(e){ return ''; }
+}
+
 async function lireUnVolet(fichier, parLaCamera, source){
   const toile = await preparerImageOcr(fichier);
   bandeau('', '');
@@ -25688,9 +25908,21 @@ async function lireUnVolet(fichier, parLaCamera, source){
   }
   bandeau(t('Lecture en cours…'), 'attente');
   await moteurOcrPret();
-  const texte = await lireDansLeBonSens(toile);
+  let texte = await lireDansLeBonSens(toile);
+
+  /* SECONDE LECTURE, SUR LA BANDE SEULE. Les trois lignes du bas d'une
+     piece d'identite sont ecrites dans une police etroite et serree :
+     noyees dans une page entiere, elles passent souvent a la trappe —
+     et avec elles le nom, le prenom et la date de naissance, qui n'ont
+     pas d'equivalent ailleurs. On relit donc le bas de l'image, agrandi
+     et limite aux seuls caracteres qu'une bande peut contenir. */
+  if(!lireBandeIdentite(texte)){
+    const enPlus = await relireLaBande(toile);
+    if(enPlus && lireBandeIdentite(enPlus)) texte = texte + '\n' + enPlus;
+  }
+
   bandeau('', '');
-  return { texte: texte, lu: lireCarteGrise(texte) };
+  return { texte: texte, lu: lireCarteGrise(texte), toile: toile };
 }
 
 /* Les volets se completent : le premier donne souvent le vehicule, le
@@ -25737,18 +25969,15 @@ async function pdfDesFaces(fichiers, parPage){
   const cible = Math.round(POIDS_MAXI_OCTETS * 0.8 / Math.max(1, fichiers.length));
   const images = [];
   for(const f of fichiers){
-    let im;
-    try{ im = await chargerImage(f); }catch(e){ continue; }
+    /* Une face peut venir d'un PDF aussi bien que d'une photo. */
+    let toile;
+    try{ toile = await toileDuFichier(f, 1); }catch(e){ continue; }
 
     /* Le document est DETOURE de ce qui l'entoure — le tissu, la table
        — et pose sur fond blanc, puis couche a l'horizontale : une carte
        d'identite se lit dans ce sens, et deux cartes couchees l'une
        au-dessus de l'autre remplissent bien mieux une page A4 que deux
        cartes debout. */
-    let toile = document.createElement('canvas');
-    toile.width = im.naturalWidth || im.width;
-    toile.height = im.naturalHeight || im.height;
-    toile.getContext('2d').drawImage(im, 0, 0);
     toile = detourerDocument(toile);
     if(toile.height > toile.width) toile = tournerToile(toile, 90);
 
@@ -25793,7 +26022,7 @@ async function pdfDesFaces(fichiers, parPage){
 /* Qu'est-ce que ce fichier ? Sert a l'import : on lit la photo une
    fois, sans rien remplir, juste pour savoir a quoi on a affaire. */
 async function identifierDocument(fichier){
-  if(!estImage(fichier)) return null;
+  if(!estImage(fichier) && !estPdf(fichier)) return null;
   try{
     const toile = await preparerImageOcr(fichier);
     await moteurOcrPret();
@@ -26102,6 +26331,40 @@ function lireBandeIdentite(texte){
    ne contient que l'etat civil — il faut donc la lire sur le texte
    imprime.
    ---------------------------------------------------------------------- */
+/* Retire d'une valeur les debris que laisse une lecture difficile : les
+   morceaux d'intitule, les tirets et barres isoles, la ponctuation de
+   bord. « - Ed EUR | ADRESSE/ Address La - » ne doit pas arriver
+   jusqu'a la fenetre de relecture. */
+function nettoyerValeur(v){
+  let x = String(v || '');
+  /* Tout ce qui precede un intitule connu est du bruit, l'intitule
+     compris. */
+  const intitules = /(ADRESSE|ADDRESS|DOMICILE|TAILLE|HEIGHT|DELIVRANCE|DATE OF ISSUE|AORESSE|ADRESSF)\s*\/?\s*[A-Za-z]*\s*:?/i;
+  const m = x.match(intitules);
+  if(m) x = x.slice(m.index + m[0].length);
+  x = x.replace(/[|¦]/g, ' ')
+       .replace(/^[\s\-–—.,;:/\\]+/, '')
+       .replace(/[\s\-–—.,;:/\\]+$/, '')
+       .replace(/\s{2,}/g, ' ')
+       .trim();
+  /* Un reste de deux caracteres ou moins ne vaut rien. */
+  return x.length > 2 ? x : '';
+}
+
+/* Une adresse commence par un numero ou par un type de voie. Ce qui
+   precede est du bruit — un reste d'intitule mal lu, « La - » par
+   exemple. On coupe donc jusqu'au vrai debut, s'il existe. */
+function debutAdresse(v){
+  const mots = String(v || '').split(/\s+/).filter(Boolean);
+  const voie = /^(RUE|AVENUE|AV|BOULEVARD|BD|CHEMIN|ROUTE|RTE|PLACE|PL|IMPASSE|ALLEE|ALLÉE|RESIDENCE|RÉSIDENCE|LIEU|QUAI|COURS|SQUARE|SENTIER|HAMEAU|VILLA|CITE|CITÉ|CLOS|ESPLANADE|FAUBOURG|PASSAGE)$/i;
+  for(let i = 0; i < Math.min(4, mots.length); i++){
+    if(/^\d/.test(mots[i]) || voie.test(mots[i])){
+      return mots.slice(i).join(' ');
+    }
+  }
+  return mots.join(' ');
+}
+
 function lireAdresseIdentite(texte){
   const l = String(texte || '').split('\n').map(nettoyerLigneOcr).filter(Boolean);
   const res = {};
@@ -26149,15 +26412,25 @@ function lireAdresseIdentite(texte){
     }
   }
 
-  const bloc = lignes.join(' ').replace(/\s{2,}/g, ' ').trim();
+  const bloc = nettoyerValeur(lignes.join(' ').replace(/\s{2,}/g, ' ').trim());
   if(!bloc) return res;
   const cp = bloc.match(/\b(\d{5})\b\s*(.*)$/);
   if(cp){
     res.cp = cp[1];
-    res.ville = nettoyerLigneOcr(cp[2]).replace(/^[-–,]\s*/, '').replace(/\bFRANCE\b/i, '').trim();
-    res.adresse = nettoyerLigneOcr(bloc.slice(0, cp.index));
+    /* La commune s'arrete au premier mot qui n'en fait pas partie : un
+       nom de ville s'ecrit en majuscules, les debris de lecture non.
+       « BEUVRAGES 7 pe p » redevient « BEUVRAGES ». */
+    let ville = nettoyerValeur(cp[2]).replace(/\bFRANCE\b/i, '').trim();
+    const mots = ville.split(/\s+/).filter(Boolean);
+    const gardes = [];
+    for(const m of mots){
+      if(!/^[A-ZÀ-Ö][A-ZÀ-Ö'\-]*$/.test(m)) break;
+      gardes.push(m);
+    }
+    res.ville = gardes.join(' ') || ville;
+    res.adresse = debutAdresse(nettoyerValeur(bloc.slice(0, cp.index)));
   }else{
-    res.adresse = bloc;
+    res.adresse = debutAdresse(bloc);
   }
   Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
   return res;
@@ -26840,7 +27113,7 @@ async function importerPieceJointe(fichier, vehicule){
      l'autre, comme une photocopie —, DEUX pages pour une carte grise,
      plus grande et plus dense. */
   let faces = [fichier], reconnu = null, surUnePage = false;
-  if(estImage(fichier)){
+  if(estImage(fichier) || estPdf(fichier)){
     bandeauEnvoi(t('Lecture en cours…'));
     reconnu = await identifierDocument(fichier);
     bandeauEnvoi('');
