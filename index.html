@@ -2292,6 +2292,14 @@ const LANGUES_DISPO = [
 
 const DICO = {
   it: {
+    "Partie 1 — recto": "Parte 1 — fronte",
+    "Partie 1 — verso": "Parte 1 — retro",
+    "Partie 2 — recto": "Parte 2 — fronte",
+    "Partie 2 — verso": "Parte 2 — retro",
+    "deux parties, modèle 2019 (sans valeur CO2)": "due parti, modello 2019 (senza valore CO2)",
+    "deux parties (depuis septembre 2013)": "due parti (da settembre 2013)",
+    "feuille A4 rose ou sable (2011-2013)": "foglio A4 rosa o sabbia (2011-2013)",
+    "ancien modèle, bande rose (avant 2011)": "vecchio modello, striscia rosa (prima del 2011)",
     "Lecture difficile": "Lettura difficile",
     "Je n’ai pas bien reconnu cette photo. Vous pouvez continuer quand même : ce qui a été lu vous sera montré.": "Non ho riconosciuto bene questa foto. Può continuare lo stesso: ciò che è stato letto le sarà mostrato.",
     "Continuer quand même": "Continuare lo stesso",
@@ -3231,6 +3239,14 @@ const DICO = {
   },
 
   lb: {
+    "Partie 1 — recto": "Deel 1 — Virsäit",
+    "Partie 1 — verso": "Deel 1 — Récksäit",
+    "Partie 2 — recto": "Deel 2 — Virsäit",
+    "Partie 2 — verso": "Deel 2 — Récksäit",
+    "deux parties, modèle 2019 (sans valeur CO2)": "zwee Deeler, Modell 2019 (ouni CO2-Wäert)",
+    "deux parties (depuis septembre 2013)": "zwee Deeler (zënter September 2013)",
+    "feuille A4 rose ou sable (2011-2013)": "A4-Blat, rosa oder sandfaarweg (2011-2013)",
+    "ancien modèle, bande rose (avant 2011)": "alt Modell, rosa Sträif (virun 2011)",
     "Lecture difficile": "Schwéier ze liesen",
     "Je n’ai pas bien reconnu cette photo. Vous pouvez continuer quand même : ce qui a été lu vous sera montré.": "Ech hunn dëst Foto net gutt erkannt. Dir kënnt trotzdem weidermaachen: wat gelies gouf, gëtt Iech gewisen.",
     "Continuer quand même": "Trotzdem weidermaachen",
@@ -4169,6 +4185,14 @@ const DICO = {
   },
 
   en: {
+    "Partie 1 — recto": "Part 1 — front",
+    "Partie 1 — verso": "Part 1 — back",
+    "Partie 2 — recto": "Part 2 — front",
+    "Partie 2 — verso": "Part 2 — back",
+    "deux parties, modèle 2019 (sans valeur CO2)": "two parts, 2019 model (no CO2 value)",
+    "deux parties (depuis septembre 2013)": "two parts (since September 2013)",
+    "feuille A4 rose ou sable (2011-2013)": "A4 sheet, pink or sand (2011-2013)",
+    "ancien modèle, bande rose (avant 2011)": "old model, pink strip (before 2011)",
     "Lecture difficile": "Hard to read",
     "Je n’ai pas bien reconnu cette photo. Vous pouvez continuer quand même : ce qui a été lu vous sera montré.": "I did not recognise this photo well. You can continue anyway: whatever was read will be shown to you.",
     "Continuer quand même": "Continue anyway",
@@ -5106,6 +5130,14 @@ const DICO = {
   },
 
   de: {
+    "Partie 1 — recto": "Teil 1 — Vorderseite",
+    "Partie 1 — verso": "Teil 1 — Rückseite",
+    "Partie 2 — recto": "Teil 2 — Vorderseite",
+    "Partie 2 — verso": "Teil 2 — Rückseite",
+    "deux parties, modèle 2019 (sans valeur CO2)": "zwei Teile, Modell 2019 (ohne CO2-Wert)",
+    "deux parties (depuis septembre 2013)": "zwei Teile (seit September 2013)",
+    "feuille A4 rose ou sable (2011-2013)": "A4-Blatt, rosa oder sandfarben (2011-2013)",
+    "ancien modèle, bande rose (avant 2011)": "altes Modell, rosa Streifen (vor 2011)",
     "Lecture difficile": "Schwer lesbar",
     "Je n’ai pas bien reconnu cette photo. Vous pouvez continuer quand même : ce qui a été lu vous sera montré.": "Ich habe dieses Foto nicht gut erkannt. Sie können trotzdem fortfahren: Was gelesen wurde, wird Ihnen gezeigt.",
     "Continuer quand même": "Trotzdem fortfahren",
@@ -6059,6 +6091,14 @@ const DICO = {
   },
 
   nl: {
+    "Partie 1 — recto": "Deel 1 — voorzijde",
+    "Partie 1 — verso": "Deel 1 — achterzijde",
+    "Partie 2 — recto": "Deel 2 — voorzijde",
+    "Partie 2 — verso": "Deel 2 — achterzijde",
+    "deux parties, modèle 2019 (sans valeur CO2)": "twee delen, model 2019 (zonder CO2-waarde)",
+    "deux parties (depuis septembre 2013)": "twee delen (sinds september 2013)",
+    "feuille A4 rose ou sable (2011-2013)": "A4-blad, roze of zandkleurig (2011-2013)",
+    "ancien modèle, bande rose (avant 2011)": "oud model, roze strook (voor 2011)",
     "Lecture difficile": "Moeilijk leesbaar",
     "Je n’ai pas bien reconnu cette photo. Vous pouvez continuer quand même : ce qui a été lu vous sera montré.": "Ik heb deze foto niet goed herkend. U kunt toch doorgaan: wat gelezen is, wordt getoond.",
     "Continuer quand même": "Toch doorgaan",
@@ -7006,7 +7046,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.32';
+const VERSION = '2.33';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10773,6 +10813,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.33': { date: '27/09/2026', lignes: [
+    "L'adresse est retrouvée même quand son intitulé n'a pas été lu : le logiciel part du code postal et remonte d'une ou deux lignes.",
+    "Le fond de la photo est effacé, pas seulement recadré : tout ce qui entoure le document devient blanc, même les coins de table ou de tissu autour d'une carte posée de travers.",
+    "Le redressement était faux : le logiciel mesurait bien l'inclinaison mais tournait parfois du mauvais côté, ce qui la doublait. Les deux sens sont maintenant essayés, et le plus droit l'emporte.",
+    "La carte grise belge est reconnue en deux parties : quatre photos demandées — recto et verso de chaque partie — et un PDF de deux pages, une partie par feuille.",
+    "Les générations de carte grise belge sont reconnues : deux parties depuis septembre 2013, modèle 2019, feuille A4 de 2011 à 2013, ancienne bande rose avant."
+  ] },
   '2.32': { date: '27/09/2026', lignes: [
     "Le PDF des faces scannées ou importées est détouré : le document est isolé de la table ou du tissu, posé sur fond blanc, et couché à l'horizontale — deux cartes tiennent ainsi sur une page.",
     "La fenêtre de relecture ne propose plus que ce qui sert : nom, prénom, date et lieu de naissance, adresse, commune, sexe. Le numéro du document et sa date de validité ont disparu.",
@@ -24396,26 +24443,44 @@ function plusGrandeTache(masque, l, h){
 
 /* L'inclinaison de la tache : l'orientation de son axe le plus long.
    Un document pose de travers de quelques degres redevient droit. */
+/* L'inclinaison du document : on cherche l'angle qui rend son cadre le
+   PLUS PETIT. Un rectangle droit tient dans un cadre serre ; incline,
+   il en demande un plus grand. On essaie donc chaque degre entre -25 et
+   +25 et l'on garde le meilleur.
+   L'axe principal, utilise auparavant, se trompait sur les documents
+   presque carres — une carte d'identite vue de face en fait partie —
+   et l'image restait de travers. */
 function inclinaison(tache){
   const p = tache.points, n = p.length / 2;
-  if(n < 50) return 0;
+  if(n < 80) return 0;
   let mx = 0, my = 0;
   for(let i = 0; i < p.length; i += 2){ mx += p[i]; my += p[i + 1]; }
   mx /= n; my /= n;
-  let sxx = 0, syy = 0, sxy = 0;
-  for(let i = 0; i < p.length; i += 2){
-    const dx = p[i] - mx, dy = p[i + 1] - my;
-    sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+
+  let meilleurAngle = 0, plusPetit = Infinity;
+  for(let deg = -25; deg <= 25; deg++){
+    const a = deg * Math.PI / 180;
+    const cos = Math.cos(a), sin = Math.sin(a);
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    /* Un point sur quatre suffit pour mesurer un cadre. */
+    for(let i = 0; i < p.length; i += 8){
+      const dx = p[i] - mx, dy = p[i + 1] - my;
+      const x = dx * cos - dy * sin, y = dx * sin + dy * cos;
+      if(x < x0) x0 = x; if(x > x1) x1 = x;
+      if(y < y0) y0 = y; if(y > y1) y1 = y;
+    }
+    const aire = (x1 - x0) * (y1 - y0);
+    if(aire < plusPetit){ plusPetit = aire; meilleurAngle = a; }
   }
-  const angle = 0.5 * Math.atan2(2 * sxy, sxx - syy);
-  /* Au-dela de 20 degres, ce n'est plus une photo de travers : c'est
-     autre chose, et mieux vaut ne rien tourner. */
-  return Math.abs(angle) > 0.35 ? 0 : angle;
+  return meilleurAngle;
 }
 
 /* Ou est le document dans cette image ? Rend la tache claire la plus
    grande, en coordonnees de l'image d'origine, ou rien du tout. */
-function tacheDuDocument(toile){
+/* « ignorerNoir » sert apres une rotation : les coins ajoutes sont d'un
+   noir parfait et fausseraient le seuil — celui-ci se placerait entre
+   le noir et le tissu, et le tissu passerait alors pour le document. */
+function tacheDuDocument(toile, ignorerNoir){
   const L = toile.width, H = toile.height;
   /* L'analyse se fait en petit — 320 points de large suffisent — puis
      le resultat s'applique a l'image entiere. */
@@ -24428,19 +24493,59 @@ function tacheDuDocument(toile){
 
   const gris = new Uint8Array(l * h);
   const histo = new Uint32Array(256);
+  let comptes = 0;
   for(let i = 0, j = 0; i < d.length; i += 4, j++){
     const g = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) | 0;
-    gris[j] = g; histo[g]++;
+    gris[j] = g;
+    if(ignorerNoir && g < 14) continue;
+    histo[g]++; comptes++;
   }
-  const seuil = seuilOtsu(histo, l * h);
+  const seuil = seuilOtsu(histo, comptes || (l * h));
   const masque = new Uint8Array(l * h);
-  for(let j = 0; j < gris.length; j++) masque[j] = gris[j] > seuil ? 1 : 0;
+  for(let j = 0; j < gris.length; j++){
+    masque[j] = (gris[j] > seuil && !(ignorerNoir && gris[j] < 14)) ? 1 : 0;
+  }
 
   const tache = plusGrandeTache(masque, l, h);
   if(!tache) return null;
   tache.part = tache.taille / (l * h);
   tache.echelle = L / l;
   return tache;
+}
+
+/* Blanchit, dans l'image recadree, tout ce qui se trouve hors de la
+   tache du document. Le masque a ete calcule en petit : on le relit en
+   place, en ramenant chaque point de l'image a sa case d'origine. */
+function effacerAutour(toile, tache, decalX, decalY, k){
+  try{
+    const l = toile.width, h = toile.height;
+    /* Le masque de la tache, sous forme de grille. */
+    const petiteL = Math.round(tache.x1 - tache.x0) + 1;
+    const dans = {};
+    const p = tache.points;
+    for(let i = 0; i < p.length; i += 2){
+      dans[p[i] + ':' + p[i + 1]] = 1;
+    }
+    const c = toile.getContext('2d');
+    const img = c.getImageData(0, 0, l, h);
+    const q = img.data;
+    for(let y = 0; y < h; y++){
+      const py = Math.round((y + decalY) / k);
+      for(let x = 0; x < l; x++){
+        const px = Math.round((x + decalX) / k);
+        if(dans[px + ':' + py]) continue;
+        /* Hors du document : blanc. On regarde aussi les cases
+           voisines, le masque etant huit fois plus grossier que
+           l'image. */
+        if(dans[(px - 1) + ':' + py] || dans[(px + 1) + ':' + py] ||
+           dans[px + ':' + (py - 1)] || dans[px + ':' + (py + 1)]) continue;
+        const i = (y * l + x) * 4;
+        q[i] = q[i + 1] = q[i + 2] = 255;
+      }
+    }
+    c.putImageData(img, 0, 0);
+  }catch(e){}
+  return toile;
 }
 
 function detourerDocument(toile){
@@ -24473,23 +24578,44 @@ function detourerDocument(toile){
     const cadree = document.createElement('canvas');
     cadree.width = lc; cadree.height = hc;
     cadree.getContext('2d').drawImage(toile, cx0, cy0, lc, hc, 0, 0, lc, hc);
-    if(!angle) return blanchirCoins(cadree);
+    /* Le fond ne s'efface qu'APRES la rotation : blanchi trop tot, il
+       faisait disparaitre le seul indice qui permet de choisir le bon
+       sens — le contraste entre le papier et ce qui l'entoure. */
+    if(!angle){
+      effacerAutour(cadree, tache, cx0, cy0, k);
+      return blanchirCoins(cadree);
+    }
 
     /* 2. ON REDRESSE, sur fond noir : les coins laisses par la rotation
        se distinguent ainsi du papier, et la seconde recherche ne peut
-       plus les confondre avec lui. */
+       plus les confondre avec lui.
+       LES DEUX SENS SONT ESSAYES. La mesure donne un angle, pas un
+       sens : tourner du mauvais cote doublait l'inclinaison au lieu de
+       la corriger, et la carte restait de travers. On garde le sens qui
+       rend le document le plus droit — celui dont le cadre est le plus
+       petit. */
     const diag = Math.ceil(Math.sqrt(lc * lc + hc * hc));
-    const tournee = document.createElement('canvas');
-    tournee.width = diag; tournee.height = diag;
-    const tc = tournee.getContext('2d');
-    tc.fillStyle = '#000000'; tc.fillRect(0, 0, diag, diag);
-    tc.translate(diag / 2, diag / 2);
-    tc.rotate(-angle);
-    tc.drawImage(cadree, -lc / 2, -hc / 2);
+    const tourner = function(a){
+      const t = document.createElement('canvas');
+      t.width = diag; t.height = diag;
+      const c = t.getContext('2d');
+      c.fillStyle = '#000000'; c.fillRect(0, 0, diag, diag);
+      c.translate(diag / 2, diag / 2);
+      c.rotate(a);
+      c.drawImage(cadree, -lc / 2, -hc / 2);
+      return t;
+    };
+    let tournee = null, apres = null, plusPetit = Infinity;
+    for(const sens of [-angle, angle]){
+      const essai = tourner(sens);
+      const tache2 = tacheDuDocument(essai, true);
+      if(!tache2) continue;
+      const aire = (tache2.x1 - tache2.x0) * (tache2.y1 - tache2.y0);
+      if(aire < plusPetit){ plusPetit = aire; tournee = essai; apres = tache2; }
+    }
 
     /* 3. ON RECOUPE au ras du document redresse. */
-    const apres = tacheDuDocument(tournee);
-    if(!apres) return blanchirCoins(cadree);
+    if(!tournee || !apres) return blanchirCoins(cadree);
     const ka = apres.echelle;
     const m2 = Math.round(Math.min(apres.x1 - apres.x0, apres.y1 - apres.y0) * ka * 0.02);
     const nx0 = Math.max(0, Math.round(apres.x0 * ka) - m2);
@@ -24504,6 +24630,9 @@ function detourerDocument(toile){
     const fc = fin.getContext('2d');
     fc.fillStyle = '#ffffff'; fc.fillRect(0, 0, lf, hf);
     fc.drawImage(tournee, nx0, ny0, lf, hf, 0, 0, lf, hf);
+    /* TOUT CE QUI N'EST PAS LE DOCUMENT DEVIENT BLANC : meme droit, un
+       document laisse un peu de tissu dans les coins. */
+    effacerAutour(fin, apres, nx0, ny0, ka);
     return blanchirCoins(fin);
   }catch(e){
     return toile;    // au moindre doute, l'image d'origine
@@ -24598,9 +24727,13 @@ const TYPES_CARTE_GRISE = [
   { id:'nl', pays:'NL', nom:'Carte grise néerlandaise',
     mots:['KENTEKENBEWIJS','RIJKSDIENST','TENAAMSTELLING','WEGVERKEER'],
     volets:['Volet I A','Volet I B','Volet II'] },
+  /* Depuis le 1er septembre 2013, le certificat belge est en DEUX
+     PARTIES a conserver separement — l'une dans la voiture, l'autre a
+     la maison. Il faut donc quatre photos : chaque partie a un recto et
+     un verso, et elles ne peuvent pas tenir sur la meme page. */
   { id:'be', pays:'BE', nom:'Carte grise belge',
     mots:['INSCHRIJVINGSBEWIJS','BELGIQUE','BELGIE','BELGIË','D.I.V.','DIV '],
-    volets:['Recto','Verso'] },
+    volets:['Partie 1 — recto','Partie 1 — verso','Partie 2 — recto','Partie 2 — verso'] },
   { id:'lu', pays:'LU', nom:'Carte grise luxembourgeoise',
     mots:['LUXEMBOURG','GRAND-DUCHE','SNCA'],
     volets:['Recto','Verso'] },
@@ -24664,6 +24797,12 @@ const GENERATIONS_CARTE_GRISE = {
     { depuis: 2014, nom: 'kentekencard, format carte (depuis 2014)' },
     { depuis: 2004, nom: 'papier, volets I A / I B / II (2004-2013)' },
     { depuis: 0,    nom: 'papier, trois volets (avant 2004)' }
+  ],
+  BE: [
+    { depuis: 2019, nom: 'deux parties, modèle 2019 (sans valeur CO2)' },
+    { depuis: 2013, nom: 'deux parties (depuis septembre 2013)' },
+    { depuis: 2011, nom: 'feuille A4 rose ou sable (2011-2013)' },
+    { depuis: 0,    nom: 'ancien modèle, bande rose (avant 2011)' }
   ]
 };
 
@@ -24674,7 +24813,8 @@ const INDICES_GENERATION = [
   { pays:'DE', mots:['FAHRZEUGSCHEIN','FAHRZEUGBRIEF'], nom:'ancien Fahrzeugschein (avant 2005)', siSeul:true },
   { pays:'NL', mots:['KENTEKENCARD','TENAAMSTELLINGSCODE'], nom:'kentekencard, format carte (depuis 2014)' },
   { pays:'NL', mots:['OVERSCHRIJVINGSBEWIJS'], nom:'papier, volets I A / I B / II (2004-2013)', siSeul:true },
-  { pays:'FR', mots:['ANTS','AGENCE NATIONALE DES TITRES'], nom:'nouveau format SIV (depuis 2009)' }
+  { pays:'FR', mots:['ANTS','AGENCE NATIONALE DES TITRES'], nom:'nouveau format SIV (depuis 2009)' },
+  { pays:'BE', mots:['PARTIE 2','DEEL 2','PARTIE II','DEEL II'], nom:'deux parties (depuis septembre 2013)' }
 ];
 
 function generationCarteGrise(lu, texte, type){
@@ -24807,6 +24947,14 @@ function lireCarteGrise(texte){
   if(champs['D.3']) res.modele = champs['D.3'];
   /* Repere I : la date de delivrance du certificat lui-meme. */
   res.dateCertif = date(champs['I']);
+
+  /* Le repere C.3 n'a pas ete lu — il est imprime petit et pale sur
+     beaucoup de certificats : on cherche alors l'adresse comme sur une
+     piece d'identite, en partant du code postal. */
+  if(!res.cp && !res.adresse){
+    const secours = lireAdresseIdentite(texte);
+    if(secours.cp || secours.adresse) Object.assign(res, secours);
+  }
 
   /* Rien ne sert de proposer un champ vide. */
   Object.keys(res).forEach(function(k){ if(!res[k]) delete res[k]; });
@@ -25384,7 +25532,13 @@ function fusionnerVolets(a, b){
    au-dessus de l'autre. C'est ce qu'on attend d'une carte d'identite :
    recto et verso sur la meme page, comme une photocopie. Une carte
    grise, plus grande et plus dense, garde une page par volet. */
-async function pdfDesFaces(fichiers, surUnePage){
+/* « parPage » : combien de faces tiennent sur une feuille.
+     2 pour une carte d'identite — recto et verso, comme une photocopie ;
+     1 pour une carte grise francaise, allemande ou neerlandaise, plus
+       grande et plus dense ;
+     2 pour une carte grise belge, dont chaque PARTIE a un recto et un
+       verso : quatre photos, deux pages, une partie par page. */
+async function pdfDesFaces(fichiers, parPage){
   if(typeof PDFLib === 'undefined') return null;
   const pdf = await PDFLib.PDFDocument.create();
   /* Chaque face est compressee pour que le tout reste sous 1 Mo — la
@@ -25413,19 +25567,23 @@ async function pdfDesFaces(fichiers, surUnePage){
   }
   if(!images.length) return null;
 
-  if(surUnePage){
+  const parFeuille = (parPage === true) ? images.length : (Number(parPage) || 1);
+  if(parFeuille > 1){
     const L = 595.28, H = 841.89;          // A4 portrait
-    const page = pdf.addPage([L, H]);
-    const marge = 28, entre = 22;
-    const hauteurCase = (H - marge * 2 - entre * (images.length - 1)) / images.length;
-    images.forEach(function(im, i){
-      const e = Math.min((L - marge * 2) / im.jpg.width, hauteurCase / im.jpg.height);
-      const w = im.jpg.width * e, h = im.jpg.height * e;
-      const hautCase = H - marge - i * (hauteurCase + entre);
-      page.drawImage(im.jpg, { x: (L - w) / 2,
-                               y: hautCase - hauteurCase + (hauteurCase - h) / 2,
-                               width: w, height: h });
-    });
+    for(let debut = 0; debut < images.length; debut += parFeuille){
+      const lot = images.slice(debut, debut + parFeuille);
+      const page = pdf.addPage([L, H]);
+      const marge = 28, entre = 22;
+      const hauteurCase = (H - marge * 2 - entre * (lot.length - 1)) / lot.length;
+      lot.forEach(function(im, i){
+        const e = Math.min((L - marge * 2) / im.jpg.width, hauteurCase / im.jpg.height);
+        const w = im.jpg.width * e, h = im.jpg.height * e;
+        const hautCase = H - marge - i * (hauteurCase + entre);
+        page.drawImage(im.jpg, { x: (L - w) / 2,
+                                 y: hautCase - hauteurCase + (hauteurCase - h) / 2,
+                                 width: w, height: h });
+      });
+    }
   }else{
     images.forEach(function(im){
       const L = im.large ? 841.89 : 595.28, H = im.large ? 595.28 : 841.89;
@@ -25460,10 +25618,10 @@ async function identifierDocument(fichier){
 
 /* Range le PDF dans le dossier de la voiture, sans rien demander : on
    vient de photographier le document, on sait ce que c'est. */
-async function joindreFacesScannees(v, fichiers, nom, surUnePage){
+async function joindreFacesScannees(v, fichiers, nom, parPage){
   if(!v || !fichiers || !fichiers.length) return false;
   try{
-    const fait = await pdfDesFaces(fichiers, surUnePage);
+    const fait = await pdfDesFaces(fichiers, parPage);
     if(!fait) return false;
     const d = descriptionVehicule(v);
     const plaque = (d.plaque || d.vin || 'SANS-PLAQUE').replace(/[^A-Za-z0-9-]/g, '').toUpperCase();
@@ -25541,7 +25699,10 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
       remplirDepuisCarteGrise(v, gardes);
       /* Les photos prises deviennent un PDF joint au dossier : le
          document est rempli ET conserve. */
-      const joint = await joindreFacesScannees(v, faces, t('Carte grise'));
+      /* Quatre photos — une carte grise belge — tiennent deux par page :
+         une partie par feuille. Deux photos : une par page. */
+      const joint = await joindreFacesScannees(v, faces, t('Carte grise'),
+                                               faces.length >= 4 ? 2 : 1);
       bandeau(t(joint ? 'Document rempli et carte grise jointe au dossier'
                       : 'Document rempli'), 'ok');
       renderMain();
@@ -25756,7 +25917,11 @@ function lireAdresseIdentite(texte){
   const lignes = [];
   for(let i = 0; i < l.length; i++){
     const haut = majuscules(l[i]);
-    if(haut.indexOf('ADRESSE') !== 0 && haut.indexOf('DOMICILE') !== 0) continue;
+    /* Le mot ADRESSE n'est plus exige EN DEBUT de ligne : sur une carte
+       francaise il est colle a sa traduction — « ADRESSE/ Address » —
+       et le lecteur rend parfois un caractere parasite devant. */
+    if(haut.indexOf('ADRESSE') === -1 && haut.indexOf('DOMICILE') === -1
+       && haut.indexOf('ADDRESS') === -1) continue;
     /* Ce qui suit le mot sur la meme ligne — apres « : » ou apres la
        partie anglaise d'un intitule bilingue —, puis les lignes
        suivantes jusqu'au code postal, qui termine toujours une
@@ -25770,6 +25935,29 @@ function lireAdresseIdentite(texte){
     }
     break;
   }
+  /* Sans intitule lisible — il est imprime tres petit et disparait
+     souvent a la lecture —, on part du CODE POSTAL : une ligne qui
+     commence par cinq chiffres suivis d'un nom de commune ne peut etre
+     qu'une fin d'adresse. Les une ou deux lignes au-dessus forment la
+     voie, si elles en ont l'allure. */
+  if(!lignes.length){
+    for(let i = 0; i < l.length; i++){
+      const m = majuscules(l[i]).match(/^(\d{5})\s+([A-Z][A-Z'\- ]{2,40})$/);
+      if(!m) continue;
+      const avant = [];
+      for(let k = Math.max(0, i - 2); k < i; k++){
+        const x = majuscules(l[k]);
+        /* Une voie porte un numero, ou l'un de ces mots. */
+        if(/\d/.test(x) || /\b(RUE|AVENUE|AV|BOULEVARD|BD|CHEMIN|ROUTE|PLACE|IMPASSE|ALLEE|RESIDENCE|LIEU|QUAI|COURS)\b/.test(x)){
+          avant.push(l[k]);
+        }
+      }
+      lignes.push.apply(lignes, avant);
+      lignes.push(l[i]);
+      break;
+    }
+  }
+
   const bloc = lignes.join(' ').replace(/\s{2,}/g, ' ').trim();
   if(!bloc) return res;
   const cp = bloc.match(/\b(\d{5})\b\s*(.*)$/);
@@ -26346,7 +26534,7 @@ async function scannerIdentite(fichier, v, parLaCamera){
         { pays: (lu && lu.pays) || '', nationalite: (lu && lu.nationalite) || '' }, gardes));
       /* Carte d'identite : recto et verso sur UNE page, comme une
          photocopie. */
-      const joint = await joindreFacesScannees(v, faces, t('Pièce d’identité'), true);
+      const joint = await joindreFacesScannees(v, faces, t('Pièce d’identité'), 2);
       bandeau(t(joint ? 'Document rempli et pièce jointe au dossier'
                       : 'Document rempli'), 'ok');
       renderMain();
@@ -26467,7 +26655,7 @@ async function importerPieceJointe(fichier, vehicule){
     bandeauEnvoi('');
   }
   if(reconnu){
-    surUnePage = (reconnu.type === 'identite');
+    surUnePage = (reconnu.type === 'identite') ? 2 : 1;
     const autre = reconnu.type === 'identite'
       ? nomDuCote(reconnu.cote === 'recto' ? 'verso' : (reconnu.cote === 'verso' ? 'recto' : ''))
       : t('l’autre face du document');
@@ -26542,7 +26730,7 @@ async function importerPieceJointe(fichier, vehicule){
     if(faces.length > 1){
       /* Plusieurs faces : un seul PDF, d'UNE page pour une carte
          d'identite, de DEUX pour une carte grise. */
-      const fait = await pdfDesFaces(faces, surUnePage);
+      const fait = await pdfDesFaces(faces, faces.length >= 4 ? 2 : surUnePage);
       if(!fait) throw new Error(t('Document introuvable.'));
       b64 = fait.b64; taille = fait.taille; ext = 'pdf'; mime = 'application/pdf';
     }else if(estImage(fichier)){
