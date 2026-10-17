@@ -10864,7 +10864,8 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
   '2.35': { date: '27/09/2026', lignes: [
-    "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé."
+    "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé.",
+    "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents."
   ] },
   '2.34': { date: '27/09/2026', lignes: [
     "La barre des boutons d'un document se fait défiler quand elle dépasse : sur PC, « Scanner la carte grise » et « Scanner une pièce d'identité » se trouvaient hors de l'écran, sans moyen de les atteindre.",
@@ -13949,12 +13950,60 @@ function fmtJour(iso){
   return d.d ? (d.d + '/' + d.m + '/' + d.y) : '';
 }
 
+/* Jour, mois, annee d'une date, LUE COMME TEXTE.
+   Avant, la date passait par new Date(), ce qui la faisait disparaitre
+   du Cerfa imprime dans deux cas :
+     - une date au format francais (« 22/04/1985 », corrigee a la main
+       dans la fenetre de relecture d'une piece d'identite) : new Date()
+       ne la comprend pas et rendait une date vide ;
+     - « 1/4/1985 » etait lu a l'americaine, 4 janvier au lieu du 1er avril.
+   Et une date AAAA-MM-JJ etait prise a minuit heure universelle : outre-mer
+   (Antilles, Guyane, Reunion selon le sens), le jour pouvait glisser de un. */
 function dparts(iso){
-  if(!iso) return {d:'',m:'',y:''};
-  const dt = new Date(iso);
-  if(isNaN(dt)) return {d:'',m:'',y:''};
+  const vide = {d:'',m:'',y:''};
+  if(!iso) return vide;
+  const s = String(iso).trim();
+  const bon = function(j, m, a){
+    j = parseInt(j, 10); m = parseInt(m, 10); a = parseInt(a, 10);
+    if(!(j >= 1 && j <= 31 && m >= 1 && m <= 12 && a >= 1000 && a <= 9999)) return vide;
+    return { d:String(j).padStart(2,'0'), m:String(m).padStart(2,'0'), y:String(a) };
+  };
+  let r = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);            // 1985-04-22 (champ date)
+  if(r) return bon(r[3], r[2], r[1]);
+  r = s.match(/^(\d{1,2})[\/.\- ](\d{1,2})[\/.\- ](\d{4})$/);   // 22/04/1985, 22.04.1985
+  if(r) return bon(r[1], r[2], r[3]);
+  const dt = new Date(s);
+  if(isNaN(dt)) return vide;
   return { d:String(dt.getDate()).padStart(2,'0'), m:String(dt.getMonth()+1).padStart(2,'0'), y:String(dt.getFullYear()) };
 }
+
+/* LES CHAMPS DATE SUR IPHONE.
+   Tous les formulaires enregistrent une saisie sur l'evenement « input ».
+   Or sur iPhone, choisir une date dans la roue ne declenche pas toujours
+   « input » : seulement « change », parfois a la fermeture de la roue.
+   La date s'affichait donc dans le champ, mais n'etait jamais ecrite
+   dans la fiche — et le Cerfa imprime sortait sans elle. Ici, tout
+   « change » d'un champ date ou heure est relaye comme une saisie : le
+   formulaire l'enregistre exactement comme une frappe au clavier. */
+(function(){
+  const DATES = 'input[type="date"],input[type="time"],input[type="month"],input[type="datetime-local"]';
+  function relayer(champ){
+    champ.__dateRelayee = champ.value;
+    champ.dispatchEvent(new Event('input', {bubbles: true}));
+  }
+  document.addEventListener('focusin', function(e){
+    const c = e.target;
+    if(c && c.matches && c.matches(DATES)) c.__dateRelayee = c.value;
+  }, true);
+  document.addEventListener('change', function(e){
+    const c = e.target;
+    if(c && c.matches && c.matches(DATES)) relayer(c);
+  }, true);
+  document.addEventListener('focusout', function(e){
+    const c = e.target;
+    if(c && c.matches && c.matches(DATES) && c.value !== c.__dateRelayee) relayer(c);
+  }, true);
+})();
 
 async function generateCerfa15776Brut(v, d){
   if(typeof PDFLib === 'undefined' || typeof CERFA_15776_B64 === 'undefined'){
@@ -25694,7 +25743,12 @@ function imageEnBase64(toile){
   return url.slice(url.indexOf(',') + 1);
 }
 
-async function lireParLeServeur(toile){
+/* Ce que le serveur a rendu en dernier : soit du texte, soit des CHAMPS
+   deja ranges quand c'est Mindee qui a repondu. */
+let champsDuServeur = null;
+
+async function lireParLeServeur(toile, type){
+  champsDuServeur = null;
   if(serveurLitLesImages === false) return '';
   if(!serveurPret() || !sessionServeur || !sessionServeur.access_token) return '';
   try{
@@ -25705,17 +25759,27 @@ async function lireParLeServeur(toile){
         'Authorization': 'Bearer ' + sessionServeur.access_token,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ image: imageEnBase64(toile) })
+      body: JSON.stringify({ image: imageEnBase64(toile), type: type || 'carteGrise' })
     });
     const rep = await r.json().catch(function(){ return null; });
-    if(!r.ok || !rep || !rep.texte){
+    if(!r.ok || !rep || (!rep.texte && !rep.champs)){
       /* Fonction absente ou cle non posee : on ne reessaiera pas de la
          session, inutile de faire attendre a chaque photo. */
       if(r.status === 404 || r.status === 500) serveurLitLesImages = false;
       return '';
     }
     serveurLitLesImages = true;
-    return rep.texte;
+    /* Mindee rend les champs directement : plus rien a deviner. */
+    if(rep.champs && Object.keys(rep.champs).length){
+      champsDuServeur = rep.champs;
+      /* On rend tout de meme un texte, fait des valeurs : les
+         verifications du logiciel — est-ce bien une carte grise, quel
+         pays, quel modele — continuent de fonctionner. */
+      return Object.keys(rep.champs).map(function(k){
+        return k + ' : ' + rep.champs[k];
+      }).join('\n');
+    }
+    return rep.texte || '';
   }catch(e){
     return '';
   }
@@ -25758,10 +25822,10 @@ async function lireToile(toile){
 }
 
 /* Lit l'image, et la retourne si elle etait couchee. */
-async function lireDansLeBonSens(toile){
+async function lireDansLeBonSens(toile, typeAttendu){
   /* Le serveur d'abord, s'il est en mesure de lire : il n'a pas besoin
      qu'on lui redresse l'image, il s'en charge. */
-  const parLeServeur = await lireParLeServeur(toile);
+  const parLeServeur = await lireParLeServeur(toile, typeAttendu);
   if(parLeServeur && scoreDocument(parLeServeur) >= 2){
     derniereLectureServeur = true;
     return parLeServeur;
@@ -25820,7 +25884,33 @@ async function relireLaBande(toile){
   }catch(e){ return ''; }
 }
 
-async function lireUnVolet(fichier, parLaCamera, source){
+/* Les champs rendus par le serveur, remis au format du logiciel : les
+   dates au format interne, les vides ecartes. */
+function nettoyerChampsServeur(champs){
+  const r = {};
+  Object.keys(champs || {}).forEach(function(k){
+    let v = String(champs[k] || '').trim();
+    if(!v) return;
+    if(/^(naissance|expire|dateFirstImmat|dateCertif)$/.test(k)){
+      v = dateInterne(v) || v;
+    }
+    r[k] = v;
+  });
+  /* L'adresse arrive d'un seul tenant — « 12 RUE DES LILAS 59000
+     LILLE » — alors que les Cerfa demandent la voie, le code postal et
+     la commune separement. */
+  if(r.adresse && !r.cp){
+    const m = r.adresse.match(/\b(\d{5})\b\s*(.*)$/);
+    if(m){
+      r.cp = m[1];
+      r.ville = nettoyerLigneOcr(m[2]).replace(/\bFRANCE\b/i, '').trim();
+      r.adresse = nettoyerLigneOcr(r.adresse.slice(0, m.index));
+    }
+  }
+  return r;
+}
+
+async function lireUnVolet(fichier, parLaCamera, source, typeAttendu){
   const toile = await preparerImageOcr(fichier);
   bandeau('', '');
   if(await photoFloue(toile)){
@@ -25831,7 +25921,7 @@ async function lireUnVolet(fichier, parLaCamera, source){
   }
   bandeau(t('Lecture en cours…'), 'attente');
   await moteurOcrPret();
-  let texte = await lireDansLeBonSens(toile);
+  let texte = await lireDansLeBonSens(toile, typeAttendu);
 
   /* SECONDE LECTURE, SUR LA BANDE SEULE. Les trois lignes du bas d'une
      piece d'identite sont ecrites dans une police etroite et serree :
@@ -25845,7 +25935,12 @@ async function lireUnVolet(fichier, parLaCamera, source){
   }
 
   bandeau('', '');
-  return { texte: texte, lu: lireCarteGrise(texte), toile: toile };
+  /* Quand le serveur a rendu des CHAMPS — Mindee —, ils l'emportent :
+     ils sont issus d'un service qui connait ces documents, la ou le
+     logiciel doit deviner a partir du texte. */
+  const lu = lireCarteGrise(texte);
+  if(champsDuServeur) Object.assign(lu, nettoyerChampsServeur(champsDuServeur));
+  return { texte: texte, lu: lu, champs: champsDuServeur, toile: toile };
 }
 
 /* Les volets se completent : le premier donne souvent le vehicule, le
@@ -25949,7 +26044,7 @@ async function identifierDocument(fichier){
   try{
     const toile = await preparerImageOcr(fichier);
     await moteurOcrPret();
-    const texte = await lireDansLeBonSens(toile);
+    const texte = await lireDansLeBonSens(toile, typeAttendu);
     if(estPieceIdentite(texte)) return { type: 'identite', nom: t('Pièce d’identité'),
                                          cote: coteIdentite(texte), texte: texte };
     if(certificatEvident(texte) || signesCarteGrise(texte) >= 3){
@@ -25986,7 +26081,7 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
   bandeau(t('Lecture de la carte grise…'), 'attente');
   try{
     const faces = [fichier];
-    const premier = await lireUnVolet(fichier, parLaCamera, 'scanCG');
+    const premier = await lireUnVolet(fichier, parLaCamera, 'scanCG', 'carteGrise');
     if(!premier) return;
 
     /* Deux signes concordants au minimum. En dessous, ce n'est pas une
@@ -26029,7 +26124,7 @@ async function scannerCarteGrise(fichier, v, parLaCamera){
         if(photo === 'sans-camera') photo = null;
       }
       if(!photo) break;
-      const volet = await lireUnVolet(photo, true, 'scanCG');
+      const volet = await lireUnVolet(photo, true, 'scanCG', 'carteGrise');
       if(!volet) break;
       faces.push(photo);
       lu = fusionnerVolets(lu, volet.lu);
@@ -26533,8 +26628,11 @@ function dateFrancaise(valeur){
 }
 
 function dateInterne(valeur){
-  const m = String(valeur || '').match(/^(\d{2})[\/.\-](\d{2})[\/.\-](\d{4})$/);
-  return m ? (m[3] + '-' + m[2] + '-' + m[1]) : String(valeur || '');
+  /* « 1/4/1985 » comme « 01/04/1985 » : le champ date de la fiche
+     n'accepte que AAAA-MM-JJ, et une date restee au format francais
+     ne s'affichait pas dans le champ. */
+  const m = String(valeur || '').trim().match(/^(\d{1,2})[\/.\- ](\d{1,2})[\/.\- ](\d{4})$/);
+  return m ? (m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0')) : String(valeur || '');
 }
 
 function fenetreIdentite(lu){
@@ -26794,9 +26892,12 @@ async function scannerIdentite(fichier, v, parLaCamera){
   bandeau(t('Lecture de la pièce d’identité…'), 'attente');
   try{
     const faces = [fichier];
-    const premiere = await lireUnVolet(fichier, parLaCamera, 'scanID');
+    const premiere = await lireUnVolet(fichier, parLaCamera, 'scanID', 'identite');
     if(!premiere) return;
     let lu = lireUneFaceIdentite(premiere.texte);
+    /* Si le serveur a rendu des champs, ils l'emportent sur ce que le
+       logiciel a devine a partir du texte. */
+    if(premiere.champs) Object.assign(lu, nettoyerChampsServeur(premiere.champs));
     let texteTotal = premiere.texte;
     let premiereFace = faceIdentite(premiere.texte);
 
@@ -26861,7 +26962,7 @@ async function scannerIdentite(fichier, v, parLaCamera){
       essais++;
       const photo = await photoSuivanteIdentite(t('Pièce d’identité') + ' — ' + precision);
       if(!photo) break;
-      const seconde = await lireUnVolet(photo, true, 'scanID');
+      const seconde = await lireUnVolet(photo, true, 'scanID', 'identite');
       if(!seconde) break;
 
       const face = faceIdentite(seconde.texte);
@@ -26906,7 +27007,10 @@ async function scannerIdentite(fichier, v, parLaCamera){
         });
         continue;
       }
-      lu = fusionnerVolets(lu, lireUneFaceIdentite(seconde.texte));
+      lu = fusionnerVolets(lu, seconde.champs
+            ? Object.assign(lireUneFaceIdentite(seconde.texte),
+                            nettoyerChampsServeur(seconde.champs))
+            : lireUneFaceIdentite(seconde.texte));
       texteTotal += '\n' + seconde.texte;
       faces.push(photo);
       break;
