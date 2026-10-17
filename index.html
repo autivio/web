@@ -191,7 +191,7 @@
        « overflow:hidden » sur la page elle-meme acheve le travail :
        rien de ce qui deborde ne peut creer de page supplementaire. */
     @page{size:210mm 297mm;margin:0;}
-    #splashScreen,#authScreen,#sidebar,.topbar,.tabs,.doc-toolbar,.cerfa-form,
+    #splashScreen,#authScreen,#sidebar,.topbar,.tabs,.ds,.ds-feuille,.ds-voile,.doc-toolbar,.cerfa-form,
     .pdf-fallback,.note,#envoiEtat,.rech-bloc,.tb-entete{display:none !important;}
     #app{display:block !important;}
     html,body{margin:0 !important;padding:0 !important;
@@ -938,7 +938,7 @@
   .author-credit{font-size:10.5px;color:var(--sidebar-ink);opacity:.7;text-align:center;margin-top:2px;}
 
   @media print{
-    #sidebar,.topbar,.tabs,.doc-toolbar,.note{display:none !important;}
+    #sidebar,.topbar,.tabs,.ds,.ds-feuille,.ds-voile,.doc-toolbar,.note{display:none !important;}
     #main{padding:0;background:#fff;}
     .doc{box-shadow:none;border:none;max-width:100%;padding:10mm;}
     body{background:#fff;}
@@ -1012,6 +1012,76 @@
   .tab:hover{border-color:#c3d0e6;color:var(--ink);}
   .tab.active{background:var(--brand);border-color:var(--brand);color:#fff;
     box-shadow:0 6px 16px rgba(var(--brand-rgb),.24);}
+
+  /* ---- Choix du document : une liste deroulante ----
+     Treize boutons cote a cote prenaient trois lignes sur PC et
+     defilaient de travers sur telephone. Une seule case montre le
+     document ouvert ; elle deroule la liste, rangee par familles. */
+  .ds{position:relative;margin:2px 0 16px;max-width:640px;}
+  .ds-btn{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+    background:var(--panel,#fff);border:1px solid var(--line,#d9e1ee);border-radius:13px;
+    padding:10px 12px 10px 10px;cursor:pointer;font:inherit;color:var(--ink,#16233a);
+    box-shadow:0 1px 2px rgba(17,29,51,.05),0 4px 14px rgba(17,29,51,.04);
+    transition:border-color .15s,box-shadow .15s;}
+  .ds-btn:hover{border-color:#c3d0e6;}
+  .ds-btn[aria-expanded="true"],.ds-btn:focus-visible{outline:none;border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(var(--brand-rgb),.15);}
+  .ds-ico{flex:0 0 40px;height:40px;border-radius:10px;background:var(--brand-soft,#eaf0fb);
+    color:var(--brand);display:grid;place-items:center;}
+  .ds-txt{flex:1 1 auto;min-width:0;display:block;}
+  .ds-sur{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted,#7b8798);}
+  .ds-nom{display:block;font-size:15.5px;font-weight:700;margin-top:1px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ds-num{display:none;}
+  .ds-cerfa{flex:0 0 auto;font-size:12px;font-weight:600;color:var(--brand);
+    background:var(--brand-soft,#eaf0fb);border-radius:999px;padding:4px 10px;white-space:nowrap;}
+  .ds-chev{flex:0 0 30px;height:30px;border-radius:8px;background:rgba(16,26,44,.05);
+    color:var(--ink-soft,#5b6b84);display:grid;place-items:center;transition:transform .18s;}
+  .ds-btn[aria-expanded="true"] .ds-chev{transform:rotate(180deg);}
+  .ds-panneau{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;
+    background:var(--panel,#fff);border:1px solid var(--line,#d9e1ee);border-radius:14px;
+    box-shadow:0 22px 50px rgba(11,21,38,.20);padding:8px;
+    max-height:min(70vh,640px);overflow-y:auto;overscroll-behavior:contain;}
+  .ds-cherche{display:flex;align-items:center;gap:8px;margin:2px 2px 6px;padding:0 11px;
+    border-radius:10px;background:rgba(16,26,44,.045);color:var(--muted,#7b8798);}
+  .ds-cherche input{flex:1;min-width:0;border:none !important;background:transparent !important;
+    outline:none;box-shadow:none !important;font:inherit;font-size:16px;padding:10px 0 !important;
+    margin:0;height:auto;color:var(--ink,#16233a);border-radius:0;-webkit-appearance:none;appearance:none;}
+  .ds-cherche:focus-within{box-shadow:0 0 0 2px rgba(var(--brand-rgb),.25);}
+  .ds-groupe{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted,#7b8798);padding:10px 10px 4px;}
+  .ds-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;
+    background:transparent;font:inherit;padding:9px 10px;border-radius:9px;font-size:14.5px;
+    color:var(--ink,#16233a);cursor:pointer;}
+  .ds-item:hover,.ds-item.survol{background:rgba(16,26,44,.05);}
+  .ds-item .n{flex:1 1 auto;min-width:0;}
+  .ds-item .c{flex:0 0 auto;font-size:12px;color:var(--muted,#7b8798);white-space:nowrap;}
+  .ds-item .k{flex:0 0 18px;color:var(--brand);display:grid;place-items:center;}
+  .ds-item.actif{background:var(--brand-soft,#eaf0fb);font-weight:600;color:var(--brand);}
+  .ds-item.actif .c{color:var(--brand);}
+  .ds-vide{padding:14px 10px;color:var(--muted,#7b8798);font-size:14px;}
+  /* Sur telephone : la liste monte du bas de l'ecran */
+  .ds-voile{position:fixed;inset:0;background:rgba(11,21,38,.45);z-index:9990;
+    animation:dsFondu .18s ease-out;}
+  .ds-feuille{position:fixed;left:0;right:0;bottom:0;z-index:9991;background:var(--panel,#fff);
+    border-radius:20px 20px 0 0;max-height:85%;overflow-y:auto;overscroll-behavior:contain;
+    padding:8px 12px max(20px, env(safe-area-inset-bottom));
+    box-shadow:0 -10px 40px rgba(11,21,38,.25);animation:dsMonte .22s ease-out;}
+  .ds-poignee{width:42px;height:5px;border-radius:9px;background:#d5dce8;margin:4px auto 10px;}
+  .ds-ftitre{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:0 6px 8px;font-size:17px;font-weight:700;color:var(--ink,#16233a);}
+  .ds-fermer{flex:0 0 34px;height:34px;border-radius:50%;border:none;background:rgba(16,26,44,.07);
+    color:var(--ink,#16233a);font-size:16px;cursor:pointer;padding:0;}
+  .ds-feuille .ds-item{padding:13px 10px;font-size:15.5px;}
+  html:has(.ds-feuille), body:has(.ds-feuille){overflow:hidden;}
+  @keyframes dsMonte{from{transform:translateY(100%);}to{transform:none;}}
+  @keyframes dsFondu{from{opacity:0;}to{opacity:1;}}
+  @media(max-width:640px){
+    .ds{max-width:none;}
+    .ds-cerfa{display:none;}
+    .ds-num{display:inline;}
+  }
 
   /* ---- Champs de saisie ---- */
   input,textarea{background:#fff;border-radius:8px;padding:9px 11px;
@@ -2499,6 +2569,11 @@ const DICO = {
     "TVA non applicable": "IVA non applicabile",
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
+    "Choisir un document": "Choisi un documento",
+    "Rechercher un document…": "Cerca un documento…",
+    "Achat et vente": "Acquisto e vendita",
+    "Carte grise et fin de vie": "Carta di circolazione e fine vita",
+    "Aucun document ne correspond.": "Nessun documento corrisponde.",
     "Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.": "Questi dati figurano su fatture, contratti e moduli. Li inserisce una sola volta.",
     "Plus tard": "Più tardi",
     "Il manque encore :": "Manca ancora:",
@@ -3452,6 +3527,11 @@ const DICO = {
     "TVA non applicable": "TVA net uwendbar",
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
+    "Choisir un document": "En Dokument wielen",
+    "Rechercher un document…": "En Dokument sichen…",
+    "Achat et vente": "Kaf a Verkaf",
+    "Carte grise et fin de vie": "Carte grise an Enn vum Liewen",
+    "Aucun document ne correspond.": "Keen Dokument passt.",
     "Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.": "Dës Donnéeë stinn op Ären Rechnungen, Kontrakter a Formulairen. Dir gitt se nëmmen eng Kéier an.",
     "Plus tard": "Méi spéit",
     "Il manque encore :": "Et feelt nach:",
@@ -4404,6 +4484,11 @@ const DICO = {
     "TVA non applicable": "VAT not applicable",
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
+    "Choisir un document": "Choose a document",
+    "Rechercher un document…": "Search for a document…",
+    "Achat et vente": "Purchase and sale",
+    "Carte grise et fin de vie": "Registration certificate and end of life",
+    "Aucun document ne correspond.": "No document matches.",
     "Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.": "These details appear on your invoices, contracts and official forms. You only enter them once.",
     "Plus tard": "Later",
     "Il manque encore :": "Still missing:",
@@ -5355,6 +5440,11 @@ const DICO = {
     "TVA non applicable": "Umsatzsteuer nicht anwendbar",
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
+    "Choisir un document": "Dokument wählen",
+    "Rechercher un document…": "Dokument suchen…",
+    "Achat et vente": "Kauf und Verkauf",
+    "Carte grise et fin de vie": "Zulassungsbescheinigung und Fahrzeugende",
+    "Aucun document ne correspond.": "Kein Dokument passt.",
     "Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.": "Diese Angaben erscheinen auf Ihren Rechnungen, Verträgen und Formularen. Sie geben sie nur einmal ein.",
     "Plus tard": "Später",
     "Il manque encore :": "Es fehlt noch:",
@@ -6322,6 +6412,11 @@ const DICO = {
     "TVA non applicable": "Btw niet van toepassing",
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
+    "Choisir un document": "Kies een document",
+    "Rechercher un document…": "Zoek een document…",
+    "Achat et vente": "Aankoop en verkoop",
+    "Carte grise et fin de vie": "Inschrijvingsbewijs en einde levensduur",
+    "Aucun document ne correspond.": "Geen document gevonden.",
     "Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.": "Deze gegevens staan op uw facturen, contracten en formulieren. U vult ze maar één keer in.",
     "Plus tard": "Later",
     "Il manque encore :": "Nog ontbrekend:",
@@ -7121,7 +7216,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.35';
+const VERSION = '2.36';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7338,7 +7433,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '27/09/2026';
+const VERSION_DATE = '17/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -10904,10 +10999,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
-  '2.35': { date: '27/09/2026', lignes: [
-    "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé.",
+  '2.36': { date: '17/10/2026', lignes: [
+    "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
     "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents.",
     "Fenêtre « Complétez votre fiche garage » : sur iPhone, elle dépassait l'écran et les boutons « Plus tard » et « Enregistrer » se cachaient sous la barre de Safari. La fenêtre tient désormais dans l'écran, son contenu défile à l'intérieur, la page derrière ne bouge plus, et les boutons restent collés en bas. Une croix en haut à droite permet aussi de fermer. Ce qui a été tapé est gardé. Valable pour toutes les fenêtres de l'application."
+  ] },
+  '2.35': { date: '27/09/2026', lignes: [
+    "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé."
   ] },
   '2.34': { date: '27/09/2026', lignes: [
     "La barre des boutons d'un document se fait défiler quand elle dépasse : sur PC, « Scanner la carte grise » et « Scanner une pièce d'identité » se trouvaient hors de l'écran, sans moyen de les atteindre.",
@@ -13376,21 +13474,7 @@ function renderMain(){
     +   '<button class="del-btn" id="delBtn" title="' + t('Supprimer cette fiche') + '" '
     +     'aria-label="' + t('Supprimer cette fiche') + '">🗑</button>'
     + '</div>'
-    + '<div class="tabs">'
-    +   tabBtn('achat', t("Déclaration d'achat"))
-    +   tabBtn('cession', t('Certificat de cession'))
-    +   tabBtn('immatriculation', t("Demande de certificat d'immatriculation — occasion"))
-    + tabBtn('neuf', t("Demande de certificat d'immatriculation — neuf"))
-    + tabBtn('mandat', t("Mandat immatriculation"))
-    + tabBtn('wgarage', t("W garage"))
-    + tabBtn('perte', t("Perte ou vol de la carte grise"))
-    + tabBtn('destruction', t("Certificat de destruction (VHU)"))
-    + tabBtn('retrait', t("Retrait de la circulation"))
-    + tabBtn('intention', t("Intention de destruction (VHU)"))
-    + tabBtn('contrat', t("Contrat de vente entre particuliers"))
-    + tabBtn('cpro', t("Contrat de vente particulier à un professionnel"))
-    +   tabBtn('facture', t('Facture de vente'))
-    + '</div>'
+    + selecteurDocuments()
     + '<div class="doc-toolbar">'
     +   '<div style="display:flex;gap:8px;flex-shrink:0;margin-left:auto">'
     +     (OFFICIAL_PDF_GENERATORS[currentDoc] ? '<button class="official-btn" id="officialPdfBtn">'
@@ -13542,6 +13626,7 @@ function renderMain(){
     document.getElementById('officialPdfBtn').onclick = function(){ OFFICIAL_PDF_GENERATORS[currentDoc](v, dealer); };
   }
   fermerVignette();
+  brancherChoixDocument();
   brancherVignettes();
   const btImp = document.getElementById('imprimerCerfa');
   if(btImp) btImp.onclick = function(){ imprimerCerfaOfficiel(v, dealer); };
@@ -13675,6 +13760,208 @@ function ongletSiPermis(cle, libelle){
   return docPermis(cle) ? tabBtn(cle, libelle) : '';
 }
 
+/* LA LISTE DES DOCUMENTS, rangee par familles.
+   Le numero du Cerfa s'affiche a droite : c'est souvent par lui qu'un
+   professionnel cherche un formulaire. Un compte particulier ne voit
+   que ce qu'il a le droit d'etablir (docPermis) ; une famille vide
+   disparait. */
+const GROUPES_DOCUMENTS = [
+  ['Achat et vente', [
+    ['achat', "Déclaration d'achat", '13751'],
+    ['cession', 'Certificat de cession', '15776'],
+    ['facture', 'Facture de vente', ''],
+    ['contrat', 'Contrat de vente entre particuliers', ''],
+    ['cpro', 'Contrat de vente particulier à un professionnel', '']
+  ]],
+  ['Immatriculation', [
+    ['immatriculation', "Demande de certificat d'immatriculation — occasion", '13750'],
+    ['neuf', "Demande de certificat d'immatriculation — neuf", '13749'],
+    ['mandat', 'Mandat immatriculation', '13757'],
+    ['wgarage', 'W garage', '13752']
+  ]],
+  ['Carte grise et fin de vie', [
+    ['perte', 'Perte ou vol de la carte grise', '13753'],
+    ['destruction', 'Certificat de destruction (VHU)', '14365'],
+    ['retrait', 'Retrait de la circulation', '13756'],
+    ['intention', 'Intention de destruction (VHU)', '14366']
+  ]]
+];
+
+const DS_ICONE = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>';
+const DS_CHEVRON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const DS_COCHE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+const DS_LOUPE = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+
+function groupesPermis(){
+  return GROUPES_DOCUMENTS.map(function(g){
+    return [g[0], g[1].filter(function(d){ return docPermis(d[0]); })];
+  }).filter(function(g){ return g[1].length; });
+}
+
+function documentCourant(){
+  for(const g of GROUPES_DOCUMENTS){
+    for(const d of g[1]){ if(d[0] === currentDoc) return d; }
+  }
+  return null;
+}
+
+function selecteurDocuments(){
+  const d = documentCourant();
+  const nom = d ? t(d[1]) : '';
+  const cerfa = d && d[2] ? 'Cerfa ' + d[2] : '';
+  return '<div class="ds" id="choixDocument">'
+    + '<button type="button" class="ds-btn" id="choixDocBtn" aria-haspopup="listbox" aria-expanded="false">'
+    +   '<span class="ds-ico">' + DS_ICONE + '</span>'
+    +   '<span class="ds-txt">'
+    +     '<span class="ds-sur">' + esc(t('Document'))
+    +       (cerfa ? '<span class="ds-num"> · ' + cerfa + '</span>' : '') + '</span>'
+    +     '<span class="ds-nom">' + esc(nom) + '</span>'
+    +   '</span>'
+    +   (cerfa ? '<span class="ds-cerfa">' + cerfa + '</span>' : '')
+    +   '<span class="ds-chev">' + DS_CHEVRON + '</span>'
+    + '</button></div>';
+}
+
+function listeDocumentsHtml(filtre){
+  const cle = majusculesDs(filtre || '');
+  let html = '';
+  groupesPermis().forEach(function(g){
+    const docs = g[1].filter(function(d){
+      if(!cle) return true;
+      return majusculesDs(t(d[1]) + ' ' + d[1] + ' ' + d[2]).indexOf(cle) !== -1;
+    });
+    if(!docs.length) return;
+    html += '<div class="ds-groupe">' + esc(t(g[0])) + '</div>';
+    docs.forEach(function(d){
+      const actif = d[0] === currentDoc;
+      html += '<button type="button" role="option" class="ds-item' + (actif ? ' actif' : '') + '"'
+        + ' data-doc="' + d[0] + '" aria-selected="' + actif + '">'
+        + '<span class="k">' + (actif ? DS_COCHE : '') + '</span>'
+        + '<span class="n">' + esc(t(d[1])) + '</span>'
+        + '<span class="c">' + (d[2] ? 'Cerfa ' + d[2] : '') + '</span></button>';
+    });
+  });
+  return html || '<div class="ds-vide">' + esc(t('Aucun document ne correspond.')) + '</div>';
+}
+
+/* Sans accents ni casse, pour que « cession » trouve « Cession ». */
+function majusculesDs(texte){
+  return String(texte || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+}
+
+function fermerChoixDocument(){
+  document.querySelectorAll('.ds-panneau,.ds-feuille,.ds-voile').forEach(function(e){ e.remove(); });
+  const bt = document.getElementById('choixDocBtn');
+  if(bt) bt.setAttribute('aria-expanded', 'false');
+  document.removeEventListener('mousedown', clicHorsChoixDocument, true);
+  document.removeEventListener('keydown', clavierChoixDocument, true);
+  fermerVignette();
+}
+
+function clicHorsChoixDocument(e){
+  const zone = document.getElementById('choixDocument');
+  if(zone && zone.contains(e.target)) return;
+  if(e.target.closest && e.target.closest('.ds-feuille')) return;
+  fermerChoixDocument();
+}
+
+function clavierChoixDocument(e){
+  const conteneur = document.querySelector('.ds-panneau,.ds-feuille');
+  if(!conteneur) return;
+  if(e.key === 'Escape'){ e.preventDefault(); fermerChoixDocument();
+    const bt = document.getElementById('choixDocBtn'); if(bt) bt.focus(); return; }
+  if(e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
+  const items = Array.from(conteneur.querySelectorAll('.ds-item'));
+  if(!items.length) return;
+  let i = items.findIndex(function(it){ return it.classList.contains('survol'); });
+  if(e.key === 'Enter'){
+    if(i < 0 && items.length === 1) i = 0;
+    if(i >= 0){ e.preventDefault(); items[i].click(); }
+    return;
+  }
+  e.preventDefault();
+  if(i >= 0) items[i].classList.remove('survol');
+  i = e.key === 'ArrowDown' ? Math.min(items.length - 1, i + 1) : Math.max(0, i - 1);
+  items[i].classList.add('survol');
+  defilerDansListe(conteneur, items[i], false);
+}
+
+/* Fait defiler la LISTE seule. scrollIntoView faisait aussi defiler la
+   page entiere quand la liste depassait le bas de l'ecran. */
+function defilerDansListe(conteneur, item, centrer){
+  const haut = item.offsetTop, bas = haut + item.offsetHeight;
+  if(centrer){
+    conteneur.scrollTop = Math.max(0, haut - conteneur.clientHeight / 2 + item.offsetHeight / 2);
+  } else if(haut < conteneur.scrollTop + 50){
+    conteneur.scrollTop = Math.max(0, haut - 50);
+  } else if(bas > conteneur.scrollTop + conteneur.clientHeight){
+    conteneur.scrollTop = bas - conteneur.clientHeight + 8;
+  }
+}
+
+function ouvrirChoixDocument(){
+  const zone = document.getElementById('choixDocument');
+  const bt = document.getElementById('choixDocBtn');
+  if(!zone || !bt) return;
+  if(document.querySelector('.ds-panneau,.ds-feuille')){ fermerChoixDocument(); return; }
+  bt.setAttribute('aria-expanded', 'true');
+  const telephone = window.matchMedia('(max-width:640px)').matches;
+  const recherche = '<label class="ds-cherche">' + DS_LOUPE
+    + '<input type="search" autocomplete="off" enterkeyhint="go" placeholder="'
+    + esc(t('Rechercher un document…')) + '"></label>';
+  let conteneur;
+  if(telephone){
+    const voile = document.createElement('div');
+    voile.className = 'ds-voile';
+    voile.onclick = fermerChoixDocument;
+    conteneur = document.createElement('div');
+    conteneur.className = 'ds-feuille';
+    conteneur.setAttribute('role', 'dialog');
+    conteneur.setAttribute('aria-modal', 'true');
+    conteneur.innerHTML = '<div class="ds-poignee"></div>'
+      + '<div class="ds-ftitre"><span>' + esc(t('Choisir un document')) + '</span>'
+      + '<button type="button" class="ds-fermer" aria-label="' + esc(t('Fermer')) + '">✕</button></div>'
+      + recherche + '<div class="ds-liste" role="listbox"></div>';
+    document.body.appendChild(voile);
+    document.body.appendChild(conteneur);
+    conteneur.querySelector('.ds-fermer').onclick = fermerChoixDocument;
+  } else {
+    conteneur = document.createElement('div');
+    conteneur.className = 'ds-panneau';
+    conteneur.innerHTML = recherche + '<div class="ds-liste" role="listbox"></div>';
+    zone.appendChild(conteneur);
+  }
+  const liste = conteneur.querySelector('.ds-liste');
+  const champ = conteneur.querySelector('input');
+  const remplir = function(){
+    liste.innerHTML = listeDocumentsHtml(champ.value);
+    liste.querySelectorAll('.ds-item').forEach(function(it){
+      it.onclick = function(){
+        const cle = it.dataset.doc;
+        fermerChoixDocument();
+        if(cle !== currentDoc) setDoc(cle);
+      };
+    });
+    if(!telephone) brancherVignettes();
+  };
+  champ.oninput = remplir;
+  remplir();
+  /* Le document ouvert reste visible quand la liste est longue. */
+  const actif = liste.querySelector('.ds-item.actif');
+  if(actif) defilerDansListe(conteneur, actif, true);
+  /* Sur PC, on peut taper tout de suite. Sur telephone, pas de clavier
+     qui surgit et cache la liste : il faut toucher la recherche. */
+  if(!telephone) champ.focus({ preventScroll: true });
+  document.addEventListener('mousedown', clicHorsChoixDocument, true);
+  document.addEventListener('keydown', clavierChoixDocument, true);
+}
+
+function brancherChoixDocument(){
+  fermerChoixDocument();
+  const bt = document.getElementById('choixDocBtn');
+  if(bt) bt.onclick = ouvrirChoixDocument;
+}
+
 function tabBtn(key,label){
   /* Le filtre est ICI, et non a l'endroit ou les onglets sont listes.
 
@@ -13712,7 +13999,9 @@ function fermerVignette(){
 }
 
 function brancherVignettes(){
-  document.querySelectorAll('.tab[data-doc]').forEach(function(onglet){
+  document.querySelectorAll('.tab[data-doc],.ds-panneau .ds-item[data-doc]').forEach(function(onglet){
+    if(onglet.dataset.vignette) return;
+    onglet.dataset.vignette = '1';
     onglet.onmouseenter = function(){
       // apres un clic, on attend que la souris ressorte de l'onglet
       if(vignetteBloquee) return;
@@ -13724,7 +14013,7 @@ function brancherVignettes(){
         const v = document.createElement('div');
         v.className = 'vignette-onglet';
         v.innerHTML = '<img alt="" src="data:image/png;base64,' + img + '">'
-                    + '<div class="vignette-nom">' + esc(onglet.textContent.trim()) + '</div>';
+                    + '<div class="vignette-nom">' + esc((onglet.querySelector('.n') || onglet).textContent.trim()) + '</div>';
         document.body.appendChild(v);
         vignetteOnglet = v;
 
@@ -13733,6 +14022,13 @@ function brancherVignettes(){
         x = Math.max(8, Math.min(x, window.innerWidth - l - 8));
         let y = r.bottom + 8;
         if(y + h > window.innerHeight - 8) y = Math.max(8, r.top - h - 8);
+        /* Dans la liste deroulante : a cote de la liste, pas dessus. */
+        const panneau = onglet.closest('.ds-panneau');
+        if(panneau){
+          const p = panneau.getBoundingClientRect();
+          x = (p.right + 14 + l <= window.innerWidth - 8) ? p.right + 14 : Math.max(8, p.left - l - 14);
+          y = Math.max(8, Math.min(r.top + r.height / 2 - h / 2, window.innerHeight - h - 8));
+        }
         v.style.left = Math.round(x) + 'px';
         v.style.top = Math.round(y) + 'px';
       }, 320);
