@@ -1051,6 +1051,31 @@
   /* ---- Fenetres modales ---- */
   .dlg-fond{background:rgba(11,21,38,.58);backdrop-filter:blur(2px);}
   .dlg{border-radius:16px;box-shadow:0 24px 60px rgba(11,21,38,.30);}
+  /* FENETRES PLUS HAUTES QUE L'ECRAN (iPhone surtout).
+     La fenetre etait centree dans le voile : quand elle depassait la
+     hauteur de l'ecran, le haut et le bas sortaient de l'ecran, sans
+     aucun moyen d'y faire defiler. Les boutons « Plus tard » et
+     « Enregistrer » se retrouvaient sous la barre de Safari, impossibles
+     a toucher. Desormais la fenetre ne depasse jamais l'ecran : son
+     contenu defile a l'interieur, la page derriere reste bloquee, et la
+     rangee de boutons reste collee en bas, toujours visible. */
+  .dlg-fond{padding:max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
+    overscroll-behavior:contain;}
+  .dlg{max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;box-sizing:border-box;position:relative;}
+  .dlg > .dlg-actions:last-child{position:sticky;bottom:-18px;background:inherit;z-index:2;
+    margin-bottom:-18px;padding:12px 0 18px;border-top:1px solid rgba(16,26,44,.07);}
+  html:has(.dlg-fond), body:has(.dlg-fond){overflow:hidden;}
+  /* La croix de fermeture, en haut a droite */
+  .dlg-entete{display:flex;align-items:flex-start;gap:10px;}
+  .dlg-entete .dlg-titre{flex:1 1 auto;min-width:0;}
+  .dlg-croix{flex:0 0 auto;width:34px;height:34px;margin:-6px -8px 0 0;border:none;border-radius:50%;
+    background:rgba(16,26,44,.07);color:var(--ink,#16233a);font-size:17px;line-height:34px;
+    text-align:center;cursor:pointer;padding:0;font-family:inherit;}
+  .dlg-croix:hover{background:rgba(16,26,44,.13);}
+  @media(max-width:760px){
+    .dlg > .dlg-actions:last-child{bottom:-14px;margin-bottom:-14px;padding-bottom:14px;}
+  }
 
   /* ---- Bandeau d'information sous les onglets ---- */
   .note,.pdf-fallback{border-radius:10px;}
@@ -7641,7 +7666,10 @@ function fenetreFicheGarage(){
   const fond = document.createElement('div');
   fond.className = 'dlg-fond';
   fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
-    + '<div class="dlg-titre">' + esc(t('Complétez votre fiche garage')) + '</div>'
+    + '<div class="dlg-entete">'
+    +   '<div class="dlg-titre">' + esc(t('Complétez votre fiche garage')) + '</div>'
+    +   '<button type="button" class="dlg-croix" id="ficheCroix" aria-label="' + esc(t('Fermer')) + '">✕</button>'
+    + '</div>'
     + '<div class="dlg-texte">'
     +   esc(t('Ces coordonnées figurent sur vos factures, vos contrats et vos Cerfa. Vous ne les saisissez qu’une fois.'))
     + '</div>'
@@ -7665,7 +7693,20 @@ function fenetreFicheGarage(){
   document.body.appendChild(fond);
 
   const fermer = function(){ fond.remove(); };
-  fond.querySelector('#ficheTard').onclick = fermer;
+  /* « Plus tard » et la croix ferment sans rien exiger, mais gardent ce
+     qui a deja ete tape : on le retrouve a la prochaine ouverture. */
+  const fermerEnGardant = async function(){
+    fond.querySelectorAll('input[data-garage]').forEach(function(inp){
+      const val = inp.value.trim();
+      if(val) dealer[inp.dataset.garage] = val;
+    });
+    const caseSansTva = fond.querySelector('#ficheSansTva');
+    if(caseSansTva) dealer.sansTva = caseSansTva.checked;
+    fermer();
+    try{ await saveDealer(); }catch(e){}
+  };
+  fond.querySelector('#ficheTard').onclick = fermerEnGardant;
+  fond.querySelector('#ficheCroix').onclick = fermerEnGardant;
   /* La case decide de l'obligation : on redessine les etoiles et on
      grise le numero des qu'elle change. */
   const caseTva = fond.querySelector('#ficheSansTva');
@@ -10865,7 +10906,8 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 const NOTES_VERSION = {
   '2.35': { date: '27/09/2026', lignes: [
     "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé.",
-    "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents."
+    "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents.",
+    "Fenêtre « Complétez votre fiche garage » : sur iPhone, elle dépassait l'écran et les boutons « Plus tard » et « Enregistrer » se cachaient sous la barre de Safari. La fenêtre tient désormais dans l'écran, son contenu défile à l'intérieur, la page derrière ne bouge plus, et les boutons restent collés en bas. Une croix en haut à droite permet aussi de fermer. Ce qui a été tapé est gardé. Valable pour toutes les fenêtres de l'application."
   ] },
   '2.34': { date: '27/09/2026', lignes: [
     "La barre des boutons d'un document se fait défiler quand elle dépasse : sur PC, « Scanner la carte grise » et « Scanner une pièce d'identité » se trouvaient hors de l'écran, sans moyen de les atteindre.",
