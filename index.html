@@ -833,6 +833,17 @@
     padding:20px 22px;max-width:760px;}
   .reg-panneau h3{margin:0 0 4px;font-size:16px;}
   .reg-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;}
+  .bt-enregistre{animation:btEnregistre .35s ease-out;filter:saturate(1.15);}
+  @keyframes btEnregistre{0%{transform:scale(.97);}60%{transform:scale(1.02);}100%{transform:none;}}
+  /* L'oeil qui montre le mot de passe */
+  .mdp-boite{position:relative;display:block;width:100%;}
+  .mdp-boite > input{padding-right:48px !important;margin:0 !important;width:100%;box-sizing:border-box;}
+  .mdp-oeil{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:38px;height:38px;
+    border:none;background:transparent;border-radius:8px;cursor:pointer;padding:0;
+    display:grid;place-items:center;color:var(--ink-soft,#5b6b84);}
+  .mdp-oeil:hover{background:rgba(16,26,44,.06);color:var(--ink,#16233a);}
+  .mdp-oeil:focus-visible{outline:2px solid var(--brand);outline-offset:1px;}
+  .reg-actions{flex-wrap:wrap;}
   .reg-actions{display:flex;gap:9px;align-items:center;margin-top:18px;
     padding-top:16px;border-top:1px solid var(--line);}
   @media(max-width:820px){
@@ -3214,6 +3225,8 @@ const DICO = {
     "Sélectionner": "Selezionare",
     "Le modèle du formulaire officiel est introuvable. Vérifiez que le dossier 'lib' a été conservé avec l'application.": "Il modello del modulo ufficiale non è stato trovato. Verifichi che la cartella 'lib' sia stata conservata con l'applicazione.",
     "Enregistré": "Salvato",
+    "Afficher le mot de passe": "Mostra la password",
+    "Masquer le mot de passe": "Nascondi la password",
     "Impossible de générer le formulaire officiel :": "Impossibile generare il modulo ufficiale:",
     "Cette image n'a pas pu être lue :": "Questa immagine non ha potuto essere letta:",
     "Cachet posé — cliquez pour le changer": "Timbro applicato — clicchi per cambiarlo",
@@ -4171,6 +4184,8 @@ const DICO = {
     "Sélectionner": "Auswielen",
     "Le modèle du formulaire officiel est introuvable. Vérifiez que le dossier 'lib' a été conservé avec l'application.": "D'Virlag vum offizielle Formulaire gouf net fonnt. Kuckt no, ob den Dossier 'lib' mat der Applikatioun bliwwen ass.",
     "Enregistré": "Gespäichert",
+    "Afficher le mot de passe": "Passwuert weisen",
+    "Masquer le mot de passe": "Passwuert verstoppen",
     "Impossible de générer le formulaire officiel :": "Den offizielle Formulaire konnt net generéiert ginn:",
     "Cette image n'a pas pu être lue :": "Dëst Bild konnt net gelies ginn:",
     "Cachet posé — cliquez pour le changer": "Stempel gesat — klickt fir en z'änneren",
@@ -5127,6 +5142,8 @@ const DICO = {
     "Sélectionner": "Select",
     "Le modèle du formulaire officiel est introuvable. Vérifiez que le dossier 'lib' a été conservé avec l'application.": "The official form template could not be found. Check that the 'lib' folder was kept with the application.",
     "Enregistré": "Saved",
+    "Afficher le mot de passe": "Show password",
+    "Masquer le mot de passe": "Hide password",
     "Impossible de générer le formulaire officiel :": "Could not generate the official form:",
     "Cette image n'a pas pu être lue :": "This image could not be read:",
     "Cachet posé — cliquez pour le changer": "Stamp applied — click to change it",
@@ -6098,6 +6115,8 @@ const DICO = {
     "Sélectionner": "Auswählen",
     "Le modèle du formulaire officiel est introuvable. Vérifiez que le dossier 'lib' a été conservé avec l'application.": "Die Vorlage des amtlichen Formulars wurde nicht gefunden. Prüfen Sie, ob der Ordner 'lib' bei der Anwendung geblieben ist.",
     "Enregistré": "Gespeichert",
+    "Afficher le mot de passe": "Passwort anzeigen",
+    "Masquer le mot de passe": "Passwort verbergen",
     "Impossible de générer le formulaire officiel :": "Das amtliche Formular konnte nicht erzeugt werden:",
     "Cette image n'a pas pu être lue :": "Dieses Bild konnte nicht gelesen werden:",
     "Cachet posé — cliquez pour le changer": "Stempel gesetzt — zum Ändern klicken",
@@ -7063,6 +7082,8 @@ const DICO = {
     "Sélectionner": "Selecteren",
     "Le modèle du formulaire officiel est introuvable. Vérifiez que le dossier 'lib' a été conservé avec l'application.": "Het sjabloon van het officiële formulier is niet gevonden. Controleer of de map 'lib' bij de toepassing is gebleven.",
     "Enregistré": "Opgeslagen",
+    "Afficher le mot de passe": "Wachtwoord tonen",
+    "Masquer le mot de passe": "Wachtwoord verbergen",
     "Impossible de générer le formulaire officiel :": "Kan het officiële formulier niet genereren:",
     "Cette image n'a pas pu être lue :": "Deze afbeelding kon niet worden gelezen:",
     "Cachet posé — cliquez pour le changer": "Stempel geplaatst — klik om te wijzigen",
@@ -11002,7 +11023,9 @@ const NOTES_VERSION = {
   '2.36': { date: '17/10/2026', lignes: [
     "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
     "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents.",
-    "Fenêtre « Complétez votre fiche garage » : sur iPhone, elle dépassait l'écran et les boutons « Plus tard » et « Enregistrer » se cachaient sous la barre de Safari. La fenêtre tient désormais dans l'écran, son contenu défile à l'intérieur, la page derrière ne bouge plus, et les boutons restent collés en bas. Une croix en haut à droite permet aussi de fermer. Ce qui a été tapé est gardé. Valable pour toutes les fenêtres de l'application."
+    "Fenêtre « Complétez votre fiche garage » : sur iPhone, elle dépassait l'écran et les boutons « Plus tard » et « Enregistrer » se cachaient sous la barre de Safari. La fenêtre tient désormais dans l'écran, son contenu défile à l'intérieur, la page derrière ne bouge plus, et les boutons restent collés en bas. Une croix en haut à droite permet aussi de fermer. Ce qui a été tapé est gardé. Valable pour toutes les fenêtres de l'application.",
+    "Un œil à droite de chaque champ mot de passe (connexion, création de compte, nouveau mot de passe, code de sécurité) montre ce qui a été tapé ; un second toucher le cache.",
+    "Réglages : « Enregistrer » confirme dans le bouton lui-même (« ✓ Enregistré »), qui revient à la normale après deux secondes et demie. Sur téléphone, le texte qui s'affichait à côté sortait de l'écran, coupé en deux."
   ] },
   '2.35': { date: '27/09/2026', lignes: [
     "Le détourage ne touche plus à l'intérieur du document : il en cherche le cadre, le redresse et le découpe. La photographie du titulaire et la puce restent intactes, et le fond disparaît parce qu'il est coupé."
@@ -13145,8 +13168,7 @@ function vueReglages(){
       +   champ('s_tel', t('Téléphone'), dealer.tel)
       +   champ('s_email', t('Email'), dealer.email)
       + '</div>'
-      + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button>'
-      + '<span id="regMsg" class="dav-resultat"></span></div>'
+      + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button></div>'
       /* Le droit de s'en aller, a la suite de la fiche du compte.
          Reserve aux comptes du serveur : un compte local ne vit que sur
          cette machine, il se supprime dans la liste des comptes. */
@@ -13167,8 +13189,7 @@ function vueReglages(){
       + '</div>'
       + '<div id="blocLogo"></div>'
       + '<div id="blocCachet"></div>'
-      + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button>'
-      + '<span id="regMsg" class="dav-resultat"></span></div>';
+      + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button></div>';
   }
   else if(ongletReglages === 'sauvegarde'){
     panneau = '<h3>' + t('Sauvegarde') + '</h3>'
@@ -13394,8 +13415,18 @@ function brancherReglages(){
       if(v !== undefined) dealer[cle] = v;
     });
     await saveDealer();
-    const msg = document.getElementById('regMsg');
-    if(msg){ msg.className = 'dav-resultat ok'; msg.textContent = t('Enregistré.'); }
+    /* La confirmation s'affiche DANS le bouton, puis s'efface. Avant,
+       « Enregistré. » s'ecrivait a cote du bouton : sur telephone, le
+       bouton prend toute la largeur, et le texte sortait de l'ecran,
+       coupe en deux. */
+    clearTimeout(bt.__minuteur);
+    if(!bt.__texte) bt.__texte = bt.innerHTML;
+    bt.classList.add('bt-enregistre');
+    bt.innerHTML = '✓ ' + esc(t('Enregistré'));
+    bt.__minuteur = setTimeout(function(){
+      bt.classList.remove('bt-enregistre');
+      bt.innerHTML = bt.__texte;
+    }, 2500);
     renderSidebar();
   };
 
@@ -14341,6 +14372,68 @@ function dparts(iso){
     const c = e.target;
     if(c && c.matches && c.matches(DATES) && c.value !== c.__dateRelayee) relayer(c);
   }, true);
+})();
+
+/* VOIR LE MOT DE PASSE.
+   Chaque champ mot de passe de l'application — connexion, creation de
+   compte, nouveau mot de passe, code de securite — recoit un oeil a
+   droite : un toucher montre ce qui a ete tape, un second le cache. Le
+   branchement se fait tout seul, y compris sur les ecrans dessines plus
+   tard : aucun formulaire ne peut l'oublier. */
+(function(){
+  const OEIL = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const OEIL_BARRE = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  function libelle(visible){
+    const tr = (typeof t === 'function') ? t : function(x){ return x; };
+    return tr(visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+  }
+  function equiper(champ){
+    if(champ.__oeil || (champ.parentNode && champ.parentNode.classList && champ.parentNode.classList.contains('mdp-boite'))) return;
+    champ.__oeil = true;
+    const cs = getComputedStyle(champ);
+    const boite = document.createElement('span');
+    boite.className = 'mdp-boite';
+    boite.style.marginTop = cs.marginTop;
+    boite.style.marginBottom = cs.marginBottom;
+    champ.parentNode.insertBefore(boite, champ);
+    boite.appendChild(champ);
+    const bt = document.createElement('button');
+    bt.type = 'button';
+    bt.className = 'mdp-oeil';
+    bt.tabIndex = 0;
+    bt.innerHTML = OEIL;
+    bt.setAttribute('aria-label', libelle(false));
+    bt.setAttribute('aria-pressed', 'false');
+    /* Garder le curseur dans le champ : sur iPhone, le clavier ne se
+       ferme pas quand on touche l'oeil. */
+    bt.addEventListener('mousedown', function(e){ e.preventDefault(); });
+    bt.addEventListener('touchstart', function(){}, { passive: true });
+    bt.onclick = function(){
+      const visible = champ.type === 'password';
+      const debut = champ.selectionStart, fin = champ.selectionEnd;
+      champ.type = visible ? 'text' : 'password';
+      bt.innerHTML = visible ? OEIL_BARRE : OEIL;
+      bt.setAttribute('aria-label', libelle(visible));
+      bt.setAttribute('aria-pressed', String(visible));
+      if(document.activeElement === champ){
+        try{ champ.setSelectionRange(debut, fin); }catch(e){}
+      }
+    };
+    boite.appendChild(bt);
+  }
+  function parcourir(racine){
+    if(!racine || racine.nodeType !== 1) return;
+    if(racine.matches && racine.matches('input[type="password"]')) equiper(racine);
+    if(racine.querySelectorAll) racine.querySelectorAll('input[type="password"]').forEach(equiper);
+  }
+  function demarrer(){
+    parcourir(document.body);
+    new MutationObserver(function(mutations){
+      mutations.forEach(function(m){ m.addedNodes.forEach(parcourir); });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  if(document.body) demarrer();
+  else document.addEventListener('DOMContentLoaded', demarrer);
 })();
 
 async function generateCerfa15776Brut(v, d){
