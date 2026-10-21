@@ -1781,18 +1781,35 @@
     box-shadow:0 0 0 3px rgba(var(--brand-rgb),.10);}
   .pays-btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
   .pays-format{font-size:12px;color:var(--ink-soft);margin-top:7px;}
-  .pays-liste{position:relative;max-width:360px;}
-  .pays-liste-drapeau{position:absolute;left:11px;top:50%;transform:translateY(-50%);
-    display:flex;pointer-events:none;border-radius:3px;overflow:hidden;line-height:0;}
-  .pays-liste select{width:100%;box-sizing:border-box;min-height:40px;font:inherit;font-size:13.5px;
-    color:var(--ink,#16233a);background-color:#fff;border:1px solid var(--line);border-radius:8px;
-    padding:9px 36px 9px 44px;cursor:pointer;-webkit-appearance:none;appearance:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235b6b84' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 12px center;
+  .pays-liste{position:relative;max-width:380px;}
+  .pays-liste-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;box-sizing:border-box;
+    text-align:left;font:inherit;font-size:14px;color:var(--ink,#16233a);background:#fff;cursor:pointer;
+    border:1px solid var(--line);border-radius:8px;padding:7px 10px 7px 11px;
     transition:border-color .14s,box-shadow .14s;}
-  .pays-liste select:hover{border-color:#c9d5e8;}
-  .pays-liste select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(var(--brand-rgb),.13);}
-  @media(max-width:640px){ .pays-liste{max-width:none;} }
+  .pays-liste-btn:hover{border-color:#c9d5e8;}
+  .pays-liste-btn[aria-expanded="true"],.pays-liste-btn:focus-visible{outline:none;border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(var(--brand-rgb),.13);}
+  .pays-liste-drapeau{flex:0 0 auto;display:flex;line-height:0;border-radius:3px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(16,26,44,.10);}
+  .pays-liste-nom{flex:1 1 auto;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pays-liste-format{flex:0 0 auto;font-size:12.5px;color:var(--ink-soft,#5b6b84);}
+  .pays-liste-chev{flex:0 0 auto;color:var(--ink-soft,#5b6b84);display:flex;transition:transform .18s;}
+  .pays-liste-btn[aria-expanded="true"] .pays-liste-chev{transform:rotate(180deg);}
+  .pays-panneau{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:70;background:#fff;
+    border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 18px 44px rgba(11,21,38,.18);
+    max-height:min(60vh,420px);overflow-y:auto;overscroll-behavior:contain;}
+  .pays-item{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:none;background:transparent;
+    font:inherit;font-size:14.5px;color:var(--ink,#16233a);padding:9px 10px;border-radius:8px;cursor:pointer;}
+  .pays-item:hover,.pays-item:focus-visible{background:rgba(16,26,44,.05);outline:none;}
+  .pays-item .n{flex:1 1 auto;min-width:0;}
+  .pays-item .f{flex:0 0 auto;font-size:12.5px;color:var(--muted,#7b8798);}
+  .pays-item .k{flex:0 0 18px;display:flex;color:var(--brand);}
+  .pays-item.actif{background:var(--brand-soft,#eaf0fb);color:var(--brand);font-weight:600;}
+  .pays-item.actif .f{color:var(--brand);}
+  @media(max-width:640px){
+    .pays-liste{max-width:none;}
+    .pays-item{padding:12px 10px;font-size:15.5px;}
+  }
 
   /* ---- Allemagne : ville reconnue, et lectures concurrentes ---- */
   .de-aide{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:7px;
@@ -2679,6 +2696,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Autre pays": "Altro paese",
+    "format libre": "formato libero",
     "Mentions légales": "Note legali",
     "Conditions générales": "Condizioni generali",
     "Confidentialité": "Privacy",
@@ -3648,6 +3667,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Autre pays": "Anert Land",
+    "format libre": "fräie Format",
     "Mentions légales": "Rechtlech Mentiounen",
     "Conditions générales": "Allgemeng Konditiounen",
     "Confidentialité": "Dateschutz",
@@ -4616,6 +4637,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Autre pays": "Other country",
+    "format libre": "free format",
     "Mentions légales": "Legal notice",
     "Conditions générales": "Terms and conditions",
     "Confidentialité": "Privacy",
@@ -5583,6 +5606,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Autre pays": "Anderes Land",
+    "format libre": "freies Format",
     "Mentions légales": "Impressum",
     "Conditions générales": "Allgemeine Bedingungen",
     "Confidentialité": "Datenschutz",
@@ -6566,6 +6591,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Autre pays": "Ander land",
+    "format libre": "vrij formaat",
     "Mentions légales": "Wettelijke vermeldingen",
     "Conditions générales": "Algemene voorwaarden",
     "Confidentialité": "Privacy",
@@ -10621,7 +10648,20 @@ function assemblerDE(brut, k, tiretTape){
   return out + trop;
 }
 
+/* LA PLAQUE N'EST JAMAIS COUPEE.
+   Chaque pays a son modele de plaque. Quand les caracteres deja saisis
+   n'entrent pas dans le modele du pays choisi, on ne les jette plus :
+   la plaque reste telle quelle, en majuscules. Avant, passer de France
+   a Belgique transformait AB-123-CD en A-B-123, et revenir a France ne
+   rendait pas les lettres perdues. */
 function formatPlate(raw, pays){
+  const forme = formatPlateSelonPays(raw, pays);
+  const utiles = function(x){ return String(x || '').toUpperCase().replace(/[^A-ZÄÖÜ0-9]/g, ''); };
+  if(utiles(forme).length < utiles(raw).length) return String(raw || '').toUpperCase();
+  return forme;
+}
+
+function formatPlateSelonPays(raw, pays){
   const brut = (raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
   if(pays !== 'DE' && !brut) return '';
   switch(pays || 'FR'){
@@ -10847,7 +10887,7 @@ function paysImmatCourant(){
     if(v) return paysPlaque(v);
   }catch(e){}
   const liste = document.getElementById('paysImmatChoix');
-  return liste && liste.value ? liste.value : 'FR';
+  return liste && liste.dataset.valeur ? liste.dataset.valeur : 'FR';
 }
 
 function majAideDE(){
@@ -10875,20 +10915,23 @@ function majAideDE(){
 }
 
 /* Le choix du pays, pose sous le champ d'immatriculation : une liste
-   deroulante, le drapeau du pays retenu affiche a gauche. Les huit
-   boutons-drapeaux prenaient deux lignes sur telephone. */
+   deroulante FAITE MAIN, parce qu'une liste du navigateur n'affiche
+   que du texte. Chaque ligne porte le drapeau du pays, son nom et le
+   modele de plaque attendu. */
+function nomPaysPlaque(p){ return p[0] === 'XX' ? t('Autre pays') : t(p[1]); }
+
 function choixPaysPlaque(v){
   const cur = paysPlaque(v);
-  const modele = PAYS_PLAQUE.filter(function(p){ return p[0] === cur; })[0];
-  return '<div style="grid-column:1/-1"><label for="paysImmatChoix">' + esc(t("Pays d'immatriculation")) + '</label>'
-    + '<div class="pays-liste">'
-    +   '<span class="pays-liste-drapeau" aria-hidden="true">' + drapeauSVG(modele ? modele[3] : 'fr', 22) + '</span>'
-    +   '<select id="paysImmatChoix">'
-    +     PAYS_PLAQUE.map(function(p){
-            return '<option value="' + p[0] + '"' + (p[0] === cur ? ' selected' : '') + '>'
-              + esc(t(p[1])) + (p[2] ? ' — ' + esc(p[2]) : '') + '</option>';
-          }).join('')
-    +   '</select>'
+  const modele = PAYS_PLAQUE.filter(function(p){ return p[0] === cur; })[0] || PAYS_PLAQUE[0];
+  return '<div style="grid-column:1/-1"><label id="paysImmatLabel">' + esc(t("Pays d'immatriculation")) + '</label>'
+    + '<div class="pays-liste" id="paysImmatZone">'
+    +   '<button type="button" class="pays-liste-btn" id="paysImmatChoix" data-valeur="' + cur + '"'
+    +     ' aria-haspopup="listbox" aria-expanded="false" aria-labelledby="paysImmatLabel paysImmatChoix">'
+    +     '<span class="pays-liste-drapeau">' + drapeauSVG(modele[3], 24) + '</span>'
+    +     '<span class="pays-liste-nom">' + esc(nomPaysPlaque(modele)) + '</span>'
+    +     (modele[2] ? '<span class="pays-liste-format mono">' + esc(modele[2]) + '</span>' : '')
+    +     '<span class="pays-liste-chev">' + DS_CHEVRON + '</span>'
+    +   '</button>'
     + '</div>'
     + '<div class="pays-format">'
     + (modele && modele[2]
@@ -10916,22 +10959,83 @@ function injecterPaysPlaque(v){
   if(paysPlaque(v) === 'DE') majAideDE();
 }
 
+function fermerListePays(){
+  document.querySelectorAll('.pays-panneau').forEach(function(e){ e.remove(); });
+  const bt = document.getElementById('paysImmatChoix');
+  if(bt) bt.setAttribute('aria-expanded', 'false');
+  document.removeEventListener('mousedown', clicHorsListePays, true);
+  document.removeEventListener('keydown', clavierListePays, true);
+}
+
+function clicHorsListePays(e){
+  const zone = document.getElementById('paysImmatZone');
+  if(zone && zone.contains(e.target)) return;
+  fermerListePays();
+}
+
+function clavierListePays(e){
+  const panneau = document.querySelector('.pays-panneau');
+  if(!panneau) return;
+  if(e.key === 'Escape'){
+    e.preventDefault(); fermerListePays();
+    const bt = document.getElementById('paysImmatChoix'); if(bt) bt.focus();
+    return;
+  }
+  if(e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  e.preventDefault();
+  const items = Array.from(panneau.querySelectorAll('.pays-item'));
+  let i = items.indexOf(document.activeElement);
+  i = e.key === 'ArrowDown' ? Math.min(items.length - 1, i + 1) : Math.max(0, i - 1);
+  items[i].focus();
+}
+
 function brancherPaysPlaque(v){
-  const liste = document.getElementById('paysImmatChoix');
-  if(!liste) return;
-  liste.onchange = function(){
-    const pays = liste.value;
-    if(pays === paysPlaque(v)) return;
-    v.vehicule.paysImmat = pays;
-    // on reformate les plaques deja saisies selon le nouveau pays,
-    // celle de la fiche comme celle recopiee sur la facture
-    if(v.vehicule.immat) v.vehicule.immat = formatPlate(v.vehicule.immat, pays);
-    if(v.facture && v.facture.immat){
-      v.facture.immat = formatPlate(v.facture.immat, pays);
-    }
-    saveVehicle(v);
-    renderMain();
+  const bt = document.getElementById('paysImmatChoix');
+  const zone = document.getElementById('paysImmatZone');
+  if(!bt || !zone) return;
+  fermerListePays();
+  bt.onclick = function(){
+    if(zone.querySelector('.pays-panneau')){ fermerListePays(); return; }
+    const cur = paysPlaque(v);
+    const panneau = document.createElement('div');
+    panneau.className = 'pays-panneau';
+    panneau.setAttribute('role', 'listbox');
+    panneau.innerHTML = PAYS_PLAQUE.map(function(p){
+      const actif = p[0] === cur;
+      return '<button type="button" role="option" class="pays-item' + (actif ? ' actif' : '') + '"'
+        + ' data-pays="' + p[0] + '" aria-selected="' + actif + '">'
+        + '<span class="pays-liste-drapeau">' + drapeauSVG(p[3], 24) + '</span>'
+        + '<span class="n">' + esc(nomPaysPlaque(p)) + '</span>'
+        + (p[2] ? '<span class="f mono">' + esc(p[2]) + '</span>'
+                : '<span class="f" style="font-style:italic">' + esc(t('format libre')) + '</span>')
+        + '<span class="k">' + (actif ? DS_COCHE : '') + '</span></button>';
+    }).join('');
+    zone.appendChild(panneau);
+    bt.setAttribute('aria-expanded', 'true');
+    panneau.querySelectorAll('.pays-item').forEach(function(it){
+      it.onclick = function(){
+        fermerListePays();
+        choisirPaysPlaque(v, it.dataset.pays);
+      };
+    });
+    const actif = panneau.querySelector('.pays-item.actif');
+    if(actif) actif.focus({ preventScroll: true });
+    document.addEventListener('mousedown', clicHorsListePays, true);
+    document.addEventListener('keydown', clavierListePays, true);
   };
+}
+
+function choisirPaysPlaque(v, pays){
+  if(pays === paysPlaque(v)) return;
+  v.vehicule.paysImmat = pays;
+  // on reformate les plaques deja saisies selon le nouveau pays,
+  // celle de la fiche comme celle recopiee sur la facture
+  if(v.vehicule.immat) v.vehicule.immat = formatPlate(v.vehicule.immat, pays);
+  if(v.facture && v.facture.immat){
+    v.facture.immat = formatPlate(v.facture.immat, pays);
+  }
+  saveVehicle(v);
+  renderMain();
 }
 
 // Repositionne le curseur en comptant les caractères utiles (hors séparateurs)
@@ -11183,7 +11287,8 @@ const NOTES_VERSION = {
     "Création de compte : il faut cocher « J'accepte les conditions générales et la politique de confidentialité ». La date d'acceptation et la version des conditions sont gardées avec le compte.",
     "La lecture des documents par le serveur passe uniquement par Google Vision : la fonction « lire-image » et sa notice sont simplifiées en conséquence.",
     "Facture : l'énergie et la durée de garantie se choisissent dans une liste déroulante, au lieu d'une grille de boutons qui prenait tout l'écran du téléphone. Les pièces couvertes restent à cocher, puisqu'on peut en choisir plusieurs. Les listes déroulantes des formulaires ont le même dessin que les autres champs.",
-    "Pays d'immatriculation : une liste déroulante dans tous les documents, avec le drapeau du pays retenu et le format de plaque attendu (« France — AB-123-CD »), à la place des huit boutons-drapeaux."
+    "Pays d'immatriculation : une liste déroulante dans tous les documents, avec le drapeau et le format de plaque de chaque pays, à la place des huit boutons-drapeaux.",
+    "La plaque n'est plus jamais coupée : quand ses caractères n'entrent pas dans le modèle du pays choisi, elle reste telle qu'elle a été saisie. Avant, passer de France à Belgique transformait AB-123-CD en A-B-123, et revenir à France ne rendait pas les lettres perdues."
   ] },
   '2.36': { date: '17/10/2026', lignes: [
     "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
