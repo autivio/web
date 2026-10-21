@@ -835,6 +835,76 @@
   .reg-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;}
   .bt-enregistre{animation:btEnregistre .35s ease-out;filter:saturate(1.15);}
   @keyframes btEnregistre{0%{transform:scale(.97);}60%{transform:scale(1.02);}100%{transform:none;}}
+  /* ---- Pages legales ---- */
+  #pageLegale{position:fixed;inset:0;z-index:12000;background:var(--bg,#eef2f8);overflow-y:auto;
+    overscroll-behavior:contain;-webkit-overflow-scrolling:touch;color:var(--ink,#16233a);}
+  html.pl-ouverte, html.pl-ouverte body{overflow:hidden;}
+  .pl-barre{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;
+    padding:max(10px, env(safe-area-inset-top)) 18px 10px;background:rgba(255,255,255,.94);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line,#e2e8f2);}
+  .pl-marque{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.06em;font-size:14px;}
+  .pl-marque .plate-badge{transform:scale(.8);}
+  .pl-onglets{flex:1;display:flex;gap:4px;justify-content:center;overflow-x:auto;scrollbar-width:none;}
+  .pl-onglets::-webkit-scrollbar{display:none;}
+  .pl-onglets a{white-space:nowrap;text-decoration:none;color:var(--ink-soft,#5b6b84);font-size:14px;
+    font-weight:600;padding:8px 12px;border-radius:9px;}
+  .pl-onglets a:hover{background:rgba(16,26,44,.05);color:var(--ink,#16233a);}
+  .pl-onglets a.actif{background:var(--brand-soft,#eaf0fb);color:var(--brand);}
+  .pl-fermer{flex:0 0 38px;height:38px;border-radius:50%;border:none;background:rgba(16,26,44,.07);
+    color:var(--ink,#16233a);font-size:17px;cursor:pointer;padding:0;}
+  .pl-texte{max-width:760px;margin:28px auto 40px;background:var(--panel,#fff);border:1px solid var(--line,#e2e8f2);
+    border-radius:16px;padding:38px 44px 30px;box-shadow:0 8px 30px rgba(17,29,51,.06);
+    font-size:15px;line-height:1.65;}
+  .pl-texte h1{font-size:28px;line-height:1.2;margin:0;letter-spacing:-.01em;outline:none;}
+  .pl-texte h1 small{display:block;font-size:15px;font-weight:500;color:var(--ink-soft,#5b6b84);
+    letter-spacing:0;margin-top:4px;}
+  .pl-date{color:var(--muted,#7b8798);font-size:13px;margin:8px 0 22px;padding-bottom:18px;
+    border-bottom:1px solid var(--line,#e2e8f2);}
+  .pl-texte h2{font-size:17px;margin:28px 0 8px;color:var(--brand);}
+  .pl-texte p{margin:0 0 10px;}
+  .pl-texte ul{margin:0 0 12px;padding-left:20px;}
+  .pl-texte li{margin:0 0 6px;}
+  .pl-texte a{color:var(--brand);}
+  .pl-texte .fiche-legale{list-style:none;padding:0;margin:4px 0 14px;border:1px solid var(--line,#e2e8f2);
+    border-radius:12px;overflow:hidden;}
+  .pl-texte .fiche-legale li{display:flex;gap:14px;margin:0;padding:9px 14px;border-top:1px solid var(--line,#e2e8f2);}
+  .pl-texte .fiche-legale li:first-child{border-top:none;}
+  .pl-texte .fiche-legale span{flex:0 0 130px;color:var(--muted,#7b8798);font-size:13.5px;}
+  .pl-texte .fiche-legale li > div{flex:1 1 auto;min-width:0;}
+  .a-completer{display:inline-block;background:#fff4c2;color:#7a5a00;border:1px dashed #e0b300;
+    border-radius:6px;padding:0 7px;font-size:13px;font-weight:600;line-height:1.6;}
+  .pl-pied{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    margin-top:30px;padding-top:18px;border-top:1px solid var(--line,#e2e8f2);}
+  .liens-legaux{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 8px;
+    font-size:12.5px;}
+  .liens-legaux a{color:var(--ink-soft,#5b6b84);text-decoration:none;}
+  .liens-legaux a:hover{text-decoration:underline;color:var(--ink,#16233a);}
+  .liens-legaux span{color:var(--muted,#9aa5b5);}
+  .auth-card .liens-legaux{margin-top:16px;padding-top:14px;border-top:1px solid var(--line,#e2e8f2);}
+  .liens-legaux-barre{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 8px;margin-top:6px;font-size:10.5px;}
+  .liens-legaux-barre a{color:var(--sidebar-ink);opacity:.6;text-decoration:none;}
+  .liens-legaux-barre a:hover{opacity:1;text-decoration:underline;}
+  .liens-legaux-barre span{color:var(--sidebar-ink);opacity:.35;}
+  .cc-cgu, .auth-card .cc-cgu{align-items:flex-start !important;line-height:1.45;text-transform:none !important;
+    letter-spacing:0 !important;font-weight:400 !important;font-size:13.5px !important;}
+  .cc-cgu input{margin-top:2px;flex:0 0 auto;}
+  .cc-cgu a{color:var(--brand);}
+  @media(max-width:640px){
+    .pl-barre{flex-wrap:wrap;padding-left:12px;padding-right:12px;gap:8px;}
+    .pl-marque{flex:1;}
+    .pl-onglets{order:3;flex:1 1 100%;justify-content:space-between;gap:2px;}
+    .pl-onglets a{font-size:13px;padding:7px 8px;}
+    .pl-texte{margin:0;border-radius:0;border:none;padding:24px 18px 30px;font-size:15.5px;}
+    .pl-texte h1{font-size:24px;}
+    .pl-texte .fiche-legale li{flex-direction:column;gap:2px;}
+    .pl-texte .fiche-legale span{flex:none;}
+  }
+  @media print{
+    html.pl-ouverte body > *:not(#pageLegale){display:none !important;}
+    #pageLegale{position:static;overflow:visible;background:#fff;}
+    .pl-barre,.pl-pied{display:none !important;}
+    .pl-texte{box-shadow:none;border:none;margin:0;padding:0;max-width:none;}
+  }
   /* L'oeil qui montre le mot de passe */
   .mdp-boite{position:relative;display:block;width:100%;}
   .mdp-boite > input{padding-right:48px !important;margin:0 !important;width:100%;box-sizing:border-box;}
@@ -1953,6 +2023,11 @@
       </button>
       <button id="logoutBtn" data-fr="⎋ Verrouiller la session">⎋ Verrouiller la session</button>
       <div class="author-credit">ya-sin Khali Benyagoub</div>
+      <nav class="liens-legaux-barre" aria-label="Informations légales">
+        <a href="#mentions-legales" data-legal="mentions-legales" data-fr="Mentions légales">Mentions légales</a><span>·</span>
+        <a href="#conditions-generales" data-legal="conditions-generales" data-fr="Conditions générales">Conditions générales</a><span>·</span>
+        <a href="#confidentialite" data-legal="confidentialite" data-fr="Confidentialité">Confidentialité</a>
+      </nav>
     </div>
   </div>
   <div id="main"></div>
@@ -2581,6 +2656,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Mentions légales": "Note legali",
+    "Conditions générales": "Condizioni generali",
+    "Confidentialité": "Privacy",
+    "Informations légales": "Informazioni legali",
+    "J’accepte les": "Accetto le",
+    "conditions générales": "condizioni generali",
+    "et la": "e la",
+    "politique de confidentialité": "informativa sulla privacy",
+    "Acceptez les conditions générales pour créer votre compte.": "Accetti le condizioni generali per creare il suo account.",
     "Rechercher un document…": "Cerca un documento…",
     "Achat et vente": "Acquisto e vendita",
     "Carte grise et fin de vie": "Carta di circolazione e fine vita",
@@ -3541,6 +3625,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Mentions légales": "Rechtlech Mentiounen",
+    "Conditions générales": "Allgemeng Konditiounen",
+    "Confidentialité": "Dateschutz",
+    "Informations légales": "Rechtlech Informatiounen",
+    "J’accepte les": "Ech akzeptéieren déi",
+    "conditions générales": "allgemeng Konditiounen",
+    "et la": "an d’",
+    "politique de confidentialité": "Dateschutzerklärung",
+    "Acceptez les conditions générales pour créer votre compte.": "Akzeptéiert déi allgemeng Konditiounen, fir Äre Kont unzeleeën.",
     "Rechercher un document…": "En Dokument sichen…",
     "Achat et vente": "Kaf a Verkaf",
     "Carte grise et fin de vie": "Carte grise an Enn vum Liewen",
@@ -4500,6 +4593,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Mentions légales": "Legal notice",
+    "Conditions générales": "Terms and conditions",
+    "Confidentialité": "Privacy",
+    "Informations légales": "Legal information",
+    "J’accepte les": "I accept the",
+    "conditions générales": "terms and conditions",
+    "et la": "and the",
+    "politique de confidentialité": "privacy policy",
+    "Acceptez les conditions générales pour créer votre compte.": "Please accept the terms and conditions to create your account.",
     "Rechercher un document…": "Search for a document…",
     "Achat et vente": "Purchase and sale",
     "Carte grise et fin de vie": "Registration certificate and end of life",
@@ -5458,6 +5560,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Mentions légales": "Impressum",
+    "Conditions générales": "Allgemeine Bedingungen",
+    "Confidentialité": "Datenschutz",
+    "Informations légales": "Rechtliche Hinweise",
+    "J’accepte les": "Ich akzeptiere die",
+    "conditions générales": "Allgemeinen Bedingungen",
+    "et la": "und die",
+    "politique de confidentialité": "Datenschutzerklärung",
+    "Acceptez les conditions générales pour créer votre compte.": "Bitte akzeptieren Sie die Allgemeinen Bedingungen, um Ihr Konto zu erstellen.",
     "Rechercher un document…": "Dokument suchen…",
     "Achat et vente": "Kauf und Verkauf",
     "Carte grise et fin de vie": "Zulassungsbescheinigung und Fahrzeugende",
@@ -6432,6 +6543,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Mentions légales": "Wettelijke vermeldingen",
+    "Conditions générales": "Algemene voorwaarden",
+    "Confidentialité": "Privacy",
+    "Informations légales": "Juridische informatie",
+    "J’accepte les": "Ik ga akkoord met de",
+    "conditions générales": "algemene voorwaarden",
+    "et la": "en het",
+    "politique de confidentialité": "privacybeleid",
+    "Acceptez les conditions générales pour créer votre compte.": "Aanvaard de algemene voorwaarden om uw account aan te maken.",
     "Rechercher un document…": "Zoek een document…",
     "Achat et vente": "Aankoop en verkoop",
     "Carte grise et fin de vie": "Inschrijvingsbewijs en einde levensduur",
@@ -7237,7 +7357,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.36';
+const VERSION = '2.37';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7350,7 +7470,10 @@ async function serveurInscrire(adresse, motDePasse, nom, societe){
                     nom_famille: societe.nom_famille || '',
                     type_compte: societe.type || 'particulier',
                     siret: societe.siret || '',
-                    tva: societe.tva || '' } }
+                    tva: societe.tva || '',
+                    /* Preuve de l'acceptation : quand, et quelle version. */
+                    cgu_acceptees_le: new Date().toISOString(),
+                    cgu_version: INFOS_LEGALES.version } }
   });
   /* Selon le reglage du projet, le serveur peut demander une
      confirmation par courriel avant d'ouvrir la session. */
@@ -7454,7 +7577,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '17/10/2026';
+const VERSION_DATE = '21/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -8587,6 +8710,9 @@ function ecranCreationCompte(){
     <input id="cc_pass" type="password" autocomplete="new-password">
     <label>${t('Confirmez le mot de passe')}</label>
     <input id="cc_pass2" type="password" autocomplete="new-password">
+    <label class="li-memo cc-cgu"><input type="checkbox" id="cc_cgu"><span>${t('J’accepte les')}
+      <a href="#conditions-generales" data-legal="conditions-generales">${t('conditions générales')}</a>
+      ${t('et la')} <a href="#confidentialite" data-legal="confidentialite">${t('politique de confidentialité')}</a>.</span></label>
     <div class="auth-error" id="cc_error"></div>
     <div class="auth-info" id="cc_info"></div>
     <button class="auth-btn" id="cc_submit">${t('Créer le compte')}</button>
@@ -8632,6 +8758,9 @@ function ecranCreationCompte(){
       if(siret.length !== 14){ err.textContent = t('Le N° SIRET compte 14 chiffres.'); return; }
     }
     if(!ressembleAdresse(mail)){ err.textContent = t('Adresse e-mail invalide.'); return; }
+    if(!document.getElementById('cc_cgu').checked){
+      err.textContent = t('Acceptez les conditions générales pour créer votre compte.'); return;
+    }
     if(utilisateur){
       if(utilisateur.length < 3){
         err.textContent = t('Le nom d’utilisateur doit faire au moins 3 caractères.'); return;
@@ -8743,6 +8872,7 @@ function authCard(inner){
   return `<div class="auth-wrap">${authScene()}<div class="auth-card">
     <div class="brand" style="justify-content:center;margin-bottom:18px"><div class="plate-badge"></div><span>AUTIVIO</span></div>
     ${inner}
+    ${liensLegauxHtml('liens-legaux')}
   </div></div>`;
 }
 
@@ -11020,6 +11150,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.37': { date: '21/10/2026', lignes: [
+    "Pages légales, comme sur un vrai site : mentions légales, conditions générales d'utilisation et de vente, politique de confidentialité. Elles s'ouvrent depuis l'écran de connexion, la création de compte et le bas du menu, et ont leur propre adresse (autivio.fr/#mentions-legales, #conditions-generales, #confidentialite). Elles s'impriment proprement.",
+    "Création de compte : il faut cocher « J'accepte les conditions générales et la politique de confidentialité ». La date d'acceptation et la version des conditions sont gardées avec le compte."
+  ] },
   '2.36': { date: '17/10/2026', lignes: [
     "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
     "Certificat de cession : la date de naissance choisie dans le champ apparaît désormais sur le Cerfa imprimé. Sur iPhone, une date prise dans la roue n'était pas toujours enregistrée dans la fiche ; et une date au format 22/04/1985 (corrigée à la main après la lecture d'une pièce d'identité) sortait vide. Valable pour toutes les dates de tous les documents.",
@@ -13790,6 +13924,451 @@ function docPermis(cle){
 function ongletSiPermis(cle, libelle){
   return docPermis(cle) ? tabBtn(cle, libelle) : '';
 }
+
+/* =====================================================================
+   PAGES LEGALES : mentions legales, conditions generales d'utilisation
+   et de vente, politique de confidentialite.
+
+   Tout ce qui depend de vous est rassemble ICI, dans INFOS_LEGALES. Une
+   valeur laissee vide s'affiche sur la page comme une case jaune
+   « a completer » : impossible de publier sans la voir.
+
+   Les pages s'ouvrent depuis l'ecran de connexion, la creation de compte
+   et le menu. Elles ont aussi leur propre adresse, pour un lien depuis
+   un e-mail ou un autre site :
+       autivio.fr/#mentions-legales
+       autivio.fr/#conditions-generales
+       autivio.fr/#confidentialite
+
+   Les textes sont en francais : ce sont des documents juridiques
+   francais (loi du 4 aout 1994 sur l'emploi de la langue francaise).
+   ===================================================================== */
+const INFOS_LEGALES = {
+  version:        '21 octobre 2026',     // date affichee en tete des trois pages
+  editeur:        'Ya-sin Khali Benyagoub',
+  statut:         '',   // ex. « Entrepreneur individuel (micro-entreprise) »
+  siret:          '',   // 14 chiffres
+  immatriculation:'',   // ex. « Registre national des entreprises (RNE) »
+  adresse:        '',   // adresse postale de l'activite
+  email:          '',   // adresse de contact publique, ex. contact@autivio.fr
+  telephone:      '',
+  tva:            '',   // numero de TVA, ou « TVA non applicable, art. 293 B du CGI »
+  directeur:      '',   // directeur de la publication ; vide = l'editeur
+  site:           'autivio.fr',
+  hebergeurSite:  { nom: 'GitHub, Inc. (GitHub Pages)', adresse: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis', contact: 'pages.github.com' },
+  registrar:      'OVH SAS, 2 rue Kellermann, 59100 Roubaix, France',  // societe aupres de qui le nom de domaine est enregistre
+  regionDonnees:  '',   // region du projet Supabase, ex. « Francfort (Allemagne) »
+  mediateur:      { nom: '', adresse: '', site: '' },     // mediateur de la consommation
+  ville:          ''    // ville des tribunaux competents entre professionnels
+};
+
+const PAGES_LEGALES = {
+  'mentions-legales':     'Mentions légales',
+  'conditions-generales': 'Conditions générales',
+  'confidentialite':      'Confidentialité'
+};
+
+/* Une valeur, ou la case « a completer » si elle manque. */
+function infoLegale(valeur, quoi){
+  const v = String(valeur || '').trim();
+  return v ? esc(v) : '<span class="a-completer">' + esc('à compléter : ' + quoi) + '</span>';
+}
+
+function contactLegal(){
+  return INFOS_LEGALES.email
+    ? '<a href="mailto:' + esc(INFOS_LEGALES.email) + '">' + esc(INFOS_LEGALES.email) + '</a>'
+    : infoLegale('', 'adresse e-mail de contact');
+}
+
+function texteMentionsLegales(){
+  const I = INFOS_LEGALES, h = I.hebergeurSite;
+  return ''
+  + '<h2>1. Éditeur du site et du logiciel</h2>'
+  + '<p>Le site <b>' + esc(I.site) + '</b> et le logiciel <b>Autivio</b> (application web, application '
+  +   'Android, logiciel pour ordinateur) sont édités par :</p>'
+  + '<ul class="fiche-legale">'
+  +   '<li><span>Nom</span><div>' + infoLegale(I.editeur, 'nom de l’éditeur') + '</div></li>'
+  +   '<li><span>Statut</span><div>' + infoLegale(I.statut, 'statut, ex. entrepreneur individuel') + '</div></li>'
+  +   '<li><span>SIRET</span><div>' + infoLegale(I.siret, 'numéro SIRET') + '</div></li>'
+  +   '<li><span>Immatriculation</span><div>' + infoLegale(I.immatriculation, 'registre, ex. RNE') + '</div></li>'
+  +   '<li><span>Adresse</span><div>' + infoLegale(I.adresse, 'adresse postale') + '</div></li>'
+  +   '<li><span>E-mail</span><div>' + contactLegal() + '</div></li>'
+  +   '<li><span>Téléphone</span><div>' + infoLegale(I.telephone, 'numéro de téléphone') + '</div></li>'
+  +   '<li><span>TVA</span><div>' + infoLegale(I.tva, 'n° de TVA ou mention de franchise') + '</div></li>'
+  + '</ul>'
+  + '<p>Directeur de la publication : ' + infoLegale(I.directeur || I.editeur, 'directeur de la publication') + '.</p>'
+
+  + '<h2>2. Hébergement</h2>'
+  + '<p><b>Le site ' + esc(I.site) + '</b> est hébergé par : '
+  +   infoLegale(h.nom, 'nom de l’hébergeur du site') + ', '
+  +   infoLegale(h.adresse, 'adresse de l’hébergeur') + ', '
+  +   infoLegale(h.contact, 'téléphone ou site de l’hébergeur') + '.</p>'
+  + (I.registrar ? '<p>Le nom de domaine ' + esc(I.site) + ' est enregistré auprès de ' + esc(I.registrar) + '.</p>' : '')
+  + '<p><b>Les comptes, les fiches et les documents enregistrés en ligne</b> sont hébergés par Supabase '
+  +   'Pte. Ltd. (Singapour), sur des serveurs situés dans la région ' + infoLegale(I.regionDonnees, 'région du serveur') + '. '
+  +   'Site : <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a>.</p>'
+
+  + '<h2>3. Propriété intellectuelle</h2>'
+  + '<p>Le logiciel Autivio, son code, son nom, son logo, sa présentation et ses textes sont protégés par le '
+  +   'droit d’auteur et le droit des marques. Toute reproduction, adaptation ou diffusion, totale ou '
+  +   'partielle, sans autorisation écrite de l’éditeur est interdite.</p>'
+  + '<p>Les formulaires Cerfa sont des documents publics de l’administration française, mis à disposition '
+  +   'sur <a href="https://www.service-public.fr" target="_blank" rel="noopener">service-public.fr</a>. '
+  +   'Autivio les remplit ; il n’en revendique aucun droit.</p>'
+
+  + '<h2>4. Indépendance vis-à-vis de l’administration</h2>'
+  + '<p>Autivio est un logiciel privé. Il n’est ni affilié, ni agréé, ni mandaté par l’Agence nationale des '
+  +   'titres sécurisés (ANTS), le ministère de l’Intérieur ou toute autre administration. Les démarches '
+  +   'd’immatriculation se font sur le site officiel '
+  +   '<a href="https://immatriculation.ants.gouv.fr" target="_blank" rel="noopener">immatriculation.ants.gouv.fr</a>, '
+  +   'qui reste seul compétent pour les accepter.</p>'
+
+  + '<h2>5. Responsabilité</h2>'
+  + '<p>L’éditeur s’efforce de fournir des informations et des formulaires exacts et à jour. Les documents '
+  +   'produits avec Autivio restent établis sous la responsabilité de la personne qui les remplit et les '
+  +   'signe : elle doit en vérifier le contenu avant tout usage. Les liens vers d’autres sites sont donnés '
+  +   'à titre pratique ; l’éditeur n’est pas responsable de leur contenu.</p>'
+
+  + '<h2>6. Données personnelles</h2>'
+  + '<p>Le traitement de vos données est décrit dans la '
+  +   '<a href="#confidentialite" data-legal="confidentialite">politique de confidentialité</a>.</p>'
+
+  + '<h2>7. Droit applicable</h2>'
+  + '<p>Le présent site et les présentes mentions sont soumis au droit français.</p>';
+}
+
+function texteConditionsGenerales(){
+  const I = INFOS_LEGALES, m = I.mediateur;
+  return ''
+  + '<h2>1. Objet</h2>'
+  + '<p>Les présentes conditions générales d’utilisation et de vente (les « Conditions ») encadrent '
+  +   'l’utilisation du logiciel Autivio (le « Service »), édité par ' + infoLegale(I.editeur, 'éditeur')
+  +   ' (l’« Éditeur »), par toute personne qui crée un compte (l’« Utilisateur »). Créer un compte vaut '
+  +   'acceptation des Conditions en vigueur ce jour-là.</p>'
+
+  + '<h2>2. Le Service</h2>'
+  + '<p>Autivio aide à gérer l’achat et la revente de véhicules : fiches véhicules, remplissage des '
+  +   'formulaires officiels (certificat de cession, déclaration d’achat, demandes d’immatriculation, '
+  +   'mandat, W garage, perte ou vol, destruction, retrait de la circulation…), contrats de vente, factures, '
+  +   'lecture de cartes grises et de pièces d’identité, sauvegarde et synchronisation entre appareils.</p>'
+  + '<p>Deux types de compte existent :</p>'
+  + '<ul>'
+  +   '<li><b>Particulier</b> : une personne physique qui agit à titre privé. Il accède aux documents utiles '
+  +     'à la vente ou à l’achat d’un véhicule entre particuliers.</li>'
+  +   '<li><b>Professionnel</b> : une personne qui agit pour son activité, identifiée par un numéro SIRET. '
+  +     'Il accède à l’ensemble des documents.</li>'
+  + '</ul>'
+  + '<p>La lecture automatique des documents est signalée « bêta » : elle peut se tromper. L’Utilisateur '
+  +   'relit toujours les informations proposées avant de les valider.</p>'
+
+  + '<h2>3. Compte</h2>'
+  + '<p>Le Service est réservé aux personnes majeures. L’Utilisateur fournit des informations exactes et '
+  +   'les tient à jour. Il garde son mot de passe secret : toute action faite depuis son compte est '
+  +   'réputée faite par lui. En cas de doute sur la sécurité de son compte, il change son mot de passe et '
+  +   'prévient l’Éditeur sans attendre.</p>'
+
+  + '<h2>4. Prix et paiement</h2>'
+  + '<p>Le Service est actuellement proposé <b>gratuitement</b>.</p>'
+  + '<p>Si des offres payantes sont créées, leur contenu, leur prix (toutes taxes comprises pour un '
+  +   'particulier, hors taxes et toutes taxes comprises pour un professionnel), leur durée, leurs modalités '
+  +   'de renouvellement et de résiliation seront présentés clairement avant toute souscription. Aucune '
+  +   'somme ne sera demandée sans l’accord exprès de l’Utilisateur, et les présentes Conditions seront '
+  +   'complétées en conséquence.</p>'
+
+  + '<h2>5. Droit de rétractation</h2>'
+  + '<p>Pour toute offre payante souscrite à distance, l’Utilisateur <b>particulier</b> dispose d’un délai de '
+  +   '<b>14 jours</b> à compter de la souscription pour se rétracter, sans avoir à se justifier '
+  +   '(article L221-18 du code de la consommation), en écrivant à ' + contactLegal() + '. '
+  +   'S’il demande que le Service commence avant la fin de ce délai, il reste redevable de la part déjà '
+  +   'fournie (article L221-25) ; il perd ce droit si le Service a été entièrement fourni avant la fin du '
+  +   'délai avec son accord exprès (article L221-28). Le remboursement intervient au plus tard 14 jours '
+  +   'après la rétractation, par le moyen de paiement utilisé.</p>'
+  + '<p>L’Utilisateur <b>professionnel</b> ne bénéficie pas de ce droit, sauf disposition légale contraire.</p>'
+
+  + '<h2>6. Obligations de l’Utilisateur</h2>'
+  + '<ul>'
+  +   '<li>Vérifier les documents produits avant de les signer, de les remettre ou de les transmettre.</li>'
+  +   '<li>Ne saisir que des informations exactes, et ne produire aucun faux document.</li>'
+  +   '<li>N’utiliser le Service que pour des opérations licites.</li>'
+  +   '<li>Respecter les droits des personnes dont il saisit les données (acheteurs, vendeurs, clients) : '
+  +     'les informer, ne collecter que ce qui est nécessaire, conserver ses factures et documents '
+  +     'comptables pendant la durée exigée par la loi.</li>'
+  +   '<li>Ne pas chercher à contourner la sécurité du Service, ni à accéder aux données d’autrui.</li>'
+  + '</ul>'
+
+  + '<h2>7. Données saisies pour le compte de l’Utilisateur</h2>'
+  + '<p>Lorsqu’un Utilisateur professionnel enregistre dans Autivio des données sur ses clients, il en est '
+  +   'le responsable de traitement ; l’Éditeur agit comme <b>sous-traitant</b> au sens de l’article 28 du '
+  +   'règlement général sur la protection des données (RGPD). À ce titre, l’Éditeur :</p>'
+  + '<ul>'
+  +   '<li>ne traite ces données que pour fournir le Service, selon les instructions de l’Utilisateur ;</li>'
+  +   '<li>ne les vend pas, ne les utilise pas à des fins publicitaires et ne les communique qu’aux '
+  +     'prestataires techniques nécessaires, listés dans la politique de confidentialité ;</li>'
+  +   '<li>veille à la confidentialité et à la sécurité de ces données, et impose les mêmes obligations à '
+  +     'ses propres prestataires ;</li>'
+  +   '<li>aide l’Utilisateur à répondre aux demandes des personnes concernées, et le prévient sans délai de '
+  +     'toute violation de données dont il aurait connaissance ;</li>'
+  +   '<li>efface ces données lorsque l’Utilisateur supprime une fiche ou son compte.</li>'
+  + '</ul>'
+
+  + '<h2>8. Disponibilité</h2>'
+  + '<p>L’Éditeur fait ses meilleurs efforts pour que le Service soit accessible à tout moment, sans pouvoir '
+  +   'le garantir : maintenance, mises à jour ou pannes des prestataires peuvent l’interrompre. Les fiches '
+  +   'restent consultables sur l’appareil sans connexion. L’Utilisateur est invité à garder une sauvegarde '
+  +   'de ses données (bouton « Sauvegarder »).</p>'
+
+  + '<h2>9. Responsabilité</h2>'
+  + '<p>Le Service est un outil d’aide. L’Éditeur ne garantit pas que l’administration acceptera un '
+  +   'dossier : l’exactitude des informations saisies et la conformité des démarches relèvent de '
+  +   'l’Utilisateur. L’Éditeur n’est pas responsable des dommages indirects, ni de ceux qui résultent '
+  +   'd’informations inexactes saisies par l’Utilisateur ou d’une lecture automatique non vérifiée.</p>'
+  + '<p>Envers un Utilisateur professionnel, la responsabilité de l’Éditeur, toutes causes confondues, est '
+  +   'limitée aux sommes payées par celui-ci au cours des douze derniers mois. Rien dans les présentes '
+  +   'Conditions ne limite les droits que le particulier tient de la loi, notamment la garantie légale de '
+  +   'conformité des contenus et services numériques (articles L224-25-12 et suivants du code de la '
+  +   'consommation).</p>'
+
+  + '<h2>10. Propriété intellectuelle</h2>'
+  + '<p>L’Éditeur concède à l’Utilisateur un droit personnel, non exclusif et non transférable d’utiliser '
+  +   'le Service pendant la durée de son compte. L’Utilisateur reste propriétaire des données qu’il '
+  +   'enregistre ; il peut les exporter à tout moment.</p>'
+
+  + '<h2>11. Fin du compte</h2>'
+  + '<p>L’Utilisateur peut supprimer son compte à tout moment, depuis Réglages &gt; « Supprimer mon compte » : '
+  +   'son compte, ses fiches et ses documents en ligne sont alors effacés du serveur, de façon définitive.</p>'
+  + '<p>L’Éditeur peut suspendre ou fermer un compte en cas de manquement grave aux présentes Conditions '
+  +   '(fraude, faux documents, atteinte à la sécurité), après en avoir informé l’Utilisateur sauf urgence.</p>'
+
+  + '<h2>12. Modification des Conditions</h2>'
+  + '<p>Les Conditions peuvent évoluer. L’Utilisateur est informé de toute modification importante avant '
+  +   'son entrée en vigueur ; s’il la refuse, il peut supprimer son compte.</p>'
+
+  + '<h2>13. Réclamations et médiation</h2>'
+  + '<p>Toute réclamation s’adresse d’abord à ' + contactLegal() + '.</p>'
+  + '<p>À défaut d’accord, l’Utilisateur particulier peut recourir gratuitement au médiateur de la '
+  +   'consommation : ' + infoLegale(m.nom, 'nom du médiateur') + ', '
+  +   infoLegale(m.adresse, 'adresse du médiateur') + ', '
+  +   infoLegale(m.site, 'site internet du médiateur') + ' (articles L612-1 et suivants du code de la '
+  +   'consommation), dans l’année qui suit sa réclamation écrite.</p>'
+
+  + '<h2>14. Droit applicable</h2>'
+  + '<p>Les présentes Conditions sont soumises au droit français. Un particulier peut saisir la juridiction '
+  +   'de son domicile ou toute autre juridiction compétente selon la loi. Entre professionnels, tout '
+  +   'litige relève des tribunaux de ' + infoLegale(I.ville, 'ville des tribunaux') + '.</p>';
+}
+
+function texteConfidentialite(){
+  const I = INFOS_LEGALES;
+  return ''
+  + '<h2>1. Qui est responsable ?</h2>'
+  + '<p>Le responsable du traitement des données de votre compte est ' + infoLegale(I.editeur, 'éditeur')
+  +   ', ' + infoLegale(I.adresse, 'adresse postale') + ', joignable à ' + contactLegal() + '.</p>'
+  + '<p>Pour les données qu’un professionnel saisit sur ses propres clients, c’est lui le responsable du '
+  +   'traitement ; Autivio agit pour son compte, comme sous-traitant (voir l’article 7 des '
+  +   '<a href="#conditions-generales" data-legal="conditions-generales">conditions générales</a>).</p>'
+
+  + '<h2>2. Quelles données ?</h2>'
+  + '<ul>'
+  +   '<li><b>Votre compte</b> : adresse e-mail, nom, prénom, nom d’utilisateur, type de compte ; pour un '
+  +     'professionnel, raison sociale, SIRET, numéro de TVA. Le mot de passe n’est jamais conservé en '
+  +     'clair : seule une empreinte irréversible est stockée.</li>'
+  +   '<li><b>Votre fiche garage</b> : adresse, code postal, ville, téléphone, cachet, logo, signataire.</li>'
+  +   '<li><b>Vos fiches et documents</b> : informations sur les véhicules, et sur les vendeurs et acheteurs '
+  +     'que vous saisissez (nom, adresse, date et lieu de naissance), documents que vous enregistrez en '
+  +     'ligne.</li>'
+  +   '<li><b>Les photos de cartes grises et de pièces d’identité</b> que vous scannez. Elles sont lues '
+  +     '<b>sur votre appareil</b>. Lorsque la lecture par le serveur est activée, l’image est transmise à un '
+  +     'service de lecture (voir l’article 4) le temps de la lire ; Autivio ne la conserve pas. Elle n’est '
+  +     'enregistrée en ligne que si vous la joignez vous-même à une fiche.</li>'
+  +   '<li><b>Données techniques</b> : journaux de connexion conservés par l’hébergeur pour la sécurité.</li>'
+  +   '<li><b>À la suppression d’un compte</b> : le motif éventuellement indiqué, sans aucune donnée '
+  +     'permettant de vous identifier.</li>'
+  + '</ul>'
+  + '<p>Autivio ne contient <b>aucune publicité, aucun outil de mesure d’audience et aucun traceur</b>.</p>'
+
+  + '<h2>3. Pourquoi, et sur quelle base ?</h2>'
+  + '<ul>'
+  +   '<li>Fournir le Service : compte, fiches, documents, synchronisation, e-mails liés à votre compte '
+  +     '(code de vérification, mot de passe oublié) — <i>exécution du contrat</i>.</li>'
+  +   '<li>Assurer la sécurité et prévenir la fraude — <i>intérêt légitime</i>.</li>'
+  +   '<li>Être prévenu, en tant qu’éditeur, de la création d’un compte, pour accompagner les nouveaux '
+  +     'utilisateurs — <i>intérêt légitime</i>.</li>'
+  +   '<li>Répondre à vos demandes et respecter nos obligations légales — <i>obligation légale</i>.</li>'
+  + '</ul>'
+  + '<p>Vos données ne sont <b>ni vendues, ni louées, ni utilisées à des fins publicitaires</b>.</p>'
+
+  + '<h2>4. Qui y a accès ?</h2>'
+  + '<p>L’éditeur, et les seuls prestataires techniques nécessaires au Service, tenus à la confidentialité :</p>'
+  + '<ul>'
+  +   '<li><b>Supabase Pte. Ltd.</b> : hébergement de la base de données, des fichiers et des comptes '
+  +     '(région ' + infoLegale(I.regionDonnees, 'région du serveur') + ').</li>'
+  +   '<li><b>GitHub, Inc.</b> (GitHub Pages) : hébergement du site ' + esc(I.site) + '. Comme tout '
+  +     'hébergeur, il voit l’adresse IP des visiteurs du site.</li>'
+  +   '<li><b>Brevo SAS</b> (9-17 rue Salneuve, 75017 Paris) : envoi des e-mails liés à votre compte.</li>'
+  +   '<li><b>Google</b> : uniquement si vous connectez vous-même votre Google Drive pour y sauvegarder '
+  +     'vos documents, ou si la lecture de documents par Google Cloud Vision est activée.</li>'
+  +   '<li><b>Mindee SAS</b> (France) : uniquement si la lecture de documents par Mindee est activée.</li>'
+  +   '<li><b>jsDelivr, unpkg, cdnjs</b> : fourniture de bibliothèques techniques (lecture des photos, des '
+  +     'PDF). Ces services voient l’adresse IP de l’appareil qui les télécharge.</li>'
+  + '</ul>'
+  + '<p>Si vous configurez votre propre messagerie dans les réglages, vos e-mails partent par votre '
+  +   'fournisseur, selon ses propres conditions.</p>'
+
+  + '<h2>5. Transferts hors de l’Union européenne</h2>'
+  + '<p>Certains prestataires sont établis hors de l’Union européenne. Ces transferts sont encadrés par '
+  +   'les garanties prévues par le RGPD : décision d’adéquation (dont le cadre de protection des données '
+  +   'UE–États-Unis) ou clauses contractuelles types de la Commission européenne.</p>'
+
+  + '<h2>6. Combien de temps ?</h2>'
+  + '<ul>'
+  +   '<li>Compte, fiches et documents : tant que votre compte existe. Vous pouvez supprimer une fiche à '
+  +     'tout moment.</li>'
+  +   '<li>Suppression du compte : effacement immédiat du serveur. Les sauvegardes techniques de '
+  +     'l’hébergeur sont écrasées dans un délai limité.</li>'
+  +   '<li>Journaux techniques : selon la durée fixée par l’hébergeur pour la sécurité.</li>'
+  + '</ul>'
+  + '<p>Les factures et documents que vous établissez pour votre activité doivent être conservés par vous '
+  +   'pendant la durée légale (dix ans pour les pièces comptables). Pensez à les exporter avant de '
+  +   'supprimer votre compte.</p>'
+
+  + '<h2>7. Sécurité</h2>'
+  + '<p>Échanges chiffrés (HTTPS), mots de passe stockés sous forme d’empreinte, cloisonnement des '
+  +   'données : chaque compte n’accède qu’à ses propres fiches. Sur un appareil partagé, utilisez « '
+  +   'Verrouiller la session » et le code de sécurité.</p>'
+
+  + '<h2>8. Stockage sur votre appareil</h2>'
+  + '<p>Pour fonctionner hors ligne, Autivio enregistre vos fiches, vos préférences et votre session dans '
+  +   'le stockage de votre navigateur ou de l’application. Ce stockage est strictement nécessaire au '
+  +   'Service : il ne sert à aucun suivi et ne demande donc pas de consentement. Vous pouvez l’effacer '
+  +   'depuis les réglages de votre navigateur ; les fiches non synchronisées seraient alors perdues.</p>'
+
+  + '<h2>9. Vos droits</h2>'
+  + '<p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, de portabilité et '
+  +   'd’opposition, ainsi que du droit de définir des directives sur le sort de vos données après votre '
+  +   'décès. La plupart s’exercent directement dans Autivio (modifier vos informations, exporter, supprimer '
+  +   'votre compte). Pour le reste, écrivez à ' + contactLegal() + ' ; une réponse vous est apportée sous un '
+  +   'mois.</p>'
+  + '<p>Vous pouvez aussi adresser une réclamation à la CNIL : 3 place de Fontenoy, TSA 80715, 75334 Paris '
+  +   'Cedex 07, <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>.</p>'
+
+  + '<h2>10. Modifications</h2>'
+  + '<p>Cette politique peut évoluer avec le Service. La date de mise à jour figure en tête de page ; '
+  +   'tout changement important vous est signalé.</p>';
+}
+
+const TEXTES_LEGAUX = {
+  'mentions-legales':     texteMentionsLegales,
+  'conditions-generales': texteConditionsGenerales,
+  'confidentialite':      texteConfidentialite
+};
+
+/* Ancienne et nouvelle orthographe des adresses : #cgu, #cgv, #rgpd... */
+const ALIAS_LEGAUX = {
+  'mentions': 'mentions-legales', 'cgu': 'conditions-generales', 'cgv': 'conditions-generales',
+  'conditions': 'conditions-generales', 'rgpd': 'confidentialite',
+  'politique-de-confidentialite': 'confidentialite'
+};
+
+function pageLegaleDuLien(){
+  const h = decodeURIComponent((location.hash || '').replace(/^#\/?/, '')).toLowerCase();
+  if(PAGES_LEGALES[h]) return h;
+  return ALIAS_LEGAUX[h] || '';
+}
+
+function liensLegauxHtml(classe){
+  return '<nav class="' + (classe || 'liens-legaux') + '" aria-label="' + esc(t('Informations légales')) + '">'
+    + Object.keys(PAGES_LEGALES).map(function(cle){
+        return '<a href="#' + cle + '" data-legal="' + cle + '">' + esc(t(PAGES_LEGALES[cle])) + '</a>';
+      }).join('<span aria-hidden="true">·</span>')
+    + '</nav>';
+}
+
+let pageLegaleOuverte = '';
+
+function ouvrirPageLegale(cle){
+  if(!TEXTES_LEGAUX[cle]) return;
+  let fond = document.getElementById('pageLegale');
+  if(!fond){
+    fond = document.createElement('div');
+    fond.id = 'pageLegale';
+    fond.setAttribute('role', 'dialog');
+    fond.setAttribute('aria-modal', 'true');
+    document.body.appendChild(fond);
+  }
+  pageLegaleOuverte = cle;
+  fond.innerHTML = '<div class="pl-barre">'
+    +   '<div class="pl-marque"><div class="plate-badge"></div><span>AUTIVIO</span></div>'
+    +   '<div class="pl-onglets" role="tablist">'
+    +     Object.keys(PAGES_LEGALES).map(function(c){
+            return '<a href="#' + c + '" role="tab" data-legal="' + c + '" aria-selected="' + (c === cle)
+              + '" class="' + (c === cle ? 'actif' : '') + '">' + esc(t(PAGES_LEGALES[c])) + '</a>';
+          }).join('')
+    +   '</div>'
+    +   '<button type="button" class="pl-fermer" aria-label="' + esc(t('Fermer')) + '">✕</button>'
+    + '</div>'
+    + '<article class="pl-texte">'
+    +   '<h1>' + esc(PAGES_LEGALES[cle]) + (cle === 'conditions-generales' ? '<small>d’utilisation et de vente</small>' : '')
+    +     (cle === 'confidentialite' ? '<small>politique de protection des données</small>' : '') + '</h1>'
+    +   '<p class="pl-date">Version du ' + esc(INFOS_LEGALES.version) + '</p>'
+    +   TEXTES_LEGAUX[cle]()
+    +   '<div class="pl-pied">'
+    +     '<button type="button" class="btn-sec" id="plImprimer">' + esc(t('Imprimer')) + '</button>'
+    +     liensLegauxHtml('liens-legaux')
+    +   '</div>'
+    + '</article>';
+  fond.scrollTop = 0;
+  /* L'onglet ouvert reste visible dans la barre, sur petit ecran. */
+  const barre = fond.querySelector('.pl-onglets'), actif = fond.querySelector('.pl-onglets a.actif');
+  if(barre && actif) barre.scrollLeft = Math.max(0, actif.offsetLeft - barre.clientWidth / 2 + actif.offsetWidth / 2);
+  fond.querySelector('.pl-fermer').onclick = fermerPageLegale;
+  fond.querySelector('#plImprimer').onclick = function(){ window.print(); };
+  /* L'adresse suit la page ouverte : on peut la copier et l'envoyer. */
+  if(pageLegaleDuLien() !== cle){
+    try{ history.replaceState(null, '', '#' + cle); }catch(e){}
+  }
+  document.documentElement.classList.add('pl-ouverte');
+  const titre = fond.querySelector('h1');
+  if(titre){ titre.tabIndex = -1; titre.focus({ preventScroll: true }); }
+}
+
+function fermerPageLegale(){
+  const fond = document.getElementById('pageLegale');
+  if(fond) fond.remove();
+  pageLegaleOuverte = '';
+  document.documentElement.classList.remove('pl-ouverte');
+  if(pageLegaleDuLien()){
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+  }
+}
+
+/* Un seul branchement pour tous les liens legaux, ou qu'ils soient :
+   ecran de connexion, creation de compte, menu, pages elles-memes. */
+document.addEventListener('click', function(e){
+  const lien = e.target.closest && e.target.closest('[data-legal]');
+  if(!lien) return;
+  e.preventDefault();
+  ouvrirPageLegale(lien.dataset.legal);
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && pageLegaleOuverte) fermerPageLegale();
+});
+window.addEventListener('hashchange', function(){
+  const cle = pageLegaleDuLien();
+  if(cle) ouvrirPageLegale(cle);
+  else if(pageLegaleOuverte) fermerPageLegale();
+});
+/* Arrivee directe par autivio.fr/#mentions-legales : la page s'ouvre
+   par-dessus l'ecran de demarrage, sans attendre la connexion. */
+(function(){
+  const cle = pageLegaleDuLien();
+  if(!cle) return;
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ ouvrirPageLegale(cle); });
+  } else {
+    setTimeout(function(){ ouvrirPageLegale(cle); }, 0);
+  }
+})();
+
 
 /* LA LISTE DES DOCUMENTS, rangee par familles.
    Le numero du Cerfa s'affiche a droite : c'est souvent par lui qu'un
