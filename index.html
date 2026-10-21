@@ -153,6 +153,8 @@
     border:1px solid #14407f;background:#ebf2fd;color:#14407f;line-height:1.25;
     font-family:Helvetica,Arial,sans-serif;white-space:nowrap;}
   .ap-exemplaire > div{position:static !important;display:block;}
+  .apercu-cadre .ap-modele{color:#000;font-weight:700;font-family:'Liberation Sans',Helvetica,Arial,sans-serif;
+    white-space:pre;line-height:1;}
   .ap-ex-l1{font-weight:700;}
   .ap-exemplaire-pied{position:absolute;left:0;right:0;text-align:center;color:#616b80;line-height:1.35;
     font-family:Helvetica,Arial,sans-serif;}
@@ -11345,6 +11347,8 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 const NOTES_VERSION = {
   '2.38': { date: '21/10/2026', lignes: [
     "Contrats de vente (entre particuliers, et particulier à professionnel) : le PDF contient deux exemplaires, comme un Cerfa — le premier marqué « Exemplaire du vendeur », le second « Exemplaire de l'acheteur », avec la mention « Établi en deux exemplaires originaux ». Le libellé est traduit quand le contrat est bilingue. L'aperçu à l'écran montre lui aussi les deux exemplaires.",
+    "Contrat néerlandais entre particuliers : la case « Car-Pass » devient « Car-Pass (BE) / Tellerrapport RDW (NL) », le relevé kilométrique officiel des Pays-Bas, comme sur le contrat vers un professionnel.",
+    "Correction : un caractère invisible copié depuis l'iPhone (Contacts, Messages) empêchait la fabrication du PDF, avec le message « WinAnsi cannot encode ». Ces caractères sont retirés à la saisie, et tous les documents remplacent désormais un caractère que la police ne connaît pas par son plus proche équivalent : le PDF sort toujours.",
     "Envoi par e-mail : un message ne part plus jamais sans son document. Si le PDF n'a pas pu être fabriqué, l'envoi s'arrête et la raison s'affiche, au lieu d'un e-mail « ci-joint » arrivé sans pièce jointe. Le bandeau de confirmation nomme le fichier envoyé. Sur iPhone, si le partage perd la permission le temps de préparer le PDF, un bouton « Partager » le relance avec le PDF joint."
   ] },
   '2.37': { date: '21/10/2026', lignes: [
@@ -15153,6 +15157,67 @@ function dparts(iso){
     if(c && c.matches && c.matches(DATES) && c.value !== c.__dateRelayee) relayer(c);
   }, true);
 })();
+
+/* CARACTERES INVISIBLES ET PDF.
+   Copier un numero, un nom ou une adresse depuis Contacts ou Messages,
+   sur iPhone, emporte souvent des marques invisibles de sens d'ecriture
+   (U+202A, U+202C, U+200E...). La police des PDF (Helvetica, codage
+   WinAnsi) ne sait pas les ecrire : la fabrication s'arretait net, avec
+   « WinAnsi cannot encode "" (0x202a) », et rien ne s'imprimait ni ne
+   partait par e-mail.
+
+   Deux protections :
+     1. a la saisie, ces marques sont retirees des champs ;
+     2. dans tous les PDF, tout caractere que la police ne connait pas
+        est remplace par son plus proche equivalent (lettre sans accent,
+        tiret, espace) ou retire s'il est invisible. Un document sort
+        toujours. */
+const INVISIBLES = /[­​-‏‪-‮⁠-⁤⁦-⁩﻿]/g;
+const WINANSI_EN_PLUS = '€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ';
+const EQUIVALENTS_PDF = {
+  '‐': '-', '‑': '-', '‒': '-', '―': '—', '−': '-',
+  ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ',
+  '′': "'", '″': '"', '‛': "'", '‟': '"', '‹': '‹', '›': '›',
+  'Œ': 'Œ', 'œ': 'œ', '№': 'N°', '™': '™', '…': '…',
+  'Ł': 'L', 'ł': 'l', 'Đ': 'D', 'đ': 'd', 'ı': 'i', 'Ħ': 'H', 'ħ': 'h', 'Ŧ': 'T', 'ŧ': 't',
+  'Ŀ': 'L', 'ŀ': 'l', 'Ə': 'E', 'ə': 'e'
+};
+function texteCompatiblePdf(texte){
+  const s = String(texte === undefined || texte === null ? '' : texte).replace(INVISIBLES, '');
+  let out = '';
+  for(const ch of s){
+    const c = ch.codePointAt(0);
+    if(ch === '\n' || ch === '\r' || ch === '\t' || (c >= 0x20 && c <= 0x7E) || (c >= 0xA0 && c <= 0xFF)
+       || WINANSI_EN_PLUS.indexOf(ch) !== -1){ out += ch; continue; }
+    if(EQUIVALENTS_PDF[ch] !== undefined){ out += EQUIVALENTS_PDF[ch]; continue; }
+    /* Lettre accentuee hors de la table (ă, ł, ş...) : la lettre de base. */
+    const base = ch.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    if(base && base !== ch && [...base].every(function(b){ const k = b.codePointAt(0); return k >= 0x20 && k <= 0xFF; })){
+      out += base; continue;
+    }
+    if(c < 0x20 || c > 0xFFFF) continue;   // commandes et emojis : retires
+    out += '?';
+  }
+  return out;
+}
+(function(){
+  if(typeof PDFLib === 'undefined' || !PDFLib.PDFFont || PDFLib.PDFFont.prototype.__nettoye) return;
+  const P = PDFLib.PDFFont.prototype;
+  const encoder = P.encodeText, largeur = P.widthOfTextAtSize;
+  P.encodeText = function(texte){ return encoder.call(this, texteCompatiblePdf(texte)); };
+  P.widthOfTextAtSize = function(texte, taille){ return largeur.call(this, texteCompatiblePdf(texte), taille); };
+  P.__nettoye = true;
+})();
+document.addEventListener('input', function(e){
+  const c = e.target;
+  if(!c || (c.tagName !== 'INPUT' && c.tagName !== 'TEXTAREA') || typeof c.value !== 'string') return;
+  INVISIBLES.lastIndex = 0;
+  if(!INVISIBLES.test(c.value)) return;
+  INVISIBLES.lastIndex = 0;
+  const pos = c.selectionStart, avant = c.value.length;
+  c.value = c.value.replace(INVISIBLES, '');
+  try{ if(pos !== null) c.setSelectionRange(Math.max(0, pos - (avant - c.value.length)), Math.max(0, pos - (avant - c.value.length))); }catch(err){}
+}, true);
 
 /* VOIR LE MOT DE PASSE.
    Chaque champ mot de passe de l'application — connexion, creation de
@@ -21247,7 +21312,7 @@ const CONTRAT_LBL = {
     documents:   "DOCUMENTS / DOCUMENTEN",
     immat:       "Certificat d'immatriculation / Inschrijvingsbewijs",
     coc:         "Certificat de conformité / Gelijkvormigheidsattest (COC)",
-    carpass:     "Car-Pass",
+    carpass:     "Car-Pass (BE) / Tellerrapport RDW (NL)",
     ct:          "Contrôle technique / Technische keuring",
     carnet:      "Carnet d'entretien / Onderhoudsboekje",
     nbCles:      "Clés (nombre / aantal",
@@ -22119,6 +22184,10 @@ function valeursContrat(v){
   return { lignes: lignes, boxes: a.boxes || {}, paiement: a.paiement,
            signVendeur: a.signVendeur, signAcheteur: a.signAcheteur };
 }
+/* Ce qui suit « Car-Pass » sur le contrat neerlandais entre particuliers
+   (position mesuree dans le modele). */
+const RDW_NL = { suite: ' (BE) / Tellerrapport RDW (NL)', x: 112.4, base: 381.3, haut: 373.6 };
+
 /* DEUX EXEMPLAIRES, comme un Cerfa.
    Un contrat de vente se signe en autant d'originaux que de parties :
    le PDF porte donc deux pages identiques, la premiere marquee
@@ -22203,9 +22272,18 @@ async function genererContratBrut(v, d){
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const ink = rgb(0.05, 0.05, 0.45);
   const G = CONTRAT_GEO[lg], val = valeursContrat(v);
+  const grasModele = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   for(const page of pdfDoc.getPages()){
     const H = page.getSize().height;
+    /* Le modele neerlandais n'imprimait que « Car-Pass », le document
+       belge. Aux Pays-Bas, le releve kilometrique officiel est le
+       « Tellerrapport » de la RDW : on le complete, dans la police et
+       la taille du modele, comme sur le contrat vers un professionnel. */
+    if(lg === 'nl'){
+      page.drawText(RDW_NL.suite, { x: RDW_NL.x, y: H - RDW_NL.base, size: 9.5, font: grasModele,
+                                    color: rgb(0, 0, 0) });
+    }
 
     for(const k in G.lignes){
       const g = G.lignes[k];
@@ -22325,6 +22403,11 @@ function apercuContrat(v){
   });
   // cachets : memes zones et memes rectangles que le PDF
   els += cachetsApercu(v, ['contrat_vend', 'contrat_ach']);
+  if(lg === 'nl'){
+    els += '<span class="ap-modele" style="left:' + (RDW_NL.x * ECH).toFixed(1) + 'px;top:'
+         + ((RDW_NL.base - 9.5 * 0.905) * ECH).toFixed(1) + 'px;font-size:' + (9.5 * ECH).toFixed(2) + 'px">'
+         + esc(RDW_NL.suite) + '</span>';
+  }
   return pagesExemplairesApercu(png, els, lg);
 }
 
