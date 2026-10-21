@@ -1168,6 +1168,17 @@
   input,textarea{background:#fff;border-radius:8px;padding:9px 11px;
     border-color:var(--line);transition:border-color .14s,box-shadow .14s;}
   input:hover,textarea:hover{border-color:#c9d5e8;}
+  /* Les listes deroulantes des formulaires, au meme dessin que les
+     champs : sans cela, le navigateur les dessinait a sa facon, avec un
+     cadre noir et une petite fleche. */
+  .cerfa-form select{width:100%;box-sizing:border-box;min-height:40px;font:inherit;font-size:13.5px;
+    color:var(--ink,#16233a);background-color:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:9px 36px 9px 11px;cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235b6b84' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;
+    transition:border-color .14s,box-shadow .14s;}
+  .cerfa-form select:hover{border-color:#c9d5e8;}
+  .cerfa-form select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(var(--brand-rgb),.13);}
   input:focus,textarea:focus{outline:none;border-color:var(--brand);
     box-shadow:0 0 0 3px rgba(var(--brand-rgb),.13);}
   label{color:var(--ink-soft);font-weight:500;margin-bottom:4px;}
@@ -1770,6 +1781,18 @@
     box-shadow:0 0 0 3px rgba(var(--brand-rgb),.10);}
   .pays-btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
   .pays-format{font-size:12px;color:var(--ink-soft);margin-top:7px;}
+  .pays-liste{position:relative;max-width:360px;}
+  .pays-liste-drapeau{position:absolute;left:11px;top:50%;transform:translateY(-50%);
+    display:flex;pointer-events:none;border-radius:3px;overflow:hidden;line-height:0;}
+  .pays-liste select{width:100%;box-sizing:border-box;min-height:40px;font:inherit;font-size:13.5px;
+    color:var(--ink,#16233a);background-color:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:9px 36px 9px 44px;cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235b6b84' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;
+    transition:border-color .14s,box-shadow .14s;}
+  .pays-liste select:hover{border-color:#c9d5e8;}
+  .pays-liste select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(var(--brand-rgb),.13);}
+  @media(max-width:640px){ .pays-liste{max-width:none;} }
 
   /* ---- Allemagne : ville reconnue, et lectures concurrentes ---- */
   .de-aide{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:7px;
@@ -10823,8 +10846,8 @@ function paysImmatCourant(){
     const v = vehicles[currentId];
     if(v) return paysPlaque(v);
   }catch(e){}
-  const bt = document.querySelector('.pays-choix.actif');
-  return bt ? bt.dataset.pays : 'FR';
+  const liste = document.getElementById('paysImmatChoix');
+  return liste && liste.value ? liste.value : 'FR';
 }
 
 function majAideDE(){
@@ -10851,17 +10874,21 @@ function majAideDE(){
   });
 }
 
-/* Le choix du pays, en drapeaux, pose sous le champ d'immatriculation */
+/* Le choix du pays, pose sous le champ d'immatriculation : une liste
+   deroulante, le drapeau du pays retenu affiche a gauche. Les huit
+   boutons-drapeaux prenaient deux lignes sur telephone. */
 function choixPaysPlaque(v){
   const cur = paysPlaque(v);
   const modele = PAYS_PLAQUE.filter(function(p){ return p[0] === cur; })[0];
-  return '<div style="grid-column:1/-1"><label>' + esc(t("Pays d'immatriculation")) + '</label>'
-    + '<div class="pays-drapeaux" role="group" aria-label="' + esc(t("Pays d'immatriculation")) + '">'
-    + PAYS_PLAQUE.map(function(p){
-        return '<button type="button" class="pays-btn' + (p[0] === cur ? ' actif' : '') + '"'
-          + ' data-pays="' + p[0] + '" title="' + esc(t(p[1]) + (p[2] ? '  —  ' + p[2] : '')) + '">'
-          + drapeauSVG(p[3], 22) + '<span>' + esc(p[0] === 'XX' ? t('Autre') : p[0]) + '</span></button>';
-      }).join('')
+  return '<div style="grid-column:1/-1"><label for="paysImmatChoix">' + esc(t("Pays d'immatriculation")) + '</label>'
+    + '<div class="pays-liste">'
+    +   '<span class="pays-liste-drapeau" aria-hidden="true">' + drapeauSVG(modele ? modele[3] : 'fr', 22) + '</span>'
+    +   '<select id="paysImmatChoix">'
+    +     PAYS_PLAQUE.map(function(p){
+            return '<option value="' + p[0] + '"' + (p[0] === cur ? ' selected' : '') + '>'
+              + esc(t(p[1])) + (p[2] ? ' — ' + esc(p[2]) : '') + '</option>';
+          }).join('')
+    +   '</select>'
     + '</div>'
     + '<div class="pays-format">'
     + (modele && modele[2]
@@ -10890,20 +10917,21 @@ function injecterPaysPlaque(v){
 }
 
 function brancherPaysPlaque(v){
-  document.querySelectorAll('.pays-btn').forEach(function(bt){
-    bt.onclick = function(){
-      if(bt.dataset.pays === paysPlaque(v)) return;
-      v.vehicule.paysImmat = bt.dataset.pays;
-      // on reformate les plaques deja saisies selon le nouveau pays,
-      // celle de la fiche comme celle recopiee sur la facture
-      if(v.vehicule.immat) v.vehicule.immat = formatPlate(v.vehicule.immat, bt.dataset.pays);
-      if(v.facture && v.facture.immat){
-        v.facture.immat = formatPlate(v.facture.immat, bt.dataset.pays);
-      }
-      saveVehicle(v);
-      renderMain();
-    };
-  });
+  const liste = document.getElementById('paysImmatChoix');
+  if(!liste) return;
+  liste.onchange = function(){
+    const pays = liste.value;
+    if(pays === paysPlaque(v)) return;
+    v.vehicule.paysImmat = pays;
+    // on reformate les plaques deja saisies selon le nouveau pays,
+    // celle de la fiche comme celle recopiee sur la facture
+    if(v.vehicule.immat) v.vehicule.immat = formatPlate(v.vehicule.immat, pays);
+    if(v.facture && v.facture.immat){
+      v.facture.immat = formatPlate(v.facture.immat, pays);
+    }
+    saveVehicle(v);
+    renderMain();
+  };
 }
 
 // Repositionne le curseur en comptant les caractères utiles (hors séparateurs)
@@ -11152,7 +11180,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
 const NOTES_VERSION = {
   '2.37': { date: '21/10/2026', lignes: [
     "Pages légales, comme sur un vrai site : mentions légales, conditions générales d'utilisation et de vente, politique de confidentialité. Elles s'ouvrent depuis l'écran de connexion, la création de compte et le bas du menu, et ont leur propre adresse (autivio.fr/#mentions-legales, #conditions-generales, #confidentialite). Elles s'impriment proprement.",
-    "Création de compte : il faut cocher « J'accepte les conditions générales et la politique de confidentialité ». La date d'acceptation et la version des conditions sont gardées avec le compte."
+    "Création de compte : il faut cocher « J'accepte les conditions générales et la politique de confidentialité ». La date d'acceptation et la version des conditions sont gardées avec le compte.",
+    "La lecture des documents par le serveur passe uniquement par Google Vision : la fonction « lire-image » et sa notice sont simplifiées en conséquence.",
+    "Facture : l'énergie et la durée de garantie se choisissent dans une liste déroulante, au lieu d'une grille de boutons qui prenait tout l'écran du téléphone. Les pièces couvertes restent à cocher, puisqu'on peut en choisir plusieurs. Les listes déroulantes des formulaires ont le même dessin que les autres champs.",
+    "Pays d'immatriculation : une liste déroulante dans tous les documents, avec le drapeau du pays retenu et le format de plaque attendu (« France — AB-123-CD »), à la place des huit boutons-drapeaux."
   ] },
   '2.36': { date: '17/10/2026', lignes: [
     "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
@@ -14207,7 +14238,6 @@ function texteConfidentialite(){
   +   '<li><b>Brevo SAS</b> (9-17 rue Salneuve, 75017 Paris) : envoi des e-mails liés à votre compte.</li>'
   +   '<li><b>Google</b> : uniquement si vous connectez vous-même votre Google Drive pour y sauvegarder '
   +     'vos documents, ou si la lecture de documents par Google Cloud Vision est activée.</li>'
-  +   '<li><b>Mindee SAS</b> (France) : uniquement si la lecture de documents par Mindee est activée.</li>'
   +   '<li><b>jsDelivr, unpkg, cdnjs</b> : fourniture de bibliothèques techniques (lecture des photos, des '
   +     'PDF). Ces services voient l’adresse IP de l’appareil qui les télécharge.</li>'
   + '</ul>'
@@ -26753,12 +26783,9 @@ function imageEnBase64(toile){
   return url.slice(url.indexOf(',') + 1);
 }
 
-/* Ce que le serveur a rendu en dernier : soit du texte, soit des CHAMPS
-   deja ranges quand c'est Mindee qui a repondu. */
-let champsDuServeur = null;
-
+/* Le serveur (Google Vision) rend du TEXTE : le logiciel le range
+   ensuite lui-meme, exactement comme une lecture sur l'appareil. */
 async function lireParLeServeur(toile, type){
-  champsDuServeur = null;
   if(serveurLitLesImages === false) return '';
   if(!serveurPret() || !sessionServeur || !sessionServeur.access_token) return '';
   try{
@@ -26772,23 +26799,13 @@ async function lireParLeServeur(toile, type){
       body: JSON.stringify({ image: imageEnBase64(toile), type: type || 'carteGrise' })
     });
     const rep = await r.json().catch(function(){ return null; });
-    if(!r.ok || !rep || (!rep.texte && !rep.champs)){
+    if(!r.ok || !rep || !rep.texte){
       /* Fonction absente ou cle non posee : on ne reessaiera pas de la
          session, inutile de faire attendre a chaque photo. */
       if(r.status === 404 || r.status === 500) serveurLitLesImages = false;
       return '';
     }
     serveurLitLesImages = true;
-    /* Mindee rend les champs directement : plus rien a deviner. */
-    if(rep.champs && Object.keys(rep.champs).length){
-      champsDuServeur = rep.champs;
-      /* On rend tout de meme un texte, fait des valeurs : les
-         verifications du logiciel — est-ce bien une carte grise, quel
-         pays, quel modele — continuent de fonctionner. */
-      return Object.keys(rep.champs).map(function(k){
-        return k + ' : ' + rep.champs[k];
-      }).join('\n');
-    }
     return rep.texte || '';
   }catch(e){
     return '';
@@ -26894,32 +26911,6 @@ async function relireLaBande(toile){
   }catch(e){ return ''; }
 }
 
-/* Les champs rendus par le serveur, remis au format du logiciel : les
-   dates au format interne, les vides ecartes. */
-function nettoyerChampsServeur(champs){
-  const r = {};
-  Object.keys(champs || {}).forEach(function(k){
-    let v = String(champs[k] || '').trim();
-    if(!v) return;
-    if(/^(naissance|expire|dateFirstImmat|dateCertif)$/.test(k)){
-      v = dateInterne(v) || v;
-    }
-    r[k] = v;
-  });
-  /* L'adresse arrive d'un seul tenant — « 12 RUE DES LILAS 59000
-     LILLE » — alors que les Cerfa demandent la voie, le code postal et
-     la commune separement. */
-  if(r.adresse && !r.cp){
-    const m = r.adresse.match(/\b(\d{5})\b\s*(.*)$/);
-    if(m){
-      r.cp = m[1];
-      r.ville = nettoyerLigneOcr(m[2]).replace(/\bFRANCE\b/i, '').trim();
-      r.adresse = nettoyerLigneOcr(r.adresse.slice(0, m.index));
-    }
-  }
-  return r;
-}
-
 async function lireUnVolet(fichier, parLaCamera, source, typeAttendu){
   const toile = await preparerImageOcr(fichier);
   bandeau('', '');
@@ -26945,12 +26936,8 @@ async function lireUnVolet(fichier, parLaCamera, source, typeAttendu){
   }
 
   bandeau('', '');
-  /* Quand le serveur a rendu des CHAMPS — Mindee —, ils l'emportent :
-     ils sont issus d'un service qui connait ces documents, la ou le
-     logiciel doit deviner a partir du texte. */
   const lu = lireCarteGrise(texte);
-  if(champsDuServeur) Object.assign(lu, nettoyerChampsServeur(champsDuServeur));
-  return { texte: texte, lu: lu, champs: champsDuServeur, toile: toile };
+  return { texte: texte, lu: lu, toile: toile };
 }
 
 /* Les volets se completent : le premier donne souvent le vehicule, le
@@ -27905,9 +27892,6 @@ async function scannerIdentite(fichier, v, parLaCamera){
     const premiere = await lireUnVolet(fichier, parLaCamera, 'scanID', 'identite');
     if(!premiere) return;
     let lu = lireUneFaceIdentite(premiere.texte);
-    /* Si le serveur a rendu des champs, ils l'emportent sur ce que le
-       logiciel a devine a partir du texte. */
-    if(premiere.champs) Object.assign(lu, nettoyerChampsServeur(premiere.champs));
     let texteTotal = premiere.texte;
     let premiereFace = faceIdentite(premiere.texte);
 
@@ -28017,10 +28001,7 @@ async function scannerIdentite(fichier, v, parLaCamera){
         });
         continue;
       }
-      lu = fusionnerVolets(lu, seconde.champs
-            ? Object.assign(lireUneFaceIdentite(seconde.texte),
-                            nettoyerChampsServeur(seconde.champs))
-            : lireUneFaceIdentite(seconde.texte));
+      lu = fusionnerVolets(lu, lireUneFaceIdentite(seconde.texte));
       texteTotal += '\n' + seconde.texte;
       faces.push(photo);
       break;
@@ -29004,6 +28985,21 @@ function ctrlV(cle, label, span){
     + '<input data-vend="' + cle + '" type="text"></div>';
 }
 
+/* Les energies de la facture : le mot d'abord, le code ensuite. Un code inconnu de la nomenclature (carte grise
+   etrangere) reste propose, pour ne pas perdre l'information. */
+function optionsEnergieFacture(valeur){
+  const actuel = String(valeur || '').toUpperCase().trim();
+  let html = '<option value="">' + esc(t('Sélectionnez l’énergie')) + '</option>'
+    + ENERGIES.map(function(e){
+        return '<option value="' + e[0] + '"' + (e[0] === actuel ? ' selected' : '') + '>'
+          + esc(t(e[1])) + ' · ' + e[0] + '</option>';
+      }).join('');
+  if(actuel && !ENERGIES.some(function(e){ return e[0] === actuel; })){
+    html += '<option value="' + esc(actuel) + '" selected>' + esc(actuel) + '</option>';
+  }
+  return html;
+}
+
 function ctrlF(path, label, type, span){
   return '<div' + (span ? ' style="grid-column:span ' + span + '"' : '') + '>'
     + '<label>' + esc(label) + '</label>'
@@ -29079,23 +29075,25 @@ function factureForm(v){
   +   ctrlF('dateFirstImmat', t('1re mise en circulation'), 'date')
   +   ctrlF('km', t('Kilométrage'))
   + '</div>'
-  + '<div class="gar-lab">' + esc(t('Énergie')) + '</div>'
-  + '<div class="gar-choix">'
-  +   ENERGIES.map(function(e){
-        return '<label class="gar-opt"><input type="radio" name="fener" data-fener="'
-          + e[0] + '"><span>' + esc(t(e[1])) + '</span></label>'; }).join('')
-  + '</div>'
+  /* Une liste deroulante : vingt-sept energies en puces prenaient
+     tout l'ecran du telephone. */
+  + '<div class="cerfa-grid"><div style="grid-column:span 2">'
+  +   '<label for="facEnergie">' + esc(t('Énergie')) + '</label>'
+  +   '<select id="facEnergie" class="liste-large">' + optionsEnergieFacture(f.energie) + '</select>'
+  + '</div></div>'
   + '<div class="cerfa-grid">' + ctrlF('observations', t('Observations'), 'text', 3) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Plaque, châssis, date et énergie sont repris de la fiche à l’ouverture : corrigez-les ici sans toucher à la fiche.')) + '</div>'
   + '</div>'
 
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Garantie')) + '</div>'
-  + '<div class="gar-lab">' + esc(t('Durée')) + '</div>'
-  + '<div class="gar-choix">'
-  +   DUREES_GARANTIE.map(function(g){
-        return '<label class="gar-opt"><input type="radio" name="fgar" data-fgar="'
-          + g[0] + '"><span>' + esc(t(g[1])) + '</span></label>'; }).join('')
-  + '</div>'
+  + '<div class="cerfa-grid"><div>'
+  +   '<label for="facGarantie">' + esc(t('Durée')) + '</label>'
+  +   '<select id="facGarantie" class="liste-large">'
+  +     DUREES_GARANTIE.map(function(g){
+          return '<option value="' + g[0] + '"' + ((f.garantieDuree || '') === g[0] ? ' selected' : '') + '>'
+            + esc(t(g[1])) + '</option>'; }).join('')
+  +   '</select>'
+  + '</div></div>'
   + '<div class="cerfa-grid" id="garAutreZone" style="display:none">'
   +   ctrlF('garantieAutre', t('Durée à préciser'), 'text', 2) + '</div>'
   + '<div class="gar-lab">' + esc(t('Pièces couvertes')) + '</div>'
@@ -29203,12 +29201,10 @@ function remplirFactureForm(v){
     inp.checked = ((f.reglement || '') === inp.dataset.freg);
   });
   majEspeces(f);
-  document.querySelectorAll('input[data-fener]').forEach(function(inp){
-    inp.checked = ((f.energie || '').toUpperCase() === inp.dataset.fener);
-  });
-  document.querySelectorAll('input[data-fgar]').forEach(function(inp){
-    inp.checked = ((f.garantieDuree || '') === inp.dataset.fgar);
-  });
+  const listeEnergie = document.getElementById('facEnergie');
+  if(listeEnergie) listeEnergie.innerHTML = optionsEnergieFacture(f.energie);
+  const listeGarantie = document.getElementById('facGarantie');
+  if(listeGarantie) listeGarantie.value = f.garantieDuree || '';
   document.querySelectorAll('input[data-fpiece]').forEach(function(inp){
     inp.checked = (f.garantiePieces || []).indexOf(inp.dataset.fpiece) !== -1;
   });
@@ -29256,14 +29252,11 @@ function wireFactureForm(v, d){
       saveVehicle(v); renderDoc(v);
     };
   });
-  document.querySelectorAll('input[data-fener]').forEach(function(inp){
-    inp.onchange = function(){
-      if(!inp.checked) return;
-      f.energie = inp.dataset.fener;
-      majZoneGarantie(f);   // rafraichit le liseré des boutons coches
-      saveVehicle(v); renderDoc(v);
-    };
-  });
+  const choixEnergie = document.getElementById('facEnergie');
+  if(choixEnergie) choixEnergie.onchange = function(){
+    f.energie = choixEnergie.value;
+    saveVehicle(v); renderDoc(v);
+  };
   document.querySelectorAll('input[data-vend]').forEach(function(inp){
     inp.oninput = function(){
       dealer[inp.dataset.vend] = valeurDate(inp);
@@ -29288,21 +29281,19 @@ function wireFactureForm(v, d){
       saveVehicle(v); renderDoc(v);
     };
   });
-  document.querySelectorAll('input[data-fgar]').forEach(function(inp){
-    inp.onchange = function(){
-      if(!inp.checked) return;
-      f.garantieDuree = inp.dataset.fgar;
-      // premiere garantie accordee : moteur et boite, l'usage du metier
-      if(f.garantieDuree && !(f.garantiePieces || []).length){
-        f.garantiePieces = ['moteur', 'boite'];
-        document.querySelectorAll('input[data-fpiece]').forEach(function(c){
-          c.checked = f.garantiePieces.indexOf(c.dataset.fpiece) !== -1;
-        });
-      }
-      majZoneGarantie(f);
-      memoriserGarantie(f); saveVehicle(v); renderDoc(v);
-    };
-  });
+  const choixGarantie = document.getElementById('facGarantie');
+  if(choixGarantie) choixGarantie.onchange = function(){
+    f.garantieDuree = choixGarantie.value;
+    // premiere garantie accordee : moteur et boite, l'usage du metier
+    if(f.garantieDuree && !(f.garantiePieces || []).length){
+      f.garantiePieces = ['moteur', 'boite'];
+      document.querySelectorAll('input[data-fpiece]').forEach(function(c){
+        c.checked = f.garantiePieces.indexOf(c.dataset.fpiece) !== -1;
+      });
+    }
+    majZoneGarantie(f);
+    memoriserGarantie(f); saveVehicle(v); renderDoc(v);
+  };
   document.querySelectorAll('input[data-fpiece]').forEach(function(inp){
     inp.onchange = function(){
       const l = (f.garantiePieces || []).slice();
