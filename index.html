@@ -3372,6 +3372,7 @@ const DICO = {
     "Fait à": "Fatto a",
     "le": "il",
     "Les intitulés ci-dessous sont ceux imprimés sur le contrat.": "Le voci sottostanti sono quelle stampate sul contratto.",
+    "Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.": "Il PDF contiene due copie: una per il venditore, una per l’acquirente. Le faccia firmare entrambe.",
     "Document généré à partir de la fiche — vérifiez les informations avant signature.": "Documento generato dalla scheda — verifichi le informazioni prima della firma.",
     "Formulaire officiel": "Modulo ufficiale",
     "pré-rempli avec les données de la fiche. Cochez les cases nécessaires ci-dessous, vérifiez les informations, imprimez en 2 exemplaires et signez.": "precompilato con i dati della scheda. Selezioni le caselle necessarie qui sotto, verifichi le informazioni, stampi in 2 copie e firmi.",
@@ -4342,6 +4343,7 @@ const DICO = {
     "Fait à": "Gemaach zu",
     "le": "den",
     "Les intitulés ci-dessous sont ceux imprimés sur le contrat.": "D'Bezeechnungen hei drënner sinn déi, déi um Kontrakt gedréckt sinn.",
+    "Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.": "De PDF huet zwee Exemplaren: eent fir de Verkeefer, eent fir de Keefer. Loosst allen zwee ënnerschreiwen.",
     "Document généré à partir de la fiche — vérifiez les informations avant signature.": "Dokument aus der Fiche generéiert — kontrolléiert d'Informatioune virun der Ënnerschrëft.",
     "Formulaire officiel": "Offizielle Formulaire",
     "pré-rempli avec les données de la fiche. Cochez les cases nécessaires ci-dessous, vérifiez les informations, imprimez en 2 exemplaires et signez.": "virausgefëllt mat den Donnéeë vun der Fiche. Kräizt hei drënner déi néideg Këschten un, kontrolléiert d'Informatioune, dréckt 2 Exemplare an ënnerschreift.",
@@ -5311,6 +5313,7 @@ const DICO = {
     "Fait à": "Done at",
     "le": "on",
     "Les intitulés ci-dessous sont ceux imprimés sur le contrat.": "The labels below are the ones printed on the contract.",
+    "Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.": "The PDF contains two copies: one for the seller, one for the buyer. Have both signed.",
     "Document généré à partir de la fiche — vérifiez les informations avant signature.": "Document generated from the record — check the information before signing.",
     "Formulaire officiel": "Official form",
     "pré-rempli avec les données de la fiche. Cochez les cases nécessaires ci-dessous, vérifiez les informations, imprimez en 2 exemplaires et signez.": "pre-filled with the data from the record. Tick the boxes needed below, check the information, print 2 copies and sign.",
@@ -6295,6 +6298,7 @@ const DICO = {
     "Fait à": "Ausgestellt in",
     "le": "am",
     "Les intitulés ci-dessous sont ceux imprimés sur le contrat.": "Die Bezeichnungen unten sind die auf dem Vertrag gedruckten.",
+    "Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.": "Das PDF enthält zwei Exemplare: eines für den Verkäufer, eines für den Käufer. Lassen Sie beide unterschreiben.",
     "Document généré à partir de la fiche — vérifiez les informations avant signature.": "Aus dem Datensatz erzeugtes Dokument — prüfen Sie die Angaben vor der Unterschrift.",
     "Formulaire officiel": "Amtliches Formular",
     "pré-rempli avec les données de la fiche. Cochez les cases nécessaires ci-dessous, vérifiez les informations, imprimez en 2 exemplaires et signez.": "vorausgefüllt mit den Angaben aus dem Datensatz. Kreuzen Sie unten die nötigen Felder an, prüfen Sie die Angaben, drucken Sie 2 Exemplare und unterschreiben Sie.",
@@ -7273,6 +7277,7 @@ const DICO = {
     "Fait à": "Opgemaakt te",
     "le": "op",
     "Les intitulés ci-dessous sont ceux imprimés sur le contrat.": "De onderstaande benamingen zijn die op het contract.",
+    "Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.": "De pdf bevat twee exemplaren: één voor de verkoper, één voor de koper. Laat beide ondertekenen.",
     "Document généré à partir de la fiche — vérifiez les informations avant signature.": "Document gegenereerd uit de fiche — controleer de gegevens voor ondertekening.",
     "Formulaire officiel": "Officieel formulier",
     "pré-rempli avec les données de la fiche. Cochez les cases nécessaires ci-dessous, vérifiez les informations, imprimez en 2 exemplaires et signez.": "vooringevuld met de gegevens uit de fiche. Vink hieronder de nodige vakjes aan, controleer de gegevens, druk 2 exemplaren af en onderteken.",
@@ -10296,7 +10301,7 @@ const PAYS_PLAQUE = [
   ['FR', 'France',      'AB-123-CD',  'fr'],
   ['BE', 'Belgique',    '1-ABC-123',  'be'],
   ['DE', 'Allemagne',   'M-AB 1234',  'de'],
-  ['NL', 'Pays-Bas',    '12-AB-34',   'nl'],
+  ['NL', 'Pays-Bas',    '5-SBV-03',   'nl'],
   ['IT', 'Italie',      'AB123CD',    'it'],
   ['LU', 'Luxembourg',  'AB1234',     'lu'],
   ['CH', 'Suisse',      'VD 123456',  'ch'],
@@ -10758,8 +10763,21 @@ function formatPlateSelonPays(raw, pays){
       return assemblerDE(net, k, /-\s*$/.test(s));
     }
     case 'NL': {
-      // groupes de 2, separes par des tirets : 12-AB-34
-      return (brut.match(/.{1,2}/g) || []).slice(0, 4).join('-');
+      /* Six caracteres en trois groupes, mais la longueur des groupes
+         change selon l'epoque (les « sidecodes ») :
+           99-XX-99, XX-99-XX, 99-XXX-9, 9-XXX-99 (5-SBV-03),
+           XX-999-X, X-999-XX, XXX-99-X, 9-XX-999, 999-XX-9...
+         Une regle les couvre tous : on coupe a chaque passage des
+         lettres aux chiffres. Les plus anciens n'ont que deux blocs
+         (AB1234, 1234AB, ABCD12) : le bloc de quatre se coupe en deux,
+         AB-12-34. L'ancienne regle coupait toujours par deux et rendait
+         5S-BV-03 au lieu de 5-SBV-03. */
+      const blocs = brut.slice(0, 6).match(/[A-Z]+|\d+/g) || [];
+      if(brut.length >= 6 && blocs.length === 2){
+        const i = blocs[0].length === 4 ? 0 : (blocs[1].length === 4 ? 1 : -1);
+        if(i !== -1) blocs.splice(i, 1, blocs[i].slice(0, 2), blocs[i].slice(2));
+      }
+      return blocs.join('-') + brut.slice(6);
     }
     case 'LU': {
       const m = brut.match(/^([A-Z]{0,2})(\d{0,4})/);
@@ -11288,7 +11306,9 @@ const NOTES_VERSION = {
     "La lecture des documents par le serveur passe uniquement par Google Vision : la fonction « lire-image » et sa notice sont simplifiées en conséquence.",
     "Facture : l'énergie et la durée de garantie se choisissent dans une liste déroulante, au lieu d'une grille de boutons qui prenait tout l'écran du téléphone. Les pièces couvertes restent à cocher, puisqu'on peut en choisir plusieurs. Les listes déroulantes des formulaires ont le même dessin que les autres champs.",
     "Pays d'immatriculation : une liste déroulante dans tous les documents, avec le drapeau et le format de plaque de chaque pays, à la place des huit boutons-drapeaux.",
-    "La plaque n'est plus jamais coupée : quand ses caractères n'entrent pas dans le modèle du pays choisi, elle reste telle qu'elle a été saisie. Avant, passer de France à Belgique transformait AB-123-CD en A-B-123, et revenir à France ne rendait pas les lettres perdues."
+    "La plaque n'est plus jamais coupée : quand ses caractères n'entrent pas dans le modèle du pays choisi, elle reste telle qu'elle a été saisie. Avant, passer de France à Belgique transformait AB-123-CD en A-B-123, et revenir à France ne rendait pas les lettres perdues.",
+    "Plaques néerlandaises : les tirets se posent au changement entre lettres et chiffres, comme sur les vraies plaques (5-SBV-03, GBB-01-B, AB-12-34). Avant, le logiciel coupait toujours par deux et écrivait 5S-BV-03.",
+    "Contrats de vente (entre particuliers, et particulier à professionnel) : le PDF contient deux exemplaires, comme un Cerfa — le premier marqué « Exemplaire du vendeur », le second « Exemplaire de l'acheteur », avec la mention « Établi en deux exemplaires originaux ». Le libellé est traduit quand le contrat est bilingue."
   ] },
   '2.36': { date: '17/10/2026', lignes: [
     "Le choix du document devient une liste déroulante : une seule case montre le document ouvert et son numéro de Cerfa. Elle déroule la liste rangée en trois familles — Achat et vente, Immatriculation, Carte grise et fin de vie — avec une recherche par nom ou par numéro. Sur téléphone, la liste monte du bas de l'écran. Un compte particulier n'y voit que les documents qu'il peut établir.",
@@ -22053,6 +22073,55 @@ function valeursContrat(v){
   return { lignes: lignes, boxes: a.boxes || {}, paiement: a.paiement,
            signVendeur: a.signVendeur, signAcheteur: a.signAcheteur };
 }
+/* DEUX EXEMPLAIRES, comme un Cerfa.
+   Un contrat de vente se signe en autant d'originaux que de parties :
+   le PDF porte donc deux pages identiques, la premiere marquee
+   « Exemplaire du vendeur », la seconde « Exemplaire de l'acheteur ».
+   Les deux se signent ; chacun repart avec la sienne. Le libelle est
+   bilingue quand le contrat l'est. */
+const EXEMPLAIRES_CONTRAT = {
+  fr: ['EXEMPLAIRE DU VENDEUR', 'EXEMPLAIRE DE L\'ACHETEUR',
+       'Établi en deux exemplaires originaux, un pour chaque partie.'],
+  nl: ['Exemplaar van de verkoper', 'Exemplaar van de koper',
+       'Opgemaakt in twee originele exemplaren, één voor elke partij.'],
+  de: ['Exemplar des Verkäufers', 'Exemplar des Käufers',
+       'In zwei Originalen ausgefertigt, eines für jede Partei.'],
+  it: ['Copia del venditore', 'Copia dell\'acquirente',
+       'Redatto in due originali, uno per ciascuna parte.'],
+  lb: ['Exemplar vum Verkeefer', 'Exemplar vum Keefer',
+       'An zwee Original-Exemplaren opgestallt, eent fir all Partei.']
+};
+
+async function enDeuxExemplaires(pdfDoc, lg){
+  const { StandardFonts, rgb } = PDFLib;
+  const gras = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const normal = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const bleu = rgb(0.08, 0.25, 0.50), fond = rgb(0.92, 0.95, 0.99), gris = rgb(0.38, 0.42, 0.50);
+  const autre = (lg && lg !== 'fr' && EXEMPLAIRES_CONTRAT[lg]) ? EXEMPLAIRES_CONTRAT[lg] : null;
+  const [copie] = await pdfDoc.copyPages(pdfDoc, [0]);
+  pdfDoc.addPage(copie);
+  pdfDoc.getPages().slice(0, 2).forEach(function(page, i){
+    const W = page.getSize().width, H = page.getSize().height;
+    /* Le cartouche, en haut a droite, au-dessus du titre. */
+    const l1 = EXEMPLAIRES_CONTRAT.fr[i] + '  ·  ' + (i + 1) + '/2';
+    const l2 = autre ? autre[i] : '';
+    const t1 = 9.5, t2 = 7.5;
+    const larg = Math.max(gras.widthOfTextAtSize(l1, t1), l2 ? normal.widthOfTextAtSize(l2, t2) : 0) + 22;
+    const haut = l2 ? 32 : 22, x = W - 42 - larg, y = H - 16 - haut;
+    page.drawRectangle({ x: x, y: y, width: larg, height: haut, color: fond,
+                         borderColor: bleu, borderWidth: 1 });
+    page.drawText(l1, { x: x + 11, y: y + haut - 14.5, size: t1, font: gras, color: bleu });
+    if(l2) page.drawText(l2, { x: x + 11, y: y + 7, size: t2, font: normal, color: bleu });
+    /* La mention, en pied de page. */
+    const pied = function(txt, yy){
+      page.drawText(txt, { x: (W - normal.widthOfTextAtSize(txt, 7.5)) / 2, y: yy,
+                           size: 7.5, font: normal, color: gris });
+    };
+    pied(EXEMPLAIRES_CONTRAT.fr[2], autre ? 34 : 28);
+    if(autre) pied(autre[2], 24);
+  });
+}
+
 async function genererContratBrut(v, d){
   const lg = contratLangue(v);
   const b64 = { fr: typeof CONTRAT_FR_B64 !== 'undefined' ? CONTRAT_FR_B64 : null,
@@ -22119,6 +22188,7 @@ async function genererContratBrut(v, d){
       demiAch, val.signAcheteur, cachetDeLaZone(v, 'contrat_ach'));
   }
 
+  await enDeuxExemplaires(pdfDoc, lg);
   const plaque = (v.vehicule.immat || '').toUpperCase() || 'sans plaque';
   try{
     pdfDoc.setTitle('Contrat de vente — ' + plaque);
@@ -22258,6 +22328,7 @@ function contratForm(v){
   +   esc(t('Changer de langue')) + '</button>'
   + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Les intitulés ci-dessous sont ceux imprimés sur le contrat.')) + '</div>'
+  + '<div class="cerfa-aide ctr-exemplaires">' + esc(t('Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.')) + '</div>'
   + '</div>'
 
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(L('vendeur')) + '</div>'
@@ -23654,6 +23725,7 @@ async function genererCProBrut(v, d){
         ancre: G.signAcheteur.ancre },
       demiAch, val.signAcheteur, cachetDeLaZone(v, 'cpro_ach'));
   }
+  await enDeuxExemplaires(pdfDoc, lg);
   const plaque = (v.vehicule.immat || '').toUpperCase() || 'sans plaque';
   try{
     pdfDoc.setTitle('Contrat de vente (pro) — ' + plaque);
@@ -23761,6 +23833,7 @@ function contratProForm(v){
   +   esc(t('Changer de langue')) + '</button>'
   + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Les intitulés ci-dessous sont ceux imprimés sur le contrat.')) + '</div>'
+  + '<div class="cerfa-aide ctr-exemplaires">' + esc(t('Le PDF contient deux exemplaires : un pour le vendeur, un pour l’acheteur. Faites signer les deux.')) + '</div>'
   + '</div>'
 
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(L('vendeur')) + '</div>'
@@ -26389,7 +26462,7 @@ function lireCarteGrise(texte){
   };
   /* Le repere A porte l'immatriculation, dans TOUS les pays. Si elle ne
      ressemble a aucun format francais — « M-AB 1234 » en Allemagne,
-     « 12-AB-34 » aux Pays-Bas, « 1-ABC-123 » en Belgique — on la garde
+     « 5-SBV-03 » aux Pays-Bas, « 1-ABC-123 » en Belgique — on la garde
      telle quelle plutot que de la deformer. */
   const brutA = (champs['A'] || '').replace(/\s{2,}/g, ' ').trim();
   res.immat = plaque(champs['A'])
