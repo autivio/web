@@ -845,6 +845,16 @@
   .reg-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;}
   .bt-enregistre{animation:btEnregistre .35s ease-out;filter:saturate(1.15);}
   @keyframes btEnregistre{0%{transform:scale(.97);}60%{transform:scale(1.02);}100%{transform:none;}}
+  /* ---- Donnees personnelles (reglages) ---- */
+  .rgpd-carte{border:1px solid var(--line,#e2e8f2);border-radius:12px;padding:16px 18px;margin:14px 0;
+    background:var(--panel,#fff);}
+  .rgpd-carte p{margin:6px 0 12px;font-size:13.5px;line-height:1.55;color:var(--ink-soft,#5b6b84);}
+  .rgpd-titre{font-weight:700;font-size:15px;color:var(--ink,#16233a);}
+  .rgpd-actions{display:flex;flex-wrap:wrap;gap:8px;}
+  .rgpd-danger{border-color:rgba(200,40,40,.35);background:rgba(200,40,40,.03);}
+  .rgpd-liens{justify-content:flex-start;font-size:13.5px;}
+  .note-rgpd{display:flex;gap:8px;align-items:flex-start;background:#fff8e1;border:1px solid #f1d27a;color:#6b5200;
+    border-radius:10px;padding:9px 12px;font-size:13px;line-height:1.45;margin:0 0 12px;max-width:640px;}
   /* ---- Pages legales ---- */
   #pageLegale{position:fixed;inset:0;z-index:12000;background:var(--bg,#eef2f8);overflow-y:auto;
     overscroll-behavior:contain;-webkit-overflow-scrolling:touch;color:var(--ink,#16233a);}
@@ -2706,6 +2716,29 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Account privato: le sue schede e i suoi documenti precedenti sono stati cancellati (GDPR).",
+    "Données personnelles": "Dati personali",
+    "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Per eliminare l’account o i dati: scheda « Dati personali ».",
+    "Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.": "Mantiene il controllo sui suoi dati: vederli, scaricarli, cancellarli o eliminare l’account.",
+    "Vos fiches et documents": "Le sue schede e i suoi documenti",
+    "Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.": "Account privato: schede e documenti vengono cancellati automaticamente a ogni nuovo accesso, su questo dispositivo e sul server. Scarichi o stampi i documenti prima di uscire.",
+    "Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.": "Account professionale: schede e documenti sono conservati finché l’account esiste, per gli obblighi contabili. Può eliminare una scheda in qualsiasi momento.",
+    "Télécharger mes données": "Scarica i miei dati",
+    "Effacer maintenant mes fiches et documents": "Cancella ora schede e documenti",
+    "Cookies et stockage sur cet appareil": "Cookie e memoria su questo dispositivo",
+    "Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.": "Autivio non usa cookie pubblicitari, misurazione del pubblico né tracciatori. Su questo dispositivo è usata solo la memoria necessaria al funzionamento: la sessione, le preferenze (lingua, aspetto) e una copia delle schede per lavorare offline. Non viene quindi chiesto alcun consenso.",
+    "Effacer les données de cet appareil": "Cancella i dati di questo dispositivo",
+    "Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).": "Cosa raccogliamo, perché e per quanto tempo, e i suoi diritti (accesso, rettifica, cancellazione, portabilità, reclamo alla CNIL).",
+    "Effacer toutes vos fiches et tous vos documents ?": "Cancellare tutte le schede e tutti i documenti?",
+    "Ils sont effacés de cet appareil et du serveur. C’est définitif.": "Vengono cancellati da questo dispositivo e dal server. È definitivo.",
+    "Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.": "Account professionale: pensi agli obblighi di conservazione (fatture: dieci anni). Scarichi prima i suoi dati.",
+    "Oui, tout effacer": "Sì, cancella tutto",
+    "Vos fiches et documents ont été effacés.": "Schede e documenti cancellati.",
+    "Effacer les données de cet appareil ?": "Cancellare i dati di questo dispositivo?",
+    "La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.": "Sessione, preferenze e copia locale delle schede vengono cancellate da questo dispositivo, poi viene disconnesso. Ciò che è sul server non viene toccato.",
+    "Les fiches qui n’ont pas encore été synchronisées seraient perdues.": "Le schede non ancora sincronizzate andrebbero perse.",
+    "Effacer et me déconnecter": "Cancella e disconnetti",
+    "Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.": "Account privato: schede e documenti saranno cancellati al prossimo accesso (GDPR). Scarichi o stampi i documenti prima di uscire.",
     "le document est vide": "il documento è vuoto",
     "Le PDF n’a pas pu être fabriqué, le message n’est pas parti.": "Non è stato possibile creare il PDF, il messaggio non è partito.",
     "avec": "con",
@@ -3685,6 +3718,29 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkont: Är vireg Fichen an Dokumenter goufen geläscht (DSGVO).",
+    "Données personnelles": "Perséinlech Donnéeën",
+    "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Fir Äre Kont oder Är Donnéeën ze läschen: Tab « Perséinlech Donnéeën ».",
+    "Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.": "Dir behaalt d’Kontroll iwwer Är Donnéeën: kucken, eroflueden, läschen oder Äre Kont läschen.",
+    "Vos fiches et documents": "Är Fichen an Dokumenter",
+    "Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.": "Privatkont: Är Fichen an Dokumenter ginn bei all neier Umeldung automatesch geläscht, op dësem Apparat an um Server. Lued Är Dokumenter erof oder dréckt se, ier Dir gitt.",
+    "Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.": "Professionelle Kont: Är Fichen an Dokumenter bleiwe gespäichert, soulaang Äre Kont existéiert, fir Är Comptabilitéitsflichten. Dir kënnt eng Fiche zu all Moment läschen.",
+    "Télécharger mes données": "Meng Donnéeën eroflueden",
+    "Effacer maintenant mes fiches et documents": "Meng Fichen an Dokumenter elo läschen",
+    "Cookies et stockage sur cet appareil": "Cookien a Späicher op dësem Apparat",
+    "Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.": "Autivio benotzt keng Reklamms-Cookien, keng Publikumsmiessung a keng Tracker. Op dësem Apparat gëtt just de Späicher benotzt, deen et brauch: Är Sessioun, Är Astellungen (Sprooch, Ausgesinn) an eng Kopie vun Äre Fiche fir offline ze schaffen. Dofir gëtt keen Averständnes gefrot.",
+    "Effacer les données de cet appareil": "D’Donnéeë vun dësem Apparat läschen",
+    "Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).": "Wat mir sammelen, firwat a wéi laang, an Är Rechter (Accès, Korrektur, Läschen, Portabilitéit, Reklamatioun bei der CNIL).",
+    "Effacer toutes vos fiches et tous vos documents ?": "All Är Fichen an Dokumenter läschen?",
+    "Ils sont effacés de cet appareil et du serveur. C’est définitif.": "Si gi vun dësem Apparat a vum Server geläscht. Dat ass definitiv.",
+    "Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.": "Professionelle Kont: denkt un Är Opbewahrungsflichten (Rechnungen: zéng Joer). Lued Är Donnéeë virdrun erof.",
+    "Oui, tout effacer": "Jo, alles läschen",
+    "Vos fiches et documents ont été effacés.": "Är Fichen an Dokumenter goufe geläscht.",
+    "Effacer les données de cet appareil ?": "D’Donnéeë vun dësem Apparat läschen?",
+    "La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.": "Sessioun, Astellungen an déi lokal Kopie vun de Fiche ginn op dësem Apparat geläscht, duerno sidd Dir ofgemellt. Wat um Server ass, bleift onberéiert.",
+    "Les fiches qui n’ont pas encore été synchronisées seraient perdues.": "Fichen, déi nach net synchroniséiert sinn, géife verluer goen.",
+    "Effacer et me déconnecter": "Läschen an ofmellen",
+    "Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.": "Privatkont: Är Fichen an Dokumenter ginn bei Ärer nächster Umeldung geläscht (DSGVO). Lued Är Dokumenter erof oder dréckt se, ier Dir gitt.",
     "le document est vide": "d’Dokument ass eidel",
     "Le PDF n’a pas pu être fabriqué, le message n’est pas parti.": "De PDF konnt net erstallt ginn, de Message ass net fortgaangen.",
     "avec": "mat",
@@ -4663,6 +4719,29 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Private account: your previous records and documents have been deleted (GDPR).",
+    "Données personnelles": "Personal data",
+    "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "To delete your account or your data: “Personal data” tab.",
+    "Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.": "You stay in control of your data: view it, download it, delete it, or delete your account.",
+    "Vos fiches et documents": "Your records and documents",
+    "Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.": "Private account: your records and documents are deleted automatically at each new login, on this device and on the server. Download or print your documents before leaving.",
+    "Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.": "Business account: your records and documents are kept as long as your account exists, for your accounting obligations. You can delete a record at any time.",
+    "Télécharger mes données": "Download my data",
+    "Effacer maintenant mes fiches et documents": "Delete my records and documents now",
+    "Cookies et stockage sur cet appareil": "Cookies and storage on this device",
+    "Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.": "Autivio uses no advertising cookies, no audience measurement and no trackers. Only the storage needed to work is used on this device: your session, your preferences (language, appearance) and a copy of your records to work offline. No consent is therefore requested.",
+    "Effacer les données de cet appareil": "Delete the data on this device",
+    "Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).": "What we collect, why and for how long, and your rights (access, rectification, erasure, portability, complaint to the CNIL).",
+    "Effacer toutes vos fiches et tous vos documents ?": "Delete all your records and documents?",
+    "Ils sont effacés de cet appareil et du serveur. C’est définitif.": "They are deleted from this device and from the server. This is permanent.",
+    "Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.": "Business account: remember your retention obligations (invoices: ten years). Download your data first.",
+    "Oui, tout effacer": "Yes, delete everything",
+    "Vos fiches et documents ont été effacés.": "Your records and documents have been deleted.",
+    "Effacer les données de cet appareil ?": "Delete the data on this device?",
+    "La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.": "The session, preferences and local copy of the records are deleted from this device, then you are logged out. What is saved on the server is not affected.",
+    "Les fiches qui n’ont pas encore été synchronisées seraient perdues.": "Records not yet synchronised would be lost.",
+    "Effacer et me déconnecter": "Delete and log out",
+    "Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.": "Private account: your records and documents will be deleted at your next login (GDPR). Download or print your documents before leaving.",
     "le document est vide": "the document is empty",
     "Le PDF n’a pas pu être fabriqué, le message n’est pas parti.": "The PDF could not be created, the message was not sent.",
     "avec": "with",
@@ -5640,6 +5719,29 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkonto: Ihre bisherigen Fahrzeugakten und Dokumente wurden gelöscht (DSGVO).",
+    "Données personnelles": "Personenbezogene Daten",
+    "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Konto oder Daten löschen: Reiter „Personenbezogene Daten“.",
+    "Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.": "Sie behalten die Kontrolle über Ihre Daten: ansehen, herunterladen, löschen oder Ihr Konto löschen.",
+    "Vos fiches et documents": "Ihre Akten und Dokumente",
+    "Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.": "Privatkonto: Ihre Akten und Dokumente werden bei jeder neuen Anmeldung automatisch gelöscht, auf diesem Gerät und auf dem Server. Laden Sie Ihre Dokumente herunter oder drucken Sie sie, bevor Sie gehen.",
+    "Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.": "Geschäftskonto: Ihre Akten und Dokumente bleiben gespeichert, solange Ihr Konto besteht, für Ihre Buchführungspflichten. Sie können eine Akte jederzeit löschen.",
+    "Télécharger mes données": "Meine Daten herunterladen",
+    "Effacer maintenant mes fiches et documents": "Meine Akten und Dokumente jetzt löschen",
+    "Cookies et stockage sur cet appareil": "Cookies und Speicher auf diesem Gerät",
+    "Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.": "Autivio verwendet keine Werbe-Cookies, keine Reichweitenmessung und keine Tracker. Auf diesem Gerät wird nur der für den Betrieb nötige Speicher genutzt: Ihre Sitzung, Ihre Einstellungen (Sprache, Darstellung) und eine Kopie Ihrer Akten für die Offline-Arbeit. Daher wird keine Einwilligung abgefragt.",
+    "Effacer les données de cet appareil": "Daten auf diesem Gerät löschen",
+    "Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).": "Was wir erheben, warum und wie lange, und Ihre Rechte (Auskunft, Berichtigung, Löschung, Übertragbarkeit, Beschwerde bei der CNIL).",
+    "Effacer toutes vos fiches et tous vos documents ?": "Alle Akten und Dokumente löschen?",
+    "Ils sont effacés de cet appareil et du serveur. C’est définitif.": "Sie werden von diesem Gerät und vom Server gelöscht. Das ist endgültig.",
+    "Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.": "Geschäftskonto: Denken Sie an Ihre Aufbewahrungspflichten (Rechnungen: zehn Jahre). Laden Sie Ihre Daten vorher herunter.",
+    "Oui, tout effacer": "Ja, alles löschen",
+    "Vos fiches et documents ont été effacés.": "Ihre Akten und Dokumente wurden gelöscht.",
+    "Effacer les données de cet appareil ?": "Daten auf diesem Gerät löschen?",
+    "La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.": "Sitzung, Einstellungen und die lokale Kopie der Akten werden von diesem Gerät gelöscht, danach werden Sie abgemeldet. Die auf dem Server gespeicherten Daten bleiben unberührt.",
+    "Les fiches qui n’ont pas encore été synchronisées seraient perdues.": "Noch nicht synchronisierte Akten gingen verloren.",
+    "Effacer et me déconnecter": "Löschen und abmelden",
+    "Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.": "Privatkonto: Ihre Akten und Dokumente werden bei Ihrer nächsten Anmeldung gelöscht (DSGVO). Laden Sie Ihre Dokumente herunter oder drucken Sie sie, bevor Sie gehen.",
     "le document est vide": "das Dokument ist leer",
     "Le PDF n’a pas pu être fabriqué, le message n’est pas parti.": "Das PDF konnte nicht erstellt werden, die Nachricht wurde nicht gesendet.",
     "avec": "mit",
@@ -6633,6 +6735,29 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Particulier account: uw vorige dossiers en documenten zijn gewist (AVG).",
+    "Données personnelles": "Persoonsgegevens",
+    "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Uw account of gegevens wissen: tabblad « Persoonsgegevens ».",
+    "Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.": "U houdt de controle over uw gegevens: bekijken, downloaden, wissen of uw account verwijderen.",
+    "Vos fiches et documents": "Uw dossiers en documenten",
+    "Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.": "Particulier account: uw dossiers en documenten worden bij elke nieuwe aanmelding automatisch gewist, op dit toestel en op de server. Download of print uw documenten voordat u vertrekt.",
+    "Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.": "Zakelijk account: uw dossiers en documenten worden bewaard zolang uw account bestaat, voor uw boekhoudkundige verplichtingen. U kunt een dossier op elk moment verwijderen.",
+    "Télécharger mes données": "Mijn gegevens downloaden",
+    "Effacer maintenant mes fiches et documents": "Mijn dossiers en documenten nu wissen",
+    "Cookies et stockage sur cet appareil": "Cookies en opslag op dit toestel",
+    "Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.": "Autivio gebruikt geen advertentiecookies, geen bezoekersmeting en geen trackers. Op dit toestel wordt alleen de opslag gebruikt die nodig is om te werken: uw sessie, uw voorkeuren (taal, weergave) en een kopie van uw dossiers om offline te werken. Er wordt dus geen toestemming gevraagd.",
+    "Effacer les données de cet appareil": "Gegevens op dit toestel wissen",
+    "Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).": "Wat we verzamelen, waarom en hoe lang, en uw rechten (inzage, rectificatie, wissing, overdraagbaarheid, klacht bij de CNIL).",
+    "Effacer toutes vos fiches et tous vos documents ?": "Al uw dossiers en documenten wissen?",
+    "Ils sont effacés de cet appareil et du serveur. C’est définitif.": "Ze worden van dit toestel en van de server gewist. Dit is definitief.",
+    "Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.": "Zakelijk account: denk aan uw bewaarplicht (facturen: tien jaar). Download eerst uw gegevens.",
+    "Oui, tout effacer": "Ja, alles wissen",
+    "Vos fiches et documents ont été effacés.": "Uw dossiers en documenten zijn gewist.",
+    "Effacer les données de cet appareil ?": "Gegevens op dit toestel wissen?",
+    "La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.": "De sessie, de voorkeuren en de lokale kopie van de dossiers worden van dit toestel gewist, daarna wordt u afgemeld. Wat op de server staat, blijft ongewijzigd.",
+    "Les fiches qui n’ont pas encore été synchronisées seraient perdues.": "Dossiers die nog niet gesynchroniseerd zijn, gaan verloren.",
+    "Effacer et me déconnecter": "Wissen en afmelden",
+    "Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.": "Particulier account: uw dossiers en documenten worden bij uw volgende aanmelding gewist (AVG). Download of print uw documenten voordat u vertrekt.",
     "le document est vide": "het document is leeg",
     "Le PDF n’a pas pu être fabriqué, le message n’est pas parti.": "De pdf kon niet worden gemaakt, het bericht is niet verzonden.",
     "avec": "met",
@@ -7457,7 +7582,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.38';
+const VERSION = '2.39';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -9159,6 +9284,7 @@ function showLoginScreen(){
     if(window.pywebview && window.pywebview.api && window.pywebview.api.session_utilisateur){
       window.pywebview.api.session_utilisateur(acc.username, !!acc.code).catch(function(){});
     }
+    connexionManuelle = true;
     enterApp();
   };
   afficherVersion();
@@ -9278,6 +9404,14 @@ async function enterApp(){
       if(!syncServeurDerniere()) await premiereMontee();
       else await synchroniserServeur(true);
     }catch(e){}
+  }
+  /* RGPD — un compte particulier ne garde rien d'une connexion a
+     l'autre : a chaque nouvelle connexion, ses fiches et documents
+     precedents sont effaces, sur l'appareil comme sur le serveur. Un
+     compte professionnel, lui, conserve tout. */
+  if(connexionManuelle){
+    connexionManuelle = false;
+    try{ await effacementAutomatiqueParticulier(); }catch(e){}
   }
   brancherBoutonSync();
   majComptesEnAttente().catch(function(){});
@@ -9771,6 +9905,86 @@ function pierresTombales(){
 
 function pierresTombalesEcrire(o){
   try{ ls.set('supprimes', JSON.stringify(o)); }catch(e){}
+}
+
+/* =====================================================================
+   DONNEES PERSONNELLES (RGPD)
+   ===================================================================== */
+let connexionManuelle = false;
+
+/* Tous les documents deposes sur le serveur par ce compte, quel que
+   soit le dossier : ceux des fiches comme ceux importes a part. */
+async function serveurEffacerTousDocuments(){
+  if(!serveurPret()) return 0;
+  const racine = 'Autivio/' + nomCompteDossier();
+  let total = 0;
+  try{
+    const entrees = await serveurAppel('/storage/v1/object/list/documents', {
+      method: 'POST', body: { prefix: racine + '/', limit: 1000 }
+    });
+    const fichiers = [];
+    for(const e of (entrees || [])){
+      if(e.id) fichiers.push(racine + '/' + e.name);       // fichier a la racine
+      else if(e.name) total += await serveurSupprimerDocuments(e.name);   // dossier
+    }
+    if(fichiers.length){
+      await serveurAppel('/storage/v1/object/documents', { method: 'DELETE', body: { prefixes: fichiers } });
+      total += fichiers.length;
+    }
+  }catch(e){}
+  return total;
+}
+
+/* Efface TOUTES les fiches et TOUS les documents du compte, ici et sur
+   le serveur. Sert a l'effacement automatique des comptes particuliers
+   et au bouton des reglages. Rend le nombre de fiches effacees. */
+async function effacerToutesMesFiches(){
+  const ids = Object.keys(vehicles || {});
+  const dossiers = ids.map(function(id){ return vehicles[id] ? sousDossierVehicule(vehicles[id]) : ''; })
+                      .filter(Boolean);
+  const maintenant = Date.now();
+  const tombes = pierresTombales();
+  ids.forEach(function(id){
+    delete vehicles[id];
+    try{ ls.remove('vehicle:' + id); }catch(e){}
+    try{ delete fichesCochees[id]; }catch(e){}
+    tombes[id] = maintenant;
+  });
+  vehicleOrder = [];
+  currentId = null;
+  pierresTombalesEcrire(tombes);
+  await saveIndex();
+  if(serveurPret()){
+    /* Les fiches restees sur le serveur sans etre descendues ici sont
+       effacees aussi : on demande la liste complete. */
+    let tous = ids.slice();
+    try{
+      const surServeur = await serveurTousLesIds();
+      Object.keys(surServeur).forEach(function(id){ if(tous.indexOf(id) === -1) tous.push(id); });
+    }catch(e){}
+    for(let i = 0; i < tous.length; i += 50){
+      try{
+        await serveurEnvoyerFiches(tous.slice(i, i + 50).map(function(id){
+          return { id: id, maj: maintenant, supprimee: true };
+        }));
+      }catch(e){}
+    }
+    for(const sd of dossiers){ try{ await serveurSupprimerDocuments(sd); }catch(e){} }
+    await serveurEffacerTousDocuments();
+  }
+  return ids.length;
+}
+
+async function effacementAutomatiqueParticulier(){
+  if(typeof compteParticulier !== 'function' || !compteParticulier()) return;
+  const avant = Object.keys(vehicles || {}).length;
+  if(avant){
+    await effacerToutesMesFiches();
+    renderAll();
+    bandeau(t('Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).'), 'ok');
+  }else if(serveurPret()){
+    serveurEffacerTousDocuments().catch(function(){});
+  }
 }
 
 async function deleteVehicleStorage(id){
@@ -11345,6 +11559,11 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.39': { date: '21/10/2026', lignes: [
+    "RGPD — compte particulier : ses fiches et documents sont effacés automatiquement à chaque nouvelle connexion, sur l'appareil comme sur le serveur. Un bandeau le rappelle sur chaque fiche. Les comptes professionnels conservent tout.",
+    "Nouvel onglet Réglages > « Données personnelles » : télécharger ses données, effacer toutes ses fiches et documents, effacer les données de l'appareil (cookies et stockage), supprimer son compte, et les liens vers les pages légales.",
+    "E-mail d'un contrat bilingue : le message est écrit en français puis dans l'autre langue du contrat, l'objet porte les deux noms du document (« Contrat de vente / Koopovereenkomst »), et il salue le vendeur et l'acheteur par leur nom."
+  ] },
   '2.38': { date: '21/10/2026', lignes: [
     "Contrats de vente (entre particuliers, et particulier à professionnel) : le PDF contient deux exemplaires, comme un Cerfa — le premier marqué « Exemplaire du vendeur », le second « Exemplaire de l'acheteur », avec la mention « Établi en deux exemplaires originaux ». Le libellé est traduit quand le contrat est bilingue. L'aperçu à l'écran montre lui aussi les deux exemplaires.",
     "Contrat néerlandais entre particuliers : la case « Car-Pass » devient « Car-Pass (BE) / Tellerrapport RDW (NL) », le relevé kilométrique officiel des Pays-Bas, comme sur le contrat vers un professionnel.",
@@ -13463,6 +13682,7 @@ const SECTIONS_REGLAGES = [
   ['sauvegarde',  '☁',  'Sauvegarde'],
   ['langue',      '🌐', 'Langue'],
     ['apparence', '🎨', 'Apparence'],
+  ['donnees',     '🔒', 'Données personnelles'],
   ['poste',       '🖥',  'Ce poste']
 ];
 
@@ -13509,17 +13729,49 @@ function vueReglages(){
       +   champ('s_email', t('Email'), dealer.email)
       + '</div>'
       + '<div class="reg-actions"><button class="official-btn" id="regEnregistrer">' + t('Enregistrer') + '</button></div>'
-      /* Le droit de s'en aller, a la suite de la fiche du compte.
-         Reserve aux comptes du serveur : un compte local ne vit que sur
-         cette machine, il se supprime dans la liste des comptes. */
-      + (serveurPret() && !estAdministrateur()
-          ? '<h3 style="margin-top:34px" class="danger-titre">' + t('Supprimer mon compte') + '</h3>'
-            + '<div class="reg-intro">'
-            +   t('Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.')
+      + '<div class="reg-intro" style="margin-top:22px">' + esc(t('Pour supprimer votre compte ou vos données : onglet « Données personnelles ».')) + '</div>';
+  }
+  else if(ongletReglages === 'donnees'){
+    const part = compteParticulier();
+    const enLigne = serveurPret();
+    panneau = '<h3>' + esc(t('Données personnelles')) + '</h3>'
+      + '<div class="reg-intro">' + esc(t('Vous gardez la main sur vos données : les voir, les télécharger, les effacer, ou supprimer votre compte.')) + '</div>'
+
+      + '<div class="rgpd-carte">'
+      +   '<div class="rgpd-titre">🗂 ' + esc(t('Vos fiches et documents')) + '</div>'
+      +   '<p>' + esc(part
+            ? t('Compte particulier : vos fiches et vos documents sont effacés automatiquement à chaque nouvelle connexion, sur cet appareil comme sur le serveur. Téléchargez ou imprimez vos documents avant de quitter.')
+            : t('Compte professionnel : vos fiches et vos documents sont conservés tant que votre compte existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.')) + '</p>'
+      +   '<div class="rgpd-actions">'
+      +     '<button type="button" class="btn-sec" id="btnExporterDonnees">⭳ ' + esc(t('Télécharger mes données')) + '</button>'
+      +     '<button type="button" class="btn-danger" id="btnEffacerFiches">' + esc(t('Effacer maintenant mes fiches et documents')) + '</button>'
+      +   '</div>'
+      + '</div>'
+
+      + '<div class="rgpd-carte">'
+      +   '<div class="rgpd-titre">🍪 ' + esc(t('Cookies et stockage sur cet appareil')) + '</div>'
+      +   '<p>' + esc(t('Autivio n’utilise aucun cookie publicitaire, aucune mesure d’audience et aucun traceur. Seul le stockage nécessaire au fonctionnement est utilisé sur cet appareil : votre session, vos préférences (langue, apparence) et une copie de vos fiches pour travailler hors connexion. Aucun consentement n’est donc demandé.')) + '</p>'
+      +   '<div class="rgpd-actions">'
+      +     '<button type="button" class="btn-danger" id="btnEffacerAppareil">' + esc(t('Effacer les données de cet appareil')) + '</button>'
+      +   '</div>'
+      + '</div>'
+
+      /* Le droit de s'en aller. Reserve aux comptes du serveur : un
+         compte local ne vit que sur cette machine. */
+      + (enLigne && !estAdministrateur()
+          ? '<div class="rgpd-carte rgpd-danger">'
+            + '<div class="rgpd-titre">⚠ ' + esc(t('Supprimer mon compte')) + '</div>'
+            + '<p>' + esc(t('Votre compte, vos fiches et vos documents sont effacés du serveur. C’est définitif : rien ne se récupère ensuite.')) + '</p>'
+            + '<div class="rgpd-actions"><button type="button" class="btn-danger" id="btnSupprimerMonCompte">'
+            +   esc(t('Supprimer mon compte')) + '</button></div>'
             + '</div>'
-            + '<button type="button" class="btn-danger" id="btnSupprimerMonCompte">'
-            +   t('Supprimer mon compte') + '</button>'
-          : '');
+          : '')
+
+      + '<div class="rgpd-carte">'
+      +   '<div class="rgpd-titre">📄 ' + esc(t('Informations légales')) + '</div>'
+      +   '<p>' + esc(t('Le détail de ce que nous collectons, pourquoi et combien de temps, et vos droits (accès, rectification, effacement, portabilité, réclamation auprès de la CNIL).')) + '</p>'
+      +   liensLegauxHtml('liens-legaux rgpd-liens')
+      + '</div>';
   }
   else if(ongletReglages === 'signature'){
     panneau = '<h3>' + t('Cachet et signataire') + '</h3>'
@@ -13726,6 +13978,46 @@ function brancherReglages(){
   const btSup = document.getElementById('btnSupprimerMonCompte');
   if(btSup) btSup.onclick = supprimerMonCompte;
 
+  const btExp = document.getElementById('btnExporterDonnees');
+  if(btExp) btExp.onclick = function(){
+    const b = document.getElementById('exportBtn');
+    if(b) b.click();
+  };
+  const btEff = document.getElementById('btnEffacerFiches');
+  if(btEff) btEff.onclick = async function(){
+    const n = Object.keys(vehicles || {}).length;
+    const ok = await demander({
+      titre: t('Effacer toutes vos fiches et tous vos documents ?') + (n ? ' (' + n + ')' : ''),
+      texte: t('Ils sont effacés de cet appareil et du serveur. C’est définitif.'),
+      detail: compteParticulier() ? '' : t('Compte professionnel : pensez à vos obligations de conservation (factures : dix ans). Téléchargez vos données avant.'),
+      oui: t('Oui, tout effacer'), non: t('Annuler'), danger: true
+    });
+    if(!ok) return;
+    btEff.disabled = true;
+    await effacerToutesMesFiches();
+    renderAll();
+    bandeau(t('Vos fiches et documents ont été effacés.'), 'ok');
+  };
+  const btApp = document.getElementById('btnEffacerAppareil');
+  if(btApp) btApp.onclick = async function(){
+    const ok = await demander({
+      titre: t('Effacer les données de cet appareil ?'),
+      texte: t('La session, les préférences et la copie locale des fiches sont effacées de cet appareil, puis vous êtes déconnecté. Ce qui est enregistré sur le serveur n’est pas touché.'),
+      detail: t('Les fiches qui n’ont pas encore été synchronisées seraient perdues.'),
+      oui: t('Effacer et me déconnecter'), non: t('Annuler'), danger: true
+    });
+    if(!ok) return;
+    try{ localStorage.clear(); }catch(e){}
+    try{ sessionStorage.clear(); }catch(e){}
+    try{
+      if(window.indexedDB && indexedDB.databases){
+        const bases = await indexedDB.databases();
+        bases.forEach(function(b){ if(b && b.name) indexedDB.deleteDatabase(b.name); });
+      }
+    }catch(e){}
+    location.reload();
+  };
+
   document.querySelectorAll('[data-onglet]').forEach(function(bt){
     bt.onclick = function(){ ongletReglages = bt.dataset.onglet; renderMain(); };
   });
@@ -13845,6 +14137,7 @@ function renderMain(){
     +   '<button class="del-btn" id="delBtn" title="' + t('Supprimer cette fiche') + '" '
     +     'aria-label="' + t('Supprimer cette fiche') + '">🗑</button>'
     + '</div>'
+    + (compteParticulier() ? '<div class="note-rgpd">🔒 <span>' + esc(t('Compte particulier : vos fiches et documents seront effacés à votre prochaine connexion (RGPD). Téléchargez ou imprimez vos documents avant de quitter.')) + '</span></div>' : '')
     + selecteurDocuments()
     + '<div class="doc-toolbar">'
     +   '<div style="display:flex;gap:8px;flex-shrink:0;margin-left:auto">'
@@ -14340,7 +14633,9 @@ function texteConditionsGenerales(){
   +   'enregistre ; il peut les exporter à tout moment.</p>'
 
   + '<h2>11. Fin du compte</h2>'
-  + '<p>L’Utilisateur peut supprimer son compte à tout moment, depuis Réglages &gt; « Supprimer mon compte » : '
+  + '<p>Les fiches et documents d’un compte <b>particulier</b> sont effacés automatiquement à chaque nouvelle '
+  +   'connexion : il lui appartient de télécharger ou d’imprimer ses documents avant de quitter.</p>'
+  + '<p>L’Utilisateur peut supprimer son compte à tout moment, depuis Réglages &gt; « Données personnelles » &gt; « Supprimer mon compte » : '
   +   'son compte, ses fiches et ses documents en ligne sont alors effacés du serveur, de façon définitive.</p>'
   + '<p>L’Éditeur peut suspendre ou fermer un compte en cas de manquement grave aux présentes Conditions '
   +   '(fraude, faux documents, atteinte à la sécurité), après en avoir informé l’Utilisateur sauf urgence.</p>'
@@ -14426,8 +14721,11 @@ function texteConfidentialite(){
 
   + '<h2>6. Combien de temps ?</h2>'
   + '<ul>'
-  +   '<li>Compte, fiches et documents : tant que votre compte existe. Vous pouvez supprimer une fiche à '
-  +     'tout moment.</li>'
+  +   '<li><b>Compte particulier</b> : vos fiches et documents sont <b>effacés automatiquement à chaque '
+  +     'nouvelle connexion</b>, sur l’appareil comme sur le serveur. Seul le compte lui-même est gardé, '
+  +     'jusqu’à ce que vous le supprimiez.</li>'
+  +   '<li><b>Compte professionnel</b> : compte, fiches et documents sont conservés tant que le compte '
+  +     'existe, pour vos obligations comptables. Vous pouvez supprimer une fiche à tout moment.</li>'
   +   '<li>Suppression du compte : effacement immédiat du serveur. Les sauvegardes techniques de '
   +     'l’hébergeur sont écrasées dans un délai limité.</li>'
   +   '<li>Journaux techniques : selon la durée fixée par l’hébergeur pour la sécurité.</li>'
@@ -14441,17 +14739,18 @@ function texteConfidentialite(){
   +   'données : chaque compte n’accède qu’à ses propres fiches. Sur un appareil partagé, utilisez « '
   +   'Verrouiller la session » et le code de sécurité.</p>'
 
-  + '<h2>8. Stockage sur votre appareil</h2>'
+  + '<h2>8. Cookies et stockage sur votre appareil</h2>'
   + '<p>Pour fonctionner hors ligne, Autivio enregistre vos fiches, vos préférences et votre session dans '
   +   'le stockage de votre navigateur ou de l’application. Ce stockage est strictement nécessaire au '
   +   'Service : il ne sert à aucun suivi et ne demande donc pas de consentement. Vous pouvez l’effacer '
-  +   'depuis les réglages de votre navigateur ; les fiches non synchronisées seraient alors perdues.</p>'
+  +   'depuis Réglages &gt; « Données personnelles » &gt; « Effacer les données de cet appareil », ou depuis '
+  +   'les réglages de votre navigateur ; les fiches non synchronisées seraient alors perdues.</p>'
 
   + '<h2>9. Vos droits</h2>'
   + '<p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, de portabilité et '
   +   'd’opposition, ainsi que du droit de définir des directives sur le sort de vos données après votre '
-  +   'décès. La plupart s’exercent directement dans Autivio (modifier vos informations, exporter, supprimer '
-  +   'votre compte). Pour le reste, écrivez à ' + contactLegal() + ' ; une réponse vous est apportée sous un '
+  +   'décès. La plupart s’exercent directement dans Autivio, onglet Réglages &gt; « Données personnelles » '
+  +   '(télécharger vos données, les effacer, supprimer votre compte). Pour le reste, écrivez à ' + contactLegal() + ' ; une réponse vous est apportée sous un '
   +   'mois.</p>'
   + '<p>Vous pouvez aussi adresser une réclamation à la CNIL : 3 place de Fontenoy, TSA 80715, 75334 Paris '
   +   'Cedex 07, <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>.</p>'
@@ -25179,6 +25478,26 @@ function traduire(cle, lg){
   return (d && d[cle]) ? d[cle] : cle;
 }
 
+/* « et » dans chaque langue des contrats, pour saluer les deux parties. */
+const ET_LANGUES = { fr: 'et', nl: 'en', de: 'und', it: 'e', lb: 'an', en: 'and' };
+
+/* Les deux parties d'un contrat, vendeur puis acheteur, pour le
+   message. Vide hors des contrats. */
+function nomsDesParties(v){
+  const nom = function(prenom, nomFamille){ return [prenom, nomFamille].filter(Boolean).join(' ').trim(); };
+  try{
+    if(currentDoc === 'contrat'){
+      const c = (v && v.contrat) || {};
+      return [nom(c.vPrenom, c.vNom), nom(c.aPrenom, c.aNom)].filter(Boolean);
+    }
+    if(currentDoc === 'cpro'){
+      const c = (v && v.contratPro) || {};
+      return [nom(c.vPrenom, c.vNom), (c.aDenom || c.aRaison || c.aNom || '').trim()].filter(Boolean);
+    }
+  }catch(e){}
+  return [];
+}
+
 /* Le nom de la personne a qui le document est destine, selon le
    document ouvert. Vide si le document ne le porte pas : le message
    dit alors simplement « Bonjour, ». */
@@ -25191,7 +25510,7 @@ function nomDestinataire(v, f){
     }
     if(currentDoc === 'cpro'){
       const c = (v && v.contratPro) || {};
-      return (c.aRaison || c.aNom || '').trim();
+      return (c.aDenom || c.aRaison || c.aNom || '').trim();
     }
   }catch(e){}
   return '';
@@ -25223,40 +25542,48 @@ function poursuivreEnvoi(v, d, f, veh, dest){
   memoriserMail(dest);
 
   const doc = nomDocCourant();
-  const num = (currentDoc === 'facture' && f.numero) ? ' n° ' + f.numero : '';
-  const auto = [veh.marque, veh.modele].filter(Boolean).join(' ');
   f = f || {}; veh = veh || {};
-  const plaque = (f.immat || veh.immat || '').toUpperCase();
+  const num = (currentDoc === 'facture' && f.numero) ? ' n° ' + f.numero : '';
+  /* Le vehicule : celui de la fiche, ou a defaut celui ecrit sur le
+     contrat lui-meme. */
+  const ctr = currentDoc === 'contrat' ? (v.contrat || {}) : (currentDoc === 'cpro' ? (v.contratPro || {}) : {});
+  const auto = [veh.marque || ctr.marque, veh.modele || ctr.modele].filter(Boolean).join(' ');
+  const plaque = (f.immat || veh.immat || ctr.plaque || '').toUpperCase();
 
-  /* La langue du message suit celle du DOCUMENT, pas celle du
-     logiciel. Un contrat allemand part avec un message allemand : le
-     client qui le recoit lit l'un et l'autre. */
+  /* La langue du message suit celle du DOCUMENT. Un contrat bilingue —
+     francais et neerlandais, allemand, italien ou luxembourgeois — part
+     avec un message dans LES DEUX langues, le francais d'abord : chacune
+     des deux parties le lit. */
   const lg = langueDocument(v);
-  const tr = function(cle){ return traduire(cle, lg); };
-
-  /* Le nom du document suit lui aussi la langue du document : il
-     restait en francais dans un message allemand. */
-  const nomDoc = nomDocTraduit(lg) || doc;
-  const objet = nomDoc + num + (auto ? ' — ' + auto : '') + (plaque ? ' (' + plaque + ')' : '');
-  /* Le message s'adresse a quelqu'un : on l'appelle par son nom quand
-     le document le porte. */
-  const qui = nomDestinataire(v, f);
+  const deuxLangues = (currentDoc === 'contrat' || currentDoc === 'cpro') && lg && lg !== 'fr';
+  const nomDocDans = function(l){ return nomDocTraduit(l) || doc; };
+  const objet = (deuxLangues ? nomDocDans('fr') + ' / ' + nomDocDans(lg) : nomDocDans(lg))
+    + num + (auto ? ' — ' + auto : '') + (plaque ? ' (' + plaque + ')' : '');
+  /* Le message s'adresse a quelqu'un : sur un contrat, au vendeur ET a
+     l'acheteur ; ailleurs, au destinataire du document. */
+  const parties = nomsDesParties(v);
   const repondrePossible = !!(d && d.email);
 
-  const lignes = [
-    tr('Bonjour') + (qui ? ' ' + qui : '') + ',',
-    tr('Veuillez trouver ci-joint le document suivant :') + ' ' + nomDoc + num + '.',
-    auto ? tr('Véhicule') + (lg === 'fr' ? ' : ' : ': ') + auto
-           + (plaque ? ' — ' + plaque : '') : '',
-    /* Repondre au message revient au garage : le dire est plus utile
-       que l'ancien « mail automatique, ne pas repondre », qui etait
-       faux. */
-    repondrePossible
-      ? tr('Pour toute question, vous pouvez répondre à ce message.')
-      : tr('Ceci est un message automatique, merci de ne pas y répondre.'),
-    tr('Cordialement,'),
-    (d && d.representant) || (d && d.raisonSociale) || ''
-  ].filter(Boolean);
+  const bloc = function(l){
+    const tr = function(cle){ return traduire(cle, l); };
+    const qui = parties.length ? parties.join(' ' + (ET_LANGUES[l] || 'et') + ' ') : nomDestinataire(v, f);
+    return [
+      tr('Bonjour') + (qui ? ' ' + qui : '') + ',',
+      tr('Veuillez trouver ci-joint le document suivant :') + ' ' + nomDocDans(l) + num + '.',
+      auto ? tr('Véhicule') + (l === 'fr' ? ' : ' : ': ') + auto
+             + (plaque ? ' — ' + plaque : '') : '',
+      /* Repondre au message revient au garage : le dire est plus utile
+         que l'ancien « mail automatique, ne pas repondre », qui etait
+         faux. */
+      repondrePossible
+        ? tr('Pour toute question, vous pouvez répondre à ce message.')
+        : tr('Ceci est un message automatique, merci de ne pas y répondre.'),
+      tr('Cordialement,')
+    ].filter(Boolean);
+  };
+  const lignes = (deuxLangues ? bloc('fr').concat(['— — —'], bloc(lg)) : bloc(lg))
+    .concat([(d && d.representant) || (d && d.raisonSociale) || ''])
+    .filter(Boolean);
 
   if(smtpDispo()){
     envoyerParSmtp(dest, objet, lignes, v, d);
@@ -25264,7 +25591,7 @@ function poursuivreEnvoi(v, d, f, veh, dest){
   }
   const pied = piedMessage(d);
   const corps = lignes.join('\n\n') + (pied ? '\n\n—\n' + pied : '')
-    + '\n\n' + mentionAutivio(lg);
+    + '\n\n' + mentionAutivio(deuxLangues ? 'fr' : lg) + (deuxLangues ? '\n' + mentionAutivio(lg) : '');
   // Un lien mailto ne peut pas porter de piece jointe : aucun navigateur
   // ne l'autorise. Le partage du systeme, lui, sait le faire — c'est le
   // chemin de l'iPhone. Le destinataire se tape dans l'application Mail,
@@ -28725,8 +29052,10 @@ function corpsHtmlMessage(lignes, d){
 
 function envoyerParSmtp(dest, objet, lignes, v, d){
   const pied = piedMessage(d);
+  const lgDoc = langueDocument(v);
+  const bilingue = (currentDoc === 'contrat' || currentDoc === 'cpro') && lgDoc && lgDoc !== 'fr';
   const corps = lignes.join('\n\n') + (pied ? '\n\n—\n' + pied : '')
-    + '\n\n' + mentionAutivio(langueDocument(v));
+    + '\n\n' + (bilingue ? mentionAutivio('fr') + '\n' + mentionAutivio(lgDoc) : mentionAutivio(lgDoc));
   const depart = Date.now();
   bandeau(t('Envoi en cours…'), 'attente');
   let joints = [];
