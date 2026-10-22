@@ -1881,6 +1881,9 @@
   .notes-maj li{margin:0 0 9px;line-height:1.45;font-size:14px;color:var(--ink);}
   @media (pointer:coarse){ .notes-maj li{font-size:15px;} }
   /* Suggestion « Mon garage » sous le champ en cours de saisie */
+  .sugg-ville-choix{display:flex !important;align-items:center;gap:9px;}
+  .sugg-drapeau{display:flex;flex:0 0 auto;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(16,26,44,.1);}
+  .sugg-pays{margin-left:auto;font-size:12px;color:var(--muted,#7b8798);}
   .sugg-garage{position:absolute;z-index:9000;background:var(--paper,#fff);
     border:1px solid var(--line,#dfe4ec);border-radius:10px;
     box-shadow:0 10px 26px rgba(15,25,45,.18);padding:6px;max-width:92vw;}
@@ -2465,7 +2468,10 @@ const DRAPEAUX = {
   nl: [['#ae1c28', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#21468b', 2/3, 1/3]],
   it: [['#009246', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#ce2b37', 2/3, 1/3]],   // bandes verticales
   lu: [['#ed2939', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#00a1de', 2/3, 1/3]],
-  lb: [['#ed2939', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#00a1de', 2/3, 1/3]]
+  lb: [['#ed2939', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#00a1de', 2/3, 1/3]],
+  at: [['#ed2939', 0, 1/3], ['#ffffff', 1/3, 1/3], ['#ed2939', 2/3, 1/3]],
+  es: [['#aa151b', 0, 1/4], ['#f1bf00', 1/4, 1/2], ['#aa151b', 3/4, 1/4]],
+  pt: [['#006600', 0, 2/5], ['#ff0000', 2/5, 3/5]]
 };
 
 // Le drapeau suisse se dessine a part : croix blanche sur fond rouge
@@ -2479,7 +2485,7 @@ function drapeauCH(l, h){
 }
 
 // Bandes verticales pour ces pays, horizontales pour les autres
-const DRAPEAUX_VERTICAUX = ['fr', 'be', 'it'];
+const DRAPEAUX_VERTICAUX = ['fr', 'be', 'it', 'pt'];
 
 // Le drapeau britannique se dessine a part : il n'est pas fait de bandes
 function drapeauUK(l, h){
@@ -2502,7 +2508,7 @@ function drapeauAutre(l, h){
 
 const NOMS_PAYS = { fr:'France', be:'Belgique', ch:'Suisse', lu:'Luxembourg',
   de:'Allemagne', nl:'Pays-Bas', it:'Italie', lb:'Luxembourg', en:'Royaume-Uni',
-  xx:'Autre pays' };
+  xx:'Autre pays', es:'Espagne', at:'Autriche', pt:'Portugal' };
 
 function drapeauSVG(code, largeur){
   const l = largeur, h = Math.round(largeur * 0.67);
@@ -2716,6 +2722,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Ville pour le code postal": "Città per il CAP",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Account privato: le sue schede e i suoi documenti precedenti sono stati cancellati (GDPR).",
     "Données personnelles": "Dati personali",
     "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Per eliminare l’account o i dati: scheda « Dati personali ».",
@@ -3718,6 +3725,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Ville pour le code postal": "Uertschaft fir de Postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkont: Är vireg Fichen an Dokumenter goufen geläscht (DSGVO).",
     "Données personnelles": "Perséinlech Donnéeën",
     "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Fir Äre Kont oder Är Donnéeën ze läschen: Tab « Perséinlech Donnéeën ».",
@@ -4719,6 +4727,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Ville pour le code postal": "Town for postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Private account: your previous records and documents have been deleted (GDPR).",
     "Données personnelles": "Personal data",
     "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "To delete your account or your data: “Personal data” tab.",
@@ -5719,6 +5728,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Ville pour le code postal": "Ort zur Postleitzahl",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkonto: Ihre bisherigen Fahrzeugakten und Dokumente wurden gelöscht (DSGVO).",
     "Données personnelles": "Personenbezogene Daten",
     "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Konto oder Daten löschen: Reiter „Personenbezogene Daten“.",
@@ -6735,6 +6745,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Ville pour le code postal": "Plaats voor postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Particulier account: uw vorige dossiers en documenten zijn gewist (AVG).",
     "Données personnelles": "Persoonsgegevens",
     "Pour supprimer votre compte ou vos données : onglet « Données personnelles ».": "Uw account of gegevens wissen: tabblad « Persoonsgegevens ».",
@@ -7582,7 +7593,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.39';
+const VERSION = '2.40';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7802,7 +7813,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '21/10/2026';
+const VERSION_DATE = '22/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -11559,7 +11570,12 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.40': { date: '22/10/2026', lignes: [
+    "La ville est proposée à partir du code postal : dès les cinq chiffres tapés, les communes qui portent ce code s'affichent sous le champ, un toucher remplit la ville. Dans tous les documents, la fiche garage et les réglages. Source : le service officiel des communes (geo.api.gouv.fr).",
+    "Les codes postaux étrangers sont reconnus aussi : Belgique, Luxembourg, Suisse, Allemagne, Pays-Bas, Italie, Espagne, Autriche, Portugal. Le pays se lit dans le champ « Pays » s'il est rempli ; sinon, Autivio le devine : le code est cherché dans tous les pays où il peut exister (cinq chiffres : France, Allemagne, Italie, Espagne ; quatre chiffres : Belgique, Luxembourg, Suisse, Autriche), et seules les villes trouvées s'affichent, chacune avec son drapeau, la France en tête. Choisir une ville remplit aussi le pays."
+  ] },
   '2.39': { date: '21/10/2026', lignes: [
+
     "RGPD — compte particulier : ses fiches et documents sont effacés automatiquement à chaque nouvelle connexion, sur l'appareil comme sur le serveur. Un bandeau le rappelle sur chaque fiche. Les comptes professionnels conservent tout.",
     "Nouvel onglet Réglages > « Données personnelles » : télécharger ses données, effacer toutes ses fiches et documents, effacer les données de l'appareil (cookies et stockage), supprimer son compte, et les liens vers les pages légales.",
     "E-mail d'un contrat bilingue : le message est écrit en français puis dans l'autre langue du contrat, l'objet porte les deux noms du document (« Contrat de vente / Koopovereenkomst »), et il salue le vendeur et l'acheteur par leur nom."
@@ -25932,6 +25948,340 @@ if(window.visualViewport){
      defiler la page : c'est ce viewport-la qui le signale. */
   window.visualViewport.addEventListener('resize', placerSuggestion);
   window.visualViewport.addEventListener('scroll', placerSuggestion);
+}
+
+/* =====================================================================
+   LA VILLE PROPOSEE A PARTIR DU CODE POSTAL
+   Des que les cinq chiffres d'un code postal francais sont tapes, le
+   logiciel demande au service officiel des communes (geo.api.gouv.fr,
+   gratuit, sans compte) quelles villes portent ce code, et les propose
+   sous le champ : un toucher remplit la ville. Plusieurs communes
+   partagent souvent un code : toutes sont proposees.
+   Marche dans tous les documents — Cerfa, contrats, facture, fiche
+   garage, reglages — sans rien brancher formulaire par formulaire.
+   Hors connexion, rien ne s'affiche et la saisie reste libre.
+   Les codes etrangers (Belgique, Luxembourg, Suisse, Allemagne,
+   Pays-Bas, Italie, Espagne, Autriche, Portugal) sont reconnus aussi.
+   ===================================================================== */
+const MOTIF_CP = /(^|[._])(cp|code\.?postal)$/;
+const communesParCp = {};
+
+function estChampCp(el){
+  if(!el || el.tagName !== 'INPUT') return false;
+  const chemin = normaliserChemin(cheminChamp(el));
+  if(chemin && MOTIF_CP.test(chemin)) return true;
+  return /(^|[_-])cp$/i.test(el.id || '');
+}
+
+/* Le champ ville qui va avec : meme attribut, « cp » remplace par
+   « ville » ou « commune » (cession.np.cp -> cession.np.commune,
+   vCp -> vVille, clientCp -> clientVille, s_cp -> s_ville...). */
+function champVilleDe(el){
+  const essais = ['ville', 'commune', 'Ville', 'Commune'];
+  for(const a of el.attributes){
+    if(a.name.indexOf('data-') !== 0 || a.name === 'data-key' || !a.value) continue;
+    if(!/(cp|Cp|CP)$/.test(a.value)) continue;
+    for(const mot of essais){
+      const cible = a.value.replace(/(cp|Cp|CP)$/, mot);
+      const trouve = document.querySelector('input[' + a.name + '="' + cible.replace(/"/g, '') + '"]');
+      if(trouve) return trouve;
+    }
+  }
+  if(el.id && /cp$/i.test(el.id)){
+    for(const mot of essais){
+      const trouve = document.getElementById(el.id.replace(/cp$/i, mot));
+      if(trouve && trouve.tagName === 'INPUT') return trouve;
+    }
+  }
+  return null;
+}
+
+/* LES AUTRES PAYS.
+   La France passe par le service officiel des communes. Les pays
+   voisins passent par Zippopotam (api.zippopotam.us, gratuit, sans
+   cle). Le pays se lit dans le champ « Pays » de la meme personne
+   quand il est rempli ; sinon, il se DEVINE :
+     5 chiffres              cherche en France, Allemagne, Italie, Espagne
+     4 chiffres              cherche en Belgique, Luxembourg, Suisse, Autriche
+     4 chiffres + 2 lettres  Pays-Bas  (1012 AB)
+     L-1234, D-12345...      le pays du prefixe
+   Seules les villes trouvees s'affichent, chacune avec son drapeau. */
+const PAYS_CODES_POSTAUX = {
+  FR: { nom: 'FRANCE',     drapeau: 'fr' },
+  BE: { nom: 'BELGIQUE',   drapeau: 'be', api: 'be' },
+  LU: { nom: 'LUXEMBOURG', drapeau: 'lu', api: 'lu' },
+  CH: { nom: 'SUISSE',     drapeau: 'ch', api: 'ch' },
+  DE: { nom: 'ALLEMAGNE',  drapeau: 'de', api: 'de' },
+  NL: { nom: 'PAYS-BAS',   drapeau: 'nl', api: 'nl' },
+  IT: { nom: 'ITALIE',     drapeau: 'it', api: 'it' },
+  ES: { nom: 'ESPAGNE',    drapeau: 'es', api: 'es' },
+  AT: { nom: 'AUTRICHE',   drapeau: 'at', api: 'at' },
+  PT: { nom: 'PORTUGAL',   drapeau: 'pt', api: 'pt' }
+};
+const LIBELLES_PAYS_CP = { FR: 'France', BE: 'Belgique', LU: 'Luxembourg', CH: 'Suisse', DE: 'Allemagne',
+  NL: 'Pays-Bas', IT: 'Italie', ES: 'Espagne', AT: 'Autriche', PT: 'Portugal' };
+const NOMS_PAYS_CP = [
+  [/^(FR|FRANCE|FRANKRIJK|FRANKREICH|FRANCIA|FRANKRAICH)$/, 'FR'],
+  [/^(BE|B|BELGIQUE|BELGIE|BELGIEN|BELGIO|BELGIUM|BELSCH)$/, 'BE'],
+  [/^(LU|L|LUXEMBOURG|LUXEMBURG|LUSSEMBURGO|LETZEBUERG)$/, 'LU'],
+  [/^(CH|SUISSE|SCHWEIZ|SVIZZERA|ZWITSERLAND|SWITZERLAND)$/, 'CH'],
+  [/^(DE|D|ALLEMAGNE|DEUTSCHLAND|DUITSLAND|GERMANIA|GERMANY|DAITSCHLAND)$/, 'DE'],
+  [/^(NL|PAYS-BAS|PAYS BAS|NEDERLAND|NIEDERLANDE|PAESI BASSI|NETHERLANDS|HOLLANDE)$/, 'NL'],
+  [/^(IT|I|ITALIE|ITALIA|ITALIEN|ITALIE|ITALY)$/, 'IT'],
+  [/^(ES|E|ESPAGNE|ESPANA|SPANIEN|SPANJE|SPAGNA|SPAIN)$/, 'ES'],
+  [/^(AT|A|AUTRICHE|OSTERREICH|OESTERREICH|AUSTRIA|OOSTENRIJK)$/, 'AT'],
+  [/^(PT|P|PORTUGAL|PORTOGALLO)$/, 'PT']
+];
+
+/* Le champ « Pays » de la meme personne (vCp -> vPays, cp -> pays). */
+function champPaysDe(el){
+  for(const a of el.attributes){
+    if(a.name.indexOf('data-') !== 0 || a.name === 'data-key' || !a.value) continue;
+    if(!/(cp|Cp|CP)$/.test(a.value)) continue;
+    for(const mot of ['pays', 'Pays']){
+      const t2 = document.querySelector('input[' + a.name + '="' + a.value.replace(/(cp|Cp|CP)$/, mot).replace(/"/g, '') + '"]');
+      if(t2) return t2;
+    }
+  }
+  if(el.id && /cp$/i.test(el.id)){
+    const t3 = document.getElementById(el.id.replace(/cp$/i, 'pays'));
+    if(t3 && t3.tagName === 'INPUT') return t3;
+  }
+  return null;
+}
+
+function codePaysSaisi(texte){
+  const n = majuscules(texte || '').replace(/\s+/g, ' ').trim();
+  if(!n) return '';
+  for(const [motif, code] of NOMS_PAYS_CP){ if(motif.test(n)) return code; }
+  return '';
+}
+
+/* Les pays a interroger pour ce code, et le code tel que chaque
+   service l'attend. */
+function paysAInterroger(code, paysSaisi){
+  const c = String(code || '').toUpperCase().replace(/\s+/g, ' ').trim();
+  const chiffres = c.replace(/^[A-Z]{1,2}-/, '');
+  if(paysSaisi){
+    if(paysSaisi === 'FR' && /^\d{5}$/.test(chiffres)) return [['FR', chiffres]];
+    if(paysSaisi === 'NL'){ const m = c.match(/^(\d{4})/); return m ? [['NL', m[1]]] : []; }
+    if(paysSaisi === 'LU' && /^\d{4}$/.test(chiffres)) return [['LU', 'L-' + chiffres]];
+    if(PAYS_CODES_POSTAUX[paysSaisi] && /^\d{4,5}$/.test(chiffres)) return [[paysSaisi, chiffres]];
+    return [];
+  }
+  /* Pas de pays indique : on DEVINE. Le code est cherche dans tous les
+     pays ou il peut exister, et seules les villes trouvees sont
+     proposees, chacune avec son drapeau. */
+  if(/^\d{4} ?[A-Z]{2}$/.test(c)) return [['NL', c.slice(0, 4)]];
+  if(/^L-?\d{4}$/.test(c)) return [['LU', 'L-' + c.replace(/\D/g, '')]];
+  if(/^D-\d{5}$/.test(c)) return [['DE', chiffres]];
+  if(/^I-\d{5}$/.test(c)) return [['IT', chiffres]];
+  if(/^(B|CH|A)-\d{4}$/.test(c)) return [[{ B: 'BE', CH: 'CH', A: 'AT' }[c.split('-')[0]], chiffres]];
+  if(/^\d{5}$/.test(c)) return ordonnerPays([['FR', c], ['DE', c], ['IT', c], ['ES', c]]);
+  if(/^\d{4}$/.test(c)) return ordonnerPays([['BE', c], ['LU', 'L-' + c], ['CH', c], ['AT', c]]);
+  return [];
+}
+
+/* L'ordre des propositions : la France d'abord, puis les pays de la
+   langue du document (un contrat neerlandais met la Belgique et les
+   Pays-Bas en tete, un contrat allemand l'Allemagne, l'Autriche et la
+   Suisse). */
+const PAYS_DE_LA_LANGUE = { nl: ['NL', 'BE'], de: ['DE', 'AT', 'CH', 'LU'], it: ['IT', 'CH'],
+                            lb: ['LU'], en: [], fr: ['FR', 'BE', 'LU', 'CH'] };
+function ordonnerPays(demandes){
+  let lg = langue;
+  try{ if(typeof langueDocument === 'function' && vehicles && vehicles[currentId]) lg = langueDocument(vehicles[currentId]); }catch(e){}
+  const tete = ['FR'].concat(PAYS_DE_LA_LANGUE[lg] || []);
+  const rang = function(code){ const i = tete.indexOf(code); return i === -1 ? 50 : i; };
+  return demandes.slice().sort(function(a, b){ return rang(a[0]) - rang(b[0]); });
+}
+
+/* Les noms tels que les rend Zippopotam pour la Suisse — « Genève 1 »,
+   « Genève 2 Transit » — sont ramenes a la ville. */
+function nomVilleNet(nom){
+  return String(nom || '').replace(/,.*$/, '').replace(/\s+\d+.*$/, '').replace(/\s+(Dist|Distribution|Transit|Centre logistique).*$/i, '').trim();
+}
+
+/* Une question qui traine ne doit pas bloquer les autres : cinq
+   secondes au plus. */
+function fetchAvecDelai(url, ms){
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const minuteur = ctrl ? setTimeout(function(){ ctrl.abort(); }, ms || 5000) : null;
+  return fetch(url, ctrl ? { signal: ctrl.signal } : undefined)
+    .finally(function(){ if(minuteur) clearTimeout(minuteur); });
+}
+
+async function communesPour(pays, code){
+  const cle = pays + ':' + code;
+  if(communesParCp[cle]) return communesParCp[cle];
+  try{
+    const garde = localStorage.getItem('autivio:cp:' + cle);
+    if(garde){ communesParCp[cle] = JSON.parse(garde); return communesParCp[cle]; }
+  }catch(e){}
+  try{
+    let noms = [];
+    if(pays === 'FR'){
+      const r = await fetchAvecDelai('https://geo.api.gouv.fr/communes?codePostal=' + encodeURIComponent(code)
+                                     + '&fields=nom&format=json');
+      if(!r.ok) return [];
+      noms = (await r.json() || []).map(function(c){ return c.nom; });
+    }else{
+      const r = await fetchAvecDelai('https://api.zippopotam.us/' + PAYS_CODES_POSTAUX[pays].api + '/' + encodeURIComponent(code));
+      if(!r.ok){ communesParCp[cle] = []; return []; }   // code inconnu dans ce pays
+      const j = await r.json();
+      noms = ((j && j.places) || []).map(function(pl){ return nomVilleNet(pl['place name']); });
+    }
+    const vus = {};
+    const liste = noms.map(function(n){ return String(n || '').trim(); })
+      .filter(function(n){ const k = majuscules(n); if(!n || vus[k]) return false; vus[k] = 1; return true; })
+      .sort(function(a, b){ return a.localeCompare(b, 'fr'); });
+    communesParCp[cle] = liste;
+    try{ localStorage.setItem('autivio:cp:' + cle, JSON.stringify(liste)); }catch(e){}
+    return liste;
+  }catch(e){ return []; }
+}
+
+function codePostalReconnaissable(v){
+  const c = String(v || '').toUpperCase().replace(/\s+/g, ' ').trim();
+  return /^\d{5}$/.test(c) || /^\d{4}$/.test(c) || /^\d{4} ?[A-Z]{2}$/.test(c) || /^L-?\d{4}$/.test(c)
+      || /^[A-Z]{1,2}-\d{4,5}$/.test(c);
+}
+
+let bulleVille = null;
+let minuteurCp = null;
+function fermerBulleVille(){ if(bulleVille){ bulleVille.remove(); bulleVille = null; } }
+
+/* Les reponses arrivent pays par pays : la bulle se complete a mesure,
+   sans attendre le plus lent. */
+function proposerVille(champCp, champSous){
+  const valeur = String(champCp.value || '');
+  if(!codePostalReconnaissable(valeur)) { fermerBulleVille(); return; }
+  const ville = champVilleDe(champCp);
+  if(!ville) return;
+  const champPays = champPaysDe(champCp);
+  const demandes = paysAInterroger(valeur, champPays ? codePaysSaisi(champPays.value) : '');
+  const resultats = demandes.map(function(){ return null; });
+  demandes.forEach(function(d, i){
+    communesPour(d[0], d[1]).then(function(liste){
+      resultats[i] = liste || [];
+      /* La saisie a pu changer pendant la question au serveur. */
+      if(String(champCp.value || '') !== valeur) return;
+      const trouvees = [];
+      resultats.forEach(function(l, j){
+        (l || []).forEach(function(v){ trouvees.push({ ville: v, pays: demandes[j][0] }); });
+      });
+      if(trouvees.length) dessinerBulleVille(champCp, champSous, ville, champPays, valeur, trouvees);
+    });
+  });
+}
+
+function dessinerBulleVille(champCp, champSous, ville, champPays, valeur, trouvees){
+  const deja = majuscules(ville.value || '').trim();
+  const restantes = trouvees.filter(function(x){ return majuscules(x.ville) !== deja; });
+  if(!restantes.length){ fermerBulleVille(); return; }
+  const plusieursPays = restantes.some(function(x){ return x.pays !== restantes[0].pays; });
+  fermerBulleVille();
+  fermerSuggestionGarage();
+  const sous = champSous || champCp;
+  /* Le champ a pu perdre le focus entre-temps : on ne propose plus. */
+  const actif = document.activeElement;
+  if(actif !== champCp && actif !== ville && actif !== sous) return;
+  const b = document.createElement('div');
+  b.className = 'sugg-garage sugg-ville';
+  b.innerHTML = '<div class="sugg-titre">📍 ' + esc(t('Ville pour le code postal') + ' ' + valeur.toUpperCase().trim()) + '</div>'
+    + restantes.slice(0, 14).map(function(x, i){
+        const p = PAYS_CODES_POSTAUX[x.pays];
+        return '<button type="button" class="sugg-choix sugg-ville-choix" data-i="' + i + '">'
+          + ((plusieursPays || x.pays !== 'FR') ? '<span class="sugg-drapeau">' + drapeauSVG(p.drapeau, 18) + '</span>' : '')
+          + '<span>' + esc(x.ville.toUpperCase()) + '</span>'
+          + (plusieursPays ? '<span class="sugg-pays">' + esc(t(LIBELLES_PAYS_CP[x.pays] || p.nom)) + '</span>' : '')
+          + '</button>';
+      }).join('');
+  document.body.appendChild(b);
+  b.__champ = sous;
+  bulleVille = b;
+  placerBulle(b);
+  b.querySelectorAll('[data-i]').forEach(function(bt){
+    bt.onmousedown = function(e){ e.preventDefault(); };
+    bt.onclick = function(){
+      const x = restantes[Number(bt.dataset.i)];
+      ville.value = x.ville.toUpperCase();
+      ville.dispatchEvent(new Event('input',  { bubbles: true }));
+      ville.dispatchEvent(new Event('change', { bubbles: true }));
+      /* Le pays aussi, s'il n'etait pas encore rempli et que la ville
+         est etrangere. */
+      if(champPays && !String(champPays.value || '').trim() && x.pays !== 'FR'){
+        champPays.value = PAYS_CODES_POSTAUX[x.pays].nom;
+        champPays.dispatchEvent(new Event('input',  { bubbles: true }));
+        champPays.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      fermerBulleVille();
+    };
+  });
+}
+
+/* Meme placement que la bulle « Mon garage » : sous le champ, ou
+   au-dessus s'il n'y a pas la place, en tenant compte du clavier. */
+function placerBulle(b){
+  if(!b || !b.__champ) return;
+  const r = b.__champ.getBoundingClientRect();
+  const vue = window.visualViewport;
+  const hautVue = vue ? vue.offsetTop : 0, gaucheVue = vue ? vue.offsetLeft : 0;
+  const hauteur = vue ? vue.height : window.innerHeight, largeur = vue ? vue.width : window.innerWidth;
+  if(r.bottom - hautVue < 0 || r.top - hautVue > hauteur || !r.width){ b.remove(); if(b === bulleVille) bulleVille = null; return; }
+  b.style.minWidth = Math.min(r.width, largeur - 16) + 'px';
+  b.style.left = (Math.max(gaucheVue + 8, Math.min(r.left, gaucheVue + largeur - b.offsetWidth - 8)) + window.scrollX) + 'px';
+  const dessous = (hauteur - (r.bottom - hautVue)) > b.offsetHeight + 12 || (r.top - hautVue) < b.offsetHeight + 12;
+  b.style.top = (dessous ? r.bottom + 4 : r.top - b.offsetHeight - 4) + window.scrollY + 'px';
+}
+
+document.addEventListener('change', function(e){
+  /* Le pays change apres le code : on repropose dans le bon pays. */
+  const el = e.target;
+  if(!el || el.tagName !== 'INPUT') return;
+  const champsCp = Array.prototype.filter.call(document.querySelectorAll('input'), estChampCp);
+  const cp = champsCp.filter(function(c){ return champPaysDe(c) === el; })[0];
+  if(cp && codePostalReconnaissable(cp.value)) proposerVille(cp, el);
+});
+document.addEventListener('input', function(e){
+  const el = e.target;
+  if(!estChampCp(el)) return;
+  clearTimeout(minuteurCp);
+  if(!codePostalReconnaissable(el.value)){ fermerBulleVille(); return; }
+  /* Quatre chiffres peuvent etre le debut d'un code francais (7500…
+     avant 75001) : on attend que la frappe s'arrete avant de chercher
+     en Belgique, au Luxembourg et en Suisse. */
+  const quatre = /^\d{4}$/.test(String(el.value || '').trim());
+  minuteurCp = setTimeout(function(){ proposerVille(el); }, quatre ? 900 : 150);
+});
+/* En revenant dans le champ ville, la proposition reapparait si le
+   code postal est deja la. */
+document.addEventListener('focusin', function(e){
+  const el = e.target;
+  if(!el || el.tagName !== 'INPUT'){ fermerBulleVille(); return; }
+  if(bulleVille && bulleVille.__champ === el) return;
+  const champsCp = Array.prototype.filter.call(document.querySelectorAll('input'), estChampCp);
+  const cp = champsCp.filter(function(c){ return champVilleDe(c) === el; })[0];
+  if(cp && codePostalReconnaissable(cp.value)){
+    setTimeout(function(){ proposerVille(cp, el); }, 0);
+  }else if(!estChampCp(el)){
+    fermerBulleVille();
+  }
+});
+document.addEventListener('focusout', function(e){
+  const champ = e.target;
+  setTimeout(function(){
+    const actif = document.activeElement;
+    if(!bulleVille) return;
+    if(actif && actif.tagName === 'INPUT' && (actif === bulleVille.__champ || champVilleDe(bulleVille.__champ) === actif)) return;
+    if(bulleVille.__champ === champ) fermerBulleVille();
+  }, 200);
+});
+window.addEventListener('scroll', function(){ placerBulle(bulleVille); }, true);
+window.addEventListener('resize', function(){ placerBulle(bulleVille); });
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize', function(){ placerBulle(bulleVille); });
+  window.visualViewport.addEventListener('scroll', function(){ placerBulle(bulleVille); });
 }
 
 /* =====================================================================
