@@ -852,6 +852,8 @@
   .bt-enregistre{animation:btEnregistre .35s ease-out;filter:saturate(1.15);}
   @keyframes btEnregistre{0%{transform:scale(.97);}60%{transform:scale(1.02);}100%{transform:none;}}
   /* ---- Donnees personnelles (reglages) ---- */
+  .choix-type-doc{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .choix-type-doc button{text-align:left;padding:12px 14px;font-size:14.5px;}
   .rgpd-carte{border:1px solid var(--line,#e2e8f2);border-radius:12px;padding:16px 18px;margin:14px 0;
     background:var(--panel,#fff);}
   .rgpd-carte p{margin:6px 0 12px;font-size:13.5px;line-height:1.55;color:var(--ink-soft,#5b6b84);}
@@ -2752,6 +2754,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Réduction du PDF…": "Riduzione del PDF…",
+    "PDF réduit": "PDF ridotto",
+    "Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.": "Questo PDF supera 1 MB e non è stato possibile ridurlo: probabilmente è protetto da password. Salvalo senza protezione, oppure fotografa il documento: la foto sarà convertita e compressa.",
+    "Recto de la pièce d’identité reconnu": "Fronte del documento d’identità riconosciuto",
+    "Verso de la pièce d’identité reconnu": "Retro del documento d’identità riconosciuto",
+    "Photographiez maintenant": "Fotografi ora",
+    "Les deux faces seront réunies dans un seul PDF": "Le due facce saranno riunite in un solo PDF",
+    "(recto en haut, verso en dessous, sur une seule page).": "(fronte in alto, retro sotto, su una sola pagina).",
+    "Ajouter le verso": "Aggiungi il retro",
+    "Ajouter le recto": "Aggiungi il fronte",
+    "Ajouter l’autre face": "Aggiungi l’altra faccia",
+    "Quel document est-ce ?": "Che documento è?",
+    "La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.": "Non è stato possibile leggere la foto. Mi dica cos’è: per un documento d’identità o una carta di circolazione le chiederò l’altra faccia.",
+    "Pièce d’identité (recto + verso)": "Documento d’identità (fronte + retro)",
+    "Autre document": "Altro documento",
     "Villes": "Città",
     "Ville pour le code postal": "Città per il CAP",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Account privato: le sue schede e i suoi documenti precedenti sono stati cancellati (GDPR).",
@@ -3756,6 +3773,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Réduction du PDF…": "PDF gëtt verklengert…",
+    "PDF réduit": "PDF verklengert",
+    "Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.": "Dëse PDF ass méi grouss wéi 1 MB a konnt net verklengert ginn: e ass wuel mat engem Passwuert geschützt. Späichert en ouni Schutz, oder fotograféiert d’Dokument: d’Foto gëtt ëmgewandelt a kompriméiert.",
+    "Recto de la pièce d’identité reconnu": "Recto vun der Identitéitskaart erkannt",
+    "Verso de la pièce d’identité reconnu": "Verso vun der Identitéitskaart erkannt",
+    "Photographiez maintenant": "Fotograféiert elo",
+    "Les deux faces seront réunies dans un seul PDF": "Déi zwou Säite ginn an engem eenzege PDF zesummegesat",
+    "(recto en haut, verso en dessous, sur une seule page).": "(Recto uewen, Verso drënner, op enger Säit).",
+    "Ajouter le verso": "Verso derbäisetzen",
+    "Ajouter le recto": "Recto derbäisetzen",
+    "Ajouter l’autre face": "Déi aner Säit derbäisetzen",
+    "Quel document est-ce ?": "Wat fir en Dokument ass dat?",
+    "La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.": "D’Foto konnt net gelies ginn. Sot mir, wat et ass: fir eng Identitéitskaart oder eng Carte grise froen ech no der anerer Säit.",
+    "Pièce d’identité (recto + verso)": "Identitéitskaart (Recto + Verso)",
+    "Autre document": "Anert Dokument",
     "Villes": "Uertschaften",
     "Ville pour le code postal": "Uertschaft fir de Postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkont: Är vireg Fichen an Dokumenter goufen geläscht (DSGVO).",
@@ -4759,6 +4791,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Réduction du PDF…": "Shrinking the PDF…",
+    "PDF réduit": "PDF shrunk",
+    "Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.": "This PDF is over 1 MB and could not be shrunk: it is probably password-protected. Save it without protection, or photograph the document: the photo will be converted and compressed.",
+    "Recto de la pièce d’identité reconnu": "Front of the ID recognised",
+    "Verso de la pièce d’identité reconnu": "Back of the ID recognised",
+    "Photographiez maintenant": "Now photograph",
+    "Les deux faces seront réunies dans un seul PDF": "Both sides will be combined into one PDF",
+    "(recto en haut, verso en dessous, sur une seule page).": "(front on top, back below, on a single page).",
+    "Ajouter le verso": "Add the back",
+    "Ajouter le recto": "Add the front",
+    "Ajouter l’autre face": "Add the other side",
+    "Quel document est-ce ?": "What document is this?",
+    "La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.": "The photo could not be read. Tell me what it is: for an ID card or a registration certificate, I will ask for the other side.",
+    "Pièce d’identité (recto + verso)": "ID card (front + back)",
+    "Autre document": "Other document",
     "Villes": "Towns",
     "Ville pour le code postal": "Town for postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Private account: your previous records and documents have been deleted (GDPR).",
@@ -5761,6 +5808,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Réduction du PDF…": "PDF wird verkleinert…",
+    "PDF réduit": "PDF verkleinert",
+    "Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.": "Diese PDF ist größer als 1 MB und konnte nicht verkleinert werden: Sie ist vermutlich passwortgeschützt. Speichern Sie sie ohne Schutz oder fotografieren Sie das Dokument: Das Foto wird umgewandelt und komprimiert.",
+    "Recto de la pièce d’identité reconnu": "Vorderseite des Ausweises erkannt",
+    "Verso de la pièce d’identité reconnu": "Rückseite des Ausweises erkannt",
+    "Photographiez maintenant": "Fotografieren Sie jetzt",
+    "Les deux faces seront réunies dans un seul PDF": "Beide Seiten werden in einem PDF zusammengefasst",
+    "(recto en haut, verso en dessous, sur une seule page).": "(Vorderseite oben, Rückseite darunter, auf einer Seite).",
+    "Ajouter le verso": "Rückseite hinzufügen",
+    "Ajouter le recto": "Vorderseite hinzufügen",
+    "Ajouter l’autre face": "Andere Seite hinzufügen",
+    "Quel document est-ce ?": "Welches Dokument ist das?",
+    "La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.": "Das Foto konnte nicht gelesen werden. Sagen Sie mir, was es ist: Bei einem Ausweis oder einer Zulassungsbescheinigung frage ich nach der anderen Seite.",
+    "Pièce d’identité (recto + verso)": "Ausweis (Vorder- + Rückseite)",
+    "Autre document": "Anderes Dokument",
     "Villes": "Orte",
     "Ville pour le code postal": "Ort zur Postleitzahl",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Privatkonto: Ihre bisherigen Fahrzeugakten und Dokumente wurden gelöscht (DSGVO).",
@@ -6779,6 +6841,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Réduction du PDF…": "Pdf wordt verkleind…",
+    "PDF réduit": "Pdf verkleind",
+    "Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.": "Deze pdf is groter dan 1 MB en kon niet worden verkleind: hij is waarschijnlijk met een wachtwoord beveiligd. Sla hem op zonder beveiliging, of fotografeer het document: de foto wordt omgezet en gecomprimeerd.",
+    "Recto de la pièce d’identité reconnu": "Voorkant van het identiteitsbewijs herkend",
+    "Verso de la pièce d’identité reconnu": "Achterkant van het identiteitsbewijs herkend",
+    "Photographiez maintenant": "Fotografeer nu",
+    "Les deux faces seront réunies dans un seul PDF": "Beide zijden worden samengevoegd in één pdf",
+    "(recto en haut, verso en dessous, sur une seule page).": "(voorkant boven, achterkant eronder, op één pagina).",
+    "Ajouter le verso": "Achterkant toevoegen",
+    "Ajouter le recto": "Voorkant toevoegen",
+    "Ajouter l’autre face": "Andere zijde toevoegen",
+    "Quel document est-ce ?": "Welk document is dit?",
+    "La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.": "De foto kon niet worden gelezen. Zeg me wat het is: voor een identiteitsbewijs of een inschrijvingsbewijs vraag ik de andere zijde.",
+    "Pièce d’identité (recto + verso)": "Identiteitsbewijs (voor- + achterkant)",
+    "Autre document": "Ander document",
     "Villes": "Plaatsen",
     "Ville pour le code postal": "Plaats voor postcode",
     "Compte particulier : vos fiches et documents précédents ont été effacés (RGPD).": "Particulier account: uw vorige dossiers en documenten zijn gewist (AVG).",
@@ -7628,7 +7705,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.41';
+const VERSION = '2.44';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -7848,7 +7925,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '22/10/2026';
+const VERSION_DATE = '24/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -11605,6 +11682,15 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.44': { date: '24/10/2026', lignes: [
+    "Un PDF importé de plus de 1 Mo est désormais réduit automatiquement sous 1 Mo, quel que soit son poids de départ : il est d'abord réécrit (le texte reste sélectionnable), puis, si cela ne suffit pas, chaque page est recompressée en image. Le logiciel affiche le gain, par exemple « PDF réduit : 15,5 Mo → 922 Ko ». Seul un PDF protégé par mot de passe ne peut pas être réduit."
+  ] },
+  '2.43': { date: '23/10/2026', lignes: [
+    "Importer un document : une carte d'identité ou une carte grise importée est de nouveau reconnue (une erreur faisait échouer la reconnaissance à chaque fois). Le logiciel dit quel côté il a lu, demande l'autre (« Ajouter le verso » ou « Ajouter le recto »), et réunit les deux faces dans un seul PDF, recto en haut même si le verso a été pris en premier. Si la photo n'est pas lisible, il demande s'il s'agit d'une pièce d'identité, d'une carte grise ou d'un autre document.",
+  ] },
+  '2.42': { date: '22/10/2026', lignes: [
+    "Les listes déroulantes affichent désormais tous leurs éléments : elles s'arrêtaient au quatre-vingtième, si bien que les départements après la Somme (dont l'outre-mer et « 99 — né(e) à l'étranger ») et une partie des pays n'apparaissaient qu'en tapant leur nom."
+  ] },
   '2.41': { date: '22/10/2026', lignes: [
     "Listes déroulantes pour les champs Pays (vendeur, acheteur, client, pays de naissance…) et Département (de naissance) dans tous les documents. On touche le champ, la liste s'ouvre, quelques lettres la filtrent ; la saisie libre reste possible. Pour le département, seul le code s'inscrit (59, 2A, 971 ; 99 pour un(e) né(e) à l'étranger). Chaque pays de la liste porte son drapeau, et le drapeau du pays choisi s'affiche dans le champ.",
     "Dans un champ ville ou commune, deux lettres suffisent : les villes qui commencent ainsi sont proposées, les plus peuplées d'abord, avec leur code postal et leur département. Choisir une ville remplit aussi le code postal s'il était vide (et qu'elle n'en a qu'un), et le pays s'il était vide et qu'elle est étrangère. France : geo.api.gouv.fr ; autres pays : Photon (OpenStreetMap).",
@@ -26771,21 +26857,85 @@ async function photoVersPdf(fichier){
   return { b64: bytesToB64(octets), taille: octets.length };
 }
 
-/* Un PDF deja leger passe tel quel. Trop lourd, on le reecrit : les
-   scanners laissent souvent des pages entieres de donnees inutiles.
-   Si cela ne suffit pas, on le dit — sans pdf.js, on ne sait pas
-   recomprimer les images qu'il contient. */
+/* Un PDF deja leger passe tel quel. Au-dela de 1 Mo, on le RETRECIT :
+     1. d'abord on le reecrit tel quel : les scanners laissent souvent
+        des donnees inutiles, et le texte reste selectionnable ;
+     2. si cela ne suffit pas, chaque page est redessinee (pdf.js) puis
+        recompressee en JPEG, a la taille de la page d'origine. Le
+        budget est partage entre les pages ; s'il est depasse, on
+        recommence un cran plus petit.
+   Seul un PDF protege par mot de passe, ou illisible, resiste. */
 async function allegerPdf(fichier){
-  const b64 = await lireFichierB64(fichier);
-  if(fichier.size <= POIDS_MAXI_OCTETS) return { b64: b64, taille: fichier.size };
+  if(fichier.size <= POIDS_MAXI_OCTETS){
+    return { b64: await lireFichierB64(fichier), taille: fichier.size };
+  }
+  const brut = new Uint8Array(await fichier.arrayBuffer());
   try{
     if(typeof PDFLib !== 'undefined'){
-      const src = await PDFLib.PDFDocument.load(await fichier.arrayBuffer(), { ignoreEncryption: true });
+      const src = await PDFLib.PDFDocument.load(brut.slice(), { ignoreEncryption: true });
       const octets = await src.save({ useObjectStreams: true });
-      if(octets.length <= POIDS_MAXI_OCTETS) return { b64: bytesToB64(octets), taille: octets.length };
+      if(octets.length <= POIDS_MAXI_OCTETS){
+        return { b64: bytesToB64(octets), taille: octets.length, reduit: true, avant: fichier.size };
+      }
     }
   }catch(e){}
-  return null;   // au-dela de ce qu'on sait faire
+  try{
+    const fait = await pdfRedessine(brut);
+    if(fait) return Object.assign(fait, { reduit: true, avant: fichier.size });
+  }catch(e){}
+  return null;   // protege ou illisible
+}
+
+/* Les pages du PDF redessinees en images compressees, sous 1 Mo. */
+async function pdfRedessine(octets){
+  if(typeof PDFLib === 'undefined') return null;
+  await moteurPdfPret();
+  const doc = await window.pdfjsLib.getDocument({ data: octets.slice() }).promise;
+  const nb = doc.numPages;
+  if(!nb) return null;
+  /* Ce qu'il faut pour lire un A4 : ~1650 points de large (200 ppp).
+     Beaucoup de pages : on descend, le budget par page etant plus maigre. */
+  let largeurVisee = nb <= 2 ? 1650 : nb <= 6 ? 1400 : 1100;
+  let budget = POIDS_MAXI_OCTETS * 0.9;
+  for(let essai = 0; essai < 4; essai++){
+    const parPage = Math.max(25000, Math.floor(budget / nb));
+    const pdf = await PDFLib.PDFDocument.create();
+    for(let n = 1; n <= nb; n++){
+      bandeauEnvoi(t('Réduction du PDF…') + (nb > 1 ? ' ' + n + '/' + nb : ''));
+      const page = await doc.getPage(n);
+      const base = page.getViewport({ scale: 1 });   // en points PDF, rotation comprise
+      /* Le petit cote de la page fait « largeurVisee » points d'image. */
+      const echelle = Math.min(3, Math.max(0.5, largeurVisee / Math.min(base.width, base.height)));
+      const vue = page.getViewport({ scale: echelle });
+      const toile = document.createElement('canvas');
+      toile.width = Math.max(1, Math.round(vue.width));
+      toile.height = Math.max(1, Math.round(vue.height));
+      const c = toile.getContext('2d');
+      c.fillStyle = '#ffffff'; c.fillRect(0, 0, toile.width, toile.height);
+      await page.render({ canvasContext: c, viewport: vue }).promise;
+      const petite = compresserImage(toile, parPage);
+      toile.width = toile.height = 1;                // libere la memoire du telephone
+      const jpg = await pdf.embedJpg(petite.url);
+      const feuille = pdf.addPage([base.width, base.height]);
+      feuille.drawImage(jpg, { x: 0, y: 0, width: base.width, height: base.height });
+      try{ page.cleanup(); }catch(e){}
+    }
+    const sortie = await pdf.save({ useObjectStreams: true });
+    if(sortie.length <= POIDS_MAXI_OCTETS){
+      try{ doc.destroy(); }catch(e){}
+      return { b64: bytesToB64(sortie), taille: sortie.length };
+    }
+    budget = budget * 0.7;
+    largeurVisee = Math.round(largeurVisee * 0.8);
+  }
+  try{ doc.destroy(); }catch(e){}
+  return null;
+}
+
+/* « 3,4 Mo », « 860 Ko » */
+function poidsLisible(octets){
+  if(octets >= 1024 * 1024) return (octets / 1024 / 1024).toFixed(1).replace('.', ',') + ' Mo';
+  return Math.max(1, Math.round(octets / 1024)) + ' Ko';
 }
 
 /* Le dossier d'une voiture. Sans plaque ni chassis, on ne renonce plus :
@@ -28348,12 +28498,23 @@ async function pdfDesFaces(fichiers, parPage){
 
 /* Qu'est-ce que ce fichier ? Sert a l'import : on lit la photo une
    fois, sans rien remplir, juste pour savoir a quoi on a affaire. */
+/* CORRECTION : cette fonction passait a la lecture une variable qui
+   n'existe pas ici (« typeAttendu »). L'erreur etait avalee en silence
+   et la fonction rendait TOUJOURS « rien reconnu » : a l'import, une
+   carte d'identite partait comme un document quelconque, sans que le
+   logiciel propose l'autre face. */
 async function identifierDocument(fichier){
   if(!estImage(fichier) && !estPdf(fichier)) return null;
   try{
     const toile = await preparerImageOcr(fichier);
     await moteurOcrPret();
-    const texte = await lireDansLeBonSens(toile, typeAttendu);
+    let texte = await lireDansLeBonSens(toile);
+    /* Le verso d'une carte d'identite se reconnait surtout a sa bande
+       de chevrons : si la premiere lecture l'a manquee, on la relit. */
+    if(!lireBandeIdentite(texte)){
+      const bande = await relireLaBande(toile);
+      if(bande && lireBandeIdentite(bande)) texte = texte + '\n' + bande;
+    }
     if(estPieceIdentite(texte)) return { type: 'identite', nom: t('Pièce d’identité'),
                                          cote: coteIdentite(texte), texte: texte };
     if(certificatEvident(texte) || signesCarteGrise(texte) >= 3){
@@ -29424,6 +29585,28 @@ function lireFichierB64(fichier){
 /* Appelee sans vehicule (bouton de la barre de gauche), elle demande a
    quelle voiture le document se rattache. Appelee depuis un dossier
    ouvert, la question ne se pose pas : c'est cette voiture-la. */
+/* Trois choix quand la photo n'a pas ete reconnue. Rend 'identite',
+   'carteGrise', ou '' pour un autre document. */
+function choisirTypeDocument(){
+  return new Promise(function(resolve){
+    document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+    const fond = document.createElement('div');
+    fond.className = 'dlg-fond';
+    fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+      + '<div class="dlg-titre">' + esc(t('Quel document est-ce ?')) + '</div>'
+      + '<div class="dlg-texte">' + esc(t('La photo n’a pas pu être lue. Dites-moi ce que c’est : pour une pièce d’identité ou une carte grise, je vous demanderai l’autre face.')) + '</div>'
+      + '<div class="choix-type-doc">'
+      +   '<button type="button" class="btn-sec" data-type="identite">🪪 ' + esc(t('Pièce d’identité (recto + verso)')) + '</button>'
+      +   '<button type="button" class="btn-sec" data-type="carteGrise">🚗 ' + esc(t('Carte grise')) + '</button>'
+      +   '<button type="button" class="btn-sec" data-type="">📄 ' + esc(t('Autre document')) + '</button>'
+      + '</div></div>';
+    document.body.appendChild(fond);
+    fond.querySelectorAll('[data-type]').forEach(function(b){
+      b.onclick = function(){ fond.remove(); resolve(b.dataset.type); };
+    });
+  });
+}
+
 async function importerPieceJointe(fichier, vehicule){
   if(!fichier) return;
   if(fichier.size > 25 * 1024 * 1024){
@@ -29447,46 +29630,61 @@ async function importerPieceJointe(fichier, vehicule){
     bandeauEnvoi(t('Lecture en cours…'));
     reconnu = await identifierDocument(fichier);
     bandeauEnvoi('');
+    /* La lecture n'a pas reconnu la photo — reflet, flou, carte
+       etrangere : on DEMANDE ce que c'est, plutot que de ranger une
+       seule face sans rien dire. */
+    if(!reconnu && estImage(fichier)){
+      const choix = await choisirTypeDocument();
+      if(choix === 'identite') reconnu = { type: 'identite', nom: t('Pièce d’identité'), cote: '', texte: '' };
+      else if(choix === 'carteGrise') reconnu = { type: 'carteGrise', nom: t('Carte grise'), texte: '' };
+    }
   }
   if(reconnu){
     surUnePage = (reconnu.type === 'identite') ? 2 : 1;
-    const autre = reconnu.type === 'identite'
-      ? nomDuCote(reconnu.cote === 'recto' ? 'verso' : (reconnu.cote === 'verso' ? 'recto' : ''))
-      : t('l’autre face du document');
+    const identite = reconnu.type === 'identite';
+    const coteManquant = identite
+      ? (reconnu.cote === 'recto' ? 'verso' : (reconnu.cote === 'verso' ? 'recto' : ''))
+      : '';
+    const autre = identite ? nomDuCote(coteManquant) : t('l’autre face du document');
     const suite = await demander({
-      titre: reconnu.nom + ' ' + t('reconnue'),
-      texte: t('Voulez-vous ajouter') + ' ' + autre + ' ? '
-             + t('Les deux faces seront réunies dans un seul PDF.'),
-      oui: t('Ajouter'), non: t('Une seule face')
+      titre: identite && reconnu.cote
+        ? (reconnu.cote === 'recto' ? t('Recto de la pièce d’identité reconnu') : t('Verso de la pièce d’identité reconnu'))
+        : (reconnu.texte ? reconnu.nom + ' ' + t('reconnue') : reconnu.nom),
+      texte: t('Photographiez maintenant') + ' ' + autre + '. '
+             + t('Les deux faces seront réunies dans un seul PDF')
+             + (identite ? ' ' + t('(recto en haut, verso en dessous, sur une seule page).') : '.'),
+      oui: identite && coteManquant
+        ? (coteManquant === 'verso' ? t('Ajouter le verso') : t('Ajouter le recto'))
+        : t('Ajouter l’autre face'),
+      non: t('Une seule face')
     });
     if(suite){
-      /* A l'import, la seconde face se choisit COMME LA PREMIERE : dans
-         la pellicule. On ouvre donc le meme selecteur — sur telephone,
-         il propose de lui-meme « Photothèque » ou « Prendre une
-         photo », et l'on reste maitre du choix.
-         Jusqu'a deux essais : si la face donnee est la meme que la
-         premiere, on le dit et on laisse recommencer. */
-      for(let essai = 0; essai < 2; essai++){
-        /* Le selecteur a ouvrir est celui du bouton d'ou l'on vient :
-           « Importer un document » du dossier, ou celui de la barre de
-           gauche quand aucun dossier n'est ouvert. */
+      /* La seconde face se prend COMME LA PREMIERE : le meme selecteur
+         propose « Prendre une photo » ou « Photothèque ». Jusqu'a deux
+         essais si la photo donnee est la meme face. */
+      for(let essai = 0; essai < 3; essai++){
         const seconde = await photoParFichier(
           document.getElementById('pjFiche') ? 'pjFiche' : 'pjBtn');
         if(!seconde) break;
-        let memeFace = false;
-        if(estImage(seconde)){
+        let memeFace = false, autreLu = null;
+        if(estImage(seconde) || estPdf(seconde)){
           bandeauEnvoi(t('Lecture en cours…'));
-          const autreLu = await identifierDocument(seconde);
+          autreLu = await identifierDocument(seconde);
           bandeauEnvoi('');
           if(autreLu && reconnu.texte && autreLu.texte){
             memeFace = ressemblance(reconnu.texte, autreLu.texte) > 0.75;
-            /* Deux cotes nommes, et identiques : preuve suffisante. */
-            if(!memeFace && reconnu.cote && autreLu.cote && reconnu.cote === autreLu.cote){
-              memeFace = true;
-            }
+            if(!memeFace && reconnu.cote && autreLu.cote && reconnu.cote === autreLu.cote) memeFace = true;
           }
         }
-        if(!memeFace){ faces.push(seconde); break; }
+        if(!memeFace){
+          /* Le recto toujours en premier : si la premiere photo etait le
+             verso, ou si la seconde est reconnue comme le recto, on
+             inverse. */
+          const premiereEstVerso = reconnu.cote === 'verso'
+            || (!reconnu.cote && autreLu && autreLu.cote === 'recto');
+          faces = (identite && premiereEstVerso) ? [seconde, fichier] : [fichier, seconde];
+          break;
+        }
         const encore = await demander({
           titre: t('Ce n’est pas la bonne photo'),
           texte: t('Cette photo montre le même côté que la première.') + ' '
@@ -29520,6 +29718,7 @@ async function importerPieceJointe(fichier, vehicule){
      envoye comme il vient. */
   bandeauEnvoi(t('Préparation du document…'));
   let b64, taille = fichier.size, ext = extensionDe(fichier.name), mime = fichier.type || 'application/octet-stream';
+  let reductionFaite = '';
   try{
     if(faces.length > 1){
       /* Plusieurs faces : un seul PDF, d'UNE page pour une carte
@@ -29531,12 +29730,14 @@ async function importerPieceJointe(fichier, vehicule){
       const fait = await photoVersPdf(fichier);
       b64 = fait.b64; taille = fait.taille; ext = 'pdf'; mime = 'application/pdf';
     }else if(ext === 'pdf' || mime === 'application/pdf'){
+      if(fichier.size > POIDS_MAXI_OCTETS) bandeauEnvoi(t('Réduction du PDF…'));
       const fait = await allegerPdf(fichier);
       if(!fait){
-        await informer(t('Ce PDF dépasse 1 Mo et ne peut pas être allégé ici. Refaites le scan en qualité normale, ou photographiez le document : la photo sera convertie et compressée.'));
+        await informer(t('Ce PDF dépasse 1 Mo et n’a pas pu être réduit : il est sans doute protégé par un mot de passe. Enregistrez-le sans protection, ou photographiez le document : la photo sera convertie et compressée.'));
         return;
       }
       b64 = fait.b64; taille = fait.taille; mime = 'application/pdf'; ext = 'pdf';
+      if(fait.reduit) reductionFaite = poidsLisible(fait.avant) + ' → ' + poidsLisible(fait.taille);
     }else{
       if(fichier.size > POIDS_MAXI_OCTETS){
         await informer(t('Ce fichier dépasse 1 Mo. Importez-le en PDF ou en photo : Autivio sait alléger ces deux-là.'));
@@ -29562,6 +29763,8 @@ async function importerPieceJointe(fichier, vehicule){
 
   if(!ok){
     await informer(t('Le document n’a pas pu être envoyé en ligne. Il est noté dans la fiche ; réessayez une fois connecté.'));
+  }else if(reductionFaite){
+    bandeau(t('PDF réduit') + ' : ' + reductionFaite, 'ok');
   }
 }
 
@@ -31282,7 +31485,7 @@ function brancherListe(inp, source, messageVide, codeSeul, oubli, rendu){
             }))
         : tout.slice();
       liste.innerHTML = trouvees.length
-        ? trouvees.slice(0, 80).map(function(m, i){
+        ? trouvees.slice(0, 300).map(function(m, i){
             return '<div class="combo-rang">'
               + '<button type="button" class="combo-item" data-marque="' + esc(m) + '" data-i="' + i + '">' + (rendu ? rendu(m) : esc(m)) + '</button>'
               + (oubli ? '<button type="button" class="combo-oubli" data-oubli="' + esc(m) + '" title="Oublier ce code">✕</button>' : '')
