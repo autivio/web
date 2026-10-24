@@ -719,7 +719,9 @@
   .choix-langue{display:flex;align-items:center;gap:7px;width:100%;background:#fff;
     border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;
     cursor:pointer;font-family:var(--font-ui);color:var(--ink);transition:border-color .15s,background .15s;}
-  .choix-langue:hover{border-color:var(--brand);background:var(--brand-soft);}
+  /* Survol a la souris seulement : sur telephone, la puce touchee en
+     dernier restait coloree, meme decochee. */
+  @media (hover:hover) and (pointer:fine){ .choix-langue:hover{border-color:var(--brand);background:var(--brand-soft);} }
   .choix-langue.actif{border-color:var(--brand);background:var(--brand-soft);font-weight:600;}
   .choix-langue.actif:after{content:'✓';margin-left:auto;color:var(--brand);font-weight:700;}
   .dlg-langues{max-width:460px;}
@@ -1496,7 +1498,9 @@
   .th-choix{display:flex;align-items:center;gap:11px;padding:11px 13px;cursor:pointer;
     background:#fff;border:1.5px solid var(--line);border-radius:11px;font:inherit;
     text-align:left;transition:border-color .15s,box-shadow .15s,transform .1s;}
-  .th-choix:hover{border-color:var(--brand);box-shadow:var(--ombre);}
+  /* Survol a la souris seulement : sur telephone, la puce touchee en
+     dernier restait coloree, meme decochee. */
+  @media (hover:hover) and (pointer:fine){ .th-choix:hover{border-color:var(--brand);box-shadow:var(--ombre);} }
   .th-choix:active{transform:translateY(1px);}
   .th-choix.actif{border-color:var(--brand);background:var(--brand-soft);}
   .th-choix.actif .th-nom{font-weight:700;}
@@ -1703,7 +1707,9 @@
     flex:0 0 auto;width:auto;margin:0;white-space:nowrap;cursor:pointer;background:#fff;
     border:1.5px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12.5px;
     color:var(--ink-soft);transition:border-color .15s,background .15s,color .15s;}
-  .gar-opt:hover{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);}
+  /* Survol a la souris seulement : sur telephone, la puce touchee en
+     dernier restait coloree, meme decochee. */
+  @media (hover:hover) and (pointer:fine){ .gar-opt:hover{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);} }
   .gar-opt.actif{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);
     font-weight:600;}
   /* La regle globale « input{width:100%} » gonflait la case a toute la
@@ -1758,7 +1764,9 @@
   .tva-opt{display:block;position:relative;padding:12px 14px 12px 38px;cursor:pointer;
     background:#fff;border:1.5px solid var(--line);border-radius:10px;
     transition:border-color .15s,background .15s;}
-  .tva-opt:hover{border-color:#c3d0e6;}
+  /* Survol a la souris seulement : sur telephone, la puce touchee en
+     dernier restait coloree, meme decochee. */
+  @media (hover:hover) and (pointer:fine){ .tva-opt:hover{border-color:#c3d0e6;} }
   .tva-opt input{position:absolute;left:13px;top:14px;width:16px;height:16px;
     accent-color:var(--brand);margin:0;}
   .tva-opt:has(input:checked){border-color:var(--brand);background:var(--brand-soft);}
@@ -1850,7 +1858,9 @@
   .de-choix{border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer;
     padding:5px 9px;font:inherit;font-size:12.5px;color:var(--ink-soft);
     transition:border-color .15s,background .15s;}
-  .de-choix:hover{border-color:var(--brand);background:var(--brand-soft);}
+  /* Survol a la souris seulement : sur telephone, la puce touchee en
+     dernier restait coloree, meme decochee. */
+  @media (hover:hover) and (pointer:fine){ .de-choix:hover{border-color:var(--brand);background:var(--brand-soft);} }
   .de-choix.actif{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);}
   .de-choix .mono{font-weight:600;color:var(--ink);}
 
@@ -7805,7 +7815,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.47';
+const VERSION = '2.48';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -11782,6 +11792,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.48': { date: '24/10/2026', lignes: [
+    "Sur téléphone, une case décochée (pièces couvertes par la garantie, type de client, raccourcis…) redevient blanche tout de suite : elle restait colorée, l'iPhone gardant en « survol » la dernière case touchée. L'effet de survol n'existe plus qu'à la souris."
+  ] },
   '2.47': { date: '24/10/2026', lignes: [
     "Facture : date d'échéance, avec les raccourcis À réception, 8, 15 et 30 jours (comptés depuis la date de création). Elle s'imprime sous les dates et dans la phrase de règlement par virement (« avant le … »).",
     "Facture : numéro de client. Un client déjà facturé retrouve son numéro tout seul d'après son nom ; « Attribuer un numéro » donne au nouveau client le numéro suivant. Il s'imprime dans l'encadré Client."
