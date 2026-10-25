@@ -7821,7 +7821,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.49';
+const VERSION = '2.50';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -8041,7 +8041,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '24/10/2026';
+const VERSION_DATE = '25/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -11798,6 +11798,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.50': { date: '25/10/2026', lignes: [
+    "Les documents suivent la fiche, plus la plaque : changer la plaque (ou ajouter le numéro de châssis après coup) ne fait plus disparaître les documents déjà rangés. La fiche retient tous ses dossiers et les affiche ensemble, quelle que soit la plaque du moment. Les documents rangés avant cette version sous une ancienne plaque sont retrouvés d'après le châssis ou les plaques qu'a portées la fiche. Rien n'est déplacé ni effacé."
+  ] },
   '2.49': { date: '24/10/2026', lignes: [
     "Liste déroulante des banques dans la case Banque (facture et Réglages) : environ 6 700 banques de 63 pays, chacune avec son drapeau et son BIC — celles du pays de votre IBAN en premier. Choisir une banque remplit le BIC.",
     "Banque reconnue d'après l'IBAN : dès qu'un IBAN complet et juste est saisi, le nom de la banque et son BIC se remplissent tout seuls (France, Belgique, Luxembourg, Pays-Bas, Allemagne, Espagne, Italie, Royaume-Uni, Suisse, Autriche… une quarantaine de pays d'Europe)."
@@ -12153,10 +12156,10 @@ async function supprimerFiches(ids){
   if(!ids.length) return;
   /* Le nom de dossier de chaque fiche, releve tant qu'elle existe
      encore. */
-  const dossiersAvant = ids.map(function(id){
-    const v = vehicles[id];
-    return v ? sousDossierVehicule(v) : '';
-  }).filter(Boolean);
+  const dossiersAvant = [];
+  ids.forEach(function(id){
+    dossiersDeLaFiche(vehicles[id]).forEach(function(d){ if(dossiersAvant.indexOf(d) === -1) dossiersAvant.push(d); });
+  });
   const noms = ids.map(function(id){
     const v = vehicles[id];
     return v ? ((v.vehicule.immat || t('Véhicule sans marque')) + ' — '
@@ -12186,8 +12189,7 @@ async function supprimerFiches(ids){
   const sousDossiers = [];
   for(const id of ids){
     const v = vehicles[id];
-    const sd = v ? sousDossierVehicule(v) : '';
-    if(!sd) continue;
+    for(const sd of dossiersDeLaFiche(v)){
     sousDossiers.push(sd);
     // le decompte n'est possible que sur PC, ou l'on lit le disque
     if(window.pywebview && window.pywebview.api && window.pywebview.api.documents_vehicule){
@@ -12195,6 +12197,7 @@ async function supprimerFiches(ids){
         const d = await window.pywebview.api.documents_vehicule(sd);
         if(d && d.existe && d.fichiers.length) dossiers.push({sd: sd, nb: d.fichiers.length});
       }catch(e){}
+    }
     }
   }
 
@@ -13186,8 +13189,15 @@ async function fenetrePartage(id){
 
   const liste = fond.querySelector('#partageListe');
   let fichiers = [];
-  try{ fichiers = await serveurListerDocuments(sous); }
-  catch(e){ fichiers = []; }
+  try{
+    await retrouverAnciensDossiers(v);
+    const vus = {};
+    for(const d of dossiersDeLaFiche(v)){
+      ((await serveurListerDocuments(d)) || []).forEach(function(f){
+        if(f && f.id && !vus[f.name]){ vus[f.name] = 1; f.__sous = d; fichiers.push(f); }
+      });
+    }
+  }catch(e){ fichiers = []; }
 
   if(!fichiers.length){
     liste.innerHTML = '<div class="partage-vide">'
@@ -13211,7 +13221,7 @@ async function fenetrePartage(id){
       const libelle = b.textContent;
       b.disabled = true;
       b.textContent = t('Préparation…');
-      const lien = await serveurLienDocument(sous, nom);
+      const lien = await serveurLienDocument(fichiers[b.dataset.i].__sous || sous, nom);
       if(!lien){
         b.textContent = t('Échec');
         setTimeout(function(){ b.disabled = false; b.textContent = libelle; }, 2000);
@@ -13724,11 +13734,12 @@ async function compterDocuments(){
   const zones = document.querySelectorAll('[data-compte]');
   if(!zones.length) return;
   for(const z of zones){
-    const dossier = z.dataset.compte;
-    if(!dossier){ z.textContent = t('Aucun document'); continue; }
     const v = vehicles[z.closest('[data-dossier]') ?
       z.closest('[data-dossier]').dataset.dossier : ''];
     if(!v){ z.textContent = ''; continue; }
+    if(!dossiersDeLaFiche(v).length && !(v.dossiers || []).length && !serveurPret()){
+      z.textContent = t('Aucun document'); continue;
+    }
     try{
       const f = await listerDocuments(v);
       z.textContent = f.length
@@ -13816,43 +13827,50 @@ async function listerLocalAndroid(sous){
    cotes ne compte qu'une fois, et la version locale est preferee
    puisqu'elle s'ouvre sans reseau. */
 async function listerDocuments(v){
-  const sous = sousDossierVehicule(v);
-  if(!sous) return [];
+  if(!v) return [];
+  /* La plaque du moment fait partie de l'historique de la fiche. */
+  memoriserPlaque(v, (v.vehicule || {}).immat);
+  try{ await retrouverAnciensDossiers(v); }catch(e){}
+  const dossiers = dossiersDeLaFiche(v);
+  if(!dossiers.length) return [];
   const vus = {}, sortie = [];
-  const ajouter = function(f){
-    if(!f || !f.nom || vus[f.nom]) return;
-    vus[f.nom] = 1; sortie.push(f);
-  };
-
   const api = window.pywebview && window.pywebview.api;
-  if(api && api.documents_vehicule){
-    try{
-      const r = await api.documents_vehicule(sous);
-      ((r && r.fichiers) || []).forEach(function(n){
-        ajouter({ nom: n, chemin: r.chemin + SEPARATEUR + n, ou: 'pc' });
-      });
-    }catch(e){}
+  for(const sous of dossiers){
+    let trouves = 0;
+    const ajouter = function(f){
+      if(!f || !f.nom) return;
+      trouves++;
+      if(vus[f.nom]) return;
+      vus[f.nom] = 1; f.sous = f.sous || sous; sortie.push(f);
+    };
+    if(api && api.documents_vehicule){
+      try{
+        const r = await api.documents_vehicule(sous);
+        ((r && r.fichiers) || []).forEach(function(n){
+          ajouter({ nom: n, chemin: r.chemin + SEPARATEUR + n, ou: 'pc' });
+        });
+      }catch(e){}
+    }
+    const locaux = await listerLocalAndroid(sous);
+    (locaux || []).forEach(ajouter);
+
+    const enLigne = await driveListerDossier(sous);
+    (enLigne || []).forEach(ajouter);
+
+    /* Le serveur aussi : une tablette qui n'a pas produit les PDF les
+       y trouve. */
+    if(serveurPret()){
+      try{
+        const surServeur = await serveurListerDocuments(sous);
+        (surServeur || []).forEach(function(f){
+          if(f && f.id) ajouter({ nom: f.name, chemin: '', ou: 'serveur', sous: sous });
+        });
+      }catch(e){}
+    }
+    /* Un dossier ou l'on trouve des documents est retenu par la fiche :
+       il restera affiche meme si la plaque change. */
+    if(trouves) memoriserDossier(v, sous);
   }
-  const locaux = await listerLocalAndroid(sous);
-  (locaux || []).forEach(ajouter);
-
-  const enLigne = await driveListerDossier(sous);
-  (enLigne || []).forEach(ajouter);
-
-  /* Le serveur aussi. Il manquait a cette liste : le tableau de bord
-     annoncait « Aucun document » pour un vehicule dont les PDF etaient
-     pourtant bien deposes — ils n'existaient simplement pas sur CET
-     appareil. C'est justement le cas d'une tablette qui n'a pas servi
-     a les produire. */
-  if(serveurPret()){
-    try{
-      const surServeur = await serveurListerDocuments(sous);
-      (surServeur || []).forEach(function(f){
-        ajouter({ nom: f.name, chemin: '', ou: 'serveur', sous: sous });
-      });
-    }catch(e){}
-  }
-
   sortie.sort(function(a, b){ return a.nom.localeCompare(b.nom); });
   return sortie;
 }
@@ -16039,7 +16057,109 @@ function sousDossierVehicule(v){
   return plaque || vin || '';
 }
 
+/* =====================================================================
+   LES DOCUMENTS SUIVENT LA FICHE, PAS LA PLAQUE
+   Le dossier porte le nom de la plaque (et du chassis). Changer la
+   plaque — ou ajouter le chassis apres coup — changeait donc de
+   dossier : les documents deja ranges semblaient perdus, et ne
+   revenaient pas toujours en retapant la plaque d'origine.
+   Desormais la fiche garde la liste de TOUS ses dossiers (v.dossiers) :
+   chaque dossier ou un document est depose, ou trouve, y est inscrit,
+   et la liste des documents les parcourt tous. Les anciens dossiers
+   sont retrouves sur le serveur d'apres le chassis ou les plaques que
+   la fiche a portees (v.plaques). Rien n'est deplace ni efface.
+   ===================================================================== */
+function dossierNet(d){
+  return accentsRetires(String(d || '')).replace(/[^A-Za-z0-9_\-.]/g, '_');
+}
+/* « SANS-PLAQUE » est commun a toutes les fiches sans plaque : on ne
+   l'attribue a aucune, sinon chacune verrait les documents des autres. */
+function dossierPropre(d){
+  return !!d && d !== 'SANS-PLAQUE' && d !== 'DIVERS';
+}
+function dossiersDeLaFiche(v){
+  const out = [];
+  const ajouter = function(d){ if(dossierPropre(d) && out.indexOf(d) === -1) out.push(d); };
+  if(!v) return out;
+  ajouter(sousDossierVehicule(v));
+  (v.dossiers || []).forEach(ajouter);
+  return out;
+}
+function memoriserDossier(v, d){
+  if(!v || !dossierPropre(d)) return;
+  if(!Array.isArray(v.dossiers)) v.dossiers = [];
+  if(v.dossiers.indexOf(d) !== -1) return;
+  v.dossiers.push(d);
+  try{ saveVehicle(v); }catch(e){}
+}
+/* Le document qu'on depose appartient a la fiche ouverte si le dossier
+   est le sien. */
+function memoriserDossierDepose(sousDossier){
+  try{
+    const v = vehicles[currentId];
+    if(v && (sousDossierVehicule(v) === sousDossier || dossierDuVehicule(v) === sousDossier)){
+      memoriserDossier(v, sousDossier);
+    }
+  }catch(e){}
+}
+function plaqueNette(p){ return String(p || '').trim().toUpperCase(); }
+function memoriserPlaque(v, p){
+  p = plaqueNette(p);
+  if(!v || p.replace(/[^A-Z0-9]/g, '').length < 4) return;
+  if(!Array.isArray(v.plaques)) v.plaques = [];
+  if(v.plaques.indexOf(p) !== -1) return;
+  v.plaques.push(p);
+  try{ saveVehicle(v); }catch(e){}
+}
+/* Les dossiers du compte sur le serveur, relus au plus une fois par
+   minute : la liste des documents est rafraichie toutes les quelques
+   secondes. */
+let dossiersServeurCache = { quand: 0, noms: [] };
+async function dossiersDuServeur(){
+  if(!serveurPret()) return [];
+  if(Date.now() - dossiersServeurCache.quand < 60000) return dossiersServeurCache.noms;
+  try{
+    const r = await serveurAppel('/storage/v1/object/list/documents', {
+      method: 'POST',
+      body: { prefix: 'Autivio/' + nomCompteDossier() + '/', limit: 1000,
+              sortBy: { column: 'name', order: 'asc' } }
+    });
+    const noms = (r || []).filter(function(x){ return !x.id && x.name; }).map(function(x){ return x.name; });
+    dossiersServeurCache = { quand: Date.now(), noms: noms };
+    return noms;
+  }catch(e){ return dossiersServeurCache.noms; }
+}
+/* Les anciens dossiers de la fiche, retrouves sur le serveur : meme
+   chassis, ou une plaque que la fiche a portee (seule, ou suivie d'un
+   chassis qui n'est pas un AUTRE que le sien). */
+async function retrouverAnciensDossiers(v){
+  if(!v || !serveurPret()) return;
+  const veh = v.vehicule || {}, fac = v.facture || {};
+  const vin = dossierNet(plaqueNette(veh.vin || fac.vin));
+  const plaques = [veh.immat, fac.immat].concat(v.plaques || [])
+    .map(plaqueNette).filter(Boolean).map(dossierNet);
+  (v.dossiers || []).forEach(function(d){ const p = String(d).split('_')[0]; if(p) plaques.push(p); });
+  if(!vin && !plaques.length) return;
+  const noms = await dossiersDuServeur();
+  noms.forEach(function(n){
+    if(!dossierPropre(n)) return;
+    const i = n.indexOf('_');
+    const avant = i === -1 ? n : n.slice(0, i), apres = i === -1 ? '' : n.slice(i + 1);
+    const memeVin = vin && vin.length >= 11 && (n === vin || apres === vin);
+    const memePlaque = plaques.indexOf(avant) !== -1 && (!apres || !vin || apres === vin);
+    if(memeVin || memePlaque) memoriserDossier(v, n);
+  });
+}
+/* Une plaque saisie puis quittee est retenue par la fiche. */
+document.addEventListener('change', function(e){
+  const el = e.target;
+  if(!el || el.tagName !== 'INPUT') return;
+  if(!el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-fac="immat"]')) return;
+  try{ memoriserPlaque(vehicles[currentId], el.value); }catch(err){}
+}, true);
+
 async function envoyerEnLigne(nomFichier, b64, mime, discret, sousDossier){
+  memoriserDossierDepose(sousDossier);
   /* Le serveur d'abord, s'il est relie. Il ne remplace pas Drive : les
      deux recoivent le document, et l'un peut marcher sans l'autre. */
   let surServeur = false;
@@ -26911,6 +27031,7 @@ async function partagerLienDocument(v, d){
     const jour = new Date().toISOString().slice(0, 10);
     const nom = plaque + '_' + nomPourFichier(nomDocCourant()) + '_' + jour + '.pdf';
 
+    memoriserDossierDepose(sousDossier);
     const depose = await serveurDeposerDocument(nom, bytesToB64(bytes), 'application/pdf', sousDossier);
     if(!depose) throw new Error(t('Envoi sur votre espace en ligne impossible :') + ' ' + nom);
 
