@@ -858,6 +858,20 @@
   .choix-type-doc{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
   .plaque-lab{display:block;font-size:12.5px;color:var(--ink-soft);margin:12px 0 4px;}
   #plaqueNouvelle{font-size:20px;letter-spacing:.06em;text-transform:uppercase;}
+  .plaque-pays{position:relative;}
+  .partage-tout{width:100%;margin:10px 0 6px;padding:11px 14px;font-weight:600;}
+  .partage-tous{display:flex;align-items:center;gap:8px;margin:12px 0 0;font-size:14px;cursor:pointer;}
+  .partage-coche{cursor:pointer;}
+  .partage-coche input, .partage-tous input{width:20px;height:20px;flex:0 0 auto;margin:0;accent-color:var(--brand);}
+  .partage-ligne.cochee{background:var(--brand-soft);}
+  .liens-texte{width:100%;box-sizing:border-box;font-size:12.5px;font-family:ui-monospace,Menlo,monospace;min-height:150px;}
+  .plaque-pays-liste{margin-top:6px;border:1px solid var(--line);border-radius:12px;background:#fff;
+    max-height:280px;overflow:auto;box-shadow:0 10px 28px rgba(15,23,42,.14);padding:4px;}
+  .plaque-pays-item{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;
+    padding:10px 12px;border-radius:9px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);text-align:left;}
+  .plaque-pays-item .pays-liste-format{margin-left:auto;color:var(--ink-soft);font-size:13px;}
+  .plaque-pays-item.actif{background:var(--brand-soft);font-weight:600;}
+  @media (hover:hover) and (pointer:fine){ .plaque-pays-item:hover{background:var(--brand-soft);} }
   .choix-type-doc button{text-align:left;padding:12px 14px;font-size:14.5px;}
   .rgpd-carte{border:1px solid var(--line,#e2e8f2);border-radius:12px;padding:16px 18px;margin:14px 0;
     background:var(--panel,#fff);}
@@ -2103,7 +2117,7 @@
     <div class="sidebar-bas">
       <button id="dossiersBtn" data-fr="📁 Mes documents en ligne">📁 Mes documents en ligne</button>
       <label class="btn-import" id="convBtn"><span data-fr="📄 Convertir en PDF">📄 Convertir en PDF</span><input type="file" id="convInput" accept="image/*,application/pdf,.heic,.heif" multiple style="display:none"></label>
-      <label class="btn-import" id="pjBtn"><span data-fr="📎 Importer un document">📎 Importer un document</span><input type="file" id="pjInput" style="display:none"></label>
+      <label class="btn-import" id="pjBtn"><span data-fr="📎 Importer un document">📎 Importer un document</span><input type="file" id="pjInput" multiple style="display:none"></label>
       <button id="notesBtn" data-fr="🗒️ Voir les nouveautés">🗒️ Voir les nouveautés</button>
       <div style="display:flex;gap:6px">
         <button id="exportBtn" style="flex:1" data-fr="⭳ Sauvegarder">⭳ Sauvegarder</button>
@@ -2774,6 +2788,22 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Assemblage de": "Unione di",
+    "fichiers en un seul PDF…": "file in un solo PDF…",
+    "fichiers réunis en un seul PDF": "file riuniti in un solo PDF",
+    "Cochez le ou les documents à partager.": "Spunta il documento o i documenti da condividere.",
+    "Tout sélectionner": "Seleziona tutto",
+    "Le lien expire au bout de 24 heures.": "Il link scade dopo 24 ore.",
+    "Le lien expire dans": "Il link scade tra",
+    "Partager ce document": "Condividi questo documento",
+    "un lien": "un link",
+    "Partager tout le dossier (un seul lien)": "Condividi tutta la cartella (un solo link)",
+    "Un seul lien pour tous les documents": "Un solo link per tutti i documenti",
+    "Tous les documents": "Tutti i documenti",
+    "Documents du véhicule": "Documenti del veicolo",
+    "Liens de partage": "Link di condivisione",
+    "Un lien par document, à envoyer en un seul message.": "Un link per documento, da inviare in un unico messaggio.",
+    "Copier le message": "Copia il messaggio",
     "Modifier la plaque": "Modifica la targa",
     "plaque actuelle": "targa attuale",
     "Pays d’immatriculation": "Paese di immatricolazione",
@@ -3840,6 +3870,22 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Assemblage de": "Zesummesetze vun",
+    "fichiers en un seul PDF…": "Fichieren an een eenzegen PDF…",
+    "fichiers réunis en un seul PDF": "Fichieren an een eenzegen PDF zesummegesat",
+    "Cochez le ou les documents à partager.": "Kräizt dat oder déi Dokumenter un, déi Dir deele wëllt.",
+    "Tout sélectionner": "Alles auswielen",
+    "Le lien expire au bout de 24 heures.": "De Link leeft no 24 Stonnen of.",
+    "Le lien expire dans": "De Link leeft of an",
+    "Partager ce document": "Dëst Dokument deelen",
+    "un lien": "ee Link",
+    "Partager tout le dossier (un seul lien)": "Ganzen Dossier deelen (ee Link)",
+    "Un seul lien pour tous les documents": "Ee Link fir all d’Dokumenter",
+    "Tous les documents": "All d’Dokumenter",
+    "Documents du véhicule": "Dokumenter vum Gefier",
+    "Liens de partage": "Deel-Linken",
+    "Un lien par document, à envoyer en un seul message.": "Ee Link pro Dokument, fir an engem eenzege Message ze schécken.",
+    "Copier le message": "Message kopéieren",
     "Modifier la plaque": "Plack änneren",
     "plaque actuelle": "aktuell Plack",
     "Pays d’immatriculation": "Immatrikulatiounsland",
@@ -4905,6 +4951,22 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Assemblage de": "Combining",
+    "fichiers en un seul PDF…": "files into one PDF…",
+    "fichiers réunis en un seul PDF": "files combined into one PDF",
+    "Cochez le ou les documents à partager.": "Tick the document(s) to share.",
+    "Tout sélectionner": "Select all",
+    "Le lien expire au bout de 24 heures.": "The link expires after 24 hours.",
+    "Le lien expire dans": "The link expires in",
+    "Partager ce document": "Share this document",
+    "un lien": "one link",
+    "Partager tout le dossier (un seul lien)": "Share the whole folder (one link)",
+    "Un seul lien pour tous les documents": "One link for all documents",
+    "Tous les documents": "All documents",
+    "Documents du véhicule": "Documents for vehicle",
+    "Liens de partage": "Share links",
+    "Un lien par document, à envoyer en un seul message.": "One link per document, to send in a single message.",
+    "Copier le message": "Copy the message",
     "Modifier la plaque": "Change the plate",
     "plaque actuelle": "current plate",
     "Pays d’immatriculation": "Country of registration",
@@ -5969,6 +6031,22 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Assemblage de": "Zusammenfügen von",
+    "fichiers en un seul PDF…": "Dateien zu einem PDF…",
+    "fichiers réunis en un seul PDF": "Dateien zu einem PDF zusammengefügt",
+    "Cochez le ou les documents à partager.": "Kreuzen Sie das oder die zu teilenden Dokumente an.",
+    "Tout sélectionner": "Alle auswählen",
+    "Le lien expire au bout de 24 heures.": "Der Link läuft nach 24 Stunden ab.",
+    "Le lien expire dans": "Der Link läuft ab in",
+    "Partager ce document": "Dieses Dokument teilen",
+    "un lien": "ein Link",
+    "Partager tout le dossier (un seul lien)": "Ganzen Ordner teilen (ein Link)",
+    "Un seul lien pour tous les documents": "Ein Link für alle Dokumente",
+    "Tous les documents": "Alle Dokumente",
+    "Documents du véhicule": "Dokumente des Fahrzeugs",
+    "Liens de partage": "Freigabelinks",
+    "Un lien par document, à envoyer en un seul message.": "Ein Link pro Dokument, in einer einzigen Nachricht zu senden.",
+    "Copier le message": "Nachricht kopieren",
     "Modifier la plaque": "Kennzeichen ändern",
     "plaque actuelle": "aktuelles Kennzeichen",
     "Pays d’immatriculation": "Zulassungsland",
@@ -7049,6 +7127,22 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Assemblage de": "Samenvoegen van",
+    "fichiers en un seul PDF…": "bestanden tot één pdf…",
+    "fichiers réunis en un seul PDF": "bestanden samengevoegd tot één pdf",
+    "Cochez le ou les documents à partager.": "Vink het document of de documenten aan om te delen.",
+    "Tout sélectionner": "Alles selecteren",
+    "Le lien expire au bout de 24 heures.": "De link verloopt na 24 uur.",
+    "Le lien expire dans": "De link verloopt over",
+    "Partager ce document": "Dit document delen",
+    "un lien": "één link",
+    "Partager tout le dossier (un seul lien)": "Hele map delen (één link)",
+    "Un seul lien pour tous les documents": "Eén link voor alle documenten",
+    "Tous les documents": "Alle documenten",
+    "Documents du véhicule": "Documenten van voertuig",
+    "Liens de partage": "Deellinks",
+    "Un lien par document, à envoyer en un seul message.": "Eén link per document, te versturen in één bericht.",
+    "Copier le message": "Bericht kopiëren",
     "Modifier la plaque": "Kenteken wijzigen",
     "plaque actuelle": "huidig kenteken",
     "Pays d’immatriculation": "Land van inschrijving",
@@ -7960,7 +8054,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.54';
+const VERSION = '2.57';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -9876,9 +9970,9 @@ async function enterApp(){
 
   const pj = document.getElementById('pjInput');
   if(pj) pj.onchange = function(){
-    const f = pj.files && pj.files[0];
+    const liste = Array.prototype.slice.call(pj.files || []);
     pj.value = '';                      // le meme fichier peut etre repris
-    if(f) importerPieceJointe(f).catch(function(e){ informer(e.message); });
+    if(liste.length) importerFichiers(liste).catch(function(e){ informer(e.message); });
   };
 
   const vh = document.getElementById('versionHaut');
@@ -12133,6 +12227,16 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.57': { date: '26/10/2026', lignes: [
+    "Importer un document : on peut maintenant choisir PLUSIEURS photos (ou PDF) d'un coup dans la photothèque. Elles sont réunies dans un seul PDF de moins de 1 Mo, une page par photo, rangé dans le dossier de la voiture. Deux photos d'une carte d'identité sont mises recto en haut et verso en dessous, sur une seule page, quel que soit l'ordre choisi."
+  ] },
+  '2.56': { date: '26/10/2026', lignes: [
+    "« Partager les documents » : cochez le ou les documents à partager (ou « Tout sélectionner »). Un seul document coché : son lien direct ; plusieurs : ils sont réunis dans un ZIP derrière un seul lien."
+  ] },
+  '2.55': { date: '26/10/2026', lignes: [
+    "« Modifier la plaque » : la liste des pays affiche maintenant leur drapeau et le format de plaque.",
+    "Partager tout le dossier d'un véhicule avec un seul lien : dans le menu d'une fiche (« 📦 Partager tout le dossier ») ou dans la fenêtre « Partager les documents ». Tous les documents sont réunis dans un ZIP et un lien temporaire est créé, à copier ou à envoyer ; le destinataire n'a besoin d'aucun compte. Un seul document : son lien direct."
+  ] },
   '2.54': { date: '26/10/2026', lignes: [
     "« ✏️ Modifier la plaque » dans le menu d'une fiche (clic droit, ou appui long sur téléphone) : choisissez le pays et tapez la nouvelle plaque, mise en forme à la frappe. Elle remplace l'ancienne sur la fiche, la facture et les contrats, et les documents déjà rangés restent affichés avec la fiche."
   ] },
@@ -13514,21 +13618,26 @@ async function fenetrePartage(id){
     return;
   }
 
-  const sous = sousDossierVehicule(v);
+  /* On coche le ou les documents a partager : un seul donne son lien
+     direct, plusieurs sont reunis dans un ZIP derriere un seul lien. */
+  const plaque = String(v.vehicule.immat || v.vehicule.vin || '').toUpperCase();
   const fond = document.createElement('div');
   fond.className = 'dlg-fond';
   fond.innerHTML =
     '<div class="dlg dlg-partage">'
     + '<div class="dlg-titre">' + esc(t('Partager les documents')) + '</div>'
-    + '<div class="dlg-texte">' + esc(sous) + '</div>'
+    + '<div class="dlg-texte">' + esc(plaque) + ' — ' + esc(t('Cochez le ou les documents à partager.')) + '</div>'
+    + '<label class="partage-tous" hidden><input type="checkbox" id="partageTous"> <span>' + esc(t('Tout sélectionner')) + '</span></label>'
     + '<div class="partage-liste" id="partageListe">'
     +   '<div class="partage-attente">' + esc(t('Lecture en cours…')) + '</div>'
     + '</div>'
     + '<div class="partage-note">'
-    +   esc(t('Les liens restent valables sept jours.'))
+    +   esc(DUREE_LIEN_JOURS === 1 ? t('Le lien expire au bout de 24 heures.')
+          : t('Le lien expire dans') + ' ' + DUREE_LIEN_JOURS + ' ' + t('jours') + '.')
     + '</div>'
     + '<div class="dlg-actions">'
     +   '<button type="button" class="dlg-non">' + esc(t('Fermer')) + '</button>'
+    +   '<button type="button" class="dlg-oui" id="partageGo" disabled>' + esc(t('Partager')) + '</button>'
     + '</div></div>';
   document.body.appendChild(fond);
 
@@ -13537,16 +13646,7 @@ async function fenetrePartage(id){
   fond.onclick = function(e){ if(e.target === fond) fermer(); };
 
   const liste = fond.querySelector('#partageListe');
-  let fichiers = [];
-  try{
-    await retrouverAnciensDossiers(v);
-    const vus = {};
-    for(const d of dossiersDeLaFiche(v)){
-      ((await serveurListerDocuments(d)) || []).forEach(function(f){
-        if(f && f.id && !vus[f.name]){ vus[f.name] = 1; f.__sous = d; fichiers.push(f); }
-      });
-    }
-  }catch(e){ fichiers = []; }
+  const fichiers = await fichiersEnLigneDeLaFiche(v);
 
   if(!fichiers.length){
     liste.innerHTML = '<div class="partage-vide">'
@@ -13557,51 +13657,34 @@ async function fenetrePartage(id){
   }
 
   liste.innerHTML = fichiers.map(function(f, i){
-    return '<div class="partage-ligne">'
-      + '<span class="partage-nom">' + esc(f.name) + '</span>'
-      + '<button type="button" class="partage-btn" data-i="' + i + '">'
-      +   esc(t('Copier le lien')) + '</button>'
-      + '</div>';
+    return '<label class="partage-ligne partage-coche">'
+      + '<input type="checkbox" data-i="' + i + '">'
+      + '<span class="partage-nom">' + esc(f.nom) + '</span>'
+      + '</label>';
   }).join('');
-
-  liste.querySelectorAll('.partage-btn').forEach(function(b){
-    b.onclick = async function(){
-      const nom = fichiers[b.dataset.i].name;
-      const libelle = b.textContent;
-      b.disabled = true;
-      b.textContent = t('Préparation…');
-      const lien = await serveurLienDocument(fichiers[b.dataset.i].__sous || sous, nom);
-      if(!lien){
-        b.textContent = t('Échec');
-        setTimeout(function(){ b.disabled = false; b.textContent = libelle; }, 2000);
-        return;
-      }
-      /* Le presse-papier peut etre refuse — page non securisee, ou
-         permission absente. On montre alors le lien pour qu'il reste
-         copiable a la main, plutot que de laisser croire a un echec. */
-      let copie = false;
-      try{
-        await navigator.clipboard.writeText(lien);
-        copie = true;
-      }catch(e){ copie = false; }
-
-      if(copie){
-        b.textContent = t('Lien copié');
-        b.classList.add('copie');
-        setTimeout(function(){
-          b.disabled = false; b.textContent = libelle; b.classList.remove('copie');
-        }, 2500);
-      }else{
-        b.disabled = false; b.textContent = libelle;
-        const zone = document.createElement('input');
-        zone.className = 'partage-lien';
-        zone.value = lien;
-        zone.readOnly = true;
-        b.parentNode.appendChild(zone);
-        zone.focus(); zone.select();
-      }
-    };
-  });
+  const tous = fond.querySelector('#partageTous');
+  fond.querySelector('.partage-tous').hidden = fichiers.length < 2;
+  const go = fond.querySelector('#partageGo');
+  const cases = Array.prototype.slice.call(liste.querySelectorAll('input[data-i]'));
+  const maj = function(){
+    const n = cases.filter(function(c){ return c.checked; }).length;
+    go.disabled = !n;
+    go.textContent = !n ? t('Partager')
+      : n === 1 ? t('Partager ce document')
+      : t('Partager') + ' ' + n + ' ' + t('documents');
+    tous.checked = n === cases.length;
+    cases.forEach(function(c){ c.closest('.partage-ligne').classList.toggle('cochee', c.checked); });
+  };
+  cases.forEach(function(c){ c.onchange = maj; });
+  tous.onchange = function(){ cases.forEach(function(c){ c.checked = tous.checked; }); maj(); };
+  if(fichiers.length === 1) cases[0].checked = true;
+  maj();
+  go.onclick = function(){
+    const choisis = cases.filter(function(c){ return c.checked; }).map(function(c){ return fichiers[Number(c.dataset.i)]; });
+    if(!choisis.length) return;
+    fermer();
+    partagerFichiers(v, choisis).catch(function(e){ informer(e.message); });
+  };
 }
 
 
@@ -13623,11 +13706,20 @@ function fenetreModifierPlaque(id){
     + '<div class="dlg-texte">' + esc([v.vehicule.marque, v.vehicule.modele].filter(Boolean).join(' ') || t('Véhicule sans marque'))
     +   (ancienne ? ' — ' + esc(t('plaque actuelle')) + ' : <b class="mono">' + esc(ancienne) + '</b>' : '') + '</div>'
     + '<label class="plaque-lab">' + esc(t('Pays d’immatriculation')) + '</label>'
-    + '<select class="dlg-champ" id="plaquePays">'
-    +   PAYS_PLAQUE.map(function(x){
-          return '<option value="' + x[0] + '"' + (x[0] === pays ? ' selected' : '') + '>' + esc(nomPaysPlaque(x)) + (x[2] ? ' — ' + esc(x[2]) : '') + '</option>';
-        }).join('')
-    + '</select>'
+    /* Une liste a drapeaux : une liste deroulante native ne sait pas
+       afficher d'images. */
+    + '<div class="plaque-pays">'
+    +   '<button type="button" class="pays-liste-btn" id="plaquePaysBtn" aria-haspopup="listbox"></button>'
+    +   '<div class="plaque-pays-liste" id="plaquePaysListe" role="listbox" hidden>'
+    +     PAYS_PLAQUE.map(function(x){
+            return '<button type="button" class="plaque-pays-item" role="option" data-pays="' + x[0] + '">'
+              + '<span class="pays-liste-drapeau">' + drapeauSVG(x[3], 24) + '</span>'
+              + '<span class="pays-liste-nom">' + esc(nomPaysPlaque(x)) + '</span>'
+              + (x[2] ? '<span class="pays-liste-format mono">' + esc(x[2]) + '</span>' : '')
+              + '</button>';
+          }).join('')
+    +   '</div>'
+    + '</div>'
     + '<label class="plaque-lab">' + esc(t('Nouvelle plaque')) + '</label>'
     + '<input class="dlg-champ mono" id="plaqueNouvelle" autocomplete="off" autocapitalize="characters" spellcheck="false">'
     + '<div class="dlg-detail" id="plaqueAide"></div>'
@@ -13637,8 +13729,32 @@ function fenetreModifierPlaque(id){
     + '</div></div>';
   document.body.appendChild(fond);
   const inp = fond.querySelector('#plaqueNouvelle');
-  const choixPays = fond.querySelector('#plaquePays');
+  const btnPays = fond.querySelector('#plaquePaysBtn');
+  const listePays = fond.querySelector('#plaquePaysListe');
   const aide = fond.querySelector('#plaqueAide');
+  const dessinerPays = function(){
+    const x = PAYS_PLAQUE.filter(function(p){ return p[0] === pays; })[0] || PAYS_PLAQUE[0];
+    btnPays.innerHTML = '<span class="pays-liste-drapeau">' + drapeauSVG(x[3], 24) + '</span>'
+      + '<span class="pays-liste-nom">' + esc(nomPaysPlaque(x)) + '</span>'
+      + (x[2] ? '<span class="pays-liste-format mono">' + esc(x[2]) + '</span>' : '')
+      + '<span class="pays-liste-chev">' + DS_CHEVRON + '</span>';
+    listePays.querySelectorAll('.plaque-pays-item').forEach(function(b){
+      b.classList.toggle('actif', b.dataset.pays === pays);
+      b.setAttribute('aria-selected', b.dataset.pays === pays ? 'true' : 'false');
+    });
+  };
+  dessinerPays();
+  btnPays.onclick = function(){ listePays.hidden = !listePays.hidden; };
+  listePays.querySelectorAll('.plaque-pays-item').forEach(function(b){
+    b.onclick = function(){
+      pays = b.dataset.pays;
+      listePays.hidden = true;
+      dessinerPays();
+      inp.value = formatPlate(inp.value, pays);
+      exemple();
+      inp.focus();
+    };
+  });
   const exemple = function(){
     const x = PAYS_PLAQUE.filter(function(p){ return p[0] === pays; })[0];
     inp.placeholder = (x && x[2]) || '';
@@ -13647,7 +13763,6 @@ function fenetreModifierPlaque(id){
   inp.value = ancienne;
   exemple();
   inp.addEventListener('input', function(){ replaceKeepingCaret(inp, formatPlate(inp.value, pays)); });
-  choixPays.onchange = function(){ pays = choixPays.value; inp.value = formatPlate(inp.value, pays); exemple(); inp.focus(); };
   const fermer = function(){ fond.remove(); };
   const valider = function(){
     const nouvelle = formatPlate(String(inp.value || '').trim().toUpperCase(), pays);
@@ -13677,6 +13792,116 @@ function fenetreModifierPlaque(id){
   setTimeout(function(){ inp.focus(); inp.select(); }, 30);
 }
 
+/* --- UN SEUL LIEN POUR TOUT LE DOSSIER ----------------------------------
+   Tous les documents de la fiche (tous ses dossiers) sont reunis dans un
+   ZIP, depose dans « PARTAGES » sur votre espace en ligne, et un lien
+   temporaire est cree. Un seul document : son lien direct. Si le
+   serveur refuse le ZIP, on donne a la place un message contenant un
+   lien par document, a copier ou envoyer d'un coup. */
+/* Les documents de la fiche sur le serveur, tous dossiers confondus. */
+async function fichiersEnLigneDeLaFiche(v){
+  const fichiers = [], vus = {};
+  try{ await retrouverAnciensDossiers(v); }catch(e){}
+  for(const d of dossiersDeLaFiche(v)){
+    const nd = dossierNet(d);
+    try{
+      ((await serveurListerDocuments(d)) || []).forEach(function(f){
+        if(f && f.id && f.name && !vus[f.name]){ vus[f.name] = 1; fichiers.push({ dossier: nd, nom: f.name }); }
+      });
+    }catch(e){}
+  }
+  return fichiers;
+}
+
+async function partagerToutLeDossier(id){
+  const v = vehicles[id];
+  if(!v) return;
+  if(!serveurPret()){
+    await informer(t('Connectez-vous avec votre adresse e-mail pour partager vos documents.'));
+    return;
+  }
+  bandeauEnvoi(t('Préparation du lien…'));
+  const fichiers = await fichiersEnLigneDeLaFiche(v);
+  if(!fichiers.length){
+    await informer(t('Aucun document sur le serveur pour ce véhicule.') + ' '
+                   + t('Enregistrez un document depuis un onglet pour qu’il y soit déposé.'));
+    return;
+  }
+  return partagerFichiers(v, fichiers);
+}
+
+/* Un document : son lien direct. Plusieurs : un ZIP et un seul lien ;
+   a defaut, un message avec un lien par document. */
+async function partagerFichiers(v, fichiers){
+  const plaque = String(v.vehicule.immat || v.vehicule.vin || t('Véhicule')).toUpperCase();
+  bandeauEnvoi(t('Préparation du lien…'));
+  if(fichiers.length === 1){
+    const lien = await lienPartageDocument(fichiers[0].dossier, fichiers[0].nom);
+    if(lien){ fenetreLien(lien, fichiers[0].nom + ' — ' + plaque); return; }
+  }else{
+    const entrees = [];
+    for(let i = 0; i < fichiers.length; i++){
+      bandeauEnvoi(t('Préparation…') + ' ' + (i + 1) + '/' + fichiers.length);
+      const donnees = await serveurTelechargerDocument(fichiers[i].dossier, fichiers[i].nom);
+      if(donnees) entrees.push({ nom: fichiers[i].nom, donnees: donnees });
+    }
+    if(entrees.length){
+      const zip = fabriquerZip(entrees);
+      const nomZip = nomPourFichier(plaque) + '_documents_' + new Date().toISOString().slice(0, 10)
+                   + '_' + Date.now().toString(36).slice(-4) + '.zip';
+      const depose = await serveurDeposerDocument(nomZip, bytesToB64(zip), 'application/zip', 'PARTAGES');
+      const lien = depose ? await lienPartageDocument('PARTAGES', nomZip) : '';
+      if(lien){
+        bandeauEnvoi(t('Lien prêt'));
+        fenetreLien(lien, plaque + ' — ' + entrees.length + ' '
+                    + t(entrees.length > 1 ? 'documents' : 'document') + ' (ZIP)');
+        return;
+      }
+    }
+  }
+  /* Repli : un lien par document, dans un seul message. */
+  const lignes = [];
+  for(const f of fichiers){
+    const l = await lienPartageDocument(f.dossier, f.nom);
+    if(l) lignes.push('• ' + f.nom + '\n  ' + l);
+  }
+  if(!lignes.length){
+    await informer(t('Le lien n’a pas pu être créé. Réessayez dans un instant.'));
+    return;
+  }
+  fenetreTexteLiens(t('Documents du véhicule') + ' ' + plaque + ' :\n\n' + lignes.join('\n\n'), plaque);
+}
+
+function fenetreTexteLiens(texte, titre){
+  document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+  const fond = document.createElement('div');
+  fond.className = 'dlg-fond';
+  fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+    + '<div class="dlg-titre">' + esc(t('Liens de partage')) + ' — ' + esc(titre) + '</div>'
+    + '<textarea class="dlg-champ liens-texte" readonly rows="8"></textarea>'
+    + '<div class="dlg-detail">' + esc(t('Un lien par document, à envoyer en un seul message.')) + '</div>'
+    + '<div class="dlg-actions">'
+    +   (navigator.share ? '<button type="button" class="dlg-non" id="liensEnvoyer">' + esc(t('Envoyer')) + '</button>' : '')
+    +   '<button type="button" class="dlg-oui" id="liensCopier">' + esc(t('Copier le message')) + '</button>'
+    + '</div>'
+    + '<button type="button" class="auth-lien" id="liensFermer">' + esc(t('Fermer')) + '</button></div>';
+  document.body.appendChild(fond);
+  const zone = fond.querySelector('.liens-texte');
+  zone.value = texte;
+  const fermer = function(){ fond.remove(); };
+  fond.querySelector('#liensFermer').onclick = fermer;
+  fond.onclick = function(e){ if(e.target === fond) fermer(); };
+  const env = fond.querySelector('#liensEnvoyer');
+  if(env) env.onclick = function(){ navigator.share({ title: titre, text: texte }).catch(function(){}); };
+  const bt = fond.querySelector('#liensCopier');
+  bt.onclick = async function(){
+    try{ await navigator.clipboard.writeText(texte); }
+    catch(e){ zone.focus(); zone.select(); }
+    bt.textContent = t('Copié');
+    setTimeout(function(){ bt.textContent = t('Copier le message'); }, 1600);
+  };
+}
+
 function menuFiche(x, y, id){
   document.querySelectorAll('.menu-fiche').forEach(function(m){ m.remove(); });
   const m = document.createElement('div');
@@ -13686,6 +13911,7 @@ function menuFiche(x, y, id){
     + '<button type="button" data-act="plaque">✏️ ' + t('Modifier la plaque') + '</button>'
     + '<button type="button" data-act="choisir">' + t('Sélectionner plusieurs fiches') + '</button>'
     + '<button type="button" data-act="partager">🔗 ' + t('Partager les documents') + '</button>'
+    + '<button type="button" data-act="toutpartager">📦 ' + t('Partager tout le dossier (un seul lien)') + '</button>'
     + '<button type="button" data-act="supprimer" class="rouge">🗑 ' + t('Supprimer cette fiche') + '</button>';
   document.body.appendChild(m);
 
@@ -13699,6 +13925,7 @@ function menuFiche(x, y, id){
   m.querySelector('[data-act="choisir"]').onclick = function(){ m.remove(); entrerSelection(id); };
   m.querySelector('[data-act="plaque"]').onclick = function(){ m.remove(); fenetreModifierPlaque(id); };
   m.querySelector('[data-act="partager"]').onclick = function(){ m.remove(); fenetrePartage(id); };
+  m.querySelector('[data-act="toutpartager"]').onclick = function(){ m.remove(); partagerToutLeDossier(id).catch(function(e){ informer(e.message); }); };
   m.querySelector('[data-act="supprimer"]').onclick = function(){ m.remove(); supprimerFiches([id]); };
 
   setTimeout(function(){
@@ -14913,7 +15140,7 @@ function renderMain(){
             : '')
     +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
     +       '<span>' + esc(t('📎 Importer un document')) + '</span>'
-    +       '<input type="file" style="display:none"></label>'
+    +       '<input type="file" multiple style="display:none"></label>'
     +   '</div>'
     + '</div>'
     + (isCession ? cessionForm(v) : (isAchat ? achatForm(v) : (isImmat ? immatForm(v) : (isNeuf ? neufForm(v) : (isMandat ? mandatForm(v) : (isWG ? wgarageForm(v) : (isPerte ? perteForm(v) : (isDestr ? destructionForm(v) : (isRetr ? retraitForm(v) : (isInt ? intentionForm(v) : (isCtr ? contratForm(v) : (isCPro ? contratProForm(v) : (isFac ? factureForm(v) : editorForTab(v))))))))))))))
@@ -15014,9 +15241,9 @@ function renderMain(){
   if(pjF){
     const champ = pjF.querySelector('input');
     champ.onchange = function(){
-      const f = champ.files && champ.files[0];
+      const liste = Array.prototype.slice.call(champ.files || []);
       champ.value = '';
-      if(f) importerPieceJointe(f, v).catch(function(e){ informer(e.message); });
+      if(liste.length) importerFichiers(liste, v).catch(function(e){ informer(e.message); });
     };
   }
   if(OFFICIAL_PDF_GENERATORS[currentDoc]){
@@ -27713,6 +27940,22 @@ async function convertirEnPdf(fichiers){
   bandeauEnvoi(t('Conversion en PDF…'));
   let octets = null;
   try{
+    octets = await assemblerEnPdf(bons);
+  }catch(e){
+    await informer(t('La conversion a échoué :') + ' ' + (e.message || e));
+    return;
+  }
+  if(!octets){
+    await informer(t('Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.'));
+    return;
+  }
+  return suiteConversion(bons, avant, octets);
+}
+
+/* Photos et/ou PDF → un seul PDF de moins de 1 Mo (octets), ou null. */
+async function assemblerEnPdf(bons){
+  let octets = null;
+  {
     if(bons.length === 1 && estPdf(bons[0])){
       const fait = await allegerPdf(bons[0]);
       if(fait) octets = b64ToBytes(fait.b64);
@@ -27737,14 +27980,11 @@ async function convertirEnPdf(fichiers){
       }
       octets = await photosEnPdf(pages);
     }
-  }catch(e){
-    await informer(t('La conversion a échoué :') + ' ' + (e.message || e));
-    return;
   }
-  if(!octets){
-    await informer(t('Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.'));
-    return;
-  }
+  return octets;
+}
+
+async function suiteConversion(bons, avant, octets){
   const base = String(bons[0].name || 'document').replace(/\.[^.]+$/, '');
   const proposition = (bons.length > 1 ? base + '-et-' + (bons.length - 1) + (bons.length > 2 ? '-autres' : '-autre') : base);
 
@@ -30608,7 +30848,58 @@ function choisirTypeDocument(){
   });
 }
 
-async function importerPieceJointe(fichier, vehicule){
+/* --- IMPORTER PLUSIEURS FICHIERS D'UN COUP ------------------------------
+   Plusieurs photos (ou PDF) choisies dans la phototheque deviennent UN
+   seul PDF, range comme un document importe. Deux photos d'une piece
+   d'identite : recto en haut, verso en dessous, sur une page ; deux ou
+   quatre photos de carte grise : une ou deux pages. Sinon, une page par
+   photo, le tout sous 1 Mo. Un fichier ni photo ni PDF (Word...) part a
+   part, comme avant. */
+async function importerFichiers(liste, vehicule){
+  liste = Array.prototype.slice.call(liste || []).filter(Boolean);
+  if(!liste.length) return;
+  if(liste.length === 1) return importerPieceJointe(liste[0], vehicule);
+  const bons = liste.filter(function(f){ return estImage(f) || estPdf(f); });
+  const autres = liste.filter(function(f){ return bons.indexOf(f) === -1; });
+  const v = vehicule || await choisirVehicule(t('Importer un document'));
+  if(!v) return;
+  if(bons.length === 1) await importerPieceJointe(bons[0], v);
+  else if(bons.length > 1){
+    let octets = null, nom = '', surUnePage = 0;
+    /* La premiere photo dit de quoi il s'agit. */
+    let reconnu = null;
+    if(estImage(bons[0]) && bons.every(estImage) && (bons.length === 2 || bons.length === 4)){
+      bandeauEnvoi(t('Lecture en cours…'));
+      reconnu = await identifierDocument(bons[0]);
+    }
+    bandeauEnvoi(t('Assemblage de') + ' ' + bons.length + ' ' + t('fichiers en un seul PDF…'));
+    try{
+      if(reconnu && reconnu.type === 'identite' && bons.length === 2){
+        const premiereEstVerso = reconnu.cote === 'verso';
+        const fait = await pdfDesFaces(premiereEstVerso ? [bons[1], bons[0]] : bons, 2);
+        if(fait){ octets = b64ToBytes(fait.b64); nom = t('Pièce d’identité'); }
+      }else if(reconnu && reconnu.type === 'carteGrise'){
+        const fait = await pdfDesFaces(bons, bons.length >= 4 ? 2 : 1);
+        if(fait){ octets = b64ToBytes(fait.b64); nom = t('Carte grise'); }
+      }
+      if(!octets) octets = await assemblerEnPdf(bons);
+    }catch(e){
+      await informer(t('La conversion a échoué :') + ' ' + (e.message || e));
+      return;
+    }
+    if(!octets){
+      await informer(t('Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.'));
+    }else{
+      bandeau(bons.length + ' ' + t('fichiers réunis en un seul PDF') + ' (' + poidsLisible(octets.length) + ')', 'ok');
+      const fichierPdf = new File([octets], 'document.pdf', { type: 'application/pdf' });
+      await importerPieceJointe(fichierPdf, v, { sansLecture: true, nom: nom, pages: bons.length });
+    }
+  }
+  for(const f of autres) await importerPieceJointe(f, v);
+}
+
+async function importerPieceJointe(fichier, vehicule, options){
+  options = options || {};
   if(!fichier) return;
   if(fichier.size > 25 * 1024 * 1024){
     await informer(t('Ce fichier dépasse 25 Mo. Réduisez-le avant de l’importer.'));
@@ -30627,7 +30918,10 @@ async function importerPieceJointe(fichier, vehicule){
      l'autre, comme une photocopie —, DEUX pages pour une carte grise,
      plus grande et plus dense. */
   let faces = [fichier], reconnu = null, surUnePage = false;
-  if(estImage(fichier) || estPdf(fichier)){
+  /* Un PDF deja assemble a partir de plusieurs photos : rien a lire. */
+  if(options.sansLecture){
+    if(options.nom) reconnu = { type: 'autre', nom: options.nom, texte: '' };
+  }else if(estImage(fichier) || estPdf(fichier)){
     bandeauEnvoi(t('Lecture en cours…'));
     reconnu = await identifierDocument(fichier);
     bandeauEnvoi('');
@@ -30759,7 +31053,7 @@ async function importerPieceJointe(fichier, vehicule){
      elles doivent rester legeres. */
   if(!v.pieces) v.pieces = [];
   v.pieces.push({ nom: propre, fichier: nomFichier, taille: taille,
-                  date: Date.now(), enLigne: !!ok, pages: faces.length });
+                  date: Date.now(), enLigne: !!ok, pages: options.pages || faces.length });
   v.updatedAt = Date.now();
   saveVehicle(v);
   if(currentId === v.id && typeof renderDoc === 'function') renderDoc(v);
