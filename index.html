@@ -1315,6 +1315,12 @@
      se tait : plus de cadres empiles, une simple ligne par fiche.
      ================================================================== */
   #vehicleList{gap:2px;padding:2px 0;}
+  /* Sur un ecran d'ordinateur portable peu haut, les boutons du bas
+     ecrasaient la liste jusqu'a zero : « Vos vehicules 1 », et rien
+     dessous. Elle garde maintenant de quoi montrer trois ou quatre
+     fiches ; la barre entiere defile s'il le faut. */
+  #sidebar #vehicleList{min-height:min(170px, 30vh);flex:1 1 auto;}
+  #sidebar #vehicleList:empty{min-height:0;}
   .v-item{background:none;border:none;border-radius:10px;padding:9px 10px 10px 15px;
     position:relative;transition:background .15s;align-items:center;gap:9px;}
   .v-item + .v-item:before{content:'';position:absolute;left:15px;right:10px;top:-1px;
@@ -2094,6 +2100,7 @@
 
     <div class="sidebar-bas">
       <button id="dossiersBtn" data-fr="📁 Mes documents en ligne">📁 Mes documents en ligne</button>
+      <label class="btn-import" id="convBtn"><span data-fr="📄 Convertir en PDF">📄 Convertir en PDF</span><input type="file" id="convInput" accept="image/*,application/pdf,.heic,.heif" multiple style="display:none"></label>
       <label class="btn-import" id="pjBtn"><span data-fr="📎 Importer un document">📎 Importer un document</span><input type="file" id="pjInput" style="display:none"></label>
       <button id="notesBtn" data-fr="🗒️ Voir les nouveautés">🗒️ Voir les nouveautés</button>
       <div style="display:flex;gap:6px">
@@ -2765,6 +2772,18 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Ne plus afficher ce message": "Non mostrare più questo messaggio",
+    "Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.": "Questo messaggio non apparirà più. I suoi dati restano modificabili in Impostazioni > Recapiti.",
+    "📄 Convertir en PDF": "📄 Converti in PDF",
+    "Choisissez des photos (JPEG, PNG…) ou des PDF.": "Scegli delle foto (JPEG, PNG…) o dei PDF.",
+    "Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.": "I file che non sono né foto né PDF sono stati esclusi.",
+    "Conversion en PDF…": "Conversione in PDF…",
+    "La conversion a échoué :": "La conversione non è riuscita:",
+    "Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.": "Non è stato possibile portare questo documento sotto 1 MB: forse è protetto da password, o ha troppe pagine.",
+    "PDF prêt": "PDF pronto",
+    "Sous quel nom l’enregistrer ?": "Con quale nome salvarlo?",
+    "Télécharger": "Scarica",
+    "PDF créé": "PDF creato",
     "Banque reconnue d’après l’IBAN": "Banca riconosciuta dall’IBAN",
     "Date d’échéance": "Data di scadenza",
     "À réception": "Al ricevimento",
@@ -3805,6 +3824,18 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Ne plus afficher ce message": "Dëse Message net méi weisen",
+    "Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.": "Dëse Message gëtt net méi gewisen. Är Koordinaten bleiwen an Astellungen > Koordinaten ännerbar.",
+    "📄 Convertir en PDF": "📄 An PDF ëmwandelen",
+    "Choisissez des photos (JPEG, PNG…) ou des PDF.": "Wielt Fotoen (JPEG, PNG…) oder PDFen.",
+    "Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.": "Fichieren, déi weder Fotoen nach PDFe sinn, goufen ewechgelooss.",
+    "Conversion en PDF…": "Ëmwandlung an PDF…",
+    "La conversion a échoué :": "D’Ëmwandlung ass feelgeschloen:",
+    "Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.": "Dëst Dokument konnt net ënner 1 MB bruecht ginn: et ass vläicht mat engem Passwuert geschützt, oder huet ze vill Säiten.",
+    "PDF prêt": "PDF fäerdeg",
+    "Sous quel nom l’enregistrer ?": "Ënner wéi engem Numm späicheren?",
+    "Télécharger": "Eroflueden",
+    "PDF créé": "PDF erstallt",
     "Banque reconnue d’après l’IBAN": "Bank no dem IBAN erkannt",
     "Date d’échéance": "Fälligkeetsdatum",
     "À réception": "Bei Empfank",
@@ -4844,6 +4875,18 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Ne plus afficher ce message": "Don't show this message again",
+    "Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.": "This message will no longer appear. Your details can still be changed in Settings > Contact details.",
+    "📄 Convertir en PDF": "📄 Convert to PDF",
+    "Choisissez des photos (JPEG, PNG…) ou des PDF.": "Choose photos (JPEG, PNG…) or PDFs.",
+    "Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.": "Files that are neither photos nor PDFs were left out.",
+    "Conversion en PDF…": "Converting to PDF…",
+    "La conversion a échoué :": "Conversion failed:",
+    "Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.": "This document could not be brought under 1 MB: it may be password-protected, or have too many pages.",
+    "PDF prêt": "PDF ready",
+    "Sous quel nom l’enregistrer ?": "What name should it be saved under?",
+    "Télécharger": "Download",
+    "PDF créé": "PDF created",
     "Banque reconnue d’après l’IBAN": "Bank recognised from the IBAN",
     "Date d’échéance": "Due date",
     "À réception": "On receipt",
@@ -5882,6 +5925,18 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Ne plus afficher ce message": "Diese Meldung nicht mehr anzeigen",
+    "Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.": "Diese Meldung erscheint nicht mehr. Ihre Angaben bleiben unter Einstellungen > Kontaktdaten änderbar.",
+    "📄 Convertir en PDF": "📄 In PDF umwandeln",
+    "Choisissez des photos (JPEG, PNG…) ou des PDF.": "Wählen Sie Fotos (JPEG, PNG…) oder PDFs.",
+    "Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.": "Dateien, die weder Fotos noch PDFs sind, wurden ausgelassen.",
+    "Conversion en PDF…": "Umwandlung in PDF…",
+    "La conversion a échoué :": "Die Umwandlung ist fehlgeschlagen:",
+    "Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.": "Dieses Dokument konnte nicht unter 1 MB gebracht werden: Es ist vielleicht passwortgeschützt oder hat zu viele Seiten.",
+    "PDF prêt": "PDF fertig",
+    "Sous quel nom l’enregistrer ?": "Unter welchem Namen speichern?",
+    "Télécharger": "Herunterladen",
+    "PDF créé": "PDF erstellt",
     "Banque reconnue d’après l’IBAN": "Bank anhand der IBAN erkannt",
     "Date d’échéance": "Fälligkeitsdatum",
     "À réception": "Bei Erhalt",
@@ -6936,6 +6991,18 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Ne plus afficher ce message": "Dit bericht niet meer tonen",
+    "Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.": "Dit bericht verschijnt niet meer. Uw gegevens blijven wijzigbaar via Instellingen > Contactgegevens.",
+    "📄 Convertir en PDF": "📄 Omzetten naar pdf",
+    "Choisissez des photos (JPEG, PNG…) ou des PDF.": "Kies foto's (JPEG, PNG…) of pdf's.",
+    "Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.": "Bestanden die geen foto of pdf zijn, zijn overgeslagen.",
+    "Conversion en PDF…": "Omzetten naar pdf…",
+    "La conversion a échoué :": "Het omzetten is mislukt:",
+    "Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.": "Dit document kon niet onder 1 MB worden gebracht: het is misschien met een wachtwoord beveiligd, of heeft te veel pagina's.",
+    "PDF prêt": "Pdf klaar",
+    "Sous quel nom l’enregistrer ?": "Onder welke naam opslaan?",
+    "Télécharger": "Downloaden",
+    "PDF créé": "Pdf gemaakt",
     "Banque reconnue d’après l’IBAN": "Bank herkend aan de IBAN",
     "Date d’échéance": "Vervaldatum",
     "À réception": "Bij ontvangst",
@@ -7821,7 +7888,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.50';
+const VERSION = '2.52';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -8000,6 +8067,34 @@ async function serveurFichesDepuis(depuis){
     '/rest/v1/fiches?select=id,donnees,maj,supprimee' + filtre + '&order=maj.asc');
 }
 
+/* La carte du serveur : chaque fiche et la date de sa derniere
+   modification, sans son contenu (quelques octets par fiche). C'est
+   elle qui decide de ce qui descend et de ce qui monte. */
+async function serveurCarteFiches(){
+  const r = await serveurAppel('/rest/v1/fiches?select=id,maj,supprimee');
+  if(!Array.isArray(r)) throw new Error('carte');
+  const m = {};
+  r.forEach(function(l){ m[l.id] = { maj: Number(l.maj) || 0, supprimee: !!l.supprimee }; });
+  return m;
+}
+/* Le contenu de quelques fiches, par paquets. */
+async function serveurFichesParIds(ids){
+  const out = [];
+  for(let i = 0; i < ids.length; i += 40){
+    const liste = ids.slice(i, i + 40).map(function(id){ return '"' + String(id).replace(/["\\]/g, '') + '"'; }).join(',');
+    const r = await serveurAppel('/rest/v1/fiches?select=id,donnees,maj,supprimee&id=in.(' + encodeURIComponent(liste) + ')');
+    (r || []).forEach(function(l){ out.push(l); });
+  }
+  return out;
+}
+const IDS_SERVEUR = 'autivio_ids_serveur';
+function idsConnusDuServeur(){
+  try{ return JSON.parse(localStorage.getItem(IDS_SERVEUR) || '{}') || {}; }catch(e){ return {}; }
+}
+function idsConnusEcrire(o){
+  try{ localStorage.setItem(IDS_SERVEUR, JSON.stringify(o)); }catch(e){}
+}
+
 /* La liste complete des identifiants presents sur le serveur.
 
    Elle sert a reperer ce qui a ete efface DIRECTEMENT dans la base —
@@ -8041,7 +8136,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '25/10/2026';
+const VERSION_DATE = '26/10/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -8389,6 +8484,10 @@ function fenetreFicheGarage(){
     +   (sansTva() ? ' checked' : '') + '>'
     +   '<span>' + esc(t('Non assujetti à la TVA (franchise en base, art. 293 B du CGI)')) + '</span></label>'
     + '<div class="dlg-detail" id="ficheAlerte"></div>'
+    /* Pour ne plus etre relance a chaque connexion. La fiche reste
+       modifiable dans Reglages > Coordonnees. */
+    + '<label class="fiche-case fiche-neplus"><input type="checkbox" id="ficheNePlus">'
+    +   '<span>' + esc(t('Ne plus afficher ce message')) + '</span></label>'
     + '<div class="dlg-actions">'
     +   '<button type="button" class="dlg-non" id="ficheTard">' + esc(t('Plus tard')) + '</button>'
     +   '<button type="button" class="dlg-oui" id="ficheOk">' + esc(t('Enregistrer')) + '</button>'
@@ -8396,6 +8495,15 @@ function fenetreFicheGarage(){
   document.body.appendChild(fond);
 
   const fermer = function(){ fond.remove(); };
+  /* La case est retenue par le compte (dealer), donc sur tous les
+     appareils, et non par ce seul navigateur. */
+  const retenirNePlus = function(){
+    const c = fond.querySelector('#ficheNePlus');
+    if(c && c.checked){
+      dealer.ficheGarageMasquee = true;
+      try{ localStorage.setItem(cleFicheMasquee(), '1'); }catch(e){}
+    }
+  };
   /* « Plus tard » et la croix ferment sans rien exiger, mais gardent ce
      qui a deja ete tape : on le retrouve a la prochaine ouverture. */
   const fermerEnGardant = async function(){
@@ -8405,8 +8513,12 @@ function fenetreFicheGarage(){
     });
     const caseSansTva = fond.querySelector('#ficheSansTva');
     if(caseSansTva) dealer.sansTva = caseSansTva.checked;
+    retenirNePlus();
     fermer();
     try{ await saveDealer(); }catch(e){}
+    if(dealer.ficheGarageMasquee){
+      bandeau(t('Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.'), 'ok');
+    }
   };
   fond.querySelector('#ficheTard').onclick = fermerEnGardant;
   fond.querySelector('#ficheCroix').onclick = fermerEnGardant;
@@ -8433,6 +8545,15 @@ function fenetreFicheGarage(){
       if(def && champObligatoire(def) && !val) manquants.push(t(def[1]));
       dealer[cle] = val;
     });
+    retenirNePlus();
+    if(manquants.length && dealer.ficheGarageMasquee){
+      /* « Ne plus afficher » coche : on enregistre ce qui est saisi et
+         on ferme, sans insister sur ce qui manque. */
+      await saveDealer();
+      fermer();
+      bandeau(t('Ce message ne s’affichera plus. Vos coordonnées restent modifiables dans Réglages > Coordonnées.'), 'ok');
+      return;
+    }
     if(manquants.length){
       /* On enregistre quand meme ce qui est saisi : rien ne se perd. */
       await saveDealer();
@@ -8447,10 +8568,19 @@ function fenetreFicheGarage(){
   };
 }
 
+function cleFicheMasquee(){
+  return 'autivio:ficheGarageMasquee:' + String((currentUser && currentUser.username) || '').toLowerCase();
+}
+
 /* Proposee une seule fois par connexion, et seulement a un compte
    professionnel dont la fiche n'est pas complete. */
 function proposerFicheGarage(){
   if(ficheGarageDemandee) return;
+  /* « Ne plus afficher ce message » : retenu par le compte (synchronise)
+     ET par l'appareil, au cas ou la synchronisation n'est pas encore
+     passee au moment de la connexion. */
+  if(dealer && dealer.ficheGarageMasquee) return;
+  try{ if(localStorage.getItem(cleFicheMasquee()) === '1') return; }catch(e){}
   if(!currentUser || compteParticulier()) return;
   if(!currentUser.serveur) return;        // compte local : pas d'inscription
   if(!ficheGarageIncomplete()) return;
@@ -9665,6 +9795,13 @@ async function enterApp(){
   const bn = document.getElementById('notesBtn');
   if(bn) bn.onclick = function(){ afficherNoteMiseAJour(true); };
 
+  const conv = document.getElementById('convInput');
+  if(conv) conv.onchange = function(){
+    const liste = Array.prototype.slice.call(conv.files || []);
+    conv.value = '';                    // le meme fichier peut etre repris
+    if(liste.length) convertirEnPdf(liste).catch(function(e){ informer(e.message); });
+  };
+
   const pj = document.getElementById('pjInput');
   if(pj) pj.onchange = function(){
     const f = pj.files && pj.files[0];
@@ -9987,6 +10124,129 @@ function serveurPret(){
    dire a l'utilisateur ce qui s'est passe. */
 async function synchroniserServeur(discret){
   if(!serveurPret()) return { ignore: true };
+  /* La synchronisation par la carte du serveur. L'ancienne methode —
+     « tout ce qui a change depuis ma derniere date » — comparait des
+     heures tirees d'horloges DIFFERENTES : il suffisait que le
+     telephone retarde d'une minute sur le PC, ou envoie sa
+     modification un peu tard, pour que le PC ne la descende jamais
+     (et que le telephone ne la monte jamais). La plaque changee sur
+     le telephone restait l'ancienne sur le PC. Elle ne sert plus que
+     si la carte ne peut pas etre lue. */
+  try{
+    const carte = await serveurCarteFiches();
+    return await synchroniserParCarte(carte);
+  }catch(e){ /* methode d'avant, ci-dessous */ }
+  return await synchroniserServeurAncien(discret);
+}
+
+async function synchroniserParCarte(carte){
+  const bilan = { recues: 0, envoyees: 0, conflits: 0 };
+  const connus = idsConnusDuServeur();
+  const derniereLocale = Number(localStorage.getItem('autivio_sync_locale') || 0) || 0;
+  const tombes = pierresTombales();
+  const recuesIds = [];
+
+  /* --- ce qui descend : plus recent la-bas qu'ici ------------------- */
+  const aDescendre = [];
+  Object.keys(carte).forEach(function(id){
+    const r = carte[id], locale = vehicles[id];
+    if(r.supprimee){
+      if(locale && (locale.maj || 0) <= r.maj){
+        delete vehicles[id];
+        try{ ls.remove('vehicle:' + id); }catch(e){}
+        bilan.recues++;
+      }
+      return;
+    }
+    if(!locale && tombes[id] && r.maj <= tombes[id]) return;   // efface ici, pas encore la-bas
+    if(!locale || r.maj > (Number(locale.maj) || 0)) aDescendre.push(id);
+  });
+  if(aDescendre.length){
+    const lignes = await serveurFichesParIds(aDescendre);
+    for(const ligne of lignes){
+      if(!ligne || ligne.supprimee || !ligne.donnees) continue;
+      const d = completerFiche(ligne.donnees);
+      d.maj = Number(ligne.maj) || d.maj || 0;
+      if(vehicles[ligne.id]) bilan.conflits++;
+      vehicles[ligne.id] = d;
+      recuesIds.push(ligne.id);
+      bilan.recues++;
+    }
+  }
+
+  /* --- ce qui monte : plus recent ici, ou absent la-bas ------------- */
+  const aEnvoyer = [];
+  const effaceesLaBas = [];
+  for(const id in vehicles){
+    const v = vehicles[id];
+    if(!v) continue;
+    const r = carte[id];
+    if(!r){
+      /* Absente du serveur. Si elle y etait au dernier passage et n'a pas
+         ete retouchee ici depuis, c'est qu'on l'a effacee la-bas
+         directement : on l'efface aussi. Sinon on l'envoie. */
+      if(connus[id] && (Number(v.maj) || 0) <= derniereLocale){ effaceesLaBas.push(id); continue; }
+      aEnvoyer.push(v);
+    }else if((Number(v.maj) || 0) > r.maj){
+      aEnvoyer.push(v);
+    }
+  }
+  effaceesLaBas.forEach(function(id){
+    delete vehicles[id];
+    try{ ls.remove('vehicle:' + id); }catch(e){}
+    bilan.recues++;
+  });
+  if(aEnvoyer.length){
+    try{
+      for(let i = 0; i < aEnvoyer.length; i += 50){
+        await serveurEnvoyerFiches(aEnvoyer.slice(i, i + 50));
+      }
+      bilan.envoyees = aEnvoyer.length;
+    }catch(e){
+      return { erreur: (e && e.message) || 'Envoi refuse par le serveur.', recues: bilan.recues };
+    }
+  }
+
+  /* Ce que le serveur connait desormais. */
+  const nouveaux = {};
+  Object.keys(carte).forEach(function(id){ if(!carte[id].supprimee) nouveaux[id] = 1; });
+  aEnvoyer.forEach(function(v){ nouveaux[v.id] = 1; });
+  idsConnusEcrire(nouveaux);
+  try{ localStorage.setItem('autivio_sync_locale', String(Date.now())); }catch(e){}
+  /* L'ancienne marque reste tenue, pour le cas ou l'on y reviendrait. */
+  let plus = syncServeurDerniere();
+  Object.keys(carte).forEach(function(id){ if(carte[id].maj > plus) plus = carte[id].maj; });
+  syncServeurMarquer(plus);
+
+  if(bilan.recues){
+    for(const id in vehicles){
+      if(vehicleOrder.indexOf(id) === -1) vehicleOrder.push(id);
+      if(recuesIds.indexOf(id) !== -1){ try{ ls.set('vehicle:' + id, JSON.stringify(vehicles[id])); }catch(e){} }
+    }
+    vehicleOrder = vehicleOrder.filter(function(id){ return !!vehicles[id]; });
+    if(currentId && !vehicles[currentId]) currentId = vehicleOrder[0] || null;
+    await saveIndex();
+    rafraichirApresReception(recuesIds);
+  }
+  return bilan;
+}
+
+/* L'ecran suit ce qui arrive : le tableau de bord est redessine, et la
+   fiche ouverte aussi — sauf pendant qu'on y tape, pour ne pas voler
+   le curseur. */
+function rafraichirApresReception(recuesIds){
+  try{
+    if(typeof renderSidebar === 'function') renderSidebar();
+    const actif = document.activeElement;
+    const enSaisie = actif && (actif.tagName === 'INPUT' || actif.tagName === 'TEXTAREA' || actif.tagName === 'SELECT');
+    if(document.querySelector('.dlg-fond')) return;           // une fenetre est ouverte
+    if(vueCourante === 'tableau' || !currentId){ if(typeof renderMain === 'function') renderMain(); return; }
+    if(recuesIds.indexOf(currentId) !== -1 && !enSaisie && typeof renderMain === 'function') renderMain();
+  }catch(e){}
+}
+
+async function synchroniserServeurAncien(discret){
+  if(!serveurPret()) return { ignore: true };
 
   const bilan = { recues: 0, envoyees: 0, conflits: 0 };
   const depuis = syncServeurDerniere();
@@ -10129,7 +10389,10 @@ let revisionFiches = 0;
    meme fiche : la plus recente l'emporte. Sans cette date, il n'y a
    aucun moyen de savoir laquelle garder. */
 async function saveVehicle(v){
-  v.maj = Date.now();
+  /* Toujours plus recent que la version d'ou l'on part, meme si
+     l'horloge de cet appareil retarde sur celle de l'autre : sinon la
+     modification passait pour plus ancienne et etait ecrasee. */
+  v.maj = Math.max(Date.now(), (Number(v.maj) || 0) + 1);
   revisionFiches++;
   try{ ls.set('vehicle:'+v.id, JSON.stringify(v)); }catch(e){}
   planifierSync();
@@ -11798,6 +12061,14 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.52': { date: '26/10/2026', lignes: [
+    "Synchronisation entre le PC et le téléphone corrigée : une plaque (ou toute modification) faite sur un appareil arrivait parfois jamais sur l'autre, parce que les deux comparaient des heures tirées de leurs propres horloges. Chaque appareil compare désormais sa liste à celle du serveur, fiche par fiche, et descend ou envoie ce qui est plus récent. L'écran (tableau de bord, fiche ouverte) se met à jour tout seul quand une fiche arrive.",
+    "Barre de gauche sur un écran d'ordinateur portable : la liste « Vos véhicules » était écrasée par les boutons du bas et ne montrait plus aucune plaque. Elle garde maintenant toujours de la place."
+  ] },
+  '2.51': { date: '26/10/2026', lignes: [
+    "Fenêtre « Complétez votre fiche garage » : nouvelle case « Ne plus afficher ce message ». Cochée, la fenêtre ne revient plus à chaque connexion, sur aucun appareil ; vos coordonnées restent modifiables dans Réglages > Coordonnées.",
+    "Nouveau bouton « 📄 Convertir en PDF » dans la barre de gauche : choisissez une ou plusieurs photos (JPEG, PNG, WebP…) ou des PDF, et vous obtenez un seul PDF de moins de 1 Mo, une page par photo, à télécharger."
+  ] },
   '2.50': { date: '25/10/2026', lignes: [
     "Les documents suivent la fiche, plus la plaque : changer la plaque (ou ajouter le numéro de châssis après coup) ne fait plus disparaître les documents déjà rangés. La fiche retient tous ses dossiers et les affiche ensemble, quelle que soit la plaque du moment. Les documents rangés avant cette version sous une ancienne plaque sont retrouvés d'après le châssis ou les plaques qu'a portées la fiche. Rien n'est déplacé ni effacé."
   ] },
@@ -27211,6 +27482,133 @@ async function pdfRedessine(octets){
   }
   try{ doc.destroy(); }catch(e){}
   return null;
+}
+
+/* =====================================================================
+   CONVERTIR EN PDF (bouton de la barre de gauche)
+   Photos (JPEG, PNG, WebP, HEIC quand l'appareil sait le lire) et PDF,
+   un ou plusieurs : un seul PDF de moins de 1 Mo, une page par photo ou
+   par page de PDF, a telecharger. Rien n'est range dans un dossier.
+     - un seul PDF : reduit comme a l'import (le texte reste
+       selectionnable si la simple reecriture suffit) ;
+     - plusieurs PDF : assembles, puis reduits si besoin ;
+     - des photos (avec ou sans PDF) : chaque page est compressee, le
+       budget de 1 Mo partage entre elles, un cran plus petit si besoin.
+   ===================================================================== */
+async function pagesDuFichier(f){
+  if(estPdf(f)){
+    await moteurPdfPret();
+    const doc = await window.pdfjsLib.getDocument({ data: new Uint8Array(await f.arrayBuffer()) }).promise;
+    const toiles = [];
+    for(let n = 1; n <= doc.numPages; n++){
+      const page = await doc.getPage(n);
+      const base = page.getViewport({ scale: 1 });
+      const echelle = Math.min(3, Math.max(0.5, 1500 / Math.min(base.width, base.height)));
+      const vue = page.getViewport({ scale: echelle });
+      const toile = document.createElement('canvas');
+      toile.width = Math.round(vue.width); toile.height = Math.round(vue.height);
+      const c = toile.getContext('2d');
+      c.fillStyle = '#ffffff'; c.fillRect(0, 0, toile.width, toile.height);
+      await page.render({ canvasContext: c, viewport: vue }).promise;
+      toile.__format = [base.width, base.height];
+      toiles.push(toile);
+    }
+    try{ doc.destroy(); }catch(e){}
+    return toiles;
+  }
+  return [await chargerImage(f)];
+}
+
+async function photosEnPdf(pages){
+  let budget = POIDS_MAXI_OCTETS * 0.88;
+  for(let essai = 0; essai < 4; essai++){
+    const parPage = Math.max(20000, Math.floor(budget / pages.length));
+    const pdf = await PDFLib.PDFDocument.create();
+    for(const im of pages){
+      const petite = compresserImage(im, parPage);
+      const jpg = await pdf.embedJpg(petite.url);
+      if(im.__format){
+        /* Page d'un PDF : meme format qu'a l'origine, image pleine page. */
+        const L = im.__format[0], H = im.__format[1];
+        pdf.addPage([L, H]).drawImage(jpg, { x: 0, y: 0, width: L, height: H });
+      }else{
+        /* Photo : sur une page A4, portrait ou paysage selon l'image. */
+        const paysage = petite.largeur > petite.hauteur;
+        const L = paysage ? 841.89 : 595.28, H = paysage ? 595.28 : 841.89, marge = 18;
+        const e = Math.min((L - marge * 2) / jpg.width, (H - marge * 2) / jpg.height);
+        const w = jpg.width * e, h = jpg.height * e;
+        pdf.addPage([L, H]).drawImage(jpg, { x: (L - w) / 2, y: (H - h) / 2, width: w, height: h });
+      }
+    }
+    const octets = await pdf.save({ useObjectStreams: true });
+    if(octets.length <= POIDS_MAXI_OCTETS) return octets;
+    budget *= 0.7;
+  }
+  return null;
+}
+
+async function convertirEnPdf(fichiers){
+  if(typeof PDFLib === 'undefined') throw new Error(t('La bibliothèque PDF est introuvable.'));
+  const bons = fichiers.filter(function(f){ return estImage(f) || estPdf(f); });
+  if(!bons.length){
+    await informer(t('Choisissez des photos (JPEG, PNG…) ou des PDF.'));
+    return;
+  }
+  if(bons.length < fichiers.length){
+    bandeau(t('Les fichiers qui ne sont ni des photos ni des PDF ont été laissés de côté.'), 'ko');
+  }
+  const avant = bons.reduce(function(n, f){ return n + (f.size || 0); }, 0);
+  bandeauEnvoi(t('Conversion en PDF…'));
+  let octets = null;
+  try{
+    if(bons.length === 1 && estPdf(bons[0])){
+      const fait = await allegerPdf(bons[0]);
+      if(fait) octets = b64ToBytes(fait.b64);
+    }else if(bons.every(estPdf)){
+      /* Plusieurs PDF : on les met bout a bout, puis on reduit si besoin. */
+      const tout = await PDFLib.PDFDocument.create();
+      for(const f of bons){
+        const src = await PDFLib.PDFDocument.load(await f.arrayBuffer(), { ignoreEncryption: true });
+        (await tout.copyPages(src, src.getPageIndices())).forEach(function(p){ tout.addPage(p); });
+      }
+      const assemble = await tout.save({ useObjectStreams: true });
+      if(assemble.length <= POIDS_MAXI_OCTETS) octets = assemble;
+      else{
+        const fait = await pdfRedessine(assemble);
+        if(fait) octets = b64ToBytes(fait.b64);
+      }
+    }else{
+      const pages = [];
+      for(const f of bons){
+        bandeauEnvoi(t('Conversion en PDF…') + ' ' + (pages.length + 1));
+        (await pagesDuFichier(f)).forEach(function(p){ pages.push(p); });
+      }
+      octets = await photosEnPdf(pages);
+    }
+  }catch(e){
+    await informer(t('La conversion a échoué :') + ' ' + (e.message || e));
+    return;
+  }
+  if(!octets){
+    await informer(t('Ce document n’a pas pu être ramené sous 1 Mo : il est peut-être protégé par un mot de passe, ou contient trop de pages.'));
+    return;
+  }
+  const base = String(bons[0].name || 'document').replace(/\.[^.]+$/, '');
+  const proposition = (bons.length > 1 ? base + '-et-' + (bons.length - 1) + (bons.length > 2 ? '-autres' : '-autre') : base);
+  const nom = await demanderTexte({
+    titre: t('PDF prêt'),
+    texte: poidsLisible(avant) + ' → ' + poidsLisible(octets.length) + ' · '
+           + t('Sous quel nom l’enregistrer ?'),
+    valeur: proposition, oui: t('Télécharger')
+  });
+  if(nom === null) return;
+  const nomFichier = (nomPourFichier(String(nom).trim() || proposition) || 'document') + '.pdf';
+  if(estAndroid() && typeof partagerAndroid === 'function'){
+    await partagerAndroid(octets, nomFichier);
+  }else{
+    telechargerFichier(octets, nomFichier, 'application/pdf');
+  }
+  bandeau(t('PDF créé') + ' : ' + nomFichier + ' (' + poidsLisible(octets.length) + ')', 'ok');
 }
 
 /* « 3,4 Mo », « 860 Ko » */
