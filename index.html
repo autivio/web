@@ -8054,7 +8054,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.57';
+const VERSION = '2.59';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -10333,6 +10333,16 @@ async function synchroniserParCarte(carte){
       if(!ligne || ligne.supprimee || !ligne.donnees) continue;
       const d = completerFiche(ligne.donnees);
       d.maj = Number(ligne.maj) || d.maj || 0;
+      /* Les dossiers et plaques connus ici ne se perdent pas : on les
+         ajoute a ceux de la fiche recue. */
+      const ici = vehicles[ligne.id];
+      if(ici){
+        ['dossiers', 'plaques'].forEach(function(cle){
+          const tout = (Array.isArray(d[cle]) ? d[cle] : []).slice();
+          (Array.isArray(ici[cle]) ? ici[cle] : []).forEach(function(x){ if(tout.indexOf(x) === -1) tout.push(x); });
+          if(tout.length) d[cle] = tout;
+        });
+      }
       if(vehicles[ligne.id]) bilan.conflits++;
       vehicles[ligne.id] = d;
       recuesIds.push(ligne.id);
@@ -12227,6 +12237,12 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.59': { date: '26/10/2026', lignes: [
+    "Synchronisation : une plaque modifiée sur le téléphone n'arrivait pas sur le PC. En comptant les documents, le PC notait dans SA copie de la fiche les dossiers qu'il trouvait ; cette note comptait comme une modification, si bien que sa copie (avec l'ancienne plaque) paraissait plus récente et repartait vers le serveur. Ces notes ne comptent plus comme une modification, et sont fusionnées quand la fiche arrive de l'autre appareil."
+  ] },
+  '2.58': { date: '26/10/2026', lignes: [
+    "Le titre des documents suit la plaque : après un changement de plaque, « WW-590-MF_facture… » s'affiche aussitôt « 1-RXT-353_facture… » dans le dossier du véhicule et dans « Partager les documents ». Les documents partagés (lien ou ZIP) portent aussi le nouveau nom. Les fichiers eux-mêmes ne sont ni déplacés ni renommés."
+  ] },
   '2.57': { date: '26/10/2026', lignes: [
     "Importer un document : on peut maintenant choisir PLUSIEURS photos (ou PDF) d'un coup dans la photothèque. Elles sont réunies dans un seul PDF de moins de 1 Mo, une page par photo, rangé dans le dossier de la voiture. Deux photos d'une carte d'identité sont mises recto en haut et verso en dessous, sur une seule page, quel que soit l'ordre choisi."
   ] },
@@ -13659,7 +13675,7 @@ async function fenetrePartage(id){
   liste.innerHTML = fichiers.map(function(f, i){
     return '<label class="partage-ligne partage-coche">'
       + '<input type="checkbox" data-i="' + i + '">'
-      + '<span class="partage-nom">' + esc(f.nom) + '</span>'
+      + '<span class="partage-nom">' + esc(titreDocument(v, f.nom)) + '</span>'
       + '</label>';
   }).join('');
   const tous = fond.querySelector('#partageTous');
@@ -13836,14 +13852,15 @@ async function partagerFichiers(v, fichiers){
   const plaque = String(v.vehicule.immat || v.vehicule.vin || t('Véhicule')).toUpperCase();
   bandeauEnvoi(t('Préparation du lien…'));
   if(fichiers.length === 1){
-    const lien = await lienPartageDocument(fichiers[0].dossier, fichiers[0].nom);
-    if(lien){ fenetreLien(lien, fichiers[0].nom + ' — ' + plaque); return; }
+    const titre = titreDocument(v, fichiers[0].nom);
+    const lien = await lienPartageDocument(fichiers[0].dossier, fichiers[0].nom, false, titre);
+    if(lien){ fenetreLien(lien, titre); return; }
   }else{
     const entrees = [];
     for(let i = 0; i < fichiers.length; i++){
       bandeauEnvoi(t('Préparation…') + ' ' + (i + 1) + '/' + fichiers.length);
       const donnees = await serveurTelechargerDocument(fichiers[i].dossier, fichiers[i].nom);
-      if(donnees) entrees.push({ nom: fichiers[i].nom, donnees: donnees });
+      if(donnees) entrees.push({ nom: titreDocument(v, fichiers[i].nom), donnees: donnees });
     }
     if(entrees.length){
       const zip = fabriquerZip(entrees);
@@ -13862,8 +13879,9 @@ async function partagerFichiers(v, fichiers){
   /* Repli : un lien par document, dans un seul message. */
   const lignes = [];
   for(const f of fichiers){
-    const l = await lienPartageDocument(f.dossier, f.nom);
-    if(l) lignes.push('• ' + f.nom + '\n  ' + l);
+    const titre = titreDocument(v, f.nom);
+    const l = await lienPartageDocument(f.dossier, f.nom, false, titre);
+    if(l) lignes.push('• ' + titre + '\n  ' + l);
   }
   if(!lignes.length){
     await informer(t('Le lien n’a pas pu être créé. Réessayez dans un instant.'));
@@ -14521,7 +14539,8 @@ async function listerDocuments(v){
        il restera affiche meme si la plaque change. */
     if(trouves) memoriserDossier(v, sous);
   }
-  sortie.sort(function(a, b){ return a.nom.localeCompare(b.nom); });
+  /* Range par titre affiche (plaque du moment), pas par nom d'origine. */
+  sortie.sort(function(a, b){ return titreDocument(v, a.nom).localeCompare(titreDocument(v, b.nom)); });
   return sortie;
 }
 
@@ -14597,7 +14616,7 @@ function ouvrirDossierVehicule(id){
     }
     liste.innerHTML = fichiers.map(function(f, i){
       return '<button type="button" class="doss-item" data-i="' + i + '">'
-        + '<span class="doss-nom">' + esc(f.nom) + '</span>'
+        + '<span class="doss-nom">' + esc(titreDocument(v, f.nom)) + '</span>'
         + (f.ou === 'drive' ? '<span class="doss-compte">Drive</span>' : '')
         + (f.ou === 'serveur' ? '<span class="doss-compte">' + esc(t('En ligne')) + '</span>' : '')
         + '</button>';
@@ -16735,12 +16754,53 @@ function dossiersDeLaFiche(v){
   (v.dossiers || []).forEach(ajouter);
   return out;
 }
+/* --- LE TITRE D'UN DOCUMENT SUIT LA PLAQUE ------------------------------
+   Les fichiers gardent le nom qu'ils ont recu a l'enregistrement
+   (« WW-590-MF_facture_2026-10-24.pdf ») : les renommer partout — serveur,
+   Drive, PC, telephone — serait risque. Mais on les AFFICHE, et on les
+   partage, avec la plaque du moment : « 1-RXT-353_facture_2026-10-24.pdf ».
+   Seul le debut du nom change, et seulement s'il porte une ancienne
+   plaque de la fiche. */
+function prefixePlaque(p){
+  return accentsRetires(String(p || '')).replace(/[^A-Za-z0-9-]/g, '').toUpperCase();
+}
+function titreDocument(v, nom){
+  nom = String(nom || '');
+  if(!v) return nom;
+  const veh = v.vehicule || {};
+  const actuel = prefixePlaque(veh.immat || veh.vin);
+  if(!actuel) return nom;
+  const anciens = [];
+  const ajouter = function(p){ p = prefixePlaque(p); if(p && p !== actuel && anciens.indexOf(p) === -1) anciens.push(p); };
+  (v.plaques || []).forEach(ajouter);
+  (v.dossiers || []).forEach(function(d){ ajouter(String(d).split('_')[0]); });
+  ajouter((v.facture || {}).immat);
+  ajouter(veh.vin);
+  ajouter('SANS-PLAQUE');
+  /* Le plus long d'abord : « 1-RXT-35 » ne doit pas mordre sur « 1-RXT-352 ». */
+  anciens.sort(function(a, b){ return b.length - a.length; });
+  const haut = nom.toUpperCase();
+  for(const p of anciens){
+    if(haut.indexOf(p + '_') === 0) return actuel + nom.slice(p.length);
+  }
+  return nom;
+}
+
+/* Ces notes (dossiers et plaques connus) sont rangees SANS dater la
+   fiche : ce n'est pas une modification. Avant, la noter comptait comme
+   un changement — la copie d'un appareil en retard (ancienne plaque)
+   paraissait alors plus recente que la modification faite sur l'autre,
+   et l'ecrasait. Elles voyagent avec la prochaine vraie modification,
+   et sont fusionnees a la reception. */
+function rangerSansDater(v){
+  try{ ls.set('vehicle:' + v.id, JSON.stringify(v)); }catch(e){}
+}
 function memoriserDossier(v, d){
   if(!v || !dossierPropre(d)) return;
   if(!Array.isArray(v.dossiers)) v.dossiers = [];
   if(v.dossiers.indexOf(d) !== -1) return;
   v.dossiers.push(d);
-  try{ saveVehicle(v); }catch(e){}
+  rangerSansDater(v);
 }
 /* Le document qu'on depose appartient a la fiche ouverte si le dossier
    est le sien. */
@@ -16759,7 +16819,7 @@ function memoriserPlaque(v, p){
   if(!Array.isArray(v.plaques)) v.plaques = [];
   if(v.plaques.indexOf(p) !== -1) return;
   v.plaques.push(p);
-  try{ saveVehicle(v); }catch(e){}
+  rangerSansDater(v);
 }
 /* Les dossiers du compte sur le serveur, relus au plus une fois par
    minute : la liste des documents est rafraichie toutes les quelques
@@ -27594,7 +27654,7 @@ document.addEventListener('input', function(e){
    ===================================================================== */
 const DUREE_LIEN_JOURS = 1;
 
-async function lienPartageDocument(sousDossier, nomFichier, reessai){
+async function lienPartageDocument(sousDossier, nomFichier, reessai, nomAffiche){
   if(!serveurPret()) return '';
   const chemin = cheminDocument(sousDossier, nomFichier);
   if(!chemin) return '';
@@ -27606,13 +27666,18 @@ async function lienPartageDocument(sousDossier, nomFichier, reessai){
       body: JSON.stringify({ expiresIn: DUREE_LIEN_JOURS * 24 * 3600 })
     });
     if(r.status === 401 && sessionServeur.refresh_token && !reessai){
-      if(await serveurRenouveler()) return lienPartageDocument(sousDossier, nomFichier, true);
+      if(await serveurRenouveler()) return lienPartageDocument(sousDossier, nomFichier, true, nomAffiche);
     }
     if(!r.ok) return '';
     const corps = await r.json();
     const signe = corps && (corps.signedURL || corps.signedUrl);
     if(!signe) return '';
-    return SUPABASE_URL + '/storage/v1' + (signe.indexOf('/') === 0 ? signe : '/' + signe);
+    const url = SUPABASE_URL + '/storage/v1' + (signe.indexOf('/') === 0 ? signe : '/' + signe);
+    /* Le destinataire enregistre le fichier sous son titre du moment
+       (plaque actuelle), et non sous son nom d'origine. */
+    return (nomAffiche && nomAffiche !== nomFichier)
+      ? url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=' + encodeURIComponent(nomAffiche)
+      : url;
   }catch(e){ return ''; }
 }
 
