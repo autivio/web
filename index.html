@@ -2788,6 +2788,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "documents renommés avec la nouvelle plaque": "documenti rinominati con la nuova targa",
+    "document renommé avec la nouvelle plaque": "documento rinominato con la nuova targa",
     "Assemblage de": "Unione di",
     "fichiers en un seul PDF…": "file in un solo PDF…",
     "fichiers réunis en un seul PDF": "file riuniti in un solo PDF",
@@ -3870,6 +3872,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "documents renommés avec la nouvelle plaque": "Dokumenter mat der neier Plack ëmbenannt",
+    "document renommé avec la nouvelle plaque": "Dokument mat der neier Plack ëmbenannt",
     "Assemblage de": "Zesummesetze vun",
     "fichiers en un seul PDF…": "Fichieren an een eenzegen PDF…",
     "fichiers réunis en un seul PDF": "Fichieren an een eenzegen PDF zesummegesat",
@@ -4951,6 +4955,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "documents renommés avec la nouvelle plaque": "documents renamed with the new plate",
+    "document renommé avec la nouvelle plaque": "document renamed with the new plate",
     "Assemblage de": "Combining",
     "fichiers en un seul PDF…": "files into one PDF…",
     "fichiers réunis en un seul PDF": "files combined into one PDF",
@@ -6031,6 +6037,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "documents renommés avec la nouvelle plaque": "Dokumente mit dem neuen Kennzeichen umbenannt",
+    "document renommé avec la nouvelle plaque": "Dokument mit dem neuen Kennzeichen umbenannt",
     "Assemblage de": "Zusammenfügen von",
     "fichiers en un seul PDF…": "Dateien zu einem PDF…",
     "fichiers réunis en un seul PDF": "Dateien zu einem PDF zusammengefügt",
@@ -7127,6 +7135,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "documents renommés avec la nouvelle plaque": "documenten hernoemd met het nieuwe kenteken",
+    "document renommé avec la nouvelle plaque": "document hernoemd met het nieuwe kenteken",
     "Assemblage de": "Samenvoegen van",
     "fichiers en un seul PDF…": "bestanden tot één pdf…",
     "fichiers réunis en un seul PDF": "bestanden samengevoegd tot één pdf",
@@ -8054,7 +8064,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.59';
+const VERSION = '2.60';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -12237,6 +12247,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.60': { date: '26/10/2026', lignes: [
+    "Les documents en ligne sont désormais RENOMMÉS pour de bon avec la plaque du moment : après un changement de plaque (ou en ouvrant le dossier du véhicule), « 1-RXT-352_facture_2026-10-24.pdf » devient « 1-RXT-353_facture_2026-10-24.pdf » sur le serveur, et rejoint le dossier de la nouvelle plaque. Tous les fichiers téléchargés portent ainsi le même début : plaque, nom, date."
+  ] },
   '2.59': { date: '26/10/2026', lignes: [
     "Synchronisation : une plaque modifiée sur le téléphone n'arrivait pas sur le PC. En comptant les documents, le PC notait dans SA copie de la fiche les dossiers qu'il trouvait ; cette note comptait comme une modification, si bien que sa copie (avec l'ancienne plaque) paraissait plus récente et repartait vers le serveur. Ces notes ne comptent plus comme une modification, et sont fusionnées quand la fiche arrive de l'autre appareil."
   ] },
@@ -13800,6 +13813,9 @@ function fenetreModifierPlaque(id){
     saveVehicle(v);
     renderAll();
     bandeau(t('Plaque modifiée') + ' : ' + (ancienne || '—') + ' → ' + nouvelle, 'ok');
+    renommerDocumentsServeur(v).then(function(n){
+      if(n) bandeau(n + ' ' + t(n > 1 ? 'documents renommés avec la nouvelle plaque' : 'document renommé avec la nouvelle plaque'), 'ok');
+    }).catch(function(){});
   };
   fond.querySelector('.dlg-non').onclick = fermer;
   fond.querySelector('.dlg-oui').onclick = valider;
@@ -14508,8 +14524,9 @@ async function listerDocuments(v){
     const ajouter = function(f){
       if(!f || !f.nom) return;
       trouves++;
-      if(vus[f.nom]) return;
-      vus[f.nom] = 1; f.sous = f.sous || sous; sortie.push(f);
+      const cle = titreDocument(v, f.nom);
+      if(vus[cle]) return;
+      vus[cle] = 1; f.sous = f.sous || sous; sortie.push(f);
     };
     if(api && api.documents_vehicule){
       try{
@@ -14608,7 +14625,13 @@ function ouvrirDossierVehicule(id){
       + '</div>';
     return;
   }
-  listerDocuments(v).then(function(fichiers){
+  /* Une fois par session et par fiche : les documents encore nommes avec
+     une ancienne plaque sont renommes avant d'etre listes. */
+  window.__renommesSession = window.__renommesSession || {};
+  const harmoniser = (serveurPret() && !window.__renommesSession[id])
+    ? renommerDocumentsServeur(v).then(function(n){ window.__renommesSession[id] = 1; return n; }).catch(function(){ return 0; })
+    : Promise.resolve(0);
+  harmoniser.then(function(){ return listerDocuments(v); }).then(function(fichiers){
     if(!fichiers.length){
       liste.innerHTML = '<div class="doss-vide">'
         + esc(t('Aucun document enregistré pour l’instant.')) + '</div>';
@@ -16795,6 +16818,68 @@ function titreDocument(v, nom){
 function rangerSansDater(v){
   try{ ls.set('vehicle:' + v.id, JSON.stringify(v)); }catch(e){}
 }
+/* --- RENOMMER POUR DE BON SUR LE SERVEUR ---------------------------------
+   Apres un changement de plaque, les documents de la fiche sont deplaces
+   dans le dossier de la nouvelle plaque ET renommes avec elle :
+   « WW-590-MF_facture_2026-10-24.pdf » devient « 1-RXT-353_facture_2026-10-24.pdf ».
+   Ainsi un fichier telecharge (pour l'ANTS, par exemple) porte le meme
+   debut que les autres : plaque, nom, date.
+   Deplacement direct si le serveur l'accepte ; sinon copie sous le
+   nouveau nom puis effacement de l'ancien. Rien n'est efface si la
+   copie a echoue. */
+function nomFichierServeur(nom){
+  return accentsRetires(String(nom || 'document.pdf')).replace(/[^A-Za-z0-9_\-. ]/g, '_');
+}
+let renommageEnCours = false;
+async function renommerDocumentsServeur(v){
+  if(!v || !serveurPret() || renommageEnCours) return 0;
+  const cible = sousDossierVehicule(v);
+  if(!dossierPropre(cible)) return 0;
+  renommageEnCours = true;
+  let faits = 0;
+  try{
+    dossiersServeurCache.quand = 0;
+    try{ await retrouverAnciensDossiers(v); }catch(e){}
+    const racine = 'Autivio/' + nomCompteDossier() + '/';
+    const cibleNet = dossierNet(cible);
+    const deja = {};
+    ((await serveurListerDocuments(cible)) || []).forEach(function(f){ if(f && f.id) deja[f.name] = 1; });
+    for(const d of dossiersDeLaFiche(v)){
+      const dNet = dossierNet(d);
+      const liste = (await serveurListerDocuments(d)) || [];
+      for(const f of liste){
+        if(!f || !f.id || !f.name) continue;
+        const nouveau = nomFichierServeur(titreDocument(v, f.name));
+        if(dNet === cibleNet && nouveau === f.name) continue;     // deja bon
+        if(deja[nouveau]) continue;                               // un fichier porte deja ce nom
+        let ok = false;
+        try{
+          await serveurAppel('/storage/v1/object/move', { method: 'POST',
+            body: { bucketId: 'documents', sourceKey: racine + dNet + '/' + f.name,
+                    destinationKey: racine + cibleNet + '/' + nouveau } });
+          ok = true;
+        }catch(e){
+          /* Deplacement refuse : copie, puis effacement de l'ancien. */
+          try{
+            const octets = await serveurTelechargerDocument(dNet, f.name);
+            if(octets && await serveurDeposerDocument(nouveau, bytesToB64(octets),
+                 (f.metadata && f.metadata.mimetype) || 'application/pdf', cible)){
+              await serveurSupprimerDocuments(dNet, f.name);
+              ok = true;
+            }
+          }catch(e2){}
+        }
+        if(ok){
+          faits++; deja[nouveau] = 1;
+          (v.pieces || []).forEach(function(pc){ if(pc && pc.fichier === f.name) pc.fichier = nouveau; });
+        }
+      }
+    }
+    if(faits){ dossiersServeurCache.quand = 0; rangerSansDater(v); }
+  }finally{ renommageEnCours = false; }
+  return faits;
+}
+
 function memoriserDossier(v, d){
   if(!v || !dossierPropre(d)) return;
   if(!Array.isArray(v.dossiers)) v.dossiers = [];
@@ -16865,7 +16950,18 @@ document.addEventListener('change', function(e){
   const el = e.target;
   if(!el || el.tagName !== 'INPUT') return;
   if(!el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-fac="immat"]')) return;
-  try{ memoriserPlaque(vehicles[currentId], el.value); }catch(err){}
+  try{
+    const v = vehicles[currentId];
+    memoriserPlaque(v, el.value);
+    if(el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"]')){
+      clearTimeout(window.__minuteurRenommer);
+      window.__minuteurRenommer = setTimeout(function(){
+        renommerDocumentsServeur(v).then(function(n){
+          if(n) bandeau(n + ' ' + t(n > 1 ? 'documents renommés avec la nouvelle plaque' : 'document renommé avec la nouvelle plaque'), 'ok');
+        }).catch(function(){});
+      }, 1500);
+    }
+  }catch(err){}
 }, true);
 
 async function envoyerEnLigne(nomFichier, b64, mime, discret, sousDossier){
