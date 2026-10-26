@@ -88,7 +88,7 @@
   .v-item .badge{display:inline-block;margin-top:6px;font-size:10px;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;}
   .badge.stock{background:#3a4b66;color:#dfe6f0;}
   .badge.vendu{background:var(--ok);color:#eafff1;}
-  #settingsBtn,#exportBtn,#logoutBtn,#dossiersBtn,#notesBtn,.btn-import{background:transparent;color:var(--sidebar-ink);border:1px solid rgba(var(--voile),.18);padding:8px;border-radius:8px;cursor:pointer;font-size:12px;text-align:center;}
+  #settingsBtn,#exportBtn,#logoutBtn,#dossiersBtn,#notesBtn,#dossierImportBtn,.btn-import{background:transparent;color:var(--sidebar-ink);border:1px solid rgba(var(--voile),.18);padding:8px;border-radius:8px;cursor:pointer;font-size:12px;text-align:center;}
   /* La synchronisation est l'action vivante de cette barre : elle
      merite d'etre vue, sans crier plus fort que le reste. */
   #syncBtn{background:rgba(46,158,91,.14);color:#8fe3b0;
@@ -2117,6 +2117,7 @@
     <div class="sidebar-bas">
       <button id="dossiersBtn" data-fr="📁 Mes documents en ligne">📁 Mes documents en ligne</button>
       <label class="btn-import" id="convBtn"><span data-fr="📄 Convertir en PDF">📄 Convertir en PDF</span><input type="file" id="convInput" accept="image/*,application/pdf,.heic,.heif" multiple style="display:none"></label>
+      <button type="button" id="dossierImportBtn" data-fr="🗂 Importer un dossier">🗂 Importer un dossier</button>
       <label class="btn-import" id="pjBtn"><span data-fr="📎 Importer un document">📎 Importer un document</span><input type="file" id="pjInput" multiple style="display:none"></label>
       <button id="notesBtn" data-fr="🗒️ Voir les nouveautés">🗒️ Voir les nouveautés</button>
       <div style="display:flex;gap:6px">
@@ -2788,6 +2789,27 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "🗂 Importer un dossier": "🗂 Importa una cartella",
+    "Importer un dossier": "Importa una cartella",
+    "Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.": "Tutti i documenti saranno archiviati nella cartella di un veicolo. Poi ti verrà chiesta la targa.",
+    "Choisir un dossier": "Scegli una cartella",
+    "Choisir plusieurs fichiers ou un ZIP": "Scegli più file o uno ZIP",
+    "Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.": "Su iPhone: nell’app File, pressione lunga sulla cartella → «Comprimi», poi scegli lo ZIP qui.",
+    "Ce ZIP est illisible.": "Questo ZIP non è leggibile.",
+    "Quelle est la plaque ?": "Qual è la targa?",
+    "documents à ranger.": "documenti da archiviare.",
+    "document à ranger.": "documento da archiviare.",
+    "S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.": "Se esiste già una scheda con questa targa, vi si aggiungono; altrimenti viene creata una scheda.",
+    "Ranger les documents": "Archivia i documenti",
+    "Fiche existante": "Scheda esistente",
+    "Une nouvelle fiche sera créée pour cette plaque.": "Verrà creata una nuova scheda per questa targa.",
+    "Saisissez la plaque.": "Inserisci la targa.",
+    "Aucun document à importer dans ce choix.": "Nessun documento da importare in questa scelta.",
+    "Import du dossier…": "Importazione della cartella…",
+    "PDF protégé": "PDF protetto",
+    "documents rangés dans le dossier": "documenti archiviati nella cartella",
+    "document rangé dans le dossier": "documento archiviato nella cartella",
+    "Laissés de côté :": "Esclusi:",
     "documents renommés avec la nouvelle plaque": "documenti rinominati con la nuova targa",
     "document renommé avec la nouvelle plaque": "documento rinominato con la nuova targa",
     "Assemblage de": "Unione di",
@@ -3872,6 +3894,27 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "🗂 Importer un dossier": "🗂 En Dossier importéieren",
+    "Importer un dossier": "En Dossier importéieren",
+    "Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.": "All d’Dokumenter ginn am Dossier vun engem Gefier ofgeluecht. Duerno gëtt no der Plack gefrot.",
+    "Choisir un dossier": "En Dossier wielen",
+    "Choisir plusieurs fichiers ou un ZIP": "Méi Fichieren oder en ZIP wielen",
+    "Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.": "Um iPhone: an der App Fichieren laang op den Dossier drécken → „Kompriméieren“, dann hei den ZIP wielen.",
+    "Ce ZIP est illisible.": "Dësen ZIP ass net liesbar.",
+    "Quelle est la plaque ?": "Wéi ass d’Plack?",
+    "documents à ranger.": "Dokumenter ofzeleeën.",
+    "document à ranger.": "Dokument ofzeleeën.",
+    "S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.": "Gëtt et schonn eng Fiche mat dëser Plack, kommen se dohinner; soss gëtt eng Fiche ugeluecht.",
+    "Ranger les documents": "D’Dokumenter ofleeën",
+    "Fiche existante": "Bestoend Fiche",
+    "Une nouvelle fiche sera créée pour cette plaque.": "Fir dës Plack gëtt eng nei Fiche ugeluecht.",
+    "Saisissez la plaque.": "Gitt d’Plack an.",
+    "Aucun document à importer dans ce choix.": "Keen Dokument fir an dëser Auswiel z’importéieren.",
+    "Import du dossier…": "Dossier gëtt importéiert…",
+    "PDF protégé": "geschützte PDF",
+    "documents rangés dans le dossier": "Dokumenter am Dossier ofgeluecht",
+    "document rangé dans le dossier": "Dokument am Dossier ofgeluecht",
+    "Laissés de côté :": "Ewechgelooss:",
     "documents renommés avec la nouvelle plaque": "Dokumenter mat der neier Plack ëmbenannt",
     "document renommé avec la nouvelle plaque": "Dokument mat der neier Plack ëmbenannt",
     "Assemblage de": "Zesummesetze vun",
@@ -4955,6 +4998,27 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "🗂 Importer un dossier": "🗂 Import a folder",
+    "Importer un dossier": "Import a folder",
+    "Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.": "All documents will be filed in a vehicle's folder. You will be asked for the plate next.",
+    "Choisir un dossier": "Choose a folder",
+    "Choisir plusieurs fichiers ou un ZIP": "Choose several files or a ZIP",
+    "Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.": "On iPhone: in the Files app, long-press the folder → “Compress”, then choose the ZIP here.",
+    "Ce ZIP est illisible.": "This ZIP cannot be read.",
+    "Quelle est la plaque ?": "What is the plate?",
+    "documents à ranger.": "documents to file.",
+    "document à ranger.": "document to file.",
+    "S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.": "If a record with this plate already exists, they join it; otherwise a record is created.",
+    "Ranger les documents": "File the documents",
+    "Fiche existante": "Existing record",
+    "Une nouvelle fiche sera créée pour cette plaque.": "A new record will be created for this plate.",
+    "Saisissez la plaque.": "Enter the plate.",
+    "Aucun document à importer dans ce choix.": "No document to import in this selection.",
+    "Import du dossier…": "Importing the folder…",
+    "PDF protégé": "protected PDF",
+    "documents rangés dans le dossier": "documents filed in the folder",
+    "document rangé dans le dossier": "document filed in the folder",
+    "Laissés de côté :": "Left out:",
     "documents renommés avec la nouvelle plaque": "documents renamed with the new plate",
     "document renommé avec la nouvelle plaque": "document renamed with the new plate",
     "Assemblage de": "Combining",
@@ -6037,6 +6101,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "🗂 Importer un dossier": "🗂 Ordner importieren",
+    "Importer un dossier": "Ordner importieren",
+    "Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.": "Alle Dokumente werden im Ordner eines Fahrzeugs abgelegt. Danach wird das Kennzeichen abgefragt.",
+    "Choisir un dossier": "Ordner wählen",
+    "Choisir plusieurs fichiers ou un ZIP": "Mehrere Dateien oder ein ZIP wählen",
+    "Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.": "Auf dem iPhone: In der App Dateien lange auf den Ordner drücken → „Komprimieren“, dann hier das ZIP wählen.",
+    "Ce ZIP est illisible.": "Dieses ZIP ist nicht lesbar.",
+    "Quelle est la plaque ?": "Wie lautet das Kennzeichen?",
+    "documents à ranger.": "Dokumente abzulegen.",
+    "document à ranger.": "Dokument abzulegen.",
+    "S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.": "Gibt es bereits eine Akte mit diesem Kennzeichen, kommen sie dorthin; sonst wird eine Akte angelegt.",
+    "Plaque": "Kennzeichen",
+    "Ranger les documents": "Dokumente ablegen",
+    "Fiche existante": "Vorhandene Akte",
+    "Une nouvelle fiche sera créée pour cette plaque.": "Für dieses Kennzeichen wird eine neue Akte angelegt.",
+    "Saisissez la plaque.": "Geben Sie das Kennzeichen ein.",
+    "Aucun document à importer dans ce choix.": "Keine Dokumente zum Importieren in dieser Auswahl.",
+    "Import du dossier…": "Ordner wird importiert…",
+    "PDF protégé": "geschütztes PDF",
+    "documents rangés dans le dossier": "Dokumente im Ordner abgelegt",
+    "document rangé dans le dossier": "Dokument im Ordner abgelegt",
+    "Laissés de côté :": "Ausgelassen:",
     "documents renommés avec la nouvelle plaque": "Dokumente mit dem neuen Kennzeichen umbenannt",
     "document renommé avec la nouvelle plaque": "Dokument mit dem neuen Kennzeichen umbenannt",
     "Assemblage de": "Zusammenfügen von",
@@ -7135,6 +7221,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "🗂 Importer un dossier": "🗂 Map importeren",
+    "Importer un dossier": "Map importeren",
+    "Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.": "Alle documenten worden in de map van een voertuig opgeborgen. Daarna wordt het kenteken gevraagd.",
+    "Choisir un dossier": "Kies een map",
+    "Choisir plusieurs fichiers ou un ZIP": "Kies meerdere bestanden of een ZIP",
+    "Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.": "Op iPhone: houd in de app Bestanden de map ingedrukt → “Comprimeer”, kies dan hier de ZIP.",
+    "Ce ZIP est illisible.": "Deze ZIP is onleesbaar.",
+    "Quelle est la plaque ?": "Wat is het kenteken?",
+    "documents à ranger.": "documenten op te bergen.",
+    "document à ranger.": "document op te bergen.",
+    "S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.": "Bestaat er al een fiche met dit kenteken, dan komen ze daarbij; anders wordt een fiche aangemaakt.",
+    "Plaque": "Kenteken",
+    "Ranger les documents": "Documenten opbergen",
+    "Fiche existante": "Bestaande fiche",
+    "Une nouvelle fiche sera créée pour cette plaque.": "Voor dit kenteken wordt een nieuwe fiche aangemaakt.",
+    "Saisissez la plaque.": "Voer het kenteken in.",
+    "Aucun document à importer dans ce choix.": "Geen document om te importeren in deze keuze.",
+    "Import du dossier…": "Map wordt geïmporteerd…",
+    "PDF protégé": "beveiligde pdf",
+    "documents rangés dans le dossier": "documenten opgeborgen in de map",
+    "document rangé dans le dossier": "document opgeborgen in de map",
+    "Laissés de côté :": "Overgeslagen:",
     "documents renommés avec la nouvelle plaque": "documenten hernoemd met het nieuwe kenteken",
     "document renommé avec la nouvelle plaque": "document hernoemd met het nieuwe kenteken",
     "Assemblage de": "Samenvoegen van",
@@ -8064,7 +8172,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.60';
+const VERSION = '2.61';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -9970,6 +10078,9 @@ async function enterApp(){
      en cliquant le numero de version en haut a gauche. */
   const bn = document.getElementById('notesBtn');
   if(bn) bn.onclick = function(){ afficherNoteMiseAJour(true); };
+
+  const di = document.getElementById('dossierImportBtn');
+  if(di) di.onclick = function(){ choisirDossierAImporter().catch(function(e){ informer(e.message); }); };
 
   const conv = document.getElementById('convInput');
   if(conv) conv.onchange = function(){
@@ -12247,6 +12358,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.61': { date: '26/10/2026', lignes: [
+    "Nouveau bouton « 🗂 Importer un dossier » dans la barre de gauche : choisissez un dossier complet (sur ordinateur), plusieurs fichiers ou un ZIP (sur téléphone). Le logiciel demande ensuite la plaque — devinée d'après le nom du dossier quand c'est possible : si une fiche porte déjà cette plaque, les documents la rejoignent ; sinon une fiche est créée. Chaque fichier est rangé sous le nom habituel PLAQUE_nom_date ; photos et PDF passent sous 1 Mo."
+  ] },
   '2.60': { date: '26/10/2026', lignes: [
     "Les documents en ligne sont désormais RENOMMÉS pour de bon avec la plaque du moment : après un changement de plaque (ou en ouvrant le dossier du véhicule), « 1-RXT-352_facture_2026-10-24.pdf » devient « 1-RXT-353_facture_2026-10-24.pdf » sur le serveur, et rejoint le dossier de la nouvelle plaque. Tous les fichiers téléchargés portent ainsi le même début : plaque, nom, date."
   ] },
@@ -31007,6 +31121,282 @@ function choisirTypeDocument(){
       b.onclick = function(){ fond.remove(); resolve(b.dataset.type); };
     });
   });
+}
+
+
+/* =====================================================================
+   IMPORTER UN DOSSIER COMPLET
+   On choisit un dossier (sur ordinateur), plusieurs fichiers ou un ZIP
+   (sur telephone : l'iPhone ne sait pas choisir un dossier, mais
+   l'appli Fichiers sait le compresser en ZIP). Le logiciel demande
+   ensuite la plaque : si une fiche porte deja cette plaque, les
+   documents la rejoignent ; sinon une fiche est creee.
+   Chaque fichier devient un document du dossier, nomme comme les
+   autres : PLAQUE_nom_date. Photos et PDF passent sous 1 Mo (les photos
+   deviennent des PDF) ; un autre fichier de plus de 1 Mo est ecarte.
+   ===================================================================== */
+const FICHIERS_IGNORES = /^(\.|~\$|thumbs\.db$|desktop\.ini$|__macosx)/i;
+
+function choisirFichiersDossier(dossier){
+  return new Promise(function(resoudre){
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.multiple = true;
+    if(dossier){ inp.webkitdirectory = true; inp.setAttribute('webkitdirectory', ''); inp.setAttribute('directory', ''); }
+    inp.style.display = 'none';
+    document.body.appendChild(inp);
+    inp.onchange = function(){
+      const l = Array.prototype.slice.call(inp.files || []);
+      inp.remove();
+      resoudre(l);
+    };
+    inp.click();
+  });
+}
+
+async function choisirDossierAImporter(){
+  const tactile = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
+  const choix = await new Promise(function(resolve){
+    document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+    const fond = document.createElement('div');
+    fond.className = 'dlg-fond';
+    fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+      + '<div class="dlg-titre">🗂 ' + esc(t('Importer un dossier')) + '</div>'
+      + '<div class="dlg-texte">' + esc(t('Tous les documents seront rangés dans le dossier d’un véhicule. La plaque vous sera demandée ensuite.')) + '</div>'
+      + '<div class="choix-type-doc">'
+      +   (tactile ? '' : '<button type="button" class="btn-sec" data-c="dossier">📁 ' + esc(t('Choisir un dossier')) + '</button>')
+      +   '<button type="button" class="btn-sec" data-c="fichiers">📄 ' + esc(t('Choisir plusieurs fichiers ou un ZIP')) + '</button>'
+      +   '<button type="button" class="btn-sec" data-c="">' + esc(t('Annuler')) + '</button>'
+      + '</div>'
+      + (tactile ? '<div class="dlg-detail">' + esc(t('Sur iPhone : dans l’app Fichiers, appui long sur le dossier → « Compresser », puis choisissez le ZIP ici.')) + '</div>' : '')
+      + '</div>';
+    document.body.appendChild(fond);
+    fond.querySelectorAll('[data-c]').forEach(function(b){ b.onclick = function(){ fond.remove(); resolve(b.dataset.c); }; });
+  });
+  if(!choix) return;
+  const liste = await choisirFichiersDossier(choix === 'dossier');
+  if(!liste.length) return;
+  await importerDossier(liste);
+}
+
+/* Le contenu d'un ZIP, sans bibliotheque : la decompression est faite
+   par le navigateur (DecompressionStream). */
+async function lireZip(fichier){
+  const o = new Uint8Array(await fichier.arrayBuffer());
+  const dv = new DataView(o.buffer, o.byteOffset, o.byteLength);
+  let fin = -1;
+  for(let i = o.length - 22; i >= Math.max(0, o.length - 65557); i--){
+    if(dv.getUint32(i, true) === 0x06054b50){ fin = i; break; }
+  }
+  if(fin < 0) throw new Error(t('Ce ZIP est illisible.'));
+  const n = dv.getUint16(fin + 10, true);
+  let pos = dv.getUint32(fin + 16, true);
+  const sortie = [];
+  for(let k = 0; k < n; k++){
+    if(dv.getUint32(pos, true) !== 0x02014b50) break;
+    const methode = dv.getUint16(pos + 10, true);
+    const taille = dv.getUint32(pos + 20, true);
+    const lnom = dv.getUint16(pos + 28, true), lext = dv.getUint16(pos + 30, true), lcom = dv.getUint16(pos + 32, true);
+    const local = dv.getUint32(pos + 42, true);
+    const nom = new TextDecoder().decode(o.subarray(pos + 46, pos + 46 + lnom));
+    pos += 46 + lnom + lext + lcom;
+    if(/\/$/.test(nom)) continue;                                   // un dossier
+    const court = nom.split('/').pop();
+    if(!court || FICHIERS_IGNORES.test(court) || /(^|\/)__MACOSX\//i.test(nom)) continue;
+    const debut = local + 30 + dv.getUint16(local + 26, true) + dv.getUint16(local + 28, true);
+    const brut = o.subarray(debut, debut + taille);
+    let donnees;
+    if(methode === 0) donnees = brut.slice();
+    else if(methode === 8 && typeof DecompressionStream !== 'undefined'){
+      const flux = new Blob([brut]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      donnees = new Uint8Array(await new Response(flux).arrayBuffer());
+    }else continue;
+    sortie.push(new File([donnees], court, { type: typeMimeDe(court) }));
+  }
+  return sortie;
+}
+function typeMimeDe(nom){
+  const e = extensionDe(nom);
+  return ({ pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp',
+            gif: 'image/gif', heic: 'image/heic', heif: 'image/heif', doc: 'application/msword',
+            docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            xls: 'application/vnd.ms-excel', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            txt: 'text/plain' })[e] || 'application/octet-stream';
+}
+
+/* La plaque devinee d'apres le nom du dossier ou des fichiers :
+   « 1-RXT-352_WVW... », « AB-123-CD facture.pdf ». */
+function plaqueDevinee(noms){
+  for(const n of noms){
+    const m = String(n || '').toUpperCase().match(/(^|[\/\\\s_])([A-Z0-9]{1,3}-[A-Z0-9]{2,4}-[A-Z0-9]{2,3})(?=[_\s.\/]|$)/);
+    if(m && /\d/.test(m[2]) && /[A-Z]/.test(m[2])) return m[2];
+  }
+  return '';
+}
+
+/* La fiche qui porte (ou a porte) cette plaque. */
+function plaqueNue(p){ return prefixePlaque(p).replace(/[^A-Z0-9]/g, ''); }
+function ficheParPlaque(plaque){
+  const k = plaqueNue(plaque);
+  if(k.length < 4) return null;
+  for(const id of vehicleOrder){
+    const v = vehicles[id];
+    if(!v) continue;
+    if(plaqueNue(v.vehicule.immat) === k) return v;
+    if((v.plaques || []).some(function(p){ return plaqueNue(p) === k; })) return v;
+  }
+  return null;
+}
+/* Le pays d'apres l'allure de la plaque, quand elle est sans ambiguite. */
+function paysDeLaPlaque(p){
+  const n = plaqueNue(p);
+  if(/^[A-Z]{2}\d{3}[A-Z]{2}$/.test(n)) return 'FR';
+  if(/^W{1,2}\d{3}[A-Z]{2}$/.test(n)) return 'FR';
+  if(/^\d[A-Z]{3}\d{3}$/.test(n)) return 'BE';
+  return '';
+}
+
+function demanderPlaqueImport(proposee, nb){
+  return new Promise(function(resolve){
+    document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+    let pays = paysDeLaPlaque(proposee) || 'FR';
+    const fond = document.createElement('div');
+    fond.className = 'dlg-fond';
+    fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+      + '<div class="dlg-titre">🗂 ' + esc(t('Quelle est la plaque ?')) + '</div>'
+      + '<div class="dlg-texte">' + nb + ' ' + esc(t(nb > 1 ? 'documents à ranger.' : 'document à ranger.')) + ' '
+      +   esc(t('S’il existe déjà une fiche avec cette plaque, ils la rejoignent ; sinon une fiche est créée.')) + '</div>'
+      + '<label class="plaque-lab">' + esc(t('Pays d’immatriculation')) + '</label>'
+      + '<div class="plaque-pays"><button type="button" class="pays-liste-btn" id="impPaysBtn"></button>'
+      +   '<div class="plaque-pays-liste" id="impPaysListe" hidden>'
+      +     PAYS_PLAQUE.map(function(x){
+              return '<button type="button" class="plaque-pays-item" data-pays="' + x[0] + '">'
+                + '<span class="pays-liste-drapeau">' + drapeauSVG(x[3], 24) + '</span>'
+                + '<span class="pays-liste-nom">' + esc(nomPaysPlaque(x)) + '</span>'
+                + (x[2] ? '<span class="pays-liste-format mono">' + esc(x[2]) + '</span>' : '') + '</button>';
+            }).join('')
+      +   '</div></div>'
+      + '<label class="plaque-lab">' + esc(t('Plaque')) + '</label>'
+      + '<input class="dlg-champ mono" id="impPlaque" autocomplete="off" autocapitalize="characters" spellcheck="false">'
+      + '<div class="dlg-detail" id="impAide"></div>'
+      + '<div class="dlg-actions">'
+      +   '<button type="button" class="dlg-non">' + esc(t('Annuler')) + '</button>'
+      +   '<button type="button" class="dlg-oui">' + esc(t('Ranger les documents')) + '</button>'
+      + '</div></div>';
+    document.body.appendChild(fond);
+    const inp = fond.querySelector('#impPlaque'), aide = fond.querySelector('#impAide');
+    const btn = fond.querySelector('#impPaysBtn'), liste = fond.querySelector('#impPaysListe');
+    const dessiner = function(){
+      const x = PAYS_PLAQUE.filter(function(p){ return p[0] === pays; })[0] || PAYS_PLAQUE[0];
+      btn.innerHTML = '<span class="pays-liste-drapeau">' + drapeauSVG(x[3], 24) + '</span>'
+        + '<span class="pays-liste-nom">' + esc(nomPaysPlaque(x)) + '</span>'
+        + (x[2] ? '<span class="pays-liste-format mono">' + esc(x[2]) + '</span>' : '')
+        + '<span class="pays-liste-chev">' + DS_CHEVRON + '</span>';
+      inp.placeholder = x[2] || '';
+      liste.querySelectorAll('.plaque-pays-item').forEach(function(b){ b.classList.toggle('actif', b.dataset.pays === pays); });
+    };
+    const majAide = function(){
+      const v = ficheParPlaque(inp.value);
+      aide.textContent = !inp.value.trim() ? ''
+        : v ? '✓ ' + t('Fiche existante') + ' : ' + ([v.vehicule.marque, v.vehicule.modele].filter(Boolean).join(' ') || v.vehicule.immat)
+            : '＋ ' + t('Une nouvelle fiche sera créée pour cette plaque.');
+    };
+    btn.onclick = function(){ liste.hidden = !liste.hidden; };
+    liste.querySelectorAll('.plaque-pays-item').forEach(function(b){
+      b.onclick = function(){ pays = b.dataset.pays; liste.hidden = true; dessiner(); inp.value = formatPlate(inp.value, pays); majAide(); inp.focus(); };
+    });
+    inp.value = proposee ? formatPlate(proposee, pays) : '';
+    dessiner(); majAide();
+    inp.addEventListener('input', function(){
+      /* Une plaque d'une allure claire choisit son pays toute seule. */
+      const devine = paysDeLaPlaque(inp.value);
+      if(devine && devine !== pays){ pays = devine; dessiner(); }
+      replaceKeepingCaret(inp, formatPlate(inp.value, pays)); majAide();
+    });
+    const fermer = function(r){ fond.remove(); resolve(r); };
+    const valider = function(){
+      const p = formatPlate(String(inp.value || '').trim().toUpperCase(), pays);
+      if(!p){ aide.textContent = t('Saisissez la plaque.'); inp.focus(); return; }
+      fermer({ plaque: p, pays: pays });
+    };
+    fond.querySelector('.dlg-non').onclick = function(){ fermer(null); };
+    fond.querySelector('.dlg-oui').onclick = valider;
+    inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); valider(); } });
+    setTimeout(function(){ inp.focus(); }, 30);
+  });
+}
+
+async function importerDossier(liste){
+  /* Les ZIP sont ouverts, les fichiers caches ou systeme ignores. */
+  let fichiers = [];
+  for(const f of liste){
+    if(!f || FICHIERS_IGNORES.test(f.name || '')) continue;
+    if(extensionDe(f.name) === 'zip'){
+      try{ (await lireZip(f)).forEach(function(x){ fichiers.push(x); }); }
+      catch(e){ await informer((f.name || 'ZIP') + ' : ' + e.message); }
+    }else fichiers.push(f);
+  }
+  if(!fichiers.length){ await informer(t('Aucun document à importer dans ce choix.')); return; }
+
+  const chemins = liste.map(function(f){ return f.webkitRelativePath || f.name || ''; });
+  const rep = await demanderPlaqueImport(plaqueDevinee(chemins.concat(fichiers.map(function(f){ return f.name; }))), fichiers.length);
+  if(!rep) return;
+
+  let v = ficheParPlaque(rep.plaque);
+  if(!v){
+    v = blankVehicle();
+    v.vehicule.immat = rep.plaque;
+    v.vehicule.paysImmat = rep.pays;
+    vehicles[v.id] = v; vehicleOrder.unshift(v.id);
+    memoriserPlaque(v, rep.plaque);
+    await saveVehicle(v); await saveIndex();
+    renderSidebar();
+  }
+  const plaque = prefixePlaque(v.vehicule.immat || v.vehicule.vin) || 'SANS-PLAQUE';
+  const aujourdhui = new Date().toISOString().slice(0, 10);
+  const pris = {};
+  let faits = 0;
+  const ecartes = [];
+  for(let i = 0; i < fichiers.length; i++){
+    const f = fichiers[i];
+    bandeauEnvoi(t('Import du dossier…') + ' ' + (i + 1) + '/' + fichiers.length);
+    try{
+      if(f.size > 25 * 1024 * 1024){ ecartes.push(f.name + ' (> 25 Mo)'); continue; }
+      /* Le nom : celui du fichier, sans une eventuelle plaque devant ni
+         date derriere (un dossier deja exporte d'Autivio), puis
+         PLAQUE_nom_date comme tous les documents. */
+      let base = String(f.name || 'document').replace(/\.[^.]+$/, '');
+      let date = aujourdhui;
+      const md = base.match(/[_\s-](\d{4}-\d{2}-\d{2})$/);
+      if(md){ date = md[1]; base = base.slice(0, -md[0].length); }
+      base = base.replace(/^[A-Z0-9]{1,3}-[A-Z0-9]{2,4}-[A-Z0-9]{2,3}_/i, '');
+      let b64, mime, ext;
+      if(estImage(f)){
+        const fait = await photoVersPdf(f); b64 = fait.b64; mime = 'application/pdf'; ext = 'pdf';
+      }else if(estPdf(f)){
+        const fait = await allegerPdf(f);
+        if(!fait){ ecartes.push(f.name + ' (' + t('PDF protégé') + ')'); continue; }
+        b64 = fait.b64; mime = 'application/pdf'; ext = 'pdf';
+      }else{
+        if(f.size > POIDS_MAXI_OCTETS){ ecartes.push(f.name + ' (> 1 Mo)'); continue; }
+        b64 = await lireFichierB64(f); mime = f.type || typeMimeDe(f.name); ext = extensionDe(f.name);
+      }
+      let nom = plaque + '_' + nomPourFichier(base) + '_' + date + (ext ? '.' + ext : '');
+      for(let k = 2; pris[nom]; k++) nom = plaque + '_' + nomPourFichier(base) + '-' + k + '_' + date + (ext ? '.' + ext : '');
+      pris[nom] = 1;
+      const ok = await envoyerEnLigne(nom, b64, mime, true, dossierDuVehicule(v));
+      if(!v.pieces) v.pieces = [];
+      v.pieces.push({ nom: base.replace(/[-_]+/g, ' ').trim() || t('Document'), fichier: nom,
+                      taille: Math.round(b64.length * 3 / 4), date: Date.now(), enLigne: !!ok, pages: 1 });
+      faits++;
+    }catch(e){ ecartes.push(f.name + ' (' + (e.message || e) + ')'); }
+  }
+  await saveVehicle(v);
+  currentId = v.id;
+  renderAll();
+  bandeauEnvoi('');
+  await informer(faits + ' ' + t(faits > 1 ? 'documents rangés dans le dossier' : 'document rangé dans le dossier') + ' ' + v.vehicule.immat + '.'
+    + (ecartes.length ? '\n\n' + t('Laissés de côté :') + '\n• ' + ecartes.join('\n• ') : ''));
 }
 
 /* --- IMPORTER PLUSIEURS FICHIERS D'UN COUP ------------------------------
