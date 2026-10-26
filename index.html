@@ -856,6 +856,8 @@
   @keyframes btEnregistre{0%{transform:scale(.97);}60%{transform:scale(1.02);}100%{transform:none;}}
   /* ---- Donnees personnelles (reglages) ---- */
   .choix-type-doc{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .plaque-lab{display:block;font-size:12.5px;color:var(--ink-soft);margin:12px 0 4px;}
+  #plaqueNouvelle{font-size:20px;letter-spacing:.06em;text-transform:uppercase;}
   .choix-type-doc button{text-align:left;padding:12px 14px;font-size:14.5px;}
   .rgpd-carte{border:1px solid var(--line,#e2e8f2);border-radius:12px;padding:16px 18px;margin:14px 0;
     background:var(--panel,#fff);}
@@ -2772,6 +2774,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Modifier la plaque": "Modifica la targa",
+    "plaque actuelle": "targa attuale",
+    "Pays d’immatriculation": "Paese di immatricolazione",
+    "Nouvelle plaque": "Nuova targa",
+    "Les documents déjà rangés restent avec la fiche.": "I documenti già archiviati restano con la scheda.",
+    "Saisissez la nouvelle plaque.": "Inserisci la nuova targa.",
+    "Plaque modifiée": "Targa modificata",
     "Aucune fiche véhicule pour l’instant : créez-en une avec « + Nouveau véhicule », ou choisissez « Exporter ».": "Ancora nessuna scheda veicolo: creane una con «+ Nuovo veicolo», oppure scegli «Esporta».",
     "octets": "byte",
     "Exporter le PDF": "Esporta il PDF",
@@ -3831,6 +3840,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Modifier la plaque": "Plack änneren",
+    "plaque actuelle": "aktuell Plack",
+    "Pays d’immatriculation": "Immatrikulatiounsland",
+    "Nouvelle plaque": "Nei Plack",
+    "Les documents déjà rangés restent avec la fiche.": "Schonn ofgeluecht Dokumenter bleiwen bei der Fiche.",
+    "Saisissez la nouvelle plaque.": "Gitt déi nei Plack an.",
+    "Plaque modifiée": "Plack geännert",
     "Aucune fiche véhicule pour l’instant : créez-en une avec « + Nouveau véhicule », ou choisissez « Exporter ».": "Nach keng Gefierfiche: maacht eng mat „+ Neit Gefier“, oder wielt „Exportéieren“.",
     "octets": "Bytes",
     "Exporter le PDF": "PDF exportéieren",
@@ -4889,6 +4905,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Modifier la plaque": "Change the plate",
+    "plaque actuelle": "current plate",
+    "Pays d’immatriculation": "Country of registration",
+    "Nouvelle plaque": "New plate",
+    "Les documents déjà rangés restent avec la fiche.": "Documents already filed stay with the record.",
+    "Saisissez la nouvelle plaque.": "Enter the new plate.",
+    "Plaque modifiée": "Plate changed",
     "Aucune fiche véhicule pour l’instant : créez-en une avec « + Nouveau véhicule », ou choisissez « Exporter ».": "No vehicle record yet: create one with “+ New vehicle”, or choose “Export”.",
     "octets": "bytes",
     "Exporter le PDF": "Export the PDF",
@@ -5946,6 +5969,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Modifier la plaque": "Kennzeichen ändern",
+    "plaque actuelle": "aktuelles Kennzeichen",
+    "Pays d’immatriculation": "Zulassungsland",
+    "Nouvelle plaque": "Neues Kennzeichen",
+    "Les documents déjà rangés restent avec la fiche.": "Bereits abgelegte Dokumente bleiben bei der Akte.",
+    "Saisissez la nouvelle plaque.": "Geben Sie das neue Kennzeichen ein.",
+    "Plaque modifiée": "Kennzeichen geändert",
     "Aucune fiche véhicule pour l’instant : créez-en une avec « + Nouveau véhicule », ou choisissez « Exporter ».": "Noch keine Fahrzeugakte: Legen Sie eine mit „+ Neues Fahrzeug“ an oder wählen Sie „Exportieren“.",
     "octets": "Bytes",
     "Exporter le PDF": "PDF exportieren",
@@ -7019,6 +7049,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Modifier la plaque": "Kenteken wijzigen",
+    "plaque actuelle": "huidig kenteken",
+    "Pays d’immatriculation": "Land van inschrijving",
+    "Nouvelle plaque": "Nieuw kenteken",
+    "Les documents déjà rangés restent avec la fiche.": "Reeds opgeborgen documenten blijven bij de fiche.",
+    "Saisissez la nouvelle plaque.": "Voer het nieuwe kenteken in.",
+    "Plaque modifiée": "Kenteken gewijzigd",
     "Aucune fiche véhicule pour l’instant : créez-en une avec « + Nouveau véhicule », ou choisissez « Exporter ».": "Nog geen voertuigfiche: maak er een aan met “+ Nieuw voertuig”, of kies “Exporteren”.",
     "octets": "bytes",
     "Exporter le PDF": "Pdf exporteren",
@@ -7923,7 +7960,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.53';
+const VERSION = '2.54';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -12096,6 +12133,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.54': { date: '26/10/2026', lignes: [
+    "« ✏️ Modifier la plaque » dans le menu d'une fiche (clic droit, ou appui long sur téléphone) : choisissez le pays et tapez la nouvelle plaque, mise en forme à la frappe. Elle remplace l'ancienne sur la fiche, la facture et les contrats, et les documents déjà rangés restent affichés avec la fiche."
+  ] },
   '2.53': { date: '26/10/2026', lignes: [
     "Convertir en PDF : une fois le PDF prêt (moins de 1 Mo, poids affiché), le logiciel demande quoi en faire — le ranger dans le dossier d'un véhicule (choix de la voiture et du nom, comme « Importer un document »), ou l'exporter : téléchargement sur ordinateur, menu de partage sur téléphone (« Enregistrer dans Fichiers », e-mail, WhatsApp, Drive…)."
   ] },
@@ -13565,12 +13605,85 @@ async function fenetrePartage(id){
 }
 
 
+/* --- MODIFIER LA PLAQUE ------------------------------------------------
+   Une petite fenetre : le pays, la plaque (mise en forme a la frappe).
+   La nouvelle plaque remplace l'ancienne partout ou elle figurait — la
+   fiche, la facture, les contrats — et l'ancien dossier reste rattache
+   a la fiche : ses documents continuent de s'afficher. */
+function fenetreModifierPlaque(id){
+  const v = vehicles[id];
+  if(!v) return;
+  document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+  const ancienne = String(v.vehicule.immat || '').trim();
+  let pays = paysPlaque(v);
+  const fond = document.createElement('div');
+  fond.className = 'dlg-fond';
+  fond.innerHTML = '<div class="dlg" role="dialog" aria-modal="true">'
+    + '<div class="dlg-titre">✏️ ' + esc(t('Modifier la plaque')) + '</div>'
+    + '<div class="dlg-texte">' + esc([v.vehicule.marque, v.vehicule.modele].filter(Boolean).join(' ') || t('Véhicule sans marque'))
+    +   (ancienne ? ' — ' + esc(t('plaque actuelle')) + ' : <b class="mono">' + esc(ancienne) + '</b>' : '') + '</div>'
+    + '<label class="plaque-lab">' + esc(t('Pays d’immatriculation')) + '</label>'
+    + '<select class="dlg-champ" id="plaquePays">'
+    +   PAYS_PLAQUE.map(function(x){
+          return '<option value="' + x[0] + '"' + (x[0] === pays ? ' selected' : '') + '>' + esc(nomPaysPlaque(x)) + (x[2] ? ' — ' + esc(x[2]) : '') + '</option>';
+        }).join('')
+    + '</select>'
+    + '<label class="plaque-lab">' + esc(t('Nouvelle plaque')) + '</label>'
+    + '<input class="dlg-champ mono" id="plaqueNouvelle" autocomplete="off" autocapitalize="characters" spellcheck="false">'
+    + '<div class="dlg-detail" id="plaqueAide"></div>'
+    + '<div class="dlg-actions">'
+    +   '<button type="button" class="dlg-non">' + esc(t('Annuler')) + '</button>'
+    +   '<button type="button" class="dlg-oui">' + esc(t('Enregistrer')) + '</button>'
+    + '</div></div>';
+  document.body.appendChild(fond);
+  const inp = fond.querySelector('#plaqueNouvelle');
+  const choixPays = fond.querySelector('#plaquePays');
+  const aide = fond.querySelector('#plaqueAide');
+  const exemple = function(){
+    const x = PAYS_PLAQUE.filter(function(p){ return p[0] === pays; })[0];
+    inp.placeholder = (x && x[2]) || '';
+    aide.textContent = t('Les documents déjà rangés restent avec la fiche.');
+  };
+  inp.value = ancienne;
+  exemple();
+  inp.addEventListener('input', function(){ replaceKeepingCaret(inp, formatPlate(inp.value, pays)); });
+  choixPays.onchange = function(){ pays = choixPays.value; inp.value = formatPlate(inp.value, pays); exemple(); inp.focus(); };
+  const fermer = function(){ fond.remove(); };
+  const valider = function(){
+    const nouvelle = formatPlate(String(inp.value || '').trim().toUpperCase(), pays);
+    if(!nouvelle){ aide.textContent = t('Saisissez la nouvelle plaque.'); inp.focus(); return; }
+    fermer();
+    if(nouvelle === ancienne && pays === paysPlaque(v)) return;
+    /* L'ancien dossier et l'ancienne plaque restent attaches a la fiche. */
+    memoriserDossier(v, sousDossierVehicule(v));
+    memoriserPlaque(v, ancienne);
+    v.vehicule.immat = nouvelle;
+    v.vehicule.paysImmat = pays;
+    /* La meme plaque ailleurs dans la fiche suit le changement ; une
+       plaque differente, saisie expres sur un document, est respectee. */
+    const pareil = function(x){ return !String(x || '').trim() || String(x).trim().toUpperCase() === ancienne.toUpperCase(); };
+    if(v.facture && pareil(v.facture.immat)) v.facture.immat = nouvelle;
+    if(v.contrat && pareil(v.contrat.plaque)) v.contrat.plaque = nouvelle;
+    if(v.contratPro && pareil(v.contratPro.plaque)) v.contratPro.plaque = nouvelle;
+    memoriserPlaque(v, nouvelle);
+    saveVehicle(v);
+    renderAll();
+    bandeau(t('Plaque modifiée') + ' : ' + (ancienne || '—') + ' → ' + nouvelle, 'ok');
+  };
+  fond.querySelector('.dlg-non').onclick = fermer;
+  fond.querySelector('.dlg-oui').onclick = valider;
+  inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); valider(); } if(e.key === 'Escape') fermer(); });
+  fond.onclick = function(e){ if(e.target === fond) fermer(); };
+  setTimeout(function(){ inp.focus(); inp.select(); }, 30);
+}
+
 function menuFiche(x, y, id){
   document.querySelectorAll('.menu-fiche').forEach(function(m){ m.remove(); });
   const m = document.createElement('div');
   m.className = 'menu-fiche';
   m.innerHTML =
       '<button type="button" data-act="ouvrir">' + t('Ouvrir la fiche') + '</button>'
+    + '<button type="button" data-act="plaque">✏️ ' + t('Modifier la plaque') + '</button>'
     + '<button type="button" data-act="choisir">' + t('Sélectionner plusieurs fiches') + '</button>'
     + '<button type="button" data-act="partager">🔗 ' + t('Partager les documents') + '</button>'
     + '<button type="button" data-act="supprimer" class="rouge">🗑 ' + t('Supprimer cette fiche') + '</button>';
@@ -13584,6 +13697,7 @@ function menuFiche(x, y, id){
     m.remove(); currentId = id; currentDoc = 'achat'; vueCourante = 'vehicule'; renderAll();
   };
   m.querySelector('[data-act="choisir"]').onclick = function(){ m.remove(); entrerSelection(id); };
+  m.querySelector('[data-act="plaque"]').onclick = function(){ m.remove(); fenetreModifierPlaque(id); };
   m.querySelector('[data-act="partager"]').onclick = function(){ m.remove(); fenetrePartage(id); };
   m.querySelector('[data-act="supprimer"]').onclick = function(){ m.remove(); supprimerFiches([id]); };
 
