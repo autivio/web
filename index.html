@@ -2913,6 +2913,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Stop & Start": "Start & Stop",
+    "d’après la motorisation": "in base alla motorizzazione",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Scheda già generata per questa motorizzazione: ripresa senza nuova ricerca. Verificala prima di scaricare il PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Ricerca con l’IA (pochi centesimi), una sola volta: poi l’elenco è gratuito per tutte le officine.",
     "CV fiscaux": "Cavalli fiscali (CV)",
@@ -4298,6 +4300,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Stop & Start": "Start-Stopp",
+    "d’après la motorisation": "no der Motorisatioun",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche fir dës Motorisatioun schonn erstallt: ouni nei Sich iwwerholl. Iwwerpréift se ier Dir de PDF eroflued.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Sich mat der KI (e puer Cent), nëmmen eemol: duerno ass d’Lëscht gratis fir all Garagen.",
     "CV fiscaux": "Steier-PS (CV)",
@@ -5682,6 +5686,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Stop & Start": "Stop & Start",
+    "d’après la motorisation": "based on the engine",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Data sheet already generated for this engine: reused without a new search. Check it before downloading the PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "AI search (a few cents), only once: the list is then free for every garage.",
     "CV fiscaux": "Tax horsepower (CV)",
@@ -7065,6 +7071,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Stop & Start": "Start-Stopp",
+    "d’après la motorisation": "laut Motorisierung",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Datenblatt für diese Motorisierung bereits erstellt: ohne neue Suche übernommen. Prüfen Sie es vor dem Herunterladen der PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Suche per KI (wenige Cent), nur einmal: danach steht die Liste allen Werkstätten kostenlos zur Verfügung.",
     "CV fiscaux": "Steuer-PS (CV)",
@@ -8468,6 +8476,8 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Stop & Start": "Start-stop",
+    "d’après la motorisation": "volgens de motor",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche al gemaakt voor deze motor: overgenomen zonder nieuwe zoekopdracht. Controleer ze voordat u de PDF downloadt.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Zoeken met AI (enkele centen), slechts één keer: daarna is de lijst gratis voor alle garages.",
     "CV fiscaux": "Fiscale pk (CV)",
@@ -9703,7 +9713,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.00';
+const VERSION = '3.02';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13896,6 +13906,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.02': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : la motorisation du véhicule (ex. « 1.6 e-HDi 115 FAP ») est toujours choisie dans la liste, même quand la liste des versions du modèle ne la connaît pas ou l’a écartée : plus de « Autre (saisie libre) » pour une motorisation déjà trouvée."
+  ] },
+  '3.01': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien et « Identifier le véhicule » : nouvelle case « Stop & Start » (Oui / Non / Je ne sais pas). Elle est envoyée à l’IA, qui ne confond plus deux moteurs voisins (ex. 1.6 HDi 110 9HR sans, 1.6 e-HDi 115 9HL avec), et elle filtre la liste des motorisations.",
+    "Elle se remplit toute seule quand la motorisation l’indique (e-HDi, S&S, BlueMotion…)."
+  ] },
   '3.00': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : dès que le code moteur ou la motorisation est trouvé, la puissance (ch), les CV fiscaux et le code moteur se remplissent tout seuls — après « Identifier le véhicule » (même quand la liste des versions du modèle n’est pas encore connue), en choisissant une version, en tapant la motorisation, ou en tapant le code moteur (ex. « RHH » → 2.0 HDi 150, 150 ch, 8 CV).",
     "Ce que vous avez tapé vous-même n’est jamais remplacé."
@@ -36239,7 +36256,7 @@ const CARNET_COLONNES_DEFAUT = ['Huile moteur', 'Filtre à huile', 'Filtre à ai
 function ensureCarnet(v){
   if(!v.carnet || typeof v.carnet !== 'object') v.carnet = {};
   const c = v.carnet;
-  ['motorisation', 'generation', 'boite', 'codeMoteur', 'photo', 'distribution'].forEach(function(k){
+  ['motorisation', 'generation', 'boite', 'codeMoteur', 'photo', 'distribution', 'startStop'].forEach(function(k){
     if(typeof c[k] !== 'string') c[k] = '';
   });
   if(!Array.isArray(c.entretiens)) c.entretiens = [];
@@ -36304,7 +36321,7 @@ function opCochee(ops, o){ return (ops || []).some(function(x){ return opMeme(x,
    memes donnees techniques, inutile de repayer l'IA. */
 function cleTechnique(v){
   const veh = v.vehicule || {}, c = v.carnet || {};
-  return [veh.marque, veh.modele, c.generation, c.motorisation, c.boite, c.codeMoteur, veh.energie, c.puissanceCh, c.distribution]
+  return [veh.marque, veh.modele, c.generation, c.motorisation, c.boite, c.codeMoteur, veh.energie, c.puissanceCh, c.distribution, c.startStop]
     .map(function(x){ return sansAccents(String(x || '')).replace(/[^A-Z0-9]/g, ''); }).join('|');
 }
 
@@ -36367,6 +36384,8 @@ function appliquerMotorisation(v, m, garderNom){
     if(d && !distributionDuCode(c.codeMoteur)){ c.distribution = d; auto.distribution = d; }
   }
   if(!veh.energie && m.energie){ const e = codeEnergieDeFamille(m.energie); if(e) veh.energie = e; }
+  const ss = startStopDepuisTexte(m.stop_start) || startStopDepuisTexte(m.nom);
+  if(ss && libre(c.startStop, 'startStop')){ c.startStop = ss; c.startStopAuto = true; auto.startStop = ss; }
   c.autoMoto = auto;
 }
 /* La motorisation tapee a la main, retrouvee dans la liste : chaque mot
@@ -36476,7 +36495,8 @@ function carnetForm(v){
   +   '<div><label>' + esc(t('Énergie')) + '</label><select id="carnetEnergie" class="liste-large">' + optionsEnergieFacture((v.vehicule || {}).energie) + '</select></div>'
   +   champVeh('dateFirstImmat', '1re mise en circulation', 'date') + champVeh('km', 'Kilométrage') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('puissanceCh', 'Puissance (ch)', 'text', 'ex. 110') + champVeh('puissanceFiscale', 'CV fiscaux')
-  +   champVeh('vin', 'N° de châssis (VIN)') + '</div>'
+  +   '<div><label>' + esc(t('Stop & Start')) + ' <span class="ident-etat" id="carnetStartStopAuto"></span></label><select id="carnetStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div></div>'
+  + '<div class="cerfa-grid">' + champVeh('vin', 'N° de châssis (VIN)') + '</div>'
   + '<div class="gar-choix"><button type="button" class="btn-sec" id="carnetIdentifier">🔎 '
   +   esc(t('Identifier le véhicule (VIN → code moteur)')) + '</button></div>'
   + (c.identifie ? '<div class="cerfa-aide">✓ ' + esc(t('Code moteur')) + ' <b>' + esc(c.identifie.code || c.codeMoteur || '—') + '</b>'
@@ -36684,6 +36704,9 @@ function wireCarnetForm(v, d){
   };
   const bo = document.getElementById('carnetBoite');
   if(bo) bo.onchange = function(){ c.boite = bo.value; saveVehicle(v); relancer(); };
+  const ss = document.getElementById('carnetStartStop');
+  if(ss) ss.onchange = function(){ c.startStop = ss.value; c.startStopAuto = false; saveVehicle(v); relancer(); const z = document.getElementById('carnetStartStopAuto'); if(z) z.textContent = ''; };
+  { const z = document.getElementById('carnetStartStopAuto'); if(z && c.startStop && c.startStopAuto) z.textContent = '— ' + t('d’après la motorisation'); }
   /* Distribution : choisie par le garage, sinon deduite du code moteur. */
   const di = document.getElementById('carnetDistribution');
   const majDistrib = function(){
@@ -36749,15 +36772,25 @@ function wireCarnetForm(v, d){
     const versions = function(){
       const l = listeEnCache();
       if(!l || !(l.motorisations || []).length) return [];
-      let liste = motosFiltrees(l.motorisations, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4), c.boite).liste;
+      let liste = motosFiltrees(l.motorisations, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4), c.boite, c.startStop).liste;
       /* CV fiscaux de la carte grise connus : on garde les versions qui ont les memes. */
       const cv = parseInt(String(veh.puissanceFiscale || ''), 10);
       if(cv){
         const memesCv = liste.filter(function(m){ return parseInt(String(m.cv_fiscaux || ''), 10) === cv; });
         if(memesCv.length) liste = memesCv;
       }
-      return liste
-        .map(function(m){ return { v: String(m.nom || '').toUpperCase(), txt: libelleMoto(m), m: m }; });
+      const res = liste.map(function(m){ return { v: String(m.nom || '').toUpperCase(), txt: libelleMoto(m), m: m }; });
+      /* La motorisation du vehicule est TOUJOURS dans la liste (et choisie),
+         meme si la liste ne la connait pas ou l'a ecartee par un filtre :
+         jamais « Autre (saisie libre) » pour une motorisation connue. */
+      const actuelle = String(c.motorisation || '').trim();
+      if(actuelle && !res.some(function(x){ return normListe(x.v) === normListe(actuelle); })){
+        const dansTout = (l.motorisations || []).filter(function(m){ return normListe(m.nom) === normListe(actuelle); })[0];
+        const m = dansTout || { nom: actuelle, code_moteur: c.codeMoteur || '', puissance_ch: c.puissanceCh || '',
+                                cv_fiscaux: veh.puissanceFiscale || '', stop_start: c.startStop || '' };
+        res.unshift({ v: actuelle.toUpperCase(), txt: libelleMoto(m), m: m, perso: !dansTout });
+      }
+      return res;
     };
     let noteMoto = etiq && etiq.querySelector('.ident-etat');
     if(etiq && !noteMoto){ noteMoto = document.createElement('span'); noteMoto.className = 'ident-etat'; etiq.appendChild(document.createTextNode(' ')); etiq.appendChild(noteMoto); }
@@ -36765,7 +36798,7 @@ function wireCarnetForm(v, d){
     const enCours = window.__motosEnCours || (window.__motosEnCours = {});
     const majNote = function(){
       if(!noteMoto) return;
-      const n = versions().length;
+      const n = versions().filter(function(x){ return !x.perso; }).length;
       noteMoto.textContent = n && !c.motorisation ? '— ' + (n > 1 ? n + ' ' + t('versions proposées, choisissez la vôtre') : t('1 version proposée')) : '';
     };
     const majBouton = function(){
@@ -36820,6 +36853,8 @@ function wireCarnetForm(v, d){
     if(enr) enr.addEventListener('change', proposer);
     const bor = document.getElementById('carnetBoite');
     if(bor) bor.addEventListener('change', proposer);
+    const ssr = document.getElementById('carnetStartStop');
+    if(ssr) ssr.addEventListener('change', proposer);
     champMoto.addEventListener('input', majNote);
     majBouton(); majNote();
     proposer();
@@ -37178,6 +37213,22 @@ function boiteDepuisTexte(x){
   if(manu && !auto) return 'Manuelle';
   return '';
 }
+/* Stop & Start : « oui », « non » ou inconnu. Il departage deux moteurs
+   voisins (ex. 1.6 HDi 110 / 1.6 e-HDi 115, 9HR / 9HL) et change la
+   batterie (EFB, AGM) et le demarreur. */
+function startStopDepuisTexte(x){
+  const s = String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  if(/^(oui|yes|ja)\b/.test(s)) return 'oui';
+  if(/^(non|no|nee|nein)\b/.test(s)) return 'non';
+  if(/\be-?hdi\b|stop\s*&?\s*start|start\s*&?\s*stop|\bs&s\b|\bstt\b|\bss\b|micro.?hybrid|\bmhev\b|e-?tsi\b|\bbluemotion\b|\befficientdynamics\b/.test(s)) return 'oui';
+  return '';
+}
+function optionsStartStop(valeur){
+  const v = startStopDepuisTexte(valeur);
+  return [['', t('— Je ne sais pas —')], ['oui', t('Oui')], ['non', t('Non')]].map(function(o){
+    return '<option value="' + o[0] + '"' + (o[0] === v ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('');
+}
+function texteStartStop(v){ return v === 'oui' ? 'oui (moteur avec Stop & Start)' : (v === 'non' ? 'non (pas de Stop & Start)' : ''); }
 function optionsBoite(valeur){
   const brut = String(valeur || '').trim();
   const v = boiteDepuisTexte(brut) || brut;
@@ -37401,7 +37452,12 @@ function motoAvecBoite(m, boite){
   const manu = /manu|bvm/.test(txt);
   return b === 'Automatique' ? auto || !manu : manu || !auto;
 }
-function motosFiltrees(tout, codeEnergie, annee, boite){
+function motoAvecStartStop(m, ss){
+  if(!ss) return true;
+  const x = startStopDepuisTexte(m.stop_start) || (startStopDepuisTexte(m.nom) === 'oui' ? 'oui' : '');
+  return !x || x === ss || /deux|both/i.test(String(m.stop_start || ''));
+}
+function motosFiltrees(tout, codeEnergie, annee, boite, startStop){
   const famille = ENERGIE_FAMILLE[String(codeEnergie || '').toUpperCase()] || '';
   let liste = famille ? tout.filter(function(m){ return m.energie === famille; }) : tout.slice();
   let note = '';
@@ -37421,6 +37477,10 @@ function motosFiltrees(tout, codeEnergie, annee, boite){
     const avecBoite = liste.filter(function(m){ return motoAvecBoite(m, boite); });
     if(avecBoite.length) liste = avecBoite;
   }
+  if(startStop){
+    const avecSs = liste.filter(function(m){ return motoAvecStartStop(m, startStop); });
+    if(avecSs.length) liste = avecSs;
+  }
   return { liste: liste, energieConnue: !!famille && !note, note: note };
 }
 function libelleMoto(m){
@@ -37428,7 +37488,7 @@ function libelleMoto(m){
   return [m.nom || '?',
           ch && !/\d\s*(ch|cv|hp)\b/i.test(m.nom || '') ? ch + ' ch' : '',
           /\d/.test(m.cv_fiscaux || '') ? m.cv_fiscaux + ' CV' : '',
-          m.code_moteur || '', m.periode || ''].filter(Boolean).join(' · ');
+          m.code_moteur || '', startStopDepuisTexte(m.stop_start) === 'oui' && !/e-?hdi|stop|s&s/i.test(m.nom || '') ? 'Stop & Start' : '', m.periode || ''].filter(Boolean).join(' · ');
 }
 function cleMotorisations(marque, modele, annee){
   return sansAccents([marque, modele, annee || ''].join('|')).toUpperCase().replace(/[^A-Z0-9|]/g, '');
@@ -37511,6 +37571,7 @@ function fenetreIdentification(v){
       +   '<div><label>' + esc(t('Puissance (ch)')) + ' — P.2</label><input id="idCh" inputmode="decimal" maxlength="10" placeholder="' + esc(t('ex. 125, ou 92 kW')) + '"></div>'
       +   '<div class="ident-large ident-lu" id="idChLu"></div>'
       +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="idBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
+      +   '<div><label>' + esc(t('Stop & Start')) + '</label><select id="idStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div>'
       + '</div>'
       + '<div class="dlg-detail" id="idAlerte"></div>'
       + '<div class="dlg-actions">'
@@ -37628,6 +37689,7 @@ function fenetreIdentification(v){
     $('idDate').addEventListener('change', function(){ if(cleChargee) chargerMotos(); else plusTard(); });
     $('idEnergie').addEventListener('change', rendreMotos);
     $('idBoite').addEventListener('change', function(){ $('idBoite').dataset.auto = ''; });
+    $('idStartStop').addEventListener('change', function(){ $('idStartStop').dataset.auto = ''; });
     $('idMotoListe').addEventListener('change', function(){
       const sel = $('idMotoListe');
       if(sel.value === 'autre' || sel.value === ''){
@@ -37647,6 +37709,8 @@ function fenetreIdentification(v){
       if(/^\d{1,2}$/.test(cv) && !$('idCv').value) $('idCv').value = cv;
       const bm = boiteDepuisTexte(m.boites);
       if(bm && (!$('idBoite').value || $('idBoite').dataset.auto === '1')){ $('idBoite').value = bm; $('idBoite').dataset.auto = '1'; }
+      const ssm = startStopDepuisTexte(m.stop_start) || startStopDepuisTexte(m.nom);
+      if(ssm && (!$('idStartStop').value || $('idStartStop').dataset.auto === '1')){ $('idStartStop').value = ssm; $('idStartStop').dataset.auto = '1'; }
       if(m.energie && !$('idEnergie').value){
         const code = codeEnergieDeFamille(m.energie);
         if(code){ $('idEnergie').value = code; rendreMotos(); }
@@ -37701,6 +37765,7 @@ function fenetreIdentification(v){
       if($('idCv').value) veh.puissanceFiscale = $('idCv').value;
       c.puissanceCh = chSaisis || '';
       if($('idBoite').value) c.boite = $('idBoite').value;
+      if($('idStartStop').value){ c.startStop = $('idStartStop').value; c.startStopAuto = $('idStartStop').dataset.auto === '1'; }
       saveVehicle(v);
       fermer(true);
       await identifierMoteur(v);
@@ -37718,7 +37783,7 @@ async function identifierMoteur(v){
     rep = await appelFicheTechnique({ mode: 'identifier', vehicule_id: v.id, vehicule: {
       vin: veh.vin, constructeur_selon_vin: lu.marque, annee_modele_selon_vin: lu.annee,
       premiere_immatriculation: fmtDate(veh.dateFirstImmat), energie: libelleEnergie(veh.energie || '') || veh.energie,
-      marque: veh.marque, modele: veh.modele, motorisation: c.motorisation, boite: c.boite,
+      marque: veh.marque, modele: veh.modele, motorisation: c.motorisation, boite: c.boite, stop_start: texteStartStop(c.startStop),
       motorisation_choisie_dans_la_liste: c.motorisationListe ? [c.motorisationListe.nom,
         c.motorisationListe.code ? 'code(s) moteur selon la liste : ' + c.motorisationListe.code : '',
         c.motorisationListe.periode, c.motorisationListe.generation].filter(Boolean).join(' — ') : '',
@@ -37748,7 +37813,7 @@ async function identifierMoteur(v){
       else{
         /* Pas de liste : ce que l'identification a trouve (ch, CV, boite). */
         appliquerMotorisation(v, { nom: motoCourte(choix.motorisation), code_moteur: choix.code_moteur, puissance_ch: choix.puissance_ch,
-          cv_fiscaux: choix.cv_fiscaux, boites: choix.boite, distribution: choix.distribution, energie: choix.energie });
+          cv_fiscaux: choix.cv_fiscaux, boites: choix.boite, distribution: choix.distribution, energie: choix.energie, stop_start: choix.stop_start });
       }
     }
     if(choix.boite && !c.boite) c.boite = boiteDepuisTexte(choix.boite);
@@ -38394,6 +38459,7 @@ async function genererTechniqueIA(v, apresIdentification){
     const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, nouvelle: nouvelle, vehicule: {
       marque: veh.marque, modele: veh.modele, generation: c.generation, motorisation: c.motorisation,
       boite: c.boite, code_moteur: c.codeMoteur, energie: libelleEnergie(veh.energie || '') || veh.energie,
+      stop_start: texteStartStop(c.startStop),
       distribution: distributionEffective(c) ? distributionEffective(c) + (c.distribution ? ' (confirmé par le garage, fait foi)' : ' (d’après le code moteur, fait foi)') : '',
       type_variante_version: veh.typeVarianteVersion, premiere_mise_en_circulation: fmtDate(veh.dateFirstImmat),
       puissance_fiscale: veh.puissanceFiscale, puissance_ch: c.puissanceCh || '', vin: veh.vin, pays_immatriculation: paysPlaque(v)
