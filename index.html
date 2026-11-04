@@ -9698,7 +9698,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.95';
+const VERSION = '2.96';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13891,6 +13891,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.96': { date: '04/11/2026', lignes: [
+    "Une seule liste des modèles pour toute l’application : déclaration d’achat, cession, immatriculation, contrats… utilisent maintenant la même liste que le carnet d’entretien, avec les générations en chiffres (C4 2, Golf 7, Clio 4) et leurs années (« C4 2 · 2010-2018 »). Plus de chiffres romains.",
+    "Toute correction de cette liste vaut désormais partout."
+  ] },
   '2.95': { date: '04/11/2026', lignes: [
     "Correction : dans les autres documents (déclaration d’achat, cession, immatriculation, factures…), les listes de la marque, du modèle, des pays, des départements et des banques s’affichaient vides depuis l’arrivée des listes du carnet d’entretien. Elles fonctionnent de nouveau : la marque propose les marques, le modèle propose les modèles de la marque choisie.",
     "Les listes déroulantes du carnet d’entretien restent propres au carnet."
@@ -35202,15 +35206,28 @@ const ROMAINS = ['','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
   }
 })();
 
+/* UNE SEULE liste de modeles pour toute l'application : celle du carnet
+   (MARQUES_AUTO, generations en chiffres : « C4 2 », « Golf 7 »). Une
+   correction faite dans MARQUES_AUTO vaut donc partout. L'ancienne table
+   MODELES ne sert que pour les marques absentes de MARQUES_AUTO, avec ses
+   chiffres romains convertis. */
 function modelesDeLaMarque(marque){
+  const auto = optionsModeles(marque);
+  if(auto.length) return auto.map(function(o){ return o.v; });
   const m = (marque || '').trim().toUpperCase();
-  if(MODELES[m]) return MODELES[m];
-  // tolerance sur les accents et la ponctuation : CITROËN, MERCEDES BENZ…
-  const n = sansAccents(m);
-  for(const cle in MODELES){
-    if(sansAccents(cle) === n) return MODELES[cle];
+  let l = MODELES[m];
+  if(!l){
+    // tolerance sur les accents et la ponctuation : CITROËN, MERCEDES BENZ…
+    const n = sansAccents(m);
+    for(const cle in MODELES){ if(sansAccents(cle) === n){ l = MODELES[cle]; break; } }
   }
-  return [];
+  const vus = {};
+  return (l || []).map(function(x){ return romainEnChiffres(x); }).filter(function(x){ if(vus[x]) return false; vus[x] = 1; return true; });
+}
+/* Libelle affiche dans la liste : « C4 2 · 2010-2018 » (la valeur reste « C4 2 »). */
+function libelleModele(marque, val){
+  const o = optionsModeles(marque).filter(function(x){ return x.v === val; })[0];
+  return o ? o.txt : val;
 }
 
 // Retrouve la marque saisie sur le formulaire actuellement affiché
@@ -35218,6 +35235,16 @@ function modelesDeLaMarque(marque){
    Elle ne regardait que la fiche et les Cerfa : sur un contrat, la
    liste des modeles restait donc vide meme apres avoir choisi la
    marque. */
+/* Marques des documents : l'ancienne liste + celles du carnet (une seule
+   source pour les modeles, voir modelesDeLaMarque). */
+function toutesLesMarques(){
+  if(toutesLesMarques._l) return toutesLesMarques._l;
+  const vus = {}, l = [];
+  MARQUES.concat(MARQUES_AUTO.map(function(m){ return m[0]; })).forEach(function(x){
+    const k = sansAccents(x); if(!vus[k]){ vus[k] = 1; l.push(x); }
+  });
+  return (toutesLesMarques._l = l.sort());
+}
 function marqueCourante(){
   const champ = document.querySelector('input[data-cess="vehicule.marque"]')
              || document.querySelector('input[data-key="vehicule"][data-field="marque"]')
@@ -35279,7 +35306,7 @@ function brancherMarques(){
   });
 
   marques.forEach(function(inp){
-    brancherListe(inp, function(){ return MARQUES; }, '');
+    brancherListe(inp, toutesLesMarques, '');
     inp.addEventListener('change', function(){
       // un modele qui n'appartient pas a la nouvelle marque n'a plus de sens
       const champModele = document.querySelector('input[data-cess="vehicule.modele"]')
@@ -35296,7 +35323,8 @@ function brancherMarques(){
   });
   modeles.forEach(function(inp){
     brancherListe(inp, function(){ return modelesDeLaMarque(marqueCourante()); },
-      'Choisissez d\'abord la marque, ou saisissez le modèle librement.');
+      'Choisissez d\'abord la marque, ou saisissez le modèle librement.', false, null,
+      function(m){ return esc(libelleModele(marqueCourante(), m)); });
   });
   // pour le genre, la liste affiche « VP — Voiture particuliere »
   // mais seul le code est inscrit dans le formulaire
