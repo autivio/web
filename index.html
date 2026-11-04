@@ -9703,7 +9703,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.98';
+const VERSION = '3.00';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13896,6 +13896,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.00': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : dès que le code moteur ou la motorisation est trouvé, la puissance (ch), les CV fiscaux et le code moteur se remplissent tout seuls — après « Identifier le véhicule » (même quand la liste des versions du modèle n’est pas encore connue), en choisissant une version, en tapant la motorisation, ou en tapant le code moteur (ex. « RHH » → 2.0 HDi 150, 150 ch, 8 CV).",
+    "Ce que vous avez tapé vous-même n’est jamais remplacé."
+  ] },
+  '2.99': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : après « Identifier le véhicule », la motorisation se range dans la liste (« 1.6 HDi 110 FAP ») au lieu de « Autre (saisie libre) » avec le long texte de l’IA (« … (DV6C TED4), boîte pilotée »). La version est retrouvée d’après le code moteur ; les motorisations déjà enregistrées avec ce texte sont corrigées à l’ouverture du carnet."
+  ] },
   '2.98': { date: '05/11/2026', lignes: [
     "Fiches techniques partagées : une fiche déjà générée pour une motorisation (même modèle, phase, code moteur et puissance, énergie, boîte) est reprise sans nouvelle recherche, même si le véhicule d’origine a été supprimé ou appartient à un autre garage. « Régénérer » lance toujours une vraie nouvelle recherche.",
     "« Identifier le véhicule » : un numéro de châssis (VIN) déjà identifié n’est plus jamais recherché deux fois.",
@@ -36239,6 +36246,7 @@ function ensureCarnet(v){
   if(c.technique && typeof c.technique !== 'object') c.technique = null;
   /* Boite : « Manuelle » ou « Automatique », jamais un texte de l'IA. */
   if(c.boite && BOITES.indexOf(c.boite) === -1) c.boite = boiteDepuisTexte(c.boite);
+  if(/[(,;]/.test(c.motorisation)) c.motorisation = motoCourte(c.motorisation);
   const veh = v.vehicule || {};
   /* Seulement un modele visiblement ecrit par l'IA (parentheses, chiffres
      romains) : « C4 » ou « 208 » tapes ou lus sur la carte grise restent. */
@@ -36365,6 +36373,24 @@ function appliquerMotorisation(v, m, garderNom){
    tape doit commencer un mot de la version (« 1.6 hdi 112 » → « 1.6 HDi
    112 FAP »). Une seule version possible, sinon rien. */
 function motsMoto(x){ return sansAccentsTxt(String(x || '')).toLowerCase().replace(/,/g, '.').split(/[^a-z0-9.]+/).filter(Boolean); }
+/* « 1.6 HDi 110 FAP (DV6C TED4), boîte pilotée… » (texte de l'IA) →
+   « 1.6 HDi 110 FAP » : sans parentheses ni precisions apres la virgule. */
+function motoCourte(txt){
+  return String(txt || '').replace(/\([^)]*\)/g, ' ').split(/[,;]| [-–—] /)[0].replace(/\s+/g, ' ').trim();
+}
+/* La version de la liste qui correspond a un texte et/ou un code moteur :
+   le code moteur d'abord (9HR), puis le texte. */
+function motoDeLaListe(tout, txt, code, codeEnergie, annee){
+  tout = tout || [];
+  const base = motosFiltrees(tout, codeEnergie, annee).liste;
+  const c = normPart(String(code || '').split(/[\s(\/,;]+/)[0]);
+  if(c){
+    const parCode = base.filter(function(m){ return normPart(m.code_moteur).indexOf(c) !== -1 || String(m.code_moteur || '').toUpperCase().split(/[^A-Z0-9]+/).indexOf(c) !== -1; });
+    if(parCode.length === 1) return parCode[0];
+    if(parCode.length > 1){ const m = trouverMotoTapee(parCode, motoCourte(txt), '', ''); if(m) return m; }
+  }
+  return trouverMotoTapee(tout, motoCourte(txt), codeEnergie, annee);
+}
 function trouverMotoTapee(tout, txt, codeEnergie, annee){
   const mots = motsMoto(txt);
   if(!mots.length || !mots.some(function(w){ return /\d/.test(w); })) return null;
@@ -36749,6 +36775,11 @@ function wireCarnetForm(v, d){
       btn.disabled = occupe;
       btn.textContent = occupe ? '⏳ ' + t('recherche des versions de ce modèle…') : '📋 ' + t('Voir les versions de ce modèle');
     };
+    if(c.motorisation && !versions().some(function(x){ return x.v === String(c.motorisation).toUpperCase(); })){
+      const l = listeEnCache();
+      const m = l ? motoDeLaListe(l.motorisations, c.motorisation, c.codeMoteur, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4)) : null;
+      if(m && versions().some(function(x){ return x.v === String(m.nom || '').toUpperCase(); })){ c.motorisation = m.nom; champMoto.value = m.nom; saveVehicle(v); }
+    }
     brancherListeAuto(champMoto, versions, function(){
       const o = versions().filter(function(x){ return x.v === champMoto.value; })[0];
       if(o){ appliquerMotorisation(v, o.m); saveVehicle(v); renderMain(); }
@@ -36804,17 +36835,24 @@ function wireCarnetForm(v, d){
     let etat = etiqMoto && etiqMoto.querySelector('.ident-etat');
     if(etiqMoto && !etat){ etat = document.createElement('span'); etat.className = 'ident-etat'; etiqMoto.appendChild(document.createTextNode(' ')); etiqMoto.appendChild(etat); }
     let minuteurTape = null;
-    const reconnaitre = function(){
+    const champCode = document.querySelector('input[data-carnet="codeMoteur"]');
+    /* depuis = 'moto' (motorisation tapee) ou 'code' (code moteur tape). */
+    const reconnaitre = function(depuis){
       clearTimeout(minuteurTape);
       minuteurTape = setTimeout(async function(){
-        const txt = champMoto.value.trim();
+        const champ = depuis === 'code' ? champCode : champMoto;
+        const txt = champ ? champ.value.trim() : '';
         if(!txt || !veh.marque || !veh.modele) return;
         let l = lireCacheMotos(cleMotorisations(veh.marque, veh.modele, anMoto()));
         if(!l) l = await lireListePartagee(veh.marque, veh.modele, anMoto());
-        if(!l || !document.contains(champMoto) || champMoto.value.trim() !== txt) return;
-        const m = trouverMotoTapee(l.motorisations, txt, veh.energie, anMoto());
+        if(!l || !document.contains(champ) || champ.value.trim() !== txt) return;
+        const m = depuis === 'code'
+          ? motoDeLaListe(l.motorisations, c.motorisation, txt, veh.energie, anMoto())
+          : trouverMotoTapee(l.motorisations, txt, veh.energie, anMoto());
         if(!m) return;
-        appliquerMotorisation(v, m, true);
+        /* Code tape : la motorisation n'est remplie que si elle est vide. */
+        appliquerMotorisation(v, m, depuis === 'moto' || !!String(c.motorisation || '').trim());
+        if(depuis === 'code' && champMoto.value !== c.motorisation){ champMoto.value = c.motorisation; if(champMoto._rendreListe) champMoto._rendreListe(); }
         saveVehicle(v);
         const fixe = function(sel, val){ const x = document.querySelector(sel); if(x && val != null && x.value !== String(val)){ x.value = val; } };
         fixe('input[data-carnet="codeMoteur"]', c.codeMoteur || '');
@@ -36826,7 +36864,8 @@ function wireCarnetForm(v, d){
         relancer();
       }, 700);
     };
-    champMoto.addEventListener('input', function(e){ if(e.isTrusted) reconnaitre(); });
+    champMoto.addEventListener('input', function(e){ if(e.isTrusted) reconnaitre('moto'); });
+    if(champCode) champCode.addEventListener('input', function(e){ if(e.isTrusted) reconnaitre('code'); });
   }
   /* Phase : liste selon le modele, remplie d'apres la 1re immatriculation. */
   const champGen = modeAuto ? document.querySelector('input[data-carnet="generation"]') : null;
@@ -37699,7 +37738,19 @@ async function identifierMoteur(v){
     c.identifie = { date: Date.now(), code: c.codeMoteur || '', certitude: 'saisi' };
   }else{
     c.codeMoteur = choix.code_moteur || '';
-    if(choix.motorisation) c.motorisation = choix.motorisation;
+    if(choix.motorisation){
+      /* La version de la liste (si elle est connue), sinon le nom court. */
+      const an = String(veh.dateFirstImmat || '').slice(0, 4);
+      let l = lireCacheMotos(cleMotorisations(veh.marque, veh.modele, an));
+      if(!l) l = await lireListePartagee(veh.marque, veh.modele, an);
+      const m = l ? motoDeLaListe(l.motorisations, choix.motorisation, choix.code_moteur, veh.energie, an) : null;
+      if(m) appliquerMotorisation(v, m);
+      else{
+        /* Pas de liste : ce que l'identification a trouve (ch, CV, boite). */
+        appliquerMotorisation(v, { nom: motoCourte(choix.motorisation), code_moteur: choix.code_moteur, puissance_ch: choix.puissance_ch,
+          cv_fiscaux: choix.cv_fiscaux, boites: choix.boite, distribution: choix.distribution, energie: choix.energie });
+      }
+    }
     if(choix.boite && !c.boite) c.boite = boiteDepuisTexte(choix.boite);
     if(!c.puissanceCh && chevauxDepuisSaisie(choix.puissance_ch)) c.puissanceCh = chevauxDepuisSaisie(choix.puissance_ch);
     c.identifie = { date: Date.now(), code: choix.code_moteur || '', certitude: choix.certitude || '' };
