@@ -9496,7 +9496,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.76';
+const VERSION = '2.77';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13689,6 +13689,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.77': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : corrige « La fiche est trop longue pour être générée en une fois ». La fiche est maintenant rédigée en trois parties en même temps (moteur ; entretien, fluides et couples ; références de pièces), puis rassemblée : plus courte à chaque fois, et plus rapide. À faire : recoller fiche-technique.ts dans Supabase."
+  ] },
   '2.76': { date: '04/11/2026', lignes: [
     "Carnet d’entretien : corrige l’erreur « The compiled grammar is too large » à la génération de la fiche. La réponse de l’IA (découpée par la recherche web) est maintenant recollée et réparée correctement. À faire : recoller fiche-technique.ts dans Supabase."
   ] },
