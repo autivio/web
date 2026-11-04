@@ -2892,6 +2892,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Distribution": "Distribuzione",
+    "Courroie": "Cinghia",
+    "Chaîne": "Catena",
+    "distribution": "distribuzione",
+    "courroie": "cinghia",
+    "chaîne": "catena",
+    "d’après le code moteur": "secondo il codice motore",
     "— Choisir —": "— Scegli —",
     "Autre (saisie libre)": "Altro (inserimento libero)",
     "ex. 7, 7 phase 2": "es. 7, 7 fase 2",
@@ -4245,6 +4252,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Distribution": "Steierung",
+    "Courroie": "Zännrimm",
+    "Chaîne": "Kette",
+    "distribution": "Steierung",
+    "courroie": "Zännrimm",
+    "chaîne": "Kette",
+    "d’après le code moteur": "no dem Motorcode",
     "— Choisir —": "— Wielen —",
     "Autre (saisie libre)": "Aner (fräi aginn)",
     "ex. 7, 7 phase 2": "z. B. 7, 7 Phas 2",
@@ -5597,6 +5611,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Distribution": "Timing drive",
+    "Courroie": "Belt",
+    "Chaîne": "Chain",
+    "distribution": "timing",
+    "courroie": "belt",
+    "chaîne": "chain",
+    "d’après le code moteur": "based on the engine code",
     "— Choisir —": "— Choose —",
     "Autre (saisie libre)": "Other (type it)",
     "ex. 7, 7 phase 2": "e.g. 7, 7 phase 2",
@@ -6948,6 +6969,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Distribution": "Steuertrieb",
+    "Courroie": "Zahnriemen",
+    "Chaîne": "Steuerkette",
+    "distribution": "Steuertrieb",
+    "courroie": "Zahnriemen",
+    "chaîne": "Steuerkette",
+    "d’après le code moteur": "laut Motorcode",
     "— Choisir —": "— Wählen —",
     "Autre (saisie libre)": "Andere (frei eingeben)",
     "ex. 7, 7 phase 2": "z. B. 7, 7 Phase 2",
@@ -8319,6 +8347,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Distribution": "Distributie",
+    "Courroie": "Riem",
+    "Chaîne": "Ketting",
+    "distribution": "distributie",
+    "courroie": "riem",
+    "chaîne": "ketting",
+    "d’après le code moteur": "volgens de motorcode",
     "— Choisir —": "— Kiezen —",
     "Autre (saisie libre)": "Ander (vrij invullen)",
     "ex. 7, 7 phase 2": "bv. 7, 7 fase 2",
@@ -9522,7 +9557,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.79';
+const VERSION = '2.81';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13715,6 +13750,14 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.81': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : nouveau champ « Distribution » (courroie ou chaîne). Il se remplit tout seul d’après le code moteur pour les moteurs courants (VW EA211 / EA111 / EA888 / TDI, PSA PureTech / HDi / THP, Renault dCi / TCe, Ford EcoBoost, BMW, Mercedes…) ou d’après l’identification ; vous pouvez le corriger. Il fait foi pour l’IA.",
+    "Le PDF suit ce choix : avec « Courroie », un « Kit chaîne de distribution » écrit par erreur devient « Kit courroie de distribution » (fiches déjà générées comprises). Recoller fiche-technique.ts dans Supabase."
+  ] },
+  '2.80': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : les équivalents de pièces ne proposent plus que des marques première monte (freinage : Bosch, TRW, ATE, Brembo, Textar, Ferodo ; filtres : Mann-Filter, Mahle, Bosch, Purflux, Hengst ; allumage : NGK, Bosch, Denso ; distribution : ContiTech, Gates, INA, SKF, Dayco). Les marques premier prix (Ridex, Stark, Vaico, Meyle…) sont retirées, y compris des fiches déjà générées.",
+    "La colonne « Référence constructeur (OEM) » n’affiche plus que les références, sans les commentaires de recherche."
+  ] },
   '2.79': { date: '04/11/2026', lignes: [
     "Carnet d’entretien et identification du véhicule : Marque et Modèle sont des listes déroulantes (61 marques, plus de 750 modèles), avec les générations en chiffres et leurs années : Golf 4 · 1997-2003, Golf 7 · 2012-2020, Clio 4, 308 2… « Autre (saisie libre) » reste possible.",
     "Les chiffres romains deviennent des chiffres : « Golf VII » s’affiche « Golf 7 », dans les champs comme dans le PDF ; l’IA rédige elle aussi les générations en chiffres (recoller fiche-technique.ts dans Supabase)."
@@ -35910,7 +35953,7 @@ const CARNET_COLONNES_DEFAUT = ['Huile moteur', 'Filtre à huile', 'Filtre à ai
 function ensureCarnet(v){
   if(!v.carnet || typeof v.carnet !== 'object') v.carnet = {};
   const c = v.carnet;
-  ['motorisation', 'generation', 'boite', 'codeMoteur', 'photo'].forEach(function(k){
+  ['motorisation', 'generation', 'boite', 'codeMoteur', 'photo', 'distribution'].forEach(function(k){
     if(typeof c[k] !== 'string') c[k] = '';
   });
   if(!Array.isArray(c.entretiens)) c.entretiens = [];
@@ -35928,7 +35971,7 @@ function colonnesCarnet(v){
    memes donnees techniques, inutile de repayer l'IA. */
 function cleTechnique(v){
   const veh = v.vehicule || {}, c = v.carnet || {};
-  return [veh.marque, veh.modele, c.generation, c.motorisation, c.boite, c.codeMoteur, veh.energie, c.puissanceCh]
+  return [veh.marque, veh.modele, c.generation, c.motorisation, c.boite, c.codeMoteur, veh.energie, c.puissanceCh, c.distribution]
     .map(function(x){ return sansAccents(String(x || '')).replace(/[^A-Z0-9]/g, ''); }).join('|');
 }
 
@@ -35979,6 +36022,7 @@ function carnetForm(v){
   +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="carnetBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
   +   champCarnet('codeMoteur', 'Code moteur', 'text', t('facultatif')) + '</div>'
   + '<div class="cerfa-grid">'
+  +   '<div><label>' + esc(t('Distribution')) + ' <span class="ident-etat" id="carnetDistribAuto"></span></label><select id="carnetDistribution" class="liste-large"></select></div>'
   +   '<div><label>' + esc(t('Énergie')) + '</label><select id="carnetEnergie" class="liste-large">' + optionsEnergieFacture((v.vehicule || {}).energie) + '</select></div>'
   +   champVeh('dateFirstImmat', '1re mise en circulation', 'date') + champVeh('km', 'Kilométrage') + '</div>'
   + '<div class="cerfa-grid">' + champVeh('vin', 'N° de châssis (VIN)') + '</div>'
@@ -36129,6 +36173,23 @@ function wireCarnetForm(v, d){
   if(en) en.onchange = function(){ v.vehicule.energie = en.value; saveVehicle(v); relancer(); };
   const bo = document.getElementById('carnetBoite');
   if(bo) bo.onchange = function(){ c.boite = bo.value; saveVehicle(v); relancer(); };
+  /* Distribution : choisie par le garage, sinon deduite du code moteur. */
+  const di = document.getElementById('carnetDistribution');
+  const majDistrib = function(){
+    if(!di) return;
+    const auto = distributionDuCode(c.codeMoteur);
+    const val = c.distribution || auto;
+    di.innerHTML = [['', t('— Je ne sais pas —')], ['courroie', t('Courroie')], ['chaîne', t('Chaîne')]]
+      .map(function(o){ return '<option value="' + esc(o[0]) + '"' + (o[0] === val ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('');
+    const z = document.getElementById('carnetDistribAuto');
+    if(z) z.textContent = !c.distribution && auto ? '— ' + t('d’après le code moteur') + ' ' + String(c.codeMoteur).toUpperCase() : '';
+  };
+  if(di){
+    majDistrib();
+    di.onchange = function(){ c.distribution = di.value; saveVehicle(v); majDistrib(); relancer(); };
+    const cm = document.querySelector('input[data-carnet="codeMoteur"]');
+    if(cm) cm.addEventListener('input', majDistrib);
+  }
   brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
   afficherCreditsCarnet(v);
 
@@ -36239,6 +36300,52 @@ const WMI_MARQUES = {
   SHH:'HONDA', YV1:'VOLVO', YV4:'VOLVO', LYV:'VOLVO', SAL:'LAND ROVER', SAJ:'JAGUAR', SCC:'LOTUS', LRW:'TESLA', XP7:'TESLA',
   '5YJ':'TESLA', LSJ:'MG', SAR:'ROVER', KPA:'SSANGYONG', LJ1:'JAC', LGX:'BYD', VLU:'SCANIA'
 };
+/* --- Distribution : courroie ou chaine, d'apres le code moteur ----------
+   Codes courants dont le type est connu avec certitude ; pour les autres,
+   c'est l'identification par l'IA (ou le garage) qui le dit. */
+const DISTRIBUTION_CODES = {
+  courroie: 'CZCA CZDA CZEA CZDB CHPA CHPB CMBA CPVA CPVB CPWA CJZA CJZB CJZC CJZD CYVA CYVB CHZB CHZC CHZD CHZJ CHZL CHYA CHYB CHYC DACA DADA DPCA DPBA DJKA DKRA DKRF DLAA DHSB DKLA '
+    + 'CAYA CAYB CAYC CAYD CFFA CFFB CFHC CFHF CFGB CBAA CBAB CBDB CLHA CLJA CAGA CAGB CAGC CAHA CJAA CBBB '
+    + 'CRKB CRLB CRBC CUNA DFGA DCYA CXXB CLHB DBKA DGTE DFBA DTRD DTTA '
+    + '9HX 9HV 9HY 9HZ 9HP 9HR 9HD 9HJ 9HL 9HF 8HX 8HZ 8HR 8HY BHY BHZ BHX YHZ YHY YHV HMZ HNZ HNY HMR RHR RHH RHF RHE RHK AHX AHW AHZ KFV KFT KFU NFU '
+    + 'M1DA M2DA M1JE M1JH SFJA SFJB B7JA',
+  'chaîne': 'CAXA CAXC CAVD CAVA CAVB CTHA CTHB CTHD CTKA BMY BLG BWK CBZA CBZB CBZC '
+    + 'CJXC CHHA CHHB CCZA CCZB CDAA CJSA CJSB CPRA CULC CZPB DKZA DNUE '
+    + '5FS 5FV 5FW 5FX 5FT 5FU 5FE 5FN 5FR 5FM'
+};
+const DISTRIBUTION_PREFIXES = [
+  [/^(K9K|K4M|K7J|K7M|D4F|F4R|F9Q|D7F)/, 'courroie'],
+  [/^(H5F|H4B|H5H|H4J|H4D|R9M|M9R|M5M)/, 'chaîne'],
+  [/^(N13|N20|N26|N47|N57|B37|B38|B47|B48|B57|B58)/, 'chaîne'],
+  [/^(OM6(51|54|56|42)|M2(70|74|64|60|82))/, 'chaîne'],
+  [/^(1NR|2NR|1KR|1ZR|2ZR|M15A|M20A|A25A)/, 'chaîne']
+];
+function distributionDuCode(code){
+  const c = String(code || '').toUpperCase().split(/[\s(/,]+/)[0].replace(/[^A-Z0-9]/g, '');
+  if(!c) return '';
+  for(const type in DISTRIBUTION_CODES){
+    if((' ' + DISTRIBUTION_CODES[type] + ' ').indexOf(' ' + c + ' ') !== -1) return type;
+  }
+  for(const r of DISTRIBUTION_PREFIXES){ if(r[0].test(c)) return r[1]; }
+  return '';
+}
+function distributionEffective(c){
+  return (c && c.distribution) || distributionDuCode(c && c.codeMoteur) || '';
+}
+/* Le PDF suit le type de distribution connu (le texte de l'IA peut se
+   tromper : « Kit chaîne » sur un moteur a courroie). */
+function corrigerDistribution(texte, type){
+  let x = String(texte == null ? '' : texte);
+  if(type !== 'courroie' && type !== 'chaîne') return x;
+  const de = type === 'courroie' ? 'cha[iî]ne' : 'courroie', vers = type;
+  /* Garde la majuscule du mot remplace. */
+  const casse = function(m, mot){ return /^[A-ZÉÈ]/.test(m) ? mot.charAt(0).toUpperCase() + mot.slice(1) : mot; };
+  x = x.replace(new RegExp('\\b(kit\\s+)' + de + '\\b', 'gi'), function(m, a){ return a + vers; })
+       .replace(new RegExp('\\b' + de + 's?(\\s+de\\s+distribution)', 'gi'), function(m, b){ return casse(m, vers) + b; })
+       .replace(new RegExp('(distribution\\s+par\\s+)' + de + '\\b', 'gi'), function(m, a){ return a + vers; });
+  return x;
+}
+
 /* --- Boite de vitesses : une liste plutot qu'un champ libre ----------------- */
 const BOITES = ['Manuelle', 'Automatique'];
 /* Ramene un texte libre (« BVM5 », « Manuelle 6 », « DSG7 », « EAT8 »...)
@@ -36702,6 +36809,10 @@ function fenetreIdentification(v){
       c.motorisationListe = motoChoisie ? { nom: motoChoisie.nom || '', code: motoChoisie.code_moteur || '',
         ch: motoChoisie.puissance_ch || '', periode: motoChoisie.periode || '', generation: motoChoisie.generation || '' } : null;
       if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = romainEnChiffres(motoChoisie.generation);
+      if(motoChoisie && !c.distribution){
+        const d = distributionDuCode(motoChoisie.code_moteur) || (/^courroie$/i.test(motoChoisie.distribution || '') ? 'courroie' : (/^cha[iî]ne$/i.test(motoChoisie.distribution || '') ? 'chaîne' : ''));
+        if(d) c.distribution = d;
+      }
       if($('idCv').value) veh.puissanceFiscale = $('idCv').value;
       c.puissanceCh = chSaisis || '';
       if($('idBoite').value) c.boite = $('idBoite').value;
@@ -36746,6 +36857,10 @@ async function identifierMoteur(v){
     if(choix.boite && !c.boite) c.boite = boiteDepuisTexte(choix.boite) || choix.boite;
     if(!c.puissanceCh && chevauxDepuisSaisie(choix.puissance_ch)) c.puissanceCh = chevauxDepuisSaisie(choix.puissance_ch);
     c.identifie = { date: Date.now(), code: choix.code_moteur || '', certitude: choix.certitude || '' };
+    if(!c.distribution){
+      const d = distributionDuCode(choix.code_moteur) || (/^courroie$/i.test(choix.distribution || '') ? 'courroie' : (/^cha[iî]ne$/i.test(choix.distribution || '') ? 'chaîne' : ''));
+      if(d) c.distribution = d;
+    }
   }
   if(rep.generation && !c.generation) c.generation = romainEnChiffres(rep.generation);
   if(rep.marque && !veh.marque) veh.marque = String(rep.marque).toUpperCase();
@@ -36778,7 +36893,8 @@ function choisirCandidatMoteur(rep){
       + (cands.length ? '<div class="ident-cands">' + cands.map(function(x, i){
           return '<label class="ident-cand"><input type="radio" name="idCand" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>'
             + '<span class="ident-cand-corps"><b class="mono">' + esc(x.code_moteur || '?') + '</b> ' + badge(x.certitude)
-            + '<br>' + esc([x.motorisation, chevauxDepuisSaisie(x.puissance_ch) && !/\d\s*(ch|cv|hp)\b/i.test(x.motorisation || '') ? chevauxDepuisSaisie(x.puissance_ch) + ' ch' : '', x.cylindree ? x.cylindree + ' cm³' : '', x.boite, x.periode].filter(Boolean).join(' · '))
+            + '<br>' + esc([x.motorisation, chevauxDepuisSaisie(x.puissance_ch) && !/\d\s*(ch|cv|hp)\b/i.test(x.motorisation || '') ? chevauxDepuisSaisie(x.puissance_ch) + ' ch' : '', x.cylindree ? x.cylindree + ' cm³' : '', x.boite, x.periode,
+                (distributionDuCode(x.code_moteur) || (/^(courroie|cha[iî]ne)$/i.test(x.distribution || '') ? x.distribution : '')) ? t('distribution') + ' : ' + t(distributionDuCode(x.code_moteur) || x.distribution) : ''].filter(Boolean).join(' · '))
             + (x.raison ? '<br><small>' + esc(x.raison) + '</small>' : '') + '</span></label>';
         }).join('') + '</div>' : '<div class="carnet-vide">' + esc(t('Aucun moteur trouvé avec certitude.')) + '</div>')
       + (rep.explication ? '<div class="dlg-detail">' + esc(rep.explication) + '</div>' : '')
@@ -36800,6 +36916,39 @@ function choisirCandidatMoteur(rep){
 }
 
 /* --- Liens de recherche des pieces ---------------------------------------- */
+/* --- Equivalents de pieces : marques premiere monte seulement ------------
+   Freinage : Bosch, TRW, ATE, Brembo, Textar, Ferodo ; filtres : Mann-Filter,
+   Mahle, Bosch, Purflux, Hengst ; allumage : NGK, Bosch, Denso, Beru ;
+   distribution : ContiTech, Gates, INA, SKF, Dayco ; embrayage : Valeo,
+   Sachs, LuK. Les marques premier prix (Ridex, Stark, Vaico...) sont
+   retirees. */
+const MARQUES_PIECES_OK = ['BOSCH', 'TRW', 'ATE', 'BREMBO', 'TEXTAR', 'FERODO', 'MANN-FILTER', 'MANN', 'MAHLE', 'KNECHT',
+  'PURFLUX', 'HENGST', 'NGK', 'DENSO', 'BERU', 'CONTITECH', 'CONTINENTAL', 'GATES', 'INA', 'SKF', 'DAYCO', 'VALEO', 'SACHS', 'LUK'];
+const MOTS_PAS_MARQUES = ['DOT', 'VW', 'PSA', 'ACEA', 'API', 'SAE', 'PR', 'OEM', 'OE', 'LL', 'TL', 'MB', 'GM', 'DEXOS', 'NB', 'AV', 'AR'];
+function equivalentsPremium(texte){
+  const brut = String(texte || '').trim();
+  if(!brut) return brut;
+  const segments = brut.split(/\s+[•·]\s+|\s*•\s*/).map(function(x){ return x.trim(); }).filter(Boolean);
+  const garde = segments.filter(function(seg){
+    const m = seg.match(/^([A-Z][A-Z.&+\-]{1,})(?:\s+([A-Z][A-Z.&+\-]{1,})(?=\s|$))?/);
+    if(!m) return true;                                   /* texte descriptif */
+    const un = m[1].replace(/\./g, '');
+    if(MOTS_PAS_MARQUES.indexOf(un) !== -1) return true;  /* norme, constructeur */
+    const deux = m[2] ? (m[1] + '-' + m[2]).replace(/\./g, '') : '';
+    return MARQUES_PIECES_OK.indexOf(un) !== -1 || (deux && MARQUES_PIECES_OK.indexOf(deux) !== -1);
+  });
+  /* S'il ne reste aucune marque d'origine, on renvoie au catalogue. */
+  const marqueRestante = garde.some(function(seg){ const m = seg.match(/^([A-Z][A-Z.&+\-]{1,})/); return m && MARQUES_PIECES_OK.indexOf(m[1].replace(/\./g, '')) !== -1; });
+  if(garde.length < segments.length && !marqueRestante) return 'à vérifier sur catalogue';
+  return garde.length ? garde.join(' • ') : 'à vérifier sur catalogue';
+}
+/* Colonne OEM : les references, sans les commentaires de recherche. */
+function oemPropre(texte){
+  return String(texte || '')
+    .replace(/\s*\((?=[^)]*(autodoc|oscaro|list[ée]|famille|confirm|diam[èe]tre non))[^)]*\)/gi, '')
+    .replace(/\s{2,}/g, ' ').trim();
+}
+
 function premiereReference(oem){
   return String(oem || '').split(/\s*[\/(•]\s*/)[0].replace(/\b(remplace|à vérifier.*)$/i, '').trim();
 }
@@ -37337,11 +37486,15 @@ async function genererTechniqueIA(v, apresIdentification){
     const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, vehicule: {
       marque: veh.marque, modele: veh.modele, generation: c.generation, motorisation: c.motorisation,
       boite: c.boite, code_moteur: c.codeMoteur, energie: libelleEnergie(veh.energie || '') || veh.energie,
+      distribution: distributionEffective(c) ? distributionEffective(c) + (c.distribution ? ' (confirmé par le garage, fait foi)' : ' (d’après le code moteur, fait foi)') : '',
       type_variante_version: veh.typeVarianteVersion, premiere_mise_en_circulation: fmtDate(veh.dateFirstImmat),
       puissance_fiscale: veh.puissanceFiscale, puissance_ch: c.puissanceCh || '', vin: veh.vin, pays_immatriculation: paysPlaque(v)
     } });
     const f = rep.fiche;
     if(!f || !f.titre) throw new Error(t('Réponse incomplète. Réessayez.'));
+    ['refs_filtres', 'refs_freins'].forEach(function(k){
+      (f[k] || []).forEach(function(x){ if(x){ x.oem = oemPropre(x.oem); x.equivalents = equivalentsPremium(x.equivalents); } });
+    });
     c.technique = f;
     c.techniqueDate = Date.now();
     c.techniqueWeb = rep.recherche_web !== false;
@@ -37518,7 +37671,15 @@ async function genererCarnetPdf(v, d){
   if(typeof PDFLib === 'undefined') throw new Error(t('La bibliothèque PDF est introuvable.'));
   const { PDFDocument, StandardFonts, rgb, degrees } = PDFLib;
   const c = ensureCarnet(v), veh = v.vehicule || {};
-  const tc = c.technique || {};
+  /* Le texte suit le type de distribution connu (courroie / chaine). */
+  const typeDistrib = distributionEffective(c);
+  const corrigerTout = function(o){
+    if(typeof o === 'string') return corrigerDistribution(o, typeDistrib);
+    if(Array.isArray(o)) return o.map(corrigerTout);
+    if(o && typeof o === 'object'){ const r = {}; Object.keys(o).forEach(function(k){ r[k] = corrigerTout(o[k]); }); return r; }
+    return o;
+  };
+  const tc = typeDistrib ? corrigerTout(c.technique || {}) : (c.technique || {});
   const T = tc.titre || {};
   const pdf = await PDFDocument.create();
   const norm = await pdf.embedFont(StandardFonts.Helvetica);
@@ -37694,7 +37855,7 @@ async function genererCarnetPdf(v, d){
       const fr = [0.34].concat(cols.map(function(){ return 0.66 / cols.length; }));
       tableau(['Mesure'].concat(cols), perf.lignes.map(function(l){ return [l.mesure].concat(cols.map(function(_, i){ return (l.valeurs || [])[i] || ''; })); }), fr);
     }
-    if(tc.note_moteur) encadre(tc.note_moteur);
+    if(tc.note_moteur) encadre(romainEnChiffres(tc.note_moteur));
 
     titreSection('3. Châssis, Dimensions et Poids');
     tableau(['Paramètre', 'Valeur / Donnée'], kv(tc.chassis), [0.32, 0.68]);
@@ -37722,13 +37883,13 @@ async function genererCarnetPdf(v, d){
     const refs = (tc.refs_filtres || []).concat(tc.refs_freins || []).filter(function(x){ return x && (x.piece || x.oem || x.equivalents); });
     if(refs.length){
       tableau(['Pièce / Consommable', 'Référence Constructeur (OEM)', 'Équivalents Première Monte'],
-        refs.map(function(x){ return [x.piece || '', x.oem || '', x.equivalents || '']; }), [0.28, 0.3, 0.42],
+        refs.map(function(x){ return [x.piece || '', oemPropre(x.oem), equivalentsPremium(x.equivalents)]; }), [0.28, 0.3, 0.42],
         refs.map(function(x){ const r = premiereReference(x.oem); return r ? { col: 1, url: 'https://www.google.com/search?q=' + encodeURIComponent(r) } : null; }),
         { entier: true, titre: '9. Références OEM & Consommables' });
       ecrire('Cliquez sur une référence constructeur (en bleu) pour la rechercher chez les vendeurs en ligne avant de commander.', MG, y, 7, norm, DOUX);
       y -= 12;
     }
-    if(tc.note_commande) encadre('Note de Commande : ' + tc.note_commande);
+    if(tc.note_commande) encadre('Note de Commande : ' + romainEnChiffres(tc.note_commande));
 
   }
 
