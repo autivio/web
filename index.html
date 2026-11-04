@@ -2913,6 +2913,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Scheda già generata per questa motorizzazione: ripresa senza nuova ricerca. Verificala prima di scaricare il PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Ricerca con l’IA (pochi centesimi), una sola volta: poi l’elenco è gratuito per tutte le officine.",
     "CV fiscaux": "Cavalli fiscali (CV)",
     "versions proposées, choisissez la vôtre": "versioni proposte, scegli la tua",
@@ -4297,6 +4298,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche fir dës Motorisatioun schonn erstallt: ouni nei Sich iwwerholl. Iwwerpréift se ier Dir de PDF eroflued.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Sich mat der KI (e puer Cent), nëmmen eemol: duerno ass d’Lëscht gratis fir all Garagen.",
     "CV fiscaux": "Steier-PS (CV)",
     "versions proposées, choisissez la vôtre": "Versioune proposéiert, wielt Är",
@@ -5680,6 +5682,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Data sheet already generated for this engine: reused without a new search. Check it before downloading the PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "AI search (a few cents), only once: the list is then free for every garage.",
     "CV fiscaux": "Tax horsepower (CV)",
     "versions proposées, choisissez la vôtre": "versions suggested, choose yours",
@@ -7062,6 +7065,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Datenblatt für diese Motorisierung bereits erstellt: ohne neue Suche übernommen. Prüfen Sie es vor dem Herunterladen der PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Suche per KI (wenige Cent), nur einmal: danach steht die Liste allen Werkstätten kostenlos zur Verfügung.",
     "CV fiscaux": "Steuer-PS (CV)",
     "versions proposées, choisissez la vôtre": "Versionen vorgeschlagen, wählen Sie Ihre",
@@ -8464,6 +8468,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche al gemaakt voor deze motor: overgenomen zonder nieuwe zoekopdracht. Controleer ze voordat u de PDF downloadt.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Zoeken met AI (enkele centen), slechts één keer: daarna is de lijst gratis voor alle garages.",
     "CV fiscaux": "Fiscale pk (CV)",
     "versions proposées, choisissez la vôtre": "versies voorgesteld, kies de uwe",
@@ -9698,7 +9703,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.96';
+const VERSION = '2.98';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13891,6 +13896,15 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.98': { date: '05/11/2026', lignes: [
+    "Fiches techniques partagées : une fiche déjà générée pour une motorisation (même modèle, phase, code moteur et puissance, énergie, boîte) est reprise sans nouvelle recherche, même si le véhicule d’origine a été supprimé ou appartient à un autre garage. « Régénérer » lance toujours une vraie nouvelle recherche.",
+    "« Identifier le véhicule » : un numéro de châssis (VIN) déjà identifié n’est plus jamais recherché deux fois.",
+    "Le carnet est payé pour le véhicule (son VIN) et non plus pour la fiche : supprimer puis recréer la fiche d’une même voiture ne fait plus repayer."
+  ] },
+  '2.97': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : après « Identifier le véhicule », le modèle est celui de la liste (« C4 2 ») et non plus le texte de l’IA (« C4 (Berline 5 portes) »), la case « Génération / phase » affiche « Phase 1 » ou « Phase 2 » d’après la 1re immatriculation (plus de « C4 2 (B7 / NC) »), et la boîte reste « Manuelle » ou « Automatique ».",
+    "Les véhicules déjà enregistrés avec ces textes sont corrigés tout seuls à l’ouverture du carnet."
+  ] },
   '2.96': { date: '04/11/2026', lignes: [
     "Une seule liste des modèles pour toute l’application : déclaration d’achat, cession, immatriculation, contrats… utilisent maintenant la même liste que le carnet d’entretien, avec les générations en chiffres (C4 2, Golf 7, Clio 4) et leurs années (« C4 2 · 2010-2018 »). Plus de chiffres romains.",
     "Toute correction de cette liste vaut désormais partout."
@@ -31020,7 +31034,7 @@ function remplirDepuisCarteGrise(v, lu){
   if(lu.immat) veh.immat = lu.immat;
   if(lu.vin) veh.vin = lu.vin;
   if(lu.marque) veh.marque = lu.marque;
-  if(lu.modele) veh.modele = lu.modele;
+  if(lu.modele) veh.modele = lu.modele;   /* D.3 tel quel : c'est l'appellation officielle */
   if(lu.dateFirstImmat) veh.dateFirstImmat = lu.dateFirstImmat;
 
   const adr = splitAddress(lu.adresse || '');
@@ -36223,6 +36237,18 @@ function ensureCarnet(v){
   });
   if(!Array.isArray(c.entretiens)) c.entretiens = [];
   if(c.technique && typeof c.technique !== 'object') c.technique = null;
+  /* Boite : « Manuelle » ou « Automatique », jamais un texte de l'IA. */
+  if(c.boite && BOITES.indexOf(c.boite) === -1) c.boite = boiteDepuisTexte(c.boite);
+  const veh = v.vehicule || {};
+  /* Seulement un modele visiblement ecrit par l'IA (parentheses, chiffres
+     romains) : « C4 » ou « 208 » tapes ou lus sur la carte grise restent. */
+  if(veh.marque && /\(|\b(II|III|IV|VI|VII|VIII)\b/.test(String(veh.modele || '')) && !optionsModeles(veh.marque).some(function(o){ return o.v === veh.modele; })){
+    const mv = modeleDeLaListe(veh.marque, veh.modele, c.generation, veh.dateFirstImmat);
+    if(mv){
+      veh.modele = mv;
+      if(c.generation && !/^phase/i.test(c.generation)){ c.generation = phaseDepuisDate(veh.marque, mv, veh.dateFirstImmat) || ''; c.generationAuto = !!c.generation; }
+    }
+  }
   return c;
 }
 
@@ -36816,7 +36842,7 @@ function wireCarnetForm(v, d){
         const dansListe = ph.some(function(o){ return o.v === c.generation; });
         let nouveau = '';
         if(auto && (!c.generation || c.generationAuto)) nouveau = auto;
-        else if(c.generation && !dansListe) nouveau = phaseDepuisTexte(veh.marque, veh.modele, c.generation);
+        else if(c.generation && !dansListe) nouveau = phaseDepuisTexte(veh.marque, veh.modele, c.generation) || auto;
         if(nouveau && nouveau !== c.generation){
           c.generation = nouveau; c.generationAuto = nouveau === auto; champGen.value = nouveau; saveVehicle(v);
         }
@@ -37105,10 +37131,12 @@ function boiteDepuisTexte(x){
   if(!s) return '';
   if(BOITES.indexOf(String(x).trim()) !== -1) return String(x).trim();
   if(/robotis|double embrayage/.test(s) && !/manu|bvm/.test(s)) return 'Automatique';
-  if(/\/| ou |,|\+/.test(s)) return '';
-  if(/dsg|edc|dct|double|s.?tronic|pdk|powershift|etg|robot|bmp|easytronic|dualogic|2tronic/.test(s)) return 'Automatique';
-  if(/auto|bva|eat|cvt|tiptronic|steptronic|aisin|\bat\d|tct/.test(s)) return 'Automatique';
-  if(/manu|bvm|\bmt\b|\bmt\d/.test(s)) return 'Manuelle';
+  /* « Manuelle 5 ou 6 vitesses (MCM/MC6) » = Manuelle ; « Manuelle 5 / BVA 6 »
+     (les deux existent) = on ne sait pas. */
+  const auto = /dsg|edc|dct|double|s.?tronic|pdk|powershift|etg|robot|bmp|easytronic|dualogic|2tronic|auto|bva|eat\d|\beat\b|cvt|tiptronic|steptronic|aisin|\bat\d|tct/.test(s);
+  const manu = /manu|bvm|\bmt\b|\bmt\d|\bmcm\b|\bmc\d|\bbe4\b|\bma\d|\bml\d/.test(s);
+  if(auto && !manu) return 'Automatique';
+  if(manu && !auto) return 'Manuelle';
   return '';
 }
 function optionsBoite(valeur){
@@ -37218,9 +37246,46 @@ function optionsModeles(marque){
     const p = e.split('|');
     const nom = p[0].trim();
     return { v: nom.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(),
-             txt: nom + (p[1] ? ' · ' + p[1].replace(/-$/, '-…') : '') };
+             txt: nom + (p[1] ? ' · ' + p[1].replace(/-$/, '-…') : ''), periode: p[1] || '' };
   });
 }
+/* Un modele ecrit par l'IA ou la carte grise (« C4 (Berline 5 portes) »,
+   « C4 II », « C4 ») ramene a la valeur de la liste (« C4 2 ») : d'abord
+   le nom exact, puis la generation donnee (« C4 2 (B7) »), puis l'annee
+   de 1re immatriculation. '' si on ne sait pas. */
+function modeleDeLaListe(marque, texte, indice, date){
+  const opts = optionsModeles(marque);
+  if(!opts.length || !String(texte || '').trim()) return '';
+  const net = function(x){ return romainEnChiffres(String(x || '')).replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim().toUpperCase(); };
+  const brut = net(texte);
+  const exact = opts.filter(function(o){ return normListe(o.v) === normListe(brut); })[0];
+  if(exact) return exact.v;
+  const base = normListe(brut.replace(/\s+\d+$/, ''));
+  const cands = opts.filter(function(o){ return normListe(o.v.replace(/\s+\d+$/, '')) === base; });
+  if(!cands.length) return '';
+  if(cands.length === 1) return cands[0].v;
+  const ind = net(indice);
+  const parIndice = cands.filter(function(o){ return ind && normListe(o.v) === normListe(ind); })[0];
+  if(parIndice) return parIndice.v;
+  const an = Number(String(date || '').slice(0, 4));
+  if(an){
+    const parAn = cands.filter(function(o){
+      const y = String(o.periode || '').match(/(\d{4})\s*-\s*(\d{4})?/);
+      return y && an >= Number(y[1]) && an <= (y[2] ? Number(y[2]) : 9999);
+    });
+    if(parAn.length === 1) return parAn[0].v;
+  }
+  return '';
+}
+/* La phase d'apres un texte de l'IA : « Phase 2 », sinon rien (jamais
+   « C4 2 (B7 / NC) » dans la case phase). */
+function phaseDepuisIA(marque, modele, texte){
+  const l = phaseDepuisTexte(marque, modele, texte);
+  if(l) return l;
+  const m = /phase\s*(\d)/i.exec(String(texte || ''));
+  return m ? 'Phase ' + m[1] : '';
+}
+
 /* Transforme un champ texte en liste deroulante (le champ reste la valeur
    de reference : il est rempli par la liste, et sert de saisie libre pour
    « Autre »). input._rendreListe() resynchronise apres un changement fait
@@ -37589,7 +37654,7 @@ function fenetreIdentification(v){
         ch: motoChoisie.puissance_ch || '', periode: motoChoisie.periode || '', generation: motoChoisie.generation || '' } : null;
       const phaseAuto = phaseDepuisDate(veh.marque, veh.modele, veh.dateFirstImmat);
       if(phaseAuto && (!c.generation || c.generationAuto)){ c.generation = phaseAuto; c.generationAuto = true; }
-      else if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = romainEnChiffres(motoChoisie.generation);
+      else if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = phaseDepuisIA(veh.marque, veh.modele, motoChoisie.generation);
       if(motoChoisie && !c.distribution){
         const d = distributionDuCode(motoChoisie.code_moteur) || (/^courroie$/i.test(motoChoisie.distribution || '') ? 'courroie' : (/^cha[iî]ne$/i.test(motoChoisie.distribution || '') ? 'chaîne' : ''));
         if(d) c.distribution = d;
@@ -37635,7 +37700,7 @@ async function identifierMoteur(v){
   }else{
     c.codeMoteur = choix.code_moteur || '';
     if(choix.motorisation) c.motorisation = choix.motorisation;
-    if(choix.boite && !c.boite) c.boite = boiteDepuisTexte(choix.boite) || choix.boite;
+    if(choix.boite && !c.boite) c.boite = boiteDepuisTexte(choix.boite);
     if(!c.puissanceCh && chevauxDepuisSaisie(choix.puissance_ch)) c.puissanceCh = chevauxDepuisSaisie(choix.puissance_ch);
     c.identifie = { date: Date.now(), code: choix.code_moteur || '', certitude: choix.certitude || '' };
     if(!c.distribution){
@@ -37643,11 +37708,18 @@ async function identifierMoteur(v){
       if(d) c.distribution = d;
     }
   }
-  const phaseAuto = phaseDepuisDate(veh.marque || rep.marque, veh.modele || rep.modele, veh.dateFirstImmat);
-  if(phaseAuto && (!c.generation || c.generationAuto)){ c.generation = phaseAuto; c.generationAuto = true; }
-  else if(rep.generation && !c.generation) c.generation = romainEnChiffres(rep.generation);
   if(rep.marque && !veh.marque) veh.marque = String(rep.marque).toUpperCase();
-  if(rep.modele && !veh.modele) veh.modele = String(rep.modele).toUpperCase();
+  /* Le modele de la liste (« C4 2 »), pas l'appellation de l'IA. */
+  const dansListe = optionsModeles(veh.marque).some(function(o){ return o.v === veh.modele; });
+  if(!dansListe){
+    const mv = modeleDeLaListe(veh.marque, veh.modele || rep.modele, rep.generation, veh.dateFirstImmat)
+            || modeleDeLaListe(veh.marque, rep.modele, rep.generation, veh.dateFirstImmat);
+    if(mv) veh.modele = mv;
+    else if(!veh.modele && rep.modele) veh.modele = romainEnChiffres(String(rep.modele)).replace(/\s*\([^)]*\)/g, '').trim().toUpperCase();
+  }
+  const phaseAuto = phaseDepuisDate(veh.marque, veh.modele, veh.dateFirstImmat);
+  if(phaseAuto && (!c.generation || c.generationAuto || !/^phase/i.test(c.generation))){ c.generation = phaseAuto; c.generationAuto = true; }
+  else if(rep.generation && !c.generation) c.generation = phaseDepuisIA(veh.marque, veh.modele, rep.generation);
   saveVehicle(v);
   renderMain();
   const go = await demander({
@@ -37801,7 +37873,7 @@ async function etatCredits(v, frais){
   const cle = v ? v.id : '';
   const c = etatCreditsCache[cle];
   if(!frais && c && Date.now() - c.date < 60000) return c.rep;
-  const rep = await appelPaiement({ action: 'etat', vehicule: cle });
+  const rep = await appelPaiement({ action: 'etat', vehicule: cle, vin: v && v.vehicule ? v.vehicule.vin || '' : '' });
   etatCreditsCache[cle] = { date: Date.now(), rep: rep };
   return rep;
 }
@@ -38230,7 +38302,7 @@ async function genererTechniqueIA(v, apresIdentification){
   const cle = cleTechnique(v);
   /* Une autre fiche a deja la meme motorisation : on propose de reprendre
      ses donnees, sans nouvel appel payant. */
-  let source = null;
+  let source = null, nouvelle = false;
   for(const id of vehicleOrder){
     const w = vehicles[id];
     if(w && w !== v && w.carnet && w.carnet.technique && cleTechnique(w) === cle){ source = w; break; }
@@ -38243,7 +38315,7 @@ async function genererTechniqueIA(v, apresIdentification){
     });
     if(reprendre){
       /* Reprendre compte comme un carnet : un credit pour ce vehicule. */
-      try{ await appelFicheTechnique({ mode: 'reprendre', vehicule_id: v.id }); }
+      try{ await appelFicheTechnique({ mode: 'reprendre', vehicule_id: v.id, vin: veh.vin || '' }); }
       catch(e){
         if(e.code === 'credit'){ await manqueDeCredit(v, 'reprendre'); return; }
         await informer(e.message || String(e)); return;
@@ -38255,6 +38327,7 @@ async function genererTechniqueIA(v, apresIdentification){
       saveVehicle(v); renderMain();
       return;
     }
+    nouvelle = true;   /* « Regenerer » : une vraie nouvelle recherche */
   }else if(c.technique){
     const ok = await demander({
       titre: t('Régénérer les données ?'),
@@ -38262,11 +38335,12 @@ async function genererTechniqueIA(v, apresIdentification){
       oui: t('Régénérer'), non: t('Annuler')
     });
     if(!ok) return;
+    nouvelle = true;
   }
   const attente = fenetreAttente(t('Recherche des données techniques…'),
     t('L’IA recherche et vérifie les caractéristiques, les références de pièces et les couples de serrage de ce moteur. Comptez une à deux minutes.'));
   try{
-    const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, vehicule: {
+    const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, nouvelle: nouvelle, vehicule: {
       marque: veh.marque, modele: veh.modele, generation: c.generation, motorisation: c.motorisation,
       boite: c.boite, code_moteur: c.codeMoteur, energie: libelleEnergie(veh.energie || '') || veh.energie,
       distribution: distributionEffective(c) ? distributionEffective(c) + (c.distribution ? ' (confirmé par le garage, fait foi)' : ' (d’après le code moteur, fait foi)') : '',
@@ -38285,7 +38359,9 @@ async function genererTechniqueIA(v, apresIdentification){
     saveVehicle(v);
     attente.fermer();
     renderMain();
-    bandeau(t('Données techniques prêtes : vérifiez-les avant de télécharger le PDF.'), 'ok');
+    bandeau(rep.partagee
+      ? t('Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.')
+      : t('Données techniques prêtes : vérifiez-les avant de télécharger le PDF.'), 'ok');
   }catch(e){
     attente.fermer();
     if(e.code === 'credit'){ await manqueDeCredit(v, 'fiche'); return; }
@@ -38305,7 +38381,7 @@ async function lireCarnetPapier(v, fichiers){
   if(!images.length){ await informer(t('Choisissez des photos du carnet.')); return; }
   const attente = fenetreAttente(t('Lecture du carnet…'), t('L’IA relève les dates, kilométrages et travaux de chaque tampon.'));
   try{
-    const rep = await appelFicheTechnique({ mode: 'carnet', vehicule_id: v.id, images: images, colonnes: colonnesCarnet(v) });
+    const rep = await appelFicheTechnique({ mode: 'carnet', vehicule_id: v.id, vin: (v.vehicule || {}).vin || '', images: images, colonnes: colonnesCarnet(v) });
     const lus = (rep && rep.entretiens) || [];
     attente.fermer();
     if(!lus.length){ await informer(t('Aucun entretien lisible sur ces photos. Reprenez-les bien à plat et nettes.')); return; }
