@@ -912,6 +912,7 @@
   .cred-main .cred-montant{flex:0 0 auto;}
   .cred-histo{margin-top:8px;font-size:13px;}
   .cred-traitee{padding:4px 0;border-bottom:1px solid var(--line,#eef0f4);color:var(--ink-soft);}
+  .liste-auto + .liste-auto-libre{margin-top:6px;}
   .ident-etat{font-weight:400;color:var(--muted,#6b7280);font-size:12px;}
   .ident-etat.ko{color:#b45309;}
   #idMotoListe + #idMoto{margin-top:6px;}
@@ -2891,6 +2892,11 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "— Choisir —": "— Scegli —",
+    "Autre (saisie libre)": "Altro (inserimento libero)",
+    "ex. 7, 7 phase 2": "es. 7, 7 fase 2",
+    "9. Références OEM — consommables": "9. Riferimenti OEM — materiali di consumo",
+    "9. Références OEM — freinage": "9. Riferimenti OEM — freni",
     "carnet": "libretto",
     "🎟 Mon crédit": "🎟 Il mio credito",
     "Autre montant": "Altro importo",
@@ -4239,6 +4245,11 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "— Choisir —": "— Wielen —",
+    "Autre (saisie libre)": "Aner (fräi aginn)",
+    "ex. 7, 7 phase 2": "z. B. 7, 7 Phas 2",
+    "9. Références OEM — consommables": "9. OEM-Referenzen — Verbrauchsdeeler",
+    "9. Références OEM — freinage": "9. OEM-Referenzen — Bremsen",
     "carnet": "Buch",
     "🎟 Mon crédit": "🎟 Mäi Guthaben",
     "Autre montant": "Anere Montant",
@@ -5586,6 +5597,11 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "— Choisir —": "— Choose —",
+    "Autre (saisie libre)": "Other (type it)",
+    "ex. 7, 7 phase 2": "e.g. 7, 7 phase 2",
+    "9. Références OEM — consommables": "9. OEM references — consumables",
+    "9. Références OEM — freinage": "9. OEM references — brakes",
     "carnet": "logbook",
     "🎟 Mon crédit": "🎟 My credit",
     "Autre montant": "Other amount",
@@ -6932,6 +6948,11 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "— Choisir —": "— Wählen —",
+    "Autre (saisie libre)": "Andere (frei eingeben)",
+    "ex. 7, 7 phase 2": "z. B. 7, 7 Phase 2",
+    "9. Références OEM — consommables": "9. OEM-Referenzen — Verbrauchsteile",
+    "9. Références OEM — freinage": "9. OEM-Referenzen — Bremsen",
     "carnet": "Heft",
     "🎟 Mon crédit": "🎟 Mein Guthaben",
     "Autre montant": "Anderer Betrag",
@@ -8298,6 +8319,11 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "— Choisir —": "— Kiezen —",
+    "Autre (saisie libre)": "Ander (vrij invullen)",
+    "ex. 7, 7 phase 2": "bv. 7, 7 fase 2",
+    "9. Références OEM — consommables": "9. OEM-referenties — verbruiksonderdelen",
+    "9. Références OEM — freinage": "9. OEM-referenties — remmen",
     "carnet": "boekje",
     "🎟 Mon crédit": "🎟 Mijn tegoed",
     "Autre montant": "Ander bedrag",
@@ -9496,7 +9522,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.77';
+const VERSION = '2.79';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13689,6 +13715,14 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.79': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien et identification du véhicule : Marque et Modèle sont des listes déroulantes (61 marques, plus de 750 modèles), avec les générations en chiffres et leurs années : Golf 4 · 1997-2003, Golf 7 · 2012-2020, Clio 4, 308 2… « Autre (saisie libre) » reste possible.",
+    "Les chiffres romains deviennent des chiffres : « Golf VII » s’affiche « Golf 7 », dans les champs comme dans le PDF ; l’IA rédige elle aussi les générations en chiffres (recoller fiche-technique.ts dans Supabase)."
+  ] },
+  '2.78': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien (PDF) : la partie « Remise à zéro de l’indicateur d’entretien » et la page « Vérifications & sources » sont supprimées. Les références OEM (filtres, allumage, distribution et freinage) sont réunies dans un seul tableau, gardé d’un seul bloc sur une page. Le carnet passe ainsi à « 10. Carnet d’entretien ».",
+    "L’IA ne rédige plus la remise à zéro : la fiche est un peu plus rapide à générer. À faire : recoller fiche-technique.ts dans Supabase."
+  ] },
   '2.77': { date: '04/11/2026', lignes: [
     "Carnet d’entretien : corrige « La fiche est trop longue pour être générée en une fois ». La fiche est maintenant rédigée en trois parties en même temps (moteur ; entretien, fluides et couples ; références de pièces), puis rassemblée : plus courte à chaque fois, et plus rapide. À faire : recoller fiche-technique.ts dans Supabase."
   ] },
@@ -35910,10 +35944,8 @@ const ETIQ_SECTIONS_TECH = [
   ['chassis', '3. Châssis, dimensions et poids'], ['courbe', '4. Courbe de couple et de puissance'],
   ['entretien', '5. Plan de maintenance'], ['fluides', '6. Fluides et lubrifiants'],
   ['freins', '7. Tolérances de freinage'], ['couples', '8. Couples de serrage'],
-  ['refs_filtres', '9. Références filtres et allumage'], ['refs_freins', '10. Références freinage'],
-  ['note_commande', 'Note de commande'], ['raz_bouton', '11 A. Remise à zéro — boutons'],
-  ['raz_ecran', '11 B. Remise à zéro — écran'], ['raz_valise', '11 C. Remise à zéro — valise'],
-  ['raz_note', 'Note remise à zéro'], ['rappel_intervalles', 'Rappel des intervalles (carnet)'],
+  ['refs_filtres', '9. Références OEM — consommables'], ['refs_freins', '9. Références OEM — freinage'],
+  ['note_commande', 'Note de commande'], ['rappel_intervalles', 'Rappel des intervalles (carnet)'],
   ['colonnes_carnet', 'Colonnes du carnet'], ['points_a_verifier', 'Points à vérifier'], ['sources', 'Sources']
 ];
 const ETIQ_CHAMPS_TECH = {
@@ -35942,7 +35974,7 @@ function carnetForm(v){
   return '<div class="cerfa-form carnet-form">'
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Véhicule et motorisation')) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Plus la motorisation est précise, plus les données seront justes : cylindrée, nom du moteur et puissance (ex. « 1.6 BlueHDi 120 », « 1.4 TSI 125 »). Le code moteur, s’il est connu, lève les ambiguïtés.')) + '</div>'
-  + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. II, VII phase 2') + '</div>'
+  + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. 7, 7 phase 2') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('motorisation', 'Motorisation *', 'text', 'ex. 1.6 BlueHDi 120 ch')
   +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="carnetBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
   +   champCarnet('codeMoteur', 'Code moteur', 'text', t('facultatif')) + '</div>'
@@ -36086,7 +36118,7 @@ function wireCarnetForm(v, d){
     minuteurCarnet = setTimeout(function(){ renderDoc(v); }, 700);
   };
   document.querySelectorAll('input[data-carnet]').forEach(function(inp){
-    inp.value = c[inp.dataset.carnet] || '';
+    inp.value = inp.dataset.carnet === 'generation' ? romainEnChiffres(c.generation || '') : (c[inp.dataset.carnet] || '');
     inp.oninput = function(){ c[inp.dataset.carnet] = inp.value; saveVehicle(v); relancer(); };
   });
   document.querySelectorAll('input[data-cveh]').forEach(function(inp){
@@ -36097,6 +36129,7 @@ function wireCarnetForm(v, d){
   if(en) en.onchange = function(){ v.vehicule.energie = en.value; saveVehicle(v); relancer(); };
   const bo = document.getElementById('carnetBoite');
   if(bo) bo.onchange = function(){ c.boite = bo.value; saveVehicle(v); relancer(); };
+  brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
   afficherCreditsCarnet(v);
 
   const ph = document.getElementById('carnetPhoto');
@@ -36227,6 +36260,155 @@ function optionsBoite(valeur){
   return '<option value="">' + esc(t('— Je ne sais pas —')) + '</option>'
     + BOITES.map(function(b){ return '<option value="' + esc(b) + '"' + (b === v ? ' selected' : '') + '>' + esc(t(b)) + '</option>'; }).join('')
     + (v && BOITES.indexOf(v) === -1 ? '<option value="' + esc(v) + '" selected>' + esc(v) + '</option>' : '');
+}
+
+/* --- Marques et modeles (listes deroulantes) ---------------------------
+   Generations en CHIFFRES (Golf 7, Clio 4) ; codes usuels pour BMW,
+   Mercedes, Audi (E90, W204, 8V) et lettres pour Opel (Corsa D).
+   Format : « Nom|annees ; Nom|annees ; ... ». Toute autre valeur reste
+   possible par « Autre (saisie libre) ». */
+const MARQUES_AUTO = [
+['ABARTH','Abarth','500;595;695;124 Spider;Punto Evo;600e'],
+['AIXAM','Aixam','City;Crossline;Coupé;Crossover;Minauto'],
+['ALFA ROMEO','Alfa Romeo','147;156;159;166;Brera;Giulietta;Giulia;GT;MiTo;Spider;Stelvio;Tonale;Junior'],
+['ALPINE','Alpine','A110;A290'],
+['ASTON MARTIN','Aston Martin','DB11;DBX;Vantage'],
+['AUDI','Audi','A1 (8X)|2010-2018;A1 (GB)|2018-;A2;A3 (8L)|1996-2003;A3 (8P)|2003-2012;A3 (8V)|2012-2020;A3 (8Y)|2020-;A4 (B5)|1994-2001;A4 (B6)|2000-2004;A4 (B7)|2004-2008;A4 (B8)|2007-2015;A4 (B9)|2015-2024;A5 (8T)|2007-2016;A5 (F5)|2016-;A6 (C5)|1997-2004;A6 (C6)|2004-2011;A6 (C7)|2011-2018;A6 (C8)|2018-;A7;A8;Q2;Q3 (8U)|2011-2018;Q3 (F3)|2018-;Q4 e-tron;Q5 (8R)|2008-2017;Q5 (FY)|2017-2024;Q7 (4L)|2006-2015;Q7 (4M)|2015-;Q8;TT (8N)|1998-2006;TT (8J)|2006-2014;TT (FV)|2014-2023;e-tron'],
+['BENTLEY','Bentley','Bentayga;Continental GT;Flying Spur'],
+['BMW','BMW','Série 1 (E87)|2004-2011;Série 1 (F20)|2011-2019;Série 1 (F40)|2019-2024;Série 2 (F22);Série 2 Active Tourer;Série 2 Gran Coupé;Série 3 (E46)|1998-2006;Série 3 (E90)|2005-2012;Série 3 (F30)|2012-2019;Série 3 (G20)|2019-;Série 4 (F32)|2013-2020;Série 4 (G22)|2020-;Série 5 (E39)|1995-2003;Série 5 (E60)|2003-2010;Série 5 (F10)|2010-2017;Série 5 (G30)|2017-2023;Série 5 (G60)|2023-;Série 6;Série 7;X1 (E84)|2009-2015;X1 (F48)|2015-2022;X1 (U11)|2022-;X2;X3 (E83)|2003-2010;X3 (F25)|2010-2017;X3 (G01)|2017-2024;X4;X5 (E53)|1999-2006;X5 (E70)|2006-2013;X5 (F15)|2013-2018;X5 (G05)|2018-;X6;Z4;i3;i4;iX;iX1;iX3'],
+['BYD','BYD','Atto 2;Atto 3;Dolphin;Dolphin Surf;Seal;Seal U;Han;Tang'],
+['CHEVROLET','Chevrolet','Aveo;Captiva;Cruze;Kalos;Matiz;Orlando;Spark;Trax'],
+['CHRYSLER','Chrysler','300C;Grand Voyager;PT Cruiser;Voyager'],
+['CITROEN','Citroën','Ami;Berlingo 1|1996-2008;Berlingo 2|2008-2018;Berlingo 3|2018-;C1 1|2005-2014;C1 2|2014-2022;C2;C3 1|2002-2009;C3 2|2009-2016;C3 3|2016-2024;C3 4|2024-;C3 Aircross;C3 Picasso;C4 1|2004-2010;C4 2|2010-2018;C4 3|2020-;C4 Cactus;C4 Picasso 1|2006-2013;C4 Picasso 2|2013-2022;C4 X;C5 1|2001-2008;C5 2|2008-2017;C5 Aircross;C5 X;C6;C8;C-Crosser;C-Elysée;C-Zero;DS3;DS4;DS5;Jumper;Jumpy 2|2007-2016;Jumpy 3|2016-;Nemo;Saxo;SpaceTourer;Xantia;Xsara;Xsara Picasso'],
+['CUPRA','Cupra','Ateca;Born;Formentor;Leon;Tavascan;Terramar'],
+['DACIA','Dacia','Bigster;Dokker;Duster 1|2010-2017;Duster 2|2017-2023;Duster 3|2024-;Jogger;Lodgy;Logan 1|2004-2012;Logan 2|2012-2020;Logan 3|2020-;Sandero 1|2008-2012;Sandero 2|2012-2020;Sandero 3|2020-;Spring'],
+['DAIHATSU','Daihatsu','Cuore;Sirion;Terios'],
+['DODGE','Dodge','Caliber;Journey;Nitro'],
+['DS','DS','DS 3;DS 3 Crossback;DS 4;DS 5;DS 7;DS 9'],
+['FERRARI','Ferrari','296;488;F8;Roma;Purosangue'],
+['FIAT','Fiat','500;500C;500L;500X;500e;600;Bravo;Doblo 1|2000-2010;Doblo 2|2010-2022;Doblo 3|2022-;Ducato;Fiorino;Grande Panda;Grande Punto;Multipla;Panda 2|2003-2012;Panda 3|2012-;Punto 2|1999-2010;Punto Evo;Qubo;Scudo;Stilo;Talento;Tipo'],
+['FORD','Ford','B-Max;C-Max 1|2003-2010;C-Max 2|2010-2019;EcoSport;Explorer;Fiesta 5|2002-2008;Fiesta 6|2008-2017;Fiesta 7|2017-2023;Focus 1|1998-2004;Focus 2|2004-2011;Focus 3|2011-2018;Focus 4|2018-2025;Fusion;Galaxy 2|2006-2015;Galaxy 3|2015-2023;Grand C-Max;Ka;Ka+;Kuga 1|2008-2012;Kuga 2|2013-2019;Kuga 3|2020-;Mondeo 3|2000-2007;Mondeo 4|2007-2014;Mondeo 5|2014-2022;Mustang;Mustang Mach-E;Puma;Ranger;S-Max 1|2006-2015;S-Max 2|2015-2023;Tourneo Connect;Tourneo Custom;Transit;Transit Connect;Transit Custom'],
+['HONDA','Honda','Accord;Civic 8|2005-2011;Civic 9|2011-2017;Civic 10|2017-2021;Civic 11|2022-;CR-V 3|2006-2012;CR-V 4|2012-2018;CR-V 5|2018-2023;CR-V 6|2023-;e;HR-V;Jazz 2|2008-2015;Jazz 3|2015-2020;Jazz 4|2020-;ZR-V'],
+['HYUNDAI','Hyundai','Bayon;Getz;i10 1|2008-2013;i10 2|2013-2019;i10 3|2019-;i20 1|2008-2014;i20 2|2014-2020;i20 3|2020-;i30 1|2007-2012;i30 2|2012-2017;i30 3|2017-;Inster;Ioniq;Ioniq 5;Ioniq 6;ix20;ix35;Kona 1|2017-2023;Kona 2|2023-;Santa Fe;Tucson 3|2015-2020;Tucson 4|2020-'],
+['INFINITI','Infiniti','Q30;Q50;QX70'],
+['ISUZU','Isuzu','D-Max'],
+['IVECO','Iveco','Daily'],
+['JAGUAR','Jaguar','E-Pace;F-Pace;F-Type;I-Pace;S-Type;X-Type;XE;XF;XJ'],
+['JEEP','Jeep','Avenger;Cherokee;Compass 1|2006-2016;Compass 2|2017-;Grand Cherokee;Renegade;Wrangler'],
+['KIA','Kia','Carens;Ceed 1|2006-2012;Ceed 2|2012-2018;Ceed 3|2018-;EV3;EV6;EV9;Niro 1|2016-2022;Niro 2|2022-;Picanto 1|2004-2011;Picanto 2|2011-2017;Picanto 3|2017-;Rio 3|2011-2017;Rio 4|2017-2023;Sorento;Soul;Sportage 3|2010-2015;Sportage 4|2015-2021;Sportage 5|2021-;Stonic;Venga;XCeed'],
+['LAMBORGHINI','Lamborghini','Huracán;Urus'],
+['LANCIA','Lancia','Delta;Musa;Ypsilon'],
+['LAND ROVER','Land Rover','Defender;Discovery 3|2004-2009;Discovery 4|2009-2016;Discovery 5|2017-;Discovery Sport;Freelander 1|1997-2006;Freelander 2|2006-2014;Range Rover;Range Rover Evoque 1|2011-2018;Range Rover Evoque 2|2019-;Range Rover Sport 1|2005-2013;Range Rover Sport 2|2013-2022;Range Rover Sport 3|2022-;Range Rover Velar'],
+['LEAPMOTOR','Leapmotor','B10;C10;T03'],
+['LEXUS','Lexus','CT;ES;IS;LBX;NX;RX;UX'],
+['LIGIER','Ligier','JS50;JS60;Myli'],
+['LYNK & CO','Lynk & Co','01;02'],
+['MASERATI','Maserati','Ghibli;Grecale;Levante;Quattroporte'],
+['MAZDA','Mazda','Mazda 2;Mazda 3;Mazda 5;Mazda 6;CX-3;CX-30;CX-5;CX-60;MX-30;MX-5'],
+['MERCEDES-BENZ','Mercedes-Benz','Classe A (W168)|1997-2004;Classe A (W169)|2004-2012;Classe A (W176)|2012-2018;Classe A (W177)|2018-;Classe B (W245)|2005-2011;Classe B (W246)|2011-2018;Classe B (W247)|2018-;Classe C (W203)|2000-2007;Classe C (W204)|2007-2014;Classe C (W205)|2014-2021;Classe C (W206)|2021-;Classe E (W211)|2002-2009;Classe E (W212)|2009-2016;Classe E (W213)|2016-2023;Classe E (W214)|2023-;Classe CLA (C117)|2013-2019;Classe CLA (C118)|2019-;Classe G;Classe GLA (X156)|2014-2020;Classe GLA (H247)|2020-;Classe GLB;Classe GLC (X253)|2015-2022;Classe GLC (X254)|2022-;Classe GLE;Classe ML;Classe S;Classe V;Citan;EQA;EQB;EQC;Sprinter;Vito'],
+['MG','MG','HS;Marvel R;MG3;MG4;MG5;ZS'],
+['MICROCAR','Microcar','Dué;M.Go'],
+['MINI','Mini','Mini (R50/R53)|2001-2006;Mini (R56)|2006-2013;Mini (F56)|2014-2024;Mini (F66/J01)|2024-;Cabrio;Clubman;Countryman (R60)|2010-2016;Countryman (F60)|2017-2023;Countryman (U25)|2024-;Paceman'],
+['MITSUBISHI','Mitsubishi','ASX;Colt;Eclipse Cross;L200;Outlander;Pajero;Space Star'],
+['NISSAN','Nissan','Ariya;Juke 1|2010-2019;Juke 2|2019-;Leaf;Micra 3|2003-2010;Micra 4|2010-2017;Micra 5|2017-;Navara;Note;NV200;Primastar;Pulsar;Qashqai 1|2007-2013;Qashqai 2|2014-2021;Qashqai 3|2021-;Townstar;X-Trail'],
+['OPEL','Opel','Adam;Agila;Astra G|1998-2004;Astra H|2004-2010;Astra J|2009-2015;Astra K|2015-2021;Astra L|2021-;Combo C|2001-2011;Combo D|2011-2018;Combo E|2018-;Corsa C|2000-2006;Corsa D|2006-2014;Corsa E|2014-2019;Corsa F|2019-;Crossland;Frontera;Grandland;Insignia A|2008-2017;Insignia B|2017-2022;Karl;Meriva A|2003-2010;Meriva B|2010-2017;Mokka A|2012-2019;Mokka B|2020-;Movano;Vivaro;Zafira A|1999-2005;Zafira B|2005-2014;Zafira C|2011-2019'],
+['PEUGEOT','Peugeot','106|1991-2003;107|2005-2014;108|2014-2021;206|1998-2012;206+;207|2006-2014;208 1|2012-2019;208 2|2019-;2008 1|2013-2019;2008 2|2019-;301;306;307|2001-2008;308 1|2007-2013;308 2|2013-2021;308 3|2021-;3008 1|2009-2016;3008 2|2016-2023;3008 3|2023-;4007;4008;406|1995-2004;407|2004-2011;408;5008 1|2009-2016;5008 2|2017-2023;5008 3|2024-;508 1|2010-2018;508 2|2018-;607;807;Bipper;Boxer;Expert 2|2007-2016;Expert 3|2016-;iOn;Partner 1|1996-2008;Partner 2|2008-2018;Partner 3|2018-;Rifter;Traveller'],
+['POLESTAR','Polestar','2;3;4'],
+['PORSCHE','Porsche','911;Boxster;Cayenne;Cayman;Macan;Panamera;Taycan'],
+['RENAULT','Renault','Arkana;Austral;Captur 1|2013-2019;Captur 2|2019-;Clio 1|1990-1998;Clio 2|1998-2012;Clio 3|2005-2014;Clio 4|2012-2019;Clio 5|2019-;Espace 4|2002-2014;Espace 5|2015-2023;Espace 6|2023-;Express;Fluence;Grand Scénic 2|2004-2009;Grand Scénic 3|2009-2016;Grand Scénic 4|2016-2022;Kadjar;Kangoo 1|1997-2008;Kangoo 2|2008-2021;Kangoo 3|2021-;Koleos 1|2008-2016;Koleos 2|2016-;Laguna 2|2001-2007;Laguna 3|2007-2015;Master 2|1997-2010;Master 3|2010-2024;Master 4|2024-;Mégane 1|1995-2002;Mégane 2|2002-2008;Mégane 3|2008-2016;Mégane 4|2016-2023;Mégane E-Tech;Modus;R5 E-Tech;Rafale;Scénic 1|1996-2003;Scénic 2|2003-2009;Scénic 3|2009-2016;Scénic 4|2016-2022;Scénic 5|2024-;Symbioz;Talisman;Trafic 2|2001-2014;Trafic 3|2014-;Twingo 1|1993-2007;Twingo 2|2007-2014;Twingo 3|2014-2024;Twizy;Vel Satis;Zoe'],
+['ROLLS-ROYCE','Rolls-Royce','Cullinan;Ghost;Phantom'],
+['ROVER','Rover','25;45;75'],
+['SAAB','Saab','9-3;9-5'],
+['SEAT','Seat','Alhambra;Altea;Arona;Ateca;Cordoba;Exeo;Ibiza 3|2002-2008;Ibiza 4|2008-2017;Ibiza 5|2017-;Leon 1|1999-2005;Leon 2|2005-2012;Leon 3|2012-2020;Leon 4|2020-;Mii;Tarraco;Toledo'],
+['SKODA','Škoda','Citigo;Elroq;Enyaq;Fabia 1|1999-2007;Fabia 2|2007-2014;Fabia 3|2014-2021;Fabia 4|2021-;Kamiq;Karoq;Kodiaq 1|2016-2024;Kodiaq 2|2024-;Octavia 1|1996-2004;Octavia 2|2004-2013;Octavia 3|2013-2020;Octavia 4|2020-;Rapid;Roomster;Scala;Superb 1|2001-2008;Superb 2|2008-2015;Superb 3|2015-2023;Superb 4|2024-;Yeti'],
+['SMART','Smart','#1;#3;Forfour;Fortwo'],
+['SSANGYONG','SsangYong (KGM)','Korando;Rexton;Tivoli;Torres'],
+['SUBARU','Subaru','Forester;Impreza;Outback;XV'],
+['SUZUKI','Suzuki','Across;Alto;Baleno;Celerio;Ignis;Jimny;S-Cross;Splash;Swace;Swift;SX4;Vitara'],
+['TESLA','Tesla','Model 3;Model S;Model X;Model Y'],
+['TOYOTA','Toyota','Auris 1|2006-2012;Auris 2|2012-2018;Avensis;Aygo 1|2005-2014;Aygo 2|2014-2022;Aygo X;bZ4X;C-HR 1|2016-2023;C-HR 2|2023-;Corolla;GR86;Highlander;Hilux;iQ;Land Cruiser;Prius;Proace;Proace City;RAV4 3|2005-2012;RAV4 4|2013-2018;RAV4 5|2019-;Supra;Urban Cruiser;Verso;Yaris 1|1999-2005;Yaris 2|2005-2011;Yaris 3|2011-2020;Yaris 4|2020-;Yaris Cross'],
+['VOLKSWAGEN','Volkswagen','Amarok;Arteon;Beetle;Bora;Caddy 3|2004-2015;Caddy 4|2015-2020;Caddy 5|2020-;California;Crafter 1|2006-2016;Crafter 2|2017-;Eos;Fox;Golf 3|1991-1997;Golf 4|1997-2003;Golf 5|2003-2008;Golf 6|2008-2012;Golf 7|2012-2020;Golf 8|2020-;Golf Plus;Golf Sportsvan;ID.3;ID.4;ID.5;ID.7;ID. Buzz;Jetta;Lupo;Multivan;New Beetle;Passat B5|1996-2005;Passat B6|2005-2010;Passat B7|2010-2014;Passat B8|2014-2023;Passat B9|2023-;Polo 3|1994-2001;Polo 4|2001-2009;Polo 5|2009-2017;Polo 6|2017-;Scirocco 3|2008-2017;Sharan 1|1995-2010;Sharan 2|2010-2022;T-Cross;T-Roc;Taigo;Tiguan 1|2007-2016;Tiguan 2|2016-2024;Tiguan 3|2024-;Touareg 1|2002-2010;Touareg 2|2010-2018;Touareg 3|2018-;Touran 1|2003-2015;Touran 2|2015-;Transporter T4|1990-2003;Transporter T5|2003-2015;Transporter T6|2015-;Up'],
+['VOLVO','Volvo','C30;EX30;EX90;S40;S60;S90;V40;V60;V70;V90;XC40;XC60;XC90']
+];
+const ALIAS_MARQUES = { VW: 'VOLKSWAGEN', MERCEDES: 'MERCEDES-BENZ', MERCEDESBENZ: 'MERCEDES-BENZ', CITROEN: 'CITROEN', SKODA: 'SKODA',
+  LANDROVER: 'LAND ROVER', ALFAROMEO: 'ALFA ROMEO', KGM: 'SSANGYONG', SSANGYONGKGM: 'SSANGYONG', DSAUTOMOBILES: 'DS', LYNKCO: 'LYNK & CO' };
+
+function normListe(x){
+  return String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+/* « Golf VII » → « Golf 7 », « Clio IV » → « Clio 4 » (chiffres romains en
+   majuscules seulement, et « V » seul uniquement apres un nom de modele,
+   pour ne pas toucher a « Classe V » ou « V6 »). */
+function romainEnChiffres(x){
+  const R = { II: '2', III: '3', IV: '4', VI: '6', VII: '7', VIII: '8', IX: '9' };
+  return String(x || '')
+    .replace(/\b(VIII|VII|VI|IV|IX|III|II)\b/g, function(m){ return R[m]; })
+    .replace(/\b(golf|polo|clio|m[eé]gane|sc[eé]nic|laguna|espace|twingo|corsa|astra|fiesta|focus|mondeo|ibiza|leon|octavia|fabia|yaris|civic|passat|kangoo|master|trafic)(\s+)V\b/gi, function(m, a, e){ return a + e + '5'; });
+}
+function entreeMarque(val){
+  let n = normListe(val);
+  if(!n) return null;
+  if(ALIAS_MARQUES[n]) n = normListe(ALIAS_MARQUES[n]);
+  return MARQUES_AUTO.filter(function(m){ return normListe(m[0]) === n || normListe(m[1]) === n; })[0] || null;
+}
+function optionsMarques(){
+  return MARQUES_AUTO.map(function(m){ return { v: m[0], txt: m[1] }; });
+}
+function optionsModeles(marque){
+  const m = entreeMarque(marque);
+  if(!m) return [];
+  return m[2].split(';').map(function(e){
+    const p = e.split('|');
+    const nom = p[0].trim();
+    return { v: nom.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(),
+             txt: nom + (p[1] ? ' · ' + p[1].replace(/-$/, '-…') : '') };
+  });
+}
+/* Transforme un champ texte en liste deroulante (le champ reste la valeur
+   de reference : il est rempli par la liste, et sert de saisie libre pour
+   « Autre »). input._rendreListe() resynchronise apres un changement fait
+   par le programme. */
+function brancherListe(input, fournir, quandChange){
+  if(!input || input._rendreListe) return;
+  const sel = document.createElement('select');
+  sel.className = 'liste-large liste-auto';
+  input.parentNode.insertBefore(sel, input);
+  input.classList.add('liste-auto-libre');
+  const rendre = function(){
+    const opts = fournir();
+    const val = input.value.trim();
+    const n = normListe(romainEnChiffres(val));
+    const trouve = val ? opts.filter(function(o){ return normListe(o.v) === n; })[0] : null;
+    sel.innerHTML = '<option value="">' + esc(t('— Choisir —')) + '</option>'
+      + opts.map(function(o){ return '<option value="' + esc(o.v) + '"' + (o === trouve ? ' selected' : '') + '>' + esc(o.txt) + '</option>'; }).join('')
+      + '<option value="__autre">' + esc(t('Autre (saisie libre)')) + '</option>';
+    if(!trouve && val) sel.value = '__autre';
+    sel.style.display = opts.length ? '' : 'none';
+    input.style.display = (!opts.length || sel.value === '__autre') ? '' : 'none';
+  };
+  sel.onchange = function(){
+    if(sel.value === '__autre'){ input.style.display = ''; input.focus(); return; }
+    input.style.display = 'none';
+    input.value = sel.value;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    if(quandChange) quandChange();
+  };
+  input._rendreListe = rendre;
+  rendre();
+}
+function brancherMarqueModele(inMarque, inModele){
+  if(!inMarque || !inModele) return;
+  brancherListe(inModele, function(){ return optionsModeles(inMarque.value); });
+  brancherListe(inMarque, optionsMarques, function(){
+    /* Nouvelle marque : le modele d'une autre marque n'a plus de sens. */
+    if(inModele.value && !optionsModeles(inMarque.value).some(function(o){ return normListe(o.v) === normListe(romainEnChiffres(inModele.value)); })){
+      inModele.value = '';
+      inModele.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    inModele._rendreListe();
+  });
+  inMarque.addEventListener('input', function(e){ if(e.isTrusted && inModele._rendreListe) inModele._rendreListe(); });
 }
 
 /* --- Liste des motorisations d'un modele ----------------------------------- */
@@ -36361,7 +36543,8 @@ function fenetreIdentification(v){
     $('idVin').value = veh.vin || '';
     $('idDate').value = /^\d{4}-\d{2}-\d{2}$/.test(veh.dateFirstImmat || '') ? veh.dateFirstImmat : '';
     $('idMarque').value = veh.marque || '';
-    $('idModele').value = veh.modele || '';
+    $('idModele').value = romainEnChiffres(veh.modele || '');
+    brancherMarqueModele($('idMarque'), $('idModele'));
     $('idMoto').value = c.motorisation || '';
     $('idCv').value = String(veh.puissanceFiscale || '').replace(/[^0-9]/g, '');
     $('idCh').value = c.puissanceCh ? String(c.puissanceCh) : '';
@@ -36493,7 +36676,7 @@ function fenetreIdentification(v){
       z.className = 'ident-large ident-lu ok';
       z.textContent = '✓ ' + [lu.marque ? t('Constructeur') + ' : ' + lu.marque : t('Constructeur non reconnu'),
                                lu.annee ? t('année-modèle') + ' ' + lu.annee : ''].filter(Boolean).join(' · ');
-      if(lu.marque && !$('idMarque').value.trim()) $('idMarque').value = lu.marque;
+      if(lu.marque && !$('idMarque').value.trim()){ $('idMarque').value = lu.marque; $('idMarque')._rendreListe && $('idMarque')._rendreListe(); $('idModele')._rendreListe && $('idModele')._rendreListe(); }
     };
     $('idVin').addEventListener('input', function(){ replaceKeepingCaret($('idVin'), $('idVin').value.toUpperCase()); majVin(); });
     $('idDate').addEventListener('change', majVin);
@@ -36518,7 +36701,7 @@ function fenetreIdentification(v){
       if($('idMoto').value.trim()) c.motorisation = $('idMoto').value.trim();
       c.motorisationListe = motoChoisie ? { nom: motoChoisie.nom || '', code: motoChoisie.code_moteur || '',
         ch: motoChoisie.puissance_ch || '', periode: motoChoisie.periode || '', generation: motoChoisie.generation || '' } : null;
-      if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = motoChoisie.generation;
+      if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = romainEnChiffres(motoChoisie.generation);
       if($('idCv').value) veh.puissanceFiscale = $('idCv').value;
       c.puissanceCh = chSaisis || '';
       if($('idBoite').value) c.boite = $('idBoite').value;
@@ -36564,7 +36747,7 @@ async function identifierMoteur(v){
     if(!c.puissanceCh && chevauxDepuisSaisie(choix.puissance_ch)) c.puissanceCh = chevauxDepuisSaisie(choix.puissance_ch);
     c.identifie = { date: Date.now(), code: choix.code_moteur || '', certitude: choix.certitude || '' };
   }
-  if(rep.generation && !c.generation) c.generation = rep.generation;
+  if(rep.generation && !c.generation) c.generation = romainEnChiffres(rep.generation);
   if(rep.marque && !veh.marque) veh.marque = String(rep.marque).toUpperCase();
   if(rep.modele && !veh.modele) veh.modele = String(rep.modele).toUpperCase();
   saveVehicle(v);
@@ -36590,7 +36773,7 @@ function choisirCandidatMoteur(rep){
     };
     fond.innerHTML = '<div class="dlg dlg-ident" role="dialog" aria-modal="true">'
       + '<div class="dlg-titre">' + esc(t('Quel moteur ?')) + '</div>'
-      + '<div class="dlg-texte">' + esc([rep.marque, rep.modele, rep.generation].filter(Boolean).join(' ')
+      + '<div class="dlg-texte">' + esc(romainEnChiffres([rep.marque, rep.modele, rep.generation].filter(Boolean).join(' '))
           + (rep.annee_modele ? ' — ' + t('année-modèle') + ' ' + rep.annee_modele : '')) + '</div>'
       + (cands.length ? '<div class="ident-cands">' + cands.map(function(x, i){
           return '<label class="ident-cand"><input type="radio" name="idCand" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>'
@@ -37348,12 +37531,12 @@ async function genererCarnetPdf(v, d){
   const marque = String(T.marque || veh.marque || '').toUpperCase();
   /* Le modele seul en titre (« GOLF VII ») : la generation et la phase
      vont dans le sous-titre, sinon « VII » apparaissait deux fois. */
-  const modele = String(T.modele || veh.modele || '').toUpperCase();
+  const modele = romainEnChiffres(String(T.modele || veh.modele || '')).toUpperCase();
   const moto = String(T.motorisation || c.motorisation || '').toUpperCase();
   const annee = anneeMec(v);
-  const piedTexte = [T.marque || veh.marque, T.modele || veh.modele, T.motorisation || c.motorisation].filter(Boolean).join(' ')
+  const piedTexte = [T.marque || veh.marque, romainEnChiffres(T.modele || veh.modele), T.motorisation || c.motorisation].filter(Boolean).join(' ')
     + (annee ? ' (' + annee + ')' : '') + ' — Fiche Technique & Atelier';
-  const sousTitre = T.sous_titre || [c.generation, veh.dateFirstImmat ? '1re mise en circulation le ' + fmtDate(veh.dateFirstImmat) : '', c.codeMoteur ? 'Moteur ' + c.codeMoteur : ''].filter(Boolean).join(' • ');
+  const sousTitre = romainEnChiffres(T.sous_titre || [c.generation, veh.dateFirstImmat ? '1re mise en circulation le ' + fmtDate(veh.dateFirstImmat) : '', c.codeMoteur ? 'Moteur ' + c.codeMoteur : ''].filter(Boolean).join(' • '));
 
   const pages = [];
   let page = null, y = 0;
@@ -37392,7 +37575,7 @@ async function genererCarnetPdf(v, d){
     y -= h + 10;
   };
   /* Un tableau qui coule sur plusieurs pages, en-tete repete. */
-  const tableau = function(entetes, lignes, fractions, liens){
+  const tableau = function(entetes, lignes, fractions, liens, options){
     if(!lignes || !lignes.length) return;
     const larg = fractions.map(function(f){ return f * LARG; });
     const PAD = 6, TA = 8;
@@ -37415,6 +37598,11 @@ async function genererCarnetPdf(v, d){
       page.drawLine({ start: { x: MG, y: y - h }, end: { x: MG + LARG, y: y - h }, thickness: 0.6, color: TRAIT });
       y -= h;
     };
+    /* Tableau d'un seul bloc : s'il tient sur une page, on le commence sur
+       une nouvelle page plutot que de le couper. */
+    const total = hauteurLigne(entetes, gras, 7.8) + lignes.reduce(function(h, cl){ return h + hauteurLigne(cl, norm, TA); }, 0) + 4;
+    if(options && options.entier && total + (options.titre ? 26 : 0) < H - MG - 6 - BAS) place(total + (options.titre ? 26 : 0));
+    if(options && options.titre) titreSection(options.titre);
     place(hauteurLigne(entetes, gras, 7.8) + hauteurLigne(lignes[0], norm, TA) + 4);
     dessinerLigne(entetes, gras, 7.8, FOND);
     lignes.forEach(function(cells){
@@ -37529,103 +37717,25 @@ async function genererCarnetPdf(v, d){
     tableau(['Composant de Freinage', 'Épaisseur Neuf', 'Cote Minimale / Limite d’Usure'], champs(tc.freins, ['composant', 'neuf', 'limite']), [0.4, 0.24, 0.36]);
     titreSection('8. Couples de Serrage Officiels (Nm)');
     tableau(['Élément / Assemblage', 'Couple (Nm)', 'Note d’Assemblage'], champs(tc.couples, ['element', 'couple', 'note']), [0.34, 0.18, 0.48]);
-    /* References : la colonne OEM est un lien (recherche de la piece en
-       ligne), et la source de verification est indiquee. */
-    const tableauRefs = function(titre, entetes, l){
-      if(!l || !l.length) return;
-      titreSection(titre);
-      const avecSource = l.some(function(x){ return x.source; });
-      const cellules = l.map(function(x){ return [x.piece || '', x.oem || '', x.equivalents || ''].concat(avecSource ? [x.source || ''] : []); });
-      const liens = l.map(function(x){ const r = premiereReference(x.oem); return r ? { col: 1, url: 'https://www.google.com/search?q=' + encodeURIComponent(r) } : null; });
-      tableau(entetes.concat(avecSource ? ['Vérifié sur'] : []), cellules, avecSource ? [0.21, 0.24, 0.37, 0.18] : [0.26, 0.3, 0.44], liens);
-    };
-    tableauRefs('9. Références OEM & Consommables d’Origine (Filtres & Allumage)',
-      ['Consommable', 'Référence Constructeur (OEM)', 'Équivalent Équipementier Première Monte'], tc.refs_filtres);
-    tableauRefs('10. Références OEM Consommables de Freinage',
-      ['Pièce de Freinage', 'Référence Constructeur (OEM)', 'Équivalent Première Monte'], tc.refs_freins);
-    if((tc.refs_filtres || []).length || (tc.refs_freins || []).length){
+    /* References : un seul tableau (consommables puis freinage) ; la
+       colonne OEM est un lien vers la recherche de la piece en ligne. */
+    const refs = (tc.refs_filtres || []).concat(tc.refs_freins || []).filter(function(x){ return x && (x.piece || x.oem || x.equivalents); });
+    if(refs.length){
+      tableau(['Pièce / Consommable', 'Référence Constructeur (OEM)', 'Équivalents Première Monte'],
+        refs.map(function(x){ return [x.piece || '', x.oem || '', x.equivalents || '']; }), [0.28, 0.3, 0.42],
+        refs.map(function(x){ const r = premiereReference(x.oem); return r ? { col: 1, url: 'https://www.google.com/search?q=' + encodeURIComponent(r) } : null; }),
+        { entier: true, titre: '9. Références OEM & Consommables' });
       ecrire('Cliquez sur une référence constructeur (en bleu) pour la rechercher chez les vendeurs en ligne avant de commander.', MG, y, 7, norm, DOUX);
       y -= 12;
     }
     if(tc.note_commande) encadre('Note de Commande : ' + tc.note_commande);
 
-    /* Remise a zero */
-    titreSection('11. Remise à Zéro de l’Indicateur d’Entretien');
-    ecrire('À faire juste après la vidange (ou l’inspection). Pensez aussi à la noter dans le carnet d’entretien.', MG, y, 8, norm, DOUX);
-    y -= 14;
-    const rb = tc.raz_bouton || {};
-    if(rb.etapes && rb.etapes.length){
-      dessinerEtapes('A. ' + (rb.titre || 'Sans valise — avec les boutons du combiné'), 'SANS VALISE', rb.etapes);
-    }
-    const re = tc.raz_ecran || {};
-    if((re.chemin && re.chemin.length) || re.note){
-      place(70);
-      y -= 4;
-      ecrire('B. ' + (re.titre || 'Sans valise — par l’écran'), MG, y, 9.5, gras, ENCRE);
-      etiquette(MG + LARG, y, 'SANS VALISE');
-      y -= 18;
-      let x = MG;
-      (re.chemin || []).forEach(function(m, i){
-        const w = largeur(m, 7.5, gras) + 14;
-        if(x + w > MG + LARG){ x = MG; y -= 22; }
-        page.drawRectangle({ x: x, y: y - 6, width: w, height: 17, borderColor: BLEU, borderWidth: 0.8, color: BLANC });
-        ecrire(m, x + 7, y, 7.5, gras, ENCRE);
-        x += w;
-        if(i < re.chemin.length - 1){ ecrire('›', x + 4, y, 10, gras, DOUX); x += 14; }
-      });
-      y -= 22;
-      if(re.note){ lignesDe(re.note, norm, 7.6, LARG).forEach(function(l){ place(10); ecrire(l, MG, y, 7.6, norm, DOUX); y -= 10; }); }
-      y -= 8;
-    }
-    const outils = (tc.raz_valise || []).filter(function(o){ return o && o.etapes && o.etapes.length; });
-    if(outils.length){
-      place(60);
-      y -= 4;
-      ecrire('C. Avec valise' + (outils.length ? ' — ' + outils.map(function(o){ return o.outil; }).join(' et ') : ''), MG, y, 9.5, gras, ENCRE);
-      etiquette(MG + LARG, y, 'AVEC VALISE');
-      y -= 16;
-      const nCol = Math.min(2, outils.length), wCol = (LARG - (nCol - 1) * 14) / nCol;
-      for(let k = 0; k < outils.length; k += nCol){
-        const lot = outils.slice(k, k + nCol);
-        /* hauteur du lot */
-        const hauts = lot.map(function(o){ return 16 + o.etapes.reduce(function(h, e){ return h + lignesDe(e, norm, 7.6, wCol - 26).length * 10 + 5; }, 0); });
-        const hLot = Math.max.apply(null, hauts);
-        place(hLot + 6);
-        lot.forEach(function(o, j){
-          const x0 = MG + j * (wCol + 14);
-          let yy = y;
-          page.drawRectangle({ x: x0, y: yy - hLot, width: wCol, height: hLot, color: FOND });
-          ecrire(o.outil, x0 + 8, yy - 12, 8.5, gras, BLEU);
-          yy -= 24;
-          o.etapes.forEach(function(e, n){
-            page.drawCircle({ x: x0 + 14, y: yy + 2.5, size: 6, color: BLEU });
-            const num = String(n + 1);
-            ecrire(num, x0 + 14 - largeur(num, 7, gras) / 2, yy, 7, gras, BLANC);
-            lignesDe(e, norm, 7.6, wCol - 30).forEach(function(l){ ecrire(l, x0 + 26, yy, 7.6, norm, ENCRE); yy -= 10; });
-            yy -= 5;
-          });
-        });
-        y -= hLot + 10;
-      }
-    }
-    if(tc.raz_note) encadre(tc.raz_note);
-
-    /* Verifications et sources */
-    const pts = (tc.points_a_verifier || []).filter(Boolean), srcs = (tc.sources || []).filter(Boolean);
-    titreSection('Vérifications & Sources');
-    encadre('Données générées par l’IA' + (c.techniqueDate ? ' le ' + new Date(c.techniqueDate).toLocaleDateString('fr-FR') : '')
-      + ' à partir de sources publiques' + (c.techniqueWeb === false ? '' : ' consultées en ligne')
-      + '. Avant toute intervention, contrôlez les couples de serrage et les références avec la documentation du constructeur ou le catalogue de votre fournisseur (code moteur, code PR, numéro de châssis).'
-      + (pts.length ? ' Points à vérifier : ' + pts.join(' ; ') + '.' : ''), { taille: 7.6 });
-    if(srcs.length){
-      lignesDe('Sources : ' + srcs.join(' • '), norm, 6.8, LARG).forEach(function(l){ place(9); ecrire(l, MG, y, 6.8, norm, DOUX); y -= 9; });
-    }
   }
 
-  /* ---------------- 12. Carnet d'entretien ---------------- */
+  /* ---------------- 10. Carnet d'entretien ---------------- */
   nouvellePage();
   y = H - 52;
-  ecrire('12. Carnet d’Entretien', MG, y, 12.5, gras, ENCRE);
+  ecrire('10. Carnet d’Entretien', MG, y, 12.5, gras, ENCRE);
   y -= 8;
   page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
   y -= 10;
