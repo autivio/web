@@ -2913,6 +2913,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "estimés, vérifiez la case P.6": "stimati, verifica la casella P.6",
     "Stop & Start": "Start & Stop",
     "d’après la motorisation": "in base alla motorizzazione",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Scheda già generata per questa motorizzazione: ripresa senza nuova ricerca. Verificala prima di scaricare il PDF.",
@@ -4300,6 +4301,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "estimés, vérifiez la case P.6": "geschat, kuckt d’Feld P.6",
     "Stop & Start": "Start-Stopp",
     "d’après la motorisation": "no der Motorisatioun",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche fir dës Motorisatioun schonn erstallt: ouni nei Sich iwwerholl. Iwwerpréift se ier Dir de PDF eroflued.",
@@ -5686,6 +5688,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "estimés, vérifiez la case P.6": "estimated, check box P.6",
     "Stop & Start": "Stop & Start",
     "d’après la motorisation": "based on the engine",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Data sheet already generated for this engine: reused without a new search. Check it before downloading the PDF.",
@@ -7071,6 +7074,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "estimés, vérifiez la case P.6": "geschätzt, Feld P.6 prüfen",
     "Stop & Start": "Start-Stopp",
     "d’après la motorisation": "laut Motorisierung",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Datenblatt für diese Motorisierung bereits erstellt: ohne neue Suche übernommen. Prüfen Sie es vor dem Herunterladen der PDF.",
@@ -8476,6 +8480,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "estimés, vérifiez la case P.6": "geschat, controleer vak P.6",
     "Stop & Start": "Start-stop",
     "d’après la motorisation": "volgens de motor",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche al gemaakt voor deze motor: overgenomen zonder nieuwe zoekopdracht. Controleer ze voordat u de PDF downloadt.",
@@ -9713,7 +9718,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.02';
+const VERSION = '3.03';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13906,6 +13911,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.03': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : quand les CV fiscaux sont vides et que la version n’est pas dans la liste (ex. 1.6 e-HDi 115), ils sont repris d’une version du même code moteur ou d’une version voisine (même cylindrée, puissance à 5 ch près), gratuitement. La case indique « estimés, vérifiez la case P.6 » tant que vous ne l’avez pas confirmée.",
+    "Une identification gardée par une ancienne version (sans CV fiscaux ni Stop & Start) est refaite une fois pour les obtenir."
+  ] },
   '3.02': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : la motorisation du véhicule (ex. « 1.6 e-HDi 115 FAP ») est toujours choisie dans la liste, même quand la liste des versions du modèle ne la connaît pas ou l’a écartée : plus de « Autre (saisie libre) » pour une motorisation déjà trouvée."
   ] },
@@ -36410,6 +36419,29 @@ function motoDeLaListe(tout, txt, code, codeEnergie, annee){
   }
   return trouverMotoTapee(tout, motoCourte(txt), codeEnergie, annee);
 }
+/* CV fiscaux d'une version absente de la liste (ex. 1.6 e-HDi 115) :
+   ceux d'une version du meme code moteur, sinon d'une version voisine
+   (meme cylindree, meme energie, puissance a 5 ch pres). Estimation, a
+   verifier sur la carte grise (P.6). */
+function cvEstime(tout, motorisation, code, ch, codeEnergie){
+  tout = tout || [];
+  const avecCv = tout.filter(function(m){ return /^\d{1,2}$/.test(String(m.cv_fiscaux || '').trim()); });
+  const c = normPart(String(code || '').split(/[\s(\/,;]+/)[0]);
+  if(c){
+    const l = avecCv.filter(function(m){ return String(m.code_moteur || '').toUpperCase().split(/[^A-Z0-9]+/).indexOf(c) !== -1; });
+    if(l.length) return { cv: String(l[0].cv_fiscaux).trim(), sur: true };
+  }
+  const cyl = (String(motorisation || '').match(/\d[.,]\d/) || [''])[0].replace(',', '.');
+  const p = Number(ch) || chevauxDepuisSaisie(motorisation);
+  const fam = ENERGIE_FAMILLE[String(codeEnergie || '').toUpperCase()] || '';
+  if(!cyl || !p) return null;
+  const voisins = avecCv.filter(function(m){
+    const mc = (String(m.nom || '').match(/\d[.,]\d/) || [''])[0].replace(',', '.');
+    const mp = chevauxDepuisSaisie(m.puissance_ch);
+    return mc === cyl && (!fam || !m.energie || m.energie === fam) && mp && Math.abs(mp - p) <= 5;
+  }).sort(function(a, b){ return Math.abs(chevauxDepuisSaisie(a.puissance_ch) - p) - Math.abs(chevauxDepuisSaisie(b.puissance_ch) - p); });
+  return voisins.length ? { cv: String(voisins[0].cv_fiscaux).trim(), sur: false } : null;
+}
 function trouverMotoTapee(tout, txt, codeEnergie, annee){
   const mots = motsMoto(txt);
   if(!mots.length || !mots.some(function(w){ return /\d/.test(w); })) return null;
@@ -36813,6 +36845,26 @@ function wireCarnetForm(v, d){
       const m = l ? motoDeLaListe(l.motorisations, c.motorisation, c.codeMoteur, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4)) : null;
       if(m && versions().some(function(x){ return x.v === String(m.nom || '').toUpperCase(); })){ c.motorisation = m.nom; champMoto.value = m.nom; saveVehicle(v); }
     }
+    /* CV fiscaux encore vides : estimes d'apres la liste (gratuit), des
+       que la liste est la (tout de suite, ou apres sa lecture). */
+    const estimerCv = function(){
+      const x = document.querySelector('input[data-cveh="puissanceFiscale"]');
+      if(!String(veh.puissanceFiscale || '').trim() && c.motorisation){
+        const l = listeEnCache();
+        const e = l ? cvEstime(l.motorisations, c.motorisation, c.codeMoteur, c.puissanceCh, veh.energie) : null;
+        if(e){
+          veh.puissanceFiscale = e.cv; c.autoMoto = Object.assign({}, c.autoMoto || {}, { puissanceFiscale: e.cv }); c.cvEstime = !e.sur; saveVehicle(v);
+          if(x) x.value = e.cv;
+          if(champMoto._rendreListe) champMoto._rendreListe();
+        }
+      }
+      if(x && !x._cvEcoute){ x._cvEcoute = true; x.addEventListener('input', function(ev){ if(!ev.isTrusted) return; c.cvEstime = false; const z = x.closest('div').querySelector('.cv-estime'); if(z) z.remove(); }); }
+      const et = x && x.closest('div') && x.closest('div').querySelector('label');
+      if(et && !et.querySelector('.cv-estime') && c.cvEstime && veh.puissanceFiscale && String(veh.puissanceFiscale) === String((c.autoMoto || {}).puissanceFiscale || '')){
+        const z = document.createElement('span'); z.className = 'ident-etat cv-estime'; z.textContent = ' — ' + t('estimés, vérifiez la case P.6'); et.appendChild(z);
+      }
+    };
+    estimerCv();
     brancherListeAuto(champMoto, versions, function(){
       const o = versions().filter(function(x){ return x.v === champMoto.value; })[0];
       if(o){ appliquerMotorisation(v, o.m); saveVehicle(v); renderMain(); }
@@ -36826,7 +36878,7 @@ function wireCarnetForm(v, d){
       majBouton();
       try{ await enCours[cle]; }
       catch(e){ (window.__motosEchecs || (window.__motosEchecs = {}))[cle] = true; if(document.contains(champMoto)) informer(e.message || String(e)); }
-      if(document.contains(champMoto)){ champMoto._rendreListe(); majBouton(); majNote(); }
+      if(document.contains(champMoto)){ champMoto._rendreListe(); majBouton(); majNote(); estimerCv(); }
     };
     btn.onclick = function(){ charger(); };
     /* Proposition automatique et GRATUITE : des que marque, modele et 1re
@@ -36842,7 +36894,7 @@ function wireCarnetForm(v, d){
         if(!veh.marque || !veh.modele || !/^\d{4}/.test(String(veh.dateFirstImmat || ''))) return;
         if(listeEnCache()) return;
         const l = await lireListePartagee(veh.marque, veh.modele, annee());
-        if(l && document.contains(champMoto)){ champMoto._rendreListe(); majBouton(); majNote(); }
+        if(l && document.contains(champMoto)){ champMoto._rendreListe(); majBouton(); majNote(); estimerCv(); }
       }, 700);
     };
     ['marque', 'modele', 'dateFirstImmat'].forEach(function(k){
