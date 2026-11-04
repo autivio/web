@@ -891,6 +891,17 @@
   .pay-offre{font-size:14px;color:var(--ink);margin:0;}
   .pay-offre-corps b{font-size:15px;color:var(--ink);}
   .pay-paypal:disabled{opacity:.6;}
+  .carnet-titre-mode{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .mode-remplissage{display:inline-flex;align-items:center;gap:8px;margin:0;cursor:pointer;font-size:12px;font-weight:600;text-transform:none;letter-spacing:0;}
+  .mode-remplissage input{position:absolute;opacity:0;width:1px;height:1px;}
+  .mode-remplissage .mode-txt{color:var(--muted,#8a94a6);}
+  .mode-remplissage .mode-txt.actif{color:var(--ink);}
+  .interrupteur{position:relative;width:46px;height:28px;border-radius:14px;background:#c9ced8;transition:background .2s;flex:0 0 auto;}
+  .interrupteur::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s;}
+  .mode-remplissage input:checked + .interrupteur{background:#34c759;}
+  .mode-remplissage input:checked + .interrupteur::after{left:21px;}
+  .mode-remplissage input:focus-visible + .interrupteur{outline:2px solid var(--brand);outline-offset:2px;}
+  .carnet-voir-versions{margin-bottom:6px;}
   .carnet-pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:8px 0;}
   .carnet-page{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line,#dfe3ea);border-radius:10px;padding:10px 12px;margin:0;cursor:pointer;}
   .carnet-page input{width:auto;flex:0 0 auto;margin-top:3px;}
@@ -956,6 +967,10 @@
   .carnet-tech-suppr{position:absolute;top:6px;right:6px;padding:2px 8px;}
   .carnet-tech-obj{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
   .carnet-ligne{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;}
+  .prochain-choix{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+  .prochain-opt{font:inherit;font-size:11.5px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;color:#334155;cursor:pointer;}
+  .prochain-opt:hover{border-color:#94a3b8;}
+  .prochain-opt.actif{background:#e8f2fc;border-color:#0b72bf;color:#0b4f86;}
   .carnet-suppr{margin-top:8px;font-size:12.5px;}
   .carnet-vide{color:var(--ink-soft);font-size:13px;padding:8px 0;}
   .carnet-apercu{display:flex;flex-direction:column;gap:14px;align-items:center;}
@@ -2898,6 +2913,10 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Manuellement": "Manualmente",
+    "Automatiquement": "Automaticamente",
+    "Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.": "Automaticamente: elenchi a discesa e campi compilati in base alla data e al codice motore. Manualmente: scrivi tutto tu.",
+    "Voir les versions de ce modèle": "Mostra le versioni di questo modello",
     "jusqu’à": "fino al",
     "à partir de": "dal",
     "d’après la 1re immatriculation": "secondo la prima immatricolazione",
@@ -4273,6 +4292,10 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Manuellement": "Manuell",
+    "Automatiquement": "Automatesch",
+    "Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.": "Automatesch: Lëschten a Felder ginn no dem Datum an dem Motorcode ausgefëllt. Manuell: Dir tippt alles selwer.",
+    "Voir les versions de ce modèle": "Versioune vun dësem Modell weisen",
     "jusqu’à": "bis",
     "à partir de": "vun",
     "d’après la 1re immatriculation": "no der éischter Zouloossung",
@@ -5647,6 +5670,10 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Manuellement": "Manually",
+    "Automatiquement": "Automatically",
+    "Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.": "Automatically: drop-down lists and fields filled from the date and the engine code. Manually: you type everything.",
+    "Voir les versions de ce modèle": "Show this model’s versions",
     "jusqu’à": "until",
     "à partir de": "from",
     "d’après la 1re immatriculation": "based on the first registration",
@@ -7020,6 +7047,10 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Manuellement": "Manuell",
+    "Automatiquement": "Automatisch",
+    "Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.": "Automatisch: Auswahllisten und Felder werden anhand des Datums und des Motorcodes ausgefüllt. Manuell: Sie geben alles selbst ein.",
+    "Voir les versions de ce modèle": "Versionen dieses Modells anzeigen",
     "jusqu’à": "bis",
     "à partir de": "ab",
     "d’après la 1re immatriculation": "laut Erstzulassung",
@@ -8413,6 +8444,10 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Manuellement": "Handmatig",
+    "Automatiquement": "Automatisch",
+    "Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.": "Automatisch: keuzelijsten en velden ingevuld op basis van de datum en de motorcode. Handmatig: u typt alles zelf.",
+    "Voir les versions de ce modèle": "Versies van dit model tonen",
     "jusqu’à": "tot",
     "à partir de": "vanaf",
     "d’après la 1re immatriculation": "volgens de eerste inschrijving",
@@ -9638,7 +9673,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.83';
+const VERSION = '2.87';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13831,6 +13866,21 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.87': { date: '04/11/2026', lignes: [
+    "Entretiens du carnet : en tapant la date, les barres se mettent toutes seules (14042018 → 14/04/2018). Le kilométrage ne prend que des chiffres.",
+    "« Prochain (km) » se calcule tout seul dès que vous tapez le kilométrage (142 000 → 157 000), avec deux boutons « + 15 000 » et « + 30 000 » pour choisir. L’écart choisi est retenu pour les entretiens suivants du véhicule ; un prochain tapé à la main n’est plus modifié.",
+    "Le carnet PDF se remplit aussi à l’ordinateur (Adobe Reader, Chrome, Edge, Firefox) : date avec barres automatiques, kilométrage, cases à cocher, observations, et « Prochain » calculé (tapez 15 ou 30 pour + 15 000 ou + 30 000). Imprimé vide, il reste à remplir au stylo."
+  ] },
+  '2.86': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : un interrupteur « Manuellement / Automatiquement » en haut de « Véhicule et motorisation ». À droite (automatique), marque, modèle, phase et motorisation sont des listes déroulantes ; choisir une motorisation remplit le code moteur, les chevaux, les CV fiscaux, la boîte et la distribution. À gauche (manuel), vous tapez tout vous-même. Le choix est retenu pour les autres véhicules.",
+    "La liste des motorisations s’affiche directement si elle a déjà été chargée pour ce modèle ; sinon, « Voir les versions de ce modèle » la demande une seule fois à l’IA."
+  ] },
+  '2.85': { date: '04/11/2026', lignes: [
+    "Plus aucun appel à l’IA sans votre demande : la fenêtre « Identifier le véhicule » ne s’ouvre plus toute seule en ouvrant le carnet (elle part de « Générer avec l’IA » ou du bouton « Identifier »), et la liste des motorisations ne se charge que sur « Voir les versions de ce modèle ». Préparer et télécharger le carnet seul ne coûte donc rien."
+  ] },
+  '2.84': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien (PDF) : le tableau a maintenant des traits verticaux entre toutes les colonnes (Date, Kilométrage, chaque opération, Observations, Prochain), des cases carrées à cocher au lieu des ronds, et des intitulés de colonnes entiers (plus de « Huile moteur 5W- » coupé)."
+  ] },
   '2.83': { date: '04/11/2026', lignes: [
     "Carnet d’entretien : « Génération / phase » devient une liste « Phase 1 / Phase 2 », remplie toute seule d’après la date de 1re immatriculation pour les modèles courants (Golf, Polo, Clio, Mégane, 208, 308, 3008, C3, Sandero, Focus, Série 3…). Chez Volkswagen on garde le nom des garages : Phase 1 (7) / Phase 2 (7.5) ; chez BMW : LCI. Vous pouvez toujours la changer ; votre choix n’est plus écrasé."
   ] },
@@ -36091,6 +36141,32 @@ const ETIQ_CHAMPS_TECH = {
   outil: 'Outil', colonnes: 'Colonnes (une par ligne)', lignes: 'Lignes'
 };
 
+/* Remplissage du carnet : automatique (listes, phase et distribution
+   deduites) ou manuel (tout a la main). Le dernier choix sert de valeur
+   par defaut pour les autres vehicules. */
+function remplissageAuto(c){
+  if(c && (c.remplissage === 'auto' || c.remplissage === 'manuel')) return c.remplissage === 'auto';
+  try{ return localStorage.getItem('autivio:remplissageCarnet') !== 'manuel'; }catch(e){ return true; }
+}
+/* Une version choisie dans la liste remplit le reste. */
+function appliquerMotorisation(v, m){
+  const c = ensureCarnet(v), veh = v.vehicule || (v.vehicule = {});
+  c.motorisation = m.nom || c.motorisation;
+  const codes = String(m.code_moteur || '').trim();
+  if(codes && !/[\/,;]| ou /.test(codes.replace(/\([^)]*\)/g, ''))) c.codeMoteur = codes.split(/[\s(]+/)[0];
+  const ch = chevauxDepuisSaisie(m.puissance_ch);
+  if(ch) c.puissanceCh = ch;
+  const cv = String(m.cv_fiscaux || '').trim();
+  if(/^\d{1,2}$/.test(cv) && !veh.puissanceFiscale) veh.puissanceFiscale = cv;
+  const b = boiteDepuisTexte(m.boites);
+  if(b && !c.boite) c.boite = b;
+  if(!c.distribution){
+    const d = distributionDuCode(c.codeMoteur) || (/^courroie$/i.test(m.distribution || '') ? 'courroie' : (/^cha[iî]ne$/i.test(m.distribution || '') ? 'chaîne' : ''));
+    if(d && !distributionDuCode(c.codeMoteur)) c.distribution = d;
+  }
+  if(!veh.energie && m.energie){ const e = codeEnergieDeFamille(m.energie); if(e) veh.energie = e; }
+}
+
 function champCarnet(cle, libelle, type, aide){
   return '<div><label>' + esc(t(libelle)) + '</label><input data-carnet="' + cle + '" type="' + (type || 'text') + '"'
     + (aide ? ' placeholder="' + esc(aide) + '"' : '') + '></div>';
@@ -36119,7 +36195,11 @@ function carnetForm(v){
   const c = ensureCarnet(v);
   const tc = c.technique;
   return '<div class="cerfa-form carnet-form">'
-  + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Véhicule et motorisation')) + '</div>'
+  + '<div class="cerfa-sec"><div class="cerfa-sec-title carnet-titre-mode"><span>' + esc(t('Véhicule et motorisation')) + '</span>'
+  +   '<label class="mode-remplissage" title="' + esc(t('Automatiquement : listes déroulantes et champs remplis d’après la date et le code moteur. Manuellement : vous tapez tout.')) + '">'
+  +     '<span class="mode-txt' + (remplissageAuto(c) ? '' : ' actif') + '">' + esc(t('Manuellement')) + '</span>'
+  +     '<input type="checkbox" id="carnetModeAuto"' + (remplissageAuto(c) ? ' checked' : '') + '><span class="interrupteur" aria-hidden="true"></span>'
+  +     '<span class="mode-txt' + (remplissageAuto(c) ? ' actif' : '') + '">' + esc(t('Automatiquement')) + '</span></label></div>'
   + '<div class="cerfa-aide">' + esc(t('Plus la motorisation est précise, plus les données seront justes : cylindrée, nom du moteur et puissance (ex. « 1.6 BlueHDi 120 », « 1.4 TSI 125 »). Le code moteur, s’il est connu, lève les ambiguïtés.')) + '</div>'
   + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. Phase 2') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('motorisation', 'Motorisation *', 'text', 'ex. 1.6 BlueHDi 120 ch')
@@ -36186,6 +36266,31 @@ function etatTechnique(v){
     + (pts ? ' · <b>' + pts + ' ' + esc(t(pts > 1 ? 'points à vérifier' : 'point à vérifier')) + '</b>' : '');
 }
 
+/* Date tapee au clavier : les barres se mettent toutes seules
+   (14 → 14/, 1404 → 14/04/, 14042018 → 14/04/2018). */
+function masquerDate(txt, efface){
+  const d = String(txt || '').replace(/\D/g, '').slice(0, 8);
+  let o = d.slice(0, 2);
+  if(d.length > 2) o += '/' + d.slice(2, 4);
+  if(d.length > 4) o += '/' + d.slice(4);
+  if(!efface && (d.length === 2 || d.length === 4)) o += '/';
+  return o;
+}
+function chiffresKm(x){ return String(x == null ? '' : x).replace(/\D/g, ''); }
+function kmLisible(n){ return Number(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' '); }
+/* Prochain entretien : kilometrage + 15 000 ou + 30 000. Le dernier
+   ecart choisi est retenu pour le vehicule (c.intervalleVidange). */
+const ECARTS_PROCHAIN = [15000, 30000];
+function ecartProchain(c){ return ECARTS_PROCHAIN.indexOf(Number(c.intervalleVidange)) !== -1 ? Number(c.intervalleVidange) : 15000; }
+function propositionsProchain(c, e){
+  const km = Number(chiffresKm(e.km));
+  if(!km) return '';
+  const pr = Number(chiffresKm(e.prochain));
+  return ECARTS_PROCHAIN.map(function(pas){
+    return '<button type="button" class="prochain-opt' + (pr === km + pas ? ' actif' : '') + '" data-cpas="' + pas + '">+ ' + esc(kmLisible(pas)) + ' → <b>' + esc(kmLisible(km + pas)) + '</b></button>';
+  }).join('');
+}
+
 function lignesEntretienHtml(v){
   const c = ensureCarnet(v), cols = colonnesCarnet(v);
   if(!c.entretiens.length) return '<div class="carnet-vide">' + esc(t('Aucun entretien enregistré.')) + '</div>';
@@ -36193,9 +36298,10 @@ function lignesEntretienHtml(v){
     const ops = e.ops || [];
     return '<div class="carnet-ligne">'
       + '<div class="cerfa-grid">'
-      +   '<div><label>' + esc(t('Date')) + '</label><input data-cent="' + i + '" data-champ="date" placeholder="JJ/MM/AAAA" value="' + esc(e.date || '') + '"></div>'
-      +   '<div><label>' + esc(t('Kilométrage')) + '</label><input data-cent="' + i + '" data-champ="km" inputmode="numeric" value="' + esc(e.km || '') + '"></div>'
-      +   '<div><label>' + esc(t('Prochain (km)')) + '</label><input data-cent="' + i + '" data-champ="prochain" inputmode="numeric" value="' + esc(e.prochain || '') + '"></div>'
+      +   '<div><label>' + esc(t('Date')) + '</label><input data-cent="' + i + '" data-champ="date" inputmode="numeric" maxlength="10" placeholder="JJ/MM/AAAA" value="' + esc(e.date || '') + '"></div>'
+      +   '<div><label>' + esc(t('Kilométrage')) + '</label><input data-cent="' + i + '" data-champ="km" inputmode="numeric" placeholder="ex. 142000" value="' + esc(e.km || '') + '"></div>'
+      +   '<div><label>' + esc(t('Prochain (km)')) + '</label><input data-cent="' + i + '" data-champ="prochain" inputmode="numeric" value="' + esc(e.prochain || '') + '">'
+      +     '<div class="prochain-choix" data-cprop="' + i + '">' + propositionsProchain(c, e) + '</div></div>'
       + '</div>'
       + '<div class="gar-choix">' + cols.map(function(op){
           return '<label class="gar-opt' + (ops.indexOf(op) !== -1 ? ' actif' : '') + '"><input type="checkbox" data-centop="' + i + '" value="' + esc(op) + '"'
@@ -36292,7 +36398,7 @@ function wireCarnetForm(v, d){
   const di = document.getElementById('carnetDistribution');
   const majDistrib = function(){
     if(!di) return;
-    const auto = distributionDuCode(c.codeMoteur);
+    const auto = remplissageAuto(c) ? distributionDuCode(c.codeMoteur) : '';
     const val = c.distribution || auto;
     di.innerHTML = [['', t('— Je ne sais pas —')], ['courroie', t('Courroie')], ['chaîne', t('Chaîne')]]
       .map(function(o){ return '<option value="' + esc(o[0]) + '"' + (o[0] === val ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('');
@@ -36324,9 +36430,58 @@ function wireCarnetForm(v, d){
       saveVehicle(v); relancer();
     };
   });
-  brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
+  /* Interrupteur Manuellement / Automatiquement */
+  const modeAuto = remplissageAuto(c);
+  const sw = document.getElementById('carnetModeAuto');
+  if(sw) sw.onchange = function(){
+    c.remplissage = sw.checked ? 'auto' : 'manuel';
+    try{ localStorage.setItem('autivio:remplissageCarnet', c.remplissage); }catch(e){}
+    saveVehicle(v); renderMain();
+  };
+  if(modeAuto) brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
+  /* Motorisation : liste des versions du modele (recue une fois par l'IA,
+     puis gardee sur l'appareil), filtree selon l'energie et l'annee. */
+  const champMoto = document.querySelector('input[data-carnet="motorisation"]');
+  if(modeAuto && champMoto){
+    const veh = v.vehicule || (v.vehicule = {});
+    const etiq = champMoto.parentNode.querySelector('label');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn-sec btn-petit carnet-voir-versions';
+    btn.textContent = '📋 ' + t('Voir les versions de ce modèle');
+    champMoto.parentNode.insertBefore(btn, champMoto);
+    const listeEnCache = function(){
+      if(!veh.marque || !veh.modele) return null;
+      return lireCacheMotos(cleMotorisations(veh.marque, veh.modele, String(veh.dateFirstImmat || '').slice(0, 4)));
+    };
+    const versions = function(){
+      const l = listeEnCache();
+      if(!l || !(l.motorisations || []).length) return [];
+      return motosFiltrees(l.motorisations, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4)).liste
+        .map(function(m){ return { v: String(m.nom || '').toUpperCase(), txt: libelleMoto(m), m: m }; });
+    };
+    const majBouton = function(){ btn.style.display = !listeEnCache() && veh.marque && veh.modele && serveurPret() ? '' : 'none'; };
+    brancherListe(champMoto, versions, function(){
+      const o = versions().filter(function(x){ return x.v === champMoto.value; })[0];
+      if(o){ appliquerMotorisation(v, o.m); saveVehicle(v); renderMain(); }
+    });
+    btn.onclick = async function(){
+      btn.disabled = true; btn.textContent = '⏳ ' + t('recherche des versions de ce modèle…');
+      try{
+        await chargerMotorisations(veh.marque, veh.modele, String(veh.dateFirstImmat || '').slice(0, 4));
+        champMoto._rendreListe(); majBouton();
+      }catch(e){ informer(e.message || String(e)); }
+      btn.disabled = false; btn.textContent = '📋 ' + t('Voir les versions de ce modèle');
+    };
+    majBouton();
+    ['marque', 'modele', 'dateFirstImmat'].forEach(function(k){
+      const x = document.querySelector('input[data-cveh="' + k + '"]');
+      if(x) x.addEventListener('input', function(){ setTimeout(function(){ champMoto._rendreListe(); majBouton(); }, 0); });
+    });
+    const enr = document.getElementById('carnetEnergie');
+    if(enr) enr.addEventListener('change', function(){ champMoto._rendreListe(); });
+  }
   /* Phase : liste selon le modele, remplie d'apres la 1re immatriculation. */
-  const champGen = document.querySelector('input[data-carnet="generation"]');
+  const champGen = modeAuto ? document.querySelector('input[data-carnet="generation"]') : null;
   if(champGen){
     const veh = v.vehicule || (v.vehicule = {});
     const etiquette = champGen.parentNode.querySelector('label');
@@ -36375,12 +36530,10 @@ function wireCarnetForm(v, d){
   if(idb) idb.onclick = function(){ fenetreIdentification(v); };
   /* Premiere ouverture du carnet de cette fiche : la fenetre
      d'identification s'ouvre d'elle-meme. */
+  /* La fenetre d'identification ne s'ouvre plus d'elle-meme : elle part
+     de « Générer avec l'IA » ou du bouton « Identifier », pour qu'aucun
+     appel a l'IA (donc aucun cout) ne parte sans que le garage le demande. */
   window.__identDemandee = window.__identDemandee || {};
-  const carnetSeul = c.pdfPages && c.pdfPages.technique === false && c.pdfPages.references === false;
-  if(!carnetSeul && !c.identifie && !c.technique && !window.__identDemandee[v.id] && !document.querySelector('.dlg-fond')){
-    window.__identDemandee[v.id] = 1;
-    setTimeout(function(){ if(currentDoc === 'carnet' && !document.querySelector('.dlg-fond')) fenetreIdentification(v); }, 250);
-  }
   const gen = document.getElementById('carnetGenerer');
   if(gen) gen.onclick = function(){ genererTechniqueIA(v).catch(function(e){ informer(e.message); }); };
 
@@ -36422,8 +36575,50 @@ function wireCarnetForm(v, d){
     const champs = document.querySelectorAll('input[data-champ="date"]');
     if(champs.length) champs[champs.length - 1].focus();
   };
+  const majProchain = function(i){
+    const e = c.entretiens[i], boite = document.querySelector('[data-cprop="' + i + '"]');
+    if(!e || !boite) return;
+    boite.innerHTML = propositionsProchain(c, e);
+    boite.querySelectorAll('[data-cpas]').forEach(function(b){
+      b.onclick = function(){
+        const km = Number(chiffresKm(e.km)), pas = Number(b.dataset.cpas);
+        if(!km) return;
+        e.prochain = String(km + pas); e.prochainAuto = true; c.intervalleVidange = pas;
+        const champ = document.querySelector('input[data-cent="' + i + '"][data-champ="prochain"]');
+        if(champ) champ.value = e.prochain;
+        saveVehicle(v); relancer(); majProchain(i);
+      };
+    });
+  };
   document.querySelectorAll('input[data-cent]').forEach(function(inp){
-    inp.oninput = function(){ const e = c.entretiens[Number(inp.dataset.cent)]; if(e){ e[inp.dataset.champ] = inp.value; saveVehicle(v); relancer(); } };
+    const i = Number(inp.dataset.cent), champ = inp.dataset.champ;
+    inp.oninput = function(ev){
+      const e = c.entretiens[i];
+      if(!e) return;
+      if(champ === 'date'){
+        /* En effacant, on laisse faire (sinon la barre repartirait). */
+        const efface = !!(ev && ev.inputType && ev.inputType.indexOf('delete') === 0);
+        if(!efface){ const m = masquerDate(inp.value, false); if(m !== inp.value) inp.value = m; }
+      }else if(champ === 'km' || champ === 'prochain'){
+        const n = chiffresKm(inp.value);
+        if(n !== inp.value) inp.value = n;
+      }
+      e[champ] = inp.value;
+      if(champ === 'prochain') e.prochainAuto = false;
+      if(champ === 'km'){
+        /* Prochain calcule tout seul tant qu'il n'a pas ete tape a la main. */
+        const km = Number(inp.value);
+        if(!e.prochain || e.prochainAuto){
+          e.prochain = km ? String(km + ecartProchain(c)) : '';
+          e.prochainAuto = true;
+          const p = document.querySelector('input[data-cent="' + i + '"][data-champ="prochain"]');
+          if(p) p.value = e.prochain;
+        }
+      }
+      if(champ === 'km' || champ === 'prochain') majProchain(i);
+      saveVehicle(v); relancer();
+    };
+    if(champ === 'km') majProchain(i);
   });
   document.querySelectorAll('input[data-centop]').forEach(function(inp){
     inp.onchange = function(){
@@ -36867,6 +37062,7 @@ function fenetreIdentification(v){
       +   '<div><label>' + esc(t('Modèle')) + ' — D.3</label><input id="idModele"></div>'
       +   '<div class="ident-large"><label>' + esc(t('Motorisation')) + ' <span id="idMotoEtat" class="ident-etat"></span></label>'
       +     '<select id="idMotoListe" class="liste-large" style="display:none"></select>'
+      +     '<button type="button" class="btn-sec btn-petit" id="idMotoCharger" style="display:none;margin-bottom:6px">📋 ' + esc(t('Voir les versions de ce modèle')) + '</button>'
       +     '<input id="idMoto" placeholder="' + esc(t('ex. 1.4 TSI, 1.6 HDi')) + '"></div>'
       +   '<div><label>' + esc(t('Chevaux fiscaux (CV)')) + ' — P.6</label><input id="idCv" inputmode="numeric" maxlength="3" placeholder="' + esc(t('ex. 7')) + '"></div>'
       +   '<div><label>' + esc(t('Puissance (ch)')) + ' — P.2</label><input id="idCh" inputmode="decimal" maxlength="10" placeholder="' + esc(t('ex. 125, ou 92 kW')) + '"></div>'
@@ -36903,6 +37099,9 @@ function fenetreIdentification(v){
        par annee (puis gardee sur l'appareil), filtree en direct selon
        l'energie et l'annee. */
     let listeMotos = null, motoChoisie = null, tourMotos = 0, minuterieMotos = 0, cleChargee = '';
+    /* La liste vient de l'IA (quelques centimes) : on ne la demande que sur
+       clic. Une liste deja recue (gardee sur l'appareil) s'affiche seule. */
+    let listeDemandee = false;
     const anneeSaisie = function(){ return ($('idDate').value || '').slice(0, 4); };
     const etatMotos = function(txt, ko){ const z = $('idMotoEtat'); z.textContent = txt ? '— ' + txt : ''; z.className = 'ident-etat' + (ko ? ' ko' : ''); };
     const rendreMotos = function(){
@@ -36953,8 +37152,15 @@ function fenetreIdentification(v){
       if(cle === cleChargee) return;
       cleChargee = cle;
       const enCache = lireCacheMotos(cle);
+      $('idMotoCharger').style.display = 'none';
       if(enCache){ listeMotos = enCache; rendreMotos(); return; }
       listeMotos = null; rendreMotos();
+      if(!listeDemandee){
+        cleChargee = '';
+        etatMotos('');
+        if(serveurPret()) $('idMotoCharger').style.display = '';
+        return;
+      }
       if(window.__motosAncienServeur){ etatMotos(t('liste indisponible : redéployez la fonction « fiche-technique »'), true); return; }
       if(!serveurPret()){ etatMotos(t('liste disponible une fois connecté'), true); return; }
       const tour = ++tourMotos;
@@ -36973,6 +37179,7 @@ function fenetreIdentification(v){
       }
     };
     const plusTard = function(){ clearTimeout(minuterieMotos); minuterieMotos = setTimeout(chargerMotos, 900); };
+    $('idMotoCharger').onclick = function(){ listeDemandee = true; cleChargee = ''; chargerMotos(); };
     $('idMarque').addEventListener('input', plusTard);
     $('idModele').addEventListener('input', plusTard);
     $('idDate').addEventListener('change', function(){ if(cleChargee) chargerMotos(); else plusTard(); });
@@ -37904,6 +38111,25 @@ function lignesCarnet(txt, font, taille, largeurMax){
   return out.length ? out : [''];
 }
 
+/* Scripts des champs du carnet PDF (JavaScript Acrobat, ES3). Ils ne
+   touchent qu'a event.change pendant la frappe : c'est ce que Adobe
+   Reader, Chrome, Edge et Firefox comprennent tous de la meme facon. */
+const JS_PDF_DATE_K = "if(!event.willCommit){var ch=String(event.change),v=String(event.value),a=event.selStart,b=event.selEnd;"
+  + "if(ch.length>1){event.change=ch.replace(/[^0-9\\/]/g,'');}"
+  + "else if(ch.length==1){if(/[0-9]/.test(ch)){var av=v.slice(0,a);if(a==v.length&&(av.length==2||av.length==5)&&av.charAt(av.length-1)!='/')event.change='/'+ch;"
+  + "if(v.length-(b-a)+event.change.length>10)event.rc=false;}else if(ch=='/'){if(!(a==2||a==5))event.rc=false;}else event.rc=false;}}";
+const JS_PDF_DATE_F = "var d=String(event.value).replace(/[^0-9]/g,'');if(d.length==8)event.value=d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4);else if(d.length==6)event.value=d.slice(0,2)+'/'+d.slice(2,4)+'/20'+d.slice(4);";
+const JS_PDF_CHIFFRES_K = "if(!event.willCommit){event.change=String(event.change).replace(/[^0-9]/g,'');}";
+const JS_PDF_MILLIERS_F = "var n=String(event.value).replace(/[^0-9]/g,'');event.value=n?n.replace(/(\\d)(?=(\\d{3})+$)/g,'$1 '):'';";
+function jsPdfProchainK(km){
+  return "if(!event.willCommit){event.change=String(event.change).replace(/[^0-9]/g,'');}else{var k=Number(String(this.getField('" + km + "').value).replace(/[^0-9]/g,''));"
+    + "var p=Number(String(event.value).replace(/[^0-9]/g,''));if(k&&p>0&&p<=100)event.value=String(k+p*1000);}";
+}
+function jsPdfProchainC(km, moi, pas){
+  return "var k=Number(String(this.getField('" + km + "').value).replace(/[^0-9]/g,''));var p=Number(String(this.getField('" + moi + "').value).replace(/[^0-9]/g,''));"
+    + "if(k&&(!p||p<=k))event.value=String(k+" + Number(pas) + ");else if(!k&&p&&p<=100)event.value='';else event.value=p?String(p):'';";
+}
+
 async function genererCarnetPdf(v, d){
   if(typeof PDFLib === 'undefined') throw new Error(t('La bibliothèque PDF est introuvable.'));
   const { PDFDocument, StandardFonts, rgb, degrees } = PDFLib;
@@ -38144,6 +38370,8 @@ async function genererCarnetPdf(v, d){
   y -= 8;
   page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
   y -= 10;
+  ecrire('À remplir au stylo ou à l’ordinateur : la date prend ses barres toute seule, « Prochain » se calcule (kilométrage + ' + kmLisible(ecartProchain(c)) + ' km ; tapez 15 ou 30 pour choisir).', MG, y - 2, 6.6, norm, DOUX);
+  y -= 14;
   const rappel = (tc.rappel_intervalles || []).filter(Boolean);
   if(rappel.length){
     /* Deux colonnes ; un rappel n'est jamais coupe entre les deux. */
@@ -38163,19 +38391,36 @@ async function genererCarnetPdf(v, d){
   const cols = colonnesCarnet(v);
   const wDate = 62, wKm = 56, wProch = 44, wOp = 13;
   const wObs = LARG - wDate - wKm - wProch - wOp * cols.length;
-  const hEntete = Math.min(110, 18 + Math.max.apply(null, cols.map(function(o){ return largeur(o, 6.2, norm); })));
+  /* Intitules courts et entiers dans l'en-tete (sans parentheses ni
+     precisions), police reduite si besoin plutot que coupes. */
+  const HAUT_MAX = 104;
+  const libelles = cols.map(function(o){
+    let l = String(o || '').split(/\s*[(,;]|\s+[–—-]\s+/)[0].trim() || String(o || '');
+    let taille = 6.2;
+    while(largeur(l, taille, norm) > HAUT_MAX - 10 && taille > 5) taille -= 0.2;
+    while(largeur(l, taille, norm) > HAUT_MAX - 10 && l.length > 4) l = l.slice(0, -2).trim() + '…';
+    return { txt: l, taille: taille };
+  });
+  const hEntete = Math.min(HAUT_MAX, 16 + Math.max.apply(null, libelles.map(function(o){ return largeur(o.txt, o.taille, norm); })));
+  /* Traits verticaux : bordures et separation de chaque colonne. */
+  const xCols = [MG, MG + wDate, MG + wDate + wKm];
+  cols.forEach(function(_, i){ xCols.push(MG + wDate + wKm + (i + 1) * wOp); });
+  xCols.push(MG + LARG - wProch, MG + LARG);
+  const traitsVerticaux = function(yHaut, yBas){
+    xCols.forEach(function(xx){ page.drawLine({ start: { x: xx, y: yHaut }, end: { x: xx, y: yBas }, thickness: 0.5, color: TRAIT }); });
+  };
   const dessinerEnteteCarnet = function(){
     page.drawRectangle({ x: MG, y: y - hEntete, width: LARG, height: hEntete, color: FOND, borderColor: TRAIT, borderWidth: 0.6 });
     ecrire('Date', MG + 5, y - hEntete + 13, 6.8, gras, ENCRE);
     ecrire('JJ / MM / AAAA', MG + 5, y - hEntete + 5, 5.6, norm, DOUX);
     ecrire('Kilométrage', MG + wDate + 5, y - hEntete + 9, 6.8, gras, ENCRE);
     let x = MG + wDate + wKm;
-    cols.forEach(function(o){
-      page.drawLine({ start: { x: x, y: y }, end: { x: x, y: y - hEntete }, thickness: 0.4, color: TRAIT });
-      page.drawText(texteCarnet(o), { x: x + wOp / 2 + 2.2, y: y - hEntete + 5, size: 6.2, font: norm, color: ENCRE, rotate: degrees(90) });
+    cols.forEach(function(o, i){
+      const lb = libelles[i];
+      page.drawText(texteCarnet(lb.txt), { x: x + wOp / 2 + lb.taille * 0.36, y: y - hEntete + 5, size: lb.taille, font: norm, color: ENCRE, rotate: degrees(90) });
       x += wOp;
     });
-    page.drawLine({ start: { x: x, y: y }, end: { x: x, y: y - hEntete }, thickness: 0.4, color: TRAIT });
+    traitsVerticaux(y, y - hEntete);
     ecrire('Observations /', x + 5, y - hEntete + 15, 6.8, gras, ENCRE);
     ecrire('Garage / Coût', x + 5, y - hEntete + 6, 6.8, gras, ENCRE);
     ecrire('Prochain', x + wObs + 5, y - hEntete + 15, 6.8, gras, ENCRE);
@@ -38184,6 +38429,28 @@ async function genererCarnetPdf(v, d){
   };
   dessinerEnteteCarnet();
   const hRang = 21;
+  /* Lignes vides remplissables a l'ordinateur (Adobe Reader, Chrome,
+     Edge, Firefox) : la date prend ses barres en tapant, le kilometrage
+     ne prend que des chiffres, « Prochain » se calcule (kilometrage
+     + l'ecart retenu ; tapez 15 ou 30 pour + 15 000 / + 30 000), les
+     cases se cochent. Imprime vide, le tableau reste a remplir au stylo. */
+  const form = pdf.getForm();
+  const pasProchain = ecartProchain(c);
+  const calculs = [];
+  const actionJs = function(champ, cle, js){
+    const ctx = pdf.context, dict = champ.acroField.dict, N = PDFLib.PDFName;
+    let aa = dict.lookup(N.of('AA'));
+    if(!aa){ aa = ctx.obj({}); dict.set(N.of('AA'), aa); }
+    aa.set(N.of(cle), ctx.obj({ S: 'JavaScript', JS: PDFLib.PDFHexString.fromText(js) }));
+  };
+  const bulle = function(champ, txt){ champ.acroField.dict.set(PDFLib.PDFName.of('TU'), PDFLib.PDFHexString.fromText(txt)); };
+  const champTexte = function(nom, x, yy, w, h, taille){
+    const f = form.createTextField(nom);
+    f.addToPage(page, { x: x, y: yy, width: w, height: h, borderWidth: 0, font: norm, textColor: ENCRE });
+    f.setFontSize(taille);
+    return f;
+  };
+  let nChamp = 0;
   const entretiens = (c.entretiens || []).slice();
   const nbVides = function(){ return Math.max(0, Math.floor((y - BAS) / hRang)); };
   const total = Math.max(entretiens.length + 4, entretiens.length + nbVides());
@@ -38200,14 +38467,37 @@ async function genererCarnetPdf(v, d){
       ecrire(e.date || '', MG + 5, ym, 7.6, norm, ENCRE);
       const km = String(e.km || '').replace(/\D/g, '');
       ecrire(km ? Number(km).toLocaleString('fr-FR') + ' km' : '', MG + wDate + 5, ym, 7.6, norm, ENCRE);
-    }else{
-      ecrire('___ / ___ / _______', MG + 5, ym, 6.8, norm, TRAIT);
-      ecrire('_________ km', MG + wDate + 5, ym, 6.8, norm, TRAIT);
+    }
+    traitsVerticaux(y, yb);
+    const r = e ? -1 : nChamp++;
+    if(!e){
+      /* « km » en fin de case, hors du champ : le chiffre tape ne le recouvre pas. */
+      ecrire('km', MG + wDate + wKm - 5 - largeur('km', 6.4), ym, 6.4, norm, DOUX);
+      const fd = champTexte('date_' + r, MG + 3, yb + 3, wDate - 6, hRang - 6, 8);
+      fd.setMaxLength(10);
+      actionJs(fd, 'K', JS_PDF_DATE_K); actionJs(fd, 'F', JS_PDF_DATE_F);
+      bulle(fd, 'Date JJ/MM/AAAA : tapez seulement les chiffres, les barres se mettent toutes seules.');
+      const fk = champTexte('km_' + r, MG + wDate + 3, yb + 3, wKm - 18, hRang - 6, 8);
+      actionJs(fk, 'K', JS_PDF_CHIFFRES_K); actionJs(fk, 'F', JS_PDF_MILLIERS_F);
+      bulle(fk, 'Kilométrage au compteur');
+      const fo = champTexte('obs_' + r, MG + wDate + wKm + cols.length * wOp + 3, yb + 3, wObs - 6, hRang - 6, 6.6);
+      bulle(fo, 'Observations, garage, coût');
+      const fp = champTexte('prochain_' + r, MG + LARG - wProch + 3, yb + 3, wProch - 6, hRang - 6, 7.4);
+      actionJs(fp, 'K', jsPdfProchainK('km_' + r));
+      actionJs(fp, 'C', jsPdfProchainC('km_' + r, 'prochain_' + r, pasProchain));
+      actionJs(fp, 'F', JS_PDF_MILLIERS_F);
+      bulle(fp, 'Calculé tout seul : kilométrage + ' + kmLisible(pasProchain) + ' km. Tapez 15 ou 30 pour + 15 000 ou + 30 000 km.');
+      calculs.push(fp.acroField.ref);
     }
     let x = MG + wDate + wKm;
-    cols.forEach(function(o){
+    cols.forEach(function(o, j){
       const cx = x + wOp / 2, cy = yb + hRang / 2;
-      page.drawCircle({ x: cx, y: cy, size: 4, borderColor: rgb(0.7, 0.75, 0.82), borderWidth: 0.6 });
+      page.drawRectangle({ x: cx - 4, y: cy - 4, width: 8, height: 8, borderColor: rgb(0.55, 0.6, 0.68), borderWidth: 0.7 });
+      if(!e){
+        const cb = form.createCheckBox('op_' + r + '_' + j);
+        cb.addToPage(page, { x: cx - 3.5, y: cy - 3.5, width: 7, height: 7, borderWidth: 0, textColor: BLEU });
+        bulle(cb, String(o || ''));
+      }
       if(e && (e.ops || []).indexOf(o) !== -1){
         page.drawLine({ start: { x: cx - 2.6, y: cy }, end: { x: cx - 0.6, y: cy - 2.2 }, thickness: 1.3, color: BLEU });
         page.drawLine({ start: { x: cx - 0.6, y: cy - 2.2 }, end: { x: cx + 3, y: cy + 2.6 }, thickness: 1.3, color: BLEU });
@@ -38221,6 +38511,12 @@ async function genererCarnetPdf(v, d){
       if(pr) ecrire(Number(pr).toLocaleString('fr-FR'), x + wObs + 4, ym, 7.2, norm, ENCRE);
     }
     y = yb;
+  }
+  if(calculs.length){
+    try{
+      const af = pdf.catalog.lookup(PDFLib.PDFName.of('AcroForm'));
+      if(af) af.set(PDFLib.PDFName.of('CO'), pdf.context.obj(calculs));
+    }catch(err){}
   }
   }
 
