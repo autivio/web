@@ -891,6 +891,12 @@
   .pay-offre{font-size:14px;color:var(--ink);margin:0;}
   .pay-offre-corps b{font-size:15px;color:var(--ink);}
   .pay-paypal:disabled{opacity:.6;}
+  .carnet-pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:8px 0;}
+  .carnet-page{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line,#dfe3ea);border-radius:10px;padding:10px 12px;margin:0;cursor:pointer;}
+  .carnet-page input{width:auto;flex:0 0 auto;margin-top:3px;}
+  .carnet-page span{display:flex;flex-direction:column;gap:2px;color:var(--ink);}
+  .carnet-page small{color:var(--muted,#6b7280);font-weight:400;}
+  .carnet-page.off{opacity:.55;cursor:default;}
   .carnet-credits{margin-top:10px;font-size:13px;color:var(--muted,#6b7280);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .carnet-credits:empty{display:none;}
   .btn-petit{padding:6px 12px;font-size:13px;}
@@ -2892,6 +2898,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "jusqu’à": "fino al",
+    "à partir de": "dal",
+    "d’après la 1re immatriculation": "secondo la prima immatricolazione",
+    "ex. Phase 2": "es. Fase 2",
+    "Pages du PDF": "Pagine del PDF",
+    "Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.": "Scegli cosa contiene il PDF. Il solo libretto (copertina e tabella di manutenzione da spuntare: olio, filtri, freni…) non usa l’IA: è immediato e gratuito.",
+    "Couverture": "Copertina",
+    "Fiche technique": "Scheda tecnica",
+    "Références OEM": "Riferimenti OEM",
+    "photo, nom du véhicule, chiffres clés": "foto, nome del veicolo, dati chiave",
+    "moteur, entretien, fluides, freins, couples": "motore, manutenzione, fluidi, freni, coppie",
+    "filtres, allumage, distribution, freinage": "filtri, accensione, distribuzione, freni",
+    "tableau à cocher : huile, filtres, freins…": "tabella da spuntare: olio, filtri, freni…",
+    "après « Générer avec l’IA »": "dopo « Genera con l’IA »",
+    "Carnet seul (gratuit)": "Solo libretto (gratuito)",
     "Distribution": "Distribuzione",
     "Courroie": "Cinghia",
     "Chaîne": "Catena",
@@ -4252,6 +4273,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "jusqu’à": "bis",
+    "à partir de": "vun",
+    "d’après la 1re immatriculation": "no der éischter Zouloossung",
+    "ex. Phase 2": "z. B. Phas 2",
+    "Pages du PDF": "PDF-Säiten",
+    "Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.": "Wielt, wat am PDF ass. D'Buch eleng (Deckblat an Entretienstabell zum Ukräizen: Ueleg, Filteren, Bremsen…) brauch keng KI: direkt a gratis.",
+    "Couverture": "Deckblat",
+    "Fiche technique": "Technescht Blat",
+    "Références OEM": "OEM-Referenzen",
+    "photo, nom du véhicule, chiffres clés": "Foto, Numm vum Gefier, Schlësselzuelen",
+    "moteur, entretien, fluides, freins, couples": "Motor, Entretien, Flëssegkeeten, Bremsen, Drehmomenter",
+    "filtres, allumage, distribution, freinage": "Filteren, Zündung, Steierung, Bremsen",
+    "tableau à cocher : huile, filtres, freins…": "Tabell zum Ukräizen: Ueleg, Filteren, Bremsen…",
+    "après « Générer avec l’IA »": "no „Mat KI erstellen“",
+    "Carnet seul (gratuit)": "Nëmmen d'Buch (gratis)",
     "Distribution": "Steierung",
     "Courroie": "Zännrimm",
     "Chaîne": "Kette",
@@ -5611,6 +5647,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "jusqu’à": "until",
+    "à partir de": "from",
+    "d’après la 1re immatriculation": "based on the first registration",
+    "ex. Phase 2": "e.g. Phase 2",
+    "Pages du PDF": "PDF pages",
+    "Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.": "Choose what the PDF contains. The logbook alone (cover and service table to tick: oil, filters, brakes…) does not use AI: it is instant and free.",
+    "Couverture": "Cover",
+    "Fiche technique": "Technical sheet",
+    "Références OEM": "OEM references",
+    "photo, nom du véhicule, chiffres clés": "photo, vehicle name, key figures",
+    "moteur, entretien, fluides, freins, couples": "engine, servicing, fluids, brakes, torques",
+    "filtres, allumage, distribution, freinage": "filters, ignition, timing, brakes",
+    "tableau à cocher : huile, filtres, freins…": "table to tick: oil, filters, brakes…",
+    "après « Générer avec l’IA »": "after “Generate with AI”",
+    "Carnet seul (gratuit)": "Logbook only (free)",
     "Distribution": "Timing drive",
     "Courroie": "Belt",
     "Chaîne": "Chain",
@@ -6969,6 +7020,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "jusqu’à": "bis",
+    "à partir de": "ab",
+    "d’après la 1re immatriculation": "laut Erstzulassung",
+    "ex. Phase 2": "z. B. Phase 2",
+    "Pages du PDF": "PDF-Seiten",
+    "Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.": "Wählen Sie den Inhalt des PDFs. Das Heft allein (Deckblatt und Wartungstabelle zum Ankreuzen: Öl, Filter, Bremsen…) nutzt keine KI: sofort und kostenlos.",
+    "Couverture": "Deckblatt",
+    "Fiche technique": "Datenblatt",
+    "Références OEM": "OEM-Referenzen",
+    "photo, nom du véhicule, chiffres clés": "Foto, Fahrzeugname, Kennzahlen",
+    "moteur, entretien, fluides, freins, couples": "Motor, Wartung, Flüssigkeiten, Bremsen, Anzugsmomente",
+    "filtres, allumage, distribution, freinage": "Filter, Zündung, Steuertrieb, Bremsen",
+    "tableau à cocher : huile, filtres, freins…": "Tabelle zum Ankreuzen: Öl, Filter, Bremsen…",
+    "après « Générer avec l’IA »": "nach „Mit KI erstellen“",
+    "Carnet seul (gratuit)": "Nur Heft (kostenlos)",
     "Distribution": "Steuertrieb",
     "Courroie": "Zahnriemen",
     "Chaîne": "Steuerkette",
@@ -8347,6 +8413,21 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "jusqu’à": "tot",
+    "à partir de": "vanaf",
+    "d’après la 1re immatriculation": "volgens de eerste inschrijving",
+    "ex. Phase 2": "bv. Fase 2",
+    "Pages du PDF": "Pagina’s van de pdf",
+    "Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.": "Kies wat de pdf bevat. Het boekje alleen (voorblad en onderhoudstabel om aan te vinken: olie, filters, remmen…) gebruikt geen AI: direct en gratis.",
+    "Couverture": "Voorblad",
+    "Fiche technique": "Technische fiche",
+    "Références OEM": "OEM-referenties",
+    "photo, nom du véhicule, chiffres clés": "foto, naam van het voertuig, kerncijfers",
+    "moteur, entretien, fluides, freins, couples": "motor, onderhoud, vloeistoffen, remmen, aanhaalmomenten",
+    "filtres, allumage, distribution, freinage": "filters, ontsteking, distributie, remmen",
+    "tableau à cocher : huile, filtres, freins…": "tabel om aan te vinken: olie, filters, remmen…",
+    "après « Générer avec l’IA »": "na ‘Genereren met AI’",
+    "Carnet seul (gratuit)": "Alleen boekje (gratis)",
     "Distribution": "Distributie",
     "Courroie": "Riem",
     "Chaîne": "Ketting",
@@ -9557,7 +9638,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.81';
+const VERSION = '2.83';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13750,6 +13831,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.83': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : « Génération / phase » devient une liste « Phase 1 / Phase 2 », remplie toute seule d’après la date de 1re immatriculation pour les modèles courants (Golf, Polo, Clio, Mégane, 208, 308, 3008, C3, Sandero, Focus, Série 3…). Chez Volkswagen on garde le nom des garages : Phase 1 (7) / Phase 2 (7.5) ; chez BMW : LCI. Vous pouvez toujours la changer ; votre choix n’est plus écrasé."
+  ] },
+  '2.82': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : nouvelle rubrique « Pages du PDF ». Cochez ce que vous voulez imprimer : couverture, fiche technique, références OEM, carnet d’entretien. « Carnet seul (gratuit) » donne la couverture et le tableau à cocher (huile, filtre à air, filtres, freins…) sans passer par l’IA : immédiat, sans crédit.",
+    "Génération plus rapide : la fiche est rédigée en quatre parties en même temps (moteur ; entretien et fluides ; références consommables ; références freinage), avec moins de recherches. Recoller fiche-technique.ts dans Supabase."
+  ] },
   '2.81': { date: '04/11/2026', lignes: [
     "Carnet d’entretien : nouveau champ « Distribution » (courroie ou chaîne). Il se remplit tout seul d’après le code moteur pour les moteurs courants (VW EA211 / EA111 / EA888 / TDI, PSA PureTech / HDi / THP, Renault dCi / TCe, Ford EcoBoost, BMW, Mercedes…) ou d’après l’identification ; vous pouvez le corriger. Il fait foi pour l’IA.",
     "Le PDF suit ce choix : avec « Courroie », un « Kit chaîne de distribution » écrit par erreur devient « Kit courroie de distribution » (fiches déjà générées comprises). Recoller fiche-technique.ts dans Supabase."
@@ -36007,6 +36095,22 @@ function champCarnet(cle, libelle, type, aide){
   return '<div><label>' + esc(t(libelle)) + '</label><input data-carnet="' + cle + '" type="' + (type || 'text') + '"'
     + (aide ? ' placeholder="' + esc(aide) + '"' : '') + '></div>';
 }
+/* Pages du PDF du carnet : le garage choisit ce qu'il imprime. */
+const PAGES_CARNET_PDF = [
+  ['couverture', 'Couverture', 'photo, nom du véhicule, chiffres clés'],
+  ['technique', 'Fiche technique', 'moteur, entretien, fluides, freins, couples'],
+  ['references', 'Références OEM', 'filtres, allumage, distribution, freinage'],
+  ['carnet', 'Carnet d’entretien', 'tableau à cocher : huile, filtres, freins…']
+];
+function pagesCarnetPdf(c){
+  const brut = (c && c.pdfPages) || {};
+  const P = {};
+  PAGES_CARNET_PDF.forEach(function(pp){ P[pp[0]] = brut[pp[0]] !== false; });
+  if(!(c && c.technique)){ P.technique = false; P.references = false; }
+  if(!P.couverture && !P.technique && !P.references && !P.carnet) P.carnet = true;
+  return P;
+}
+
 function champVeh(cle, libelle, type){
   return '<div><label>' + esc(t(libelle)) + '</label><input data-cveh="' + cle + '" type="' + (type || 'text') + '"></div>';
 }
@@ -36017,7 +36121,7 @@ function carnetForm(v){
   return '<div class="cerfa-form carnet-form">'
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Véhicule et motorisation')) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Plus la motorisation est précise, plus les données seront justes : cylindrée, nom du moteur et puissance (ex. « 1.6 BlueHDi 120 », « 1.4 TSI 125 »). Le code moteur, s’il est connu, lève les ambiguïtés.')) + '</div>'
-  + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. 7, 7 phase 2') + '</div>'
+  + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. Phase 2') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('motorisation', 'Motorisation *', 'text', 'ex. 1.6 BlueHDi 120 ch')
   +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="carnetBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
   +   champCarnet('codeMoteur', 'Code moteur', 'text', t('facultatif')) + '</div>'
@@ -36057,6 +36161,17 @@ function carnetForm(v){
   +   '<button type="button" class="btn-sec" id="carnetAjouter">' + esc(t('+ Ajouter un entretien')) + '</button>'
   + '</div>'
   + '<div id="carnetLignes">' + lignesEntretienHtml(v) + '</div>'
+  + '</div>'
+  + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Pages du PDF')) + '</div>'
+  + '<div class="cerfa-aide">' + esc(t('Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.')) + '</div>'
+  + '<div class="carnet-pages">' + PAGES_CARNET_PDF.map(function(pp){
+      const P = pagesCarnetPdf(c);
+      const sansFiche = (pp[0] === 'technique' || pp[0] === 'references') && !c.technique;
+      return '<label class="carnet-page' + (sansFiche ? ' off' : '') + '"><input type="checkbox" data-cpage="' + pp[0] + '"' + (P[pp[0]] ? ' checked' : '') + (sansFiche ? ' disabled' : '') + '>'
+        + '<span><b>' + esc(t(pp[1])) + '</b><small>' + esc(t(sansFiche ? 'après « Générer avec l’IA »' : pp[2])) + '</small></span></label>';
+    }).join('') + '</div>'
+  + '<div class="gar-choix"><button type="button" class="btn-sec" data-cpreset="tout">' + esc(t('Tout')) + '</button>'
+  +   '<button type="button" class="btn-sec" data-cpreset="carnet">' + esc(t('Carnet seul (gratuit)')) + '</button></div>'
   + '</div>'
   + '</div>';
 }
@@ -36190,7 +36305,56 @@ function wireCarnetForm(v, d){
     const cm = document.querySelector('input[data-carnet="codeMoteur"]');
     if(cm) cm.addEventListener('input', majDistrib);
   }
+  /* Pages du PDF */
+  const majPages = function(){
+    c.pdfPages = c.pdfPages || {};
+    document.querySelectorAll('input[data-cpage]').forEach(function(x){ if(!x.disabled) c.pdfPages[x.dataset.cpage] = x.checked; });
+    saveVehicle(v); relancer();
+  };
+  document.querySelectorAll('input[data-cpage]').forEach(function(x){ x.onchange = majPages; });
+  document.querySelectorAll('[data-cpreset]').forEach(function(b){
+    b.onclick = function(){
+      const seul = b.dataset.cpreset === 'carnet';
+      document.querySelectorAll('input[data-cpage]').forEach(function(x){
+        if(!x.disabled) x.checked = seul ? (x.dataset.cpage === 'couverture' || x.dataset.cpage === 'carnet') : true;
+      });
+      /* Retenu meme pour les cases grisees : « carnet seul » = pas de fiche. */
+      c.pdfPages = seul ? { couverture: true, technique: false, references: false, carnet: true }
+                        : { couverture: true, technique: true, references: true, carnet: true };
+      saveVehicle(v); relancer();
+    };
+  });
   brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
+  /* Phase : liste selon le modele, remplie d'apres la 1re immatriculation. */
+  const champGen = document.querySelector('input[data-carnet="generation"]');
+  if(champGen){
+    const veh = v.vehicule || (v.vehicule = {});
+    const etiquette = champGen.parentNode.querySelector('label');
+    let note = etiquette && etiquette.querySelector('.ident-etat');
+    if(etiquette && !note){ note = document.createElement('span'); note.className = 'ident-etat'; etiquette.appendChild(document.createTextNode(' ')); etiquette.appendChild(note); }
+    const majGen = function(){
+      const ph = phasesDuModele(veh.marque, veh.modele);
+      const auto = phaseDepuisDate(veh.marque, veh.modele, veh.dateFirstImmat);
+      if(ph.length){
+        const dansListe = ph.some(function(o){ return o.v === c.generation; });
+        let nouveau = '';
+        if(auto && (!c.generation || c.generationAuto)) nouveau = auto;
+        else if(c.generation && !dansListe) nouveau = phaseDepuisTexte(veh.marque, veh.modele, c.generation);
+        if(nouveau && nouveau !== c.generation){
+          c.generation = nouveau; c.generationAuto = nouveau === auto; champGen.value = nouveau; saveVehicle(v);
+        }
+      }
+      if(champGen._rendreListe) champGen._rendreListe();
+      if(note) note.textContent = ph.length && c.generationAuto && auto ? '— ' + t('d’après la 1re immatriculation') : '';
+    };
+    brancherListe(champGen, function(){ return phasesDuModele(veh.marque, veh.modele); });
+    champGen.addEventListener('input', function(){ c.generationAuto = false; if(note) note.textContent = ''; });
+    ['marque', 'modele', 'dateFirstImmat'].forEach(function(k){
+      const x = document.querySelector('input[data-cveh="' + k + '"]');
+      if(x){ x.addEventListener('input', function(){ setTimeout(majGen, 0); }); x.addEventListener('change', function(){ setTimeout(majGen, 0); }); }
+    });
+    majGen();
+  }
   afficherCreditsCarnet(v);
 
   const ph = document.getElementById('carnetPhoto');
@@ -36212,7 +36376,8 @@ function wireCarnetForm(v, d){
   /* Premiere ouverture du carnet de cette fiche : la fenetre
      d'identification s'ouvre d'elle-meme. */
   window.__identDemandee = window.__identDemandee || {};
-  if(!c.identifie && !c.technique && !window.__identDemandee[v.id] && !document.querySelector('.dlg-fond')){
+  const carnetSeul = c.pdfPages && c.pdfPages.technique === false && c.pdfPages.references === false;
+  if(!carnetSeul && !c.identifie && !c.technique && !window.__identDemandee[v.id] && !document.querySelector('.dlg-fond')){
     window.__identDemandee[v.id] = 1;
     setTimeout(function(){ if(currentDoc === 'carnet' && !document.querySelector('.dlg-fond')) fenetreIdentification(v); }, 250);
   }
@@ -36300,6 +36465,74 @@ const WMI_MARQUES = {
   SHH:'HONDA', YV1:'VOLVO', YV4:'VOLVO', LYV:'VOLVO', SAL:'LAND ROVER', SAJ:'JAGUAR', SCC:'LOTUS', LRW:'TESLA', XP7:'TESLA',
   '5YJ':'TESLA', LSJ:'MG', SAR:'ROVER', KPA:'SSANGYONG', LJ1:'JAC', LGX:'BYD', VLU:'SCANIA'
 };
+/* --- Phases (restylages) : annee du restylage par modele --------------
+   « 2017 » = phase 2 a partir de 2017 ; « 2012/2014 » = phase 2 en 2012,
+   phase 3 en 2014. Deduite de la 1re immatriculation, modifiable. */
+const PHASES_MODELES = {
+  VOLKSWAGEN: 'GOLF 7:2017;GOLF 8:2024;POLO 4:2005;POLO 5:2014;POLO 6:2021;TIGUAN 1:2011;TIGUAN 2:2020;PASSAT B8:2019;T-ROC:2022;UP:2016;TRANSPORTER T6:2019;TOUAREG 2:2014;SCIROCCO 3:2014;GOLF SPORTSVAN:2018;GOLF PLUS:2009;TOURAN 1:2007/2010;CADDY 3:2010',
+  RENAULT: 'CLIO 2:2001;CLIO 3:2009;CLIO 4:2016;CLIO 5:2023;MEGANE 2:2006;MEGANE 3:2012/2014;MEGANE 4:2020;CAPTUR 1:2017;CAPTUR 2:2024;SCENIC 3:2012;GRAND SCENIC 3:2012;TWINGO 2:2012;TWINGO 3:2019;KANGOO 2:2013;LAGUNA 3:2010;ESPACE 4:2006/2010;MASTER 3:2014/2019;TRAFIC 3:2019;KADJAR:2018;ZOE:2019;KOLEOS 2:2019',
+  PEUGEOT: '107:2009/2012;108:2018;207:2009;208 1:2015;208 2:2023;2008 1:2016;2008 2:2023;307:2005;308 1:2011;308 2:2017;3008 2:2020;407:2008;5008 2:2020;508 1:2014;508 2:2023;PARTNER 2:2012/2015',
+  CITROEN: 'C1 1:2008/2012;C3 2:2013;C3 3:2020;C4 2:2015;C4 PICASSO 2:2016;C4 CACTUS:2018;C5 AIRCROSS:2022;BERLINGO 2:2012/2015;DS3:2014',
+  DACIA: 'SANDERO 2:2016;SANDERO 3:2022;DUSTER 1:2013;DUSTER 2:2021;LOGAN 2:2016',
+  FORD: 'FIESTA 6:2013;FIESTA 7:2022;FOCUS 2:2008;FOCUS 3:2014;FOCUS 4:2022;KUGA 2:2016;C-MAX 2:2015;MONDEO 4:2010',
+  OPEL: 'CORSA D:2011;CORSA F:2023;ASTRA J:2012;ASTRA K:2019;INSIGNIA A:2013;MOKKA A:2016;ZAFIRA C:2016',
+  TOYOTA: 'YARIS 3:2014/2017;AURIS 2:2015;C-HR 1:2020;RAV4 4:2016;AYGO 2:2018',
+  NISSAN: 'QASHQAI 1:2010;QASHQAI 2:2017;JUKE 1:2014;MICRA 4:2013',
+  SEAT: 'IBIZA 4:2012/2015;LEON 3:2017',
+  SKODA: 'OCTAVIA 2:2009;OCTAVIA 3:2017;FABIA 2:2010;FABIA 3:2018;SUPERB 3:2019',
+  HYUNDAI: 'I20 2:2018;I30 3:2020;TUCSON 3:2018;KONA 1:2021',
+  KIA: 'SPORTAGE 4:2018;CEED 2:2015;PICANTO 3:2020;NIRO 1:2019',
+  BMW: 'SERIE 1 (E87):2007;SERIE 1 (F20):2015;SERIE 3 (E90):2008;SERIE 3 (F30):2015;SERIE 3 (G20):2022;SERIE 5 (F10):2013;SERIE 5 (G30):2020;X1 (F48):2019;X3 (F25):2014',
+  'MERCEDES-BENZ': 'CLASSE A (W176):2015;CLASSE C (W204):2011;CLASSE C (W205):2018;CLASSE E (W212):2013;CLASSE E (W213):2020;CLASSE GLA (X156):2017',
+  AUDI: 'A1 (8X):2015;A3 (8P):2008;A3 (8V):2016;A4 (B8):2012;Q3 (8U):2015;Q5 (8R):2012',
+  MINI: 'MINI (F56):2018/2021',
+  FIAT: '500:2015'
+};
+function anneesRestylage(marque, modele){
+  const m = entreeMarque(marque);
+  if(!m || !PHASES_MODELES[m[0]]) return null;
+  const cible = normListe(romainEnChiffres(modele));
+  if(!cible) return null;
+  const e = PHASES_MODELES[m[0]].split(';').filter(function(x){ return normListe(x.split(':')[0]) === cible; })[0];
+  return e ? e.split(':')[1].split('/').map(Number) : null;
+}
+/* Appellation des garages en plus de « Phase n » : Golf 7 / 7.5, LCI chez
+   BMW, B8.5 pour l'A4. */
+function nomPhase(marque, modele, n){
+  const m = entreeMarque(marque), mod = romainEnChiffres(String(modele || '')).toUpperCase();
+  let alias = '';
+  const golf = /^GOLF\s+(\d)$/.exec(mod.trim());
+  if(m && m[0] === 'VOLKSWAGEN' && golf) alias = n === 1 ? golf[1] : golf[1] + '.5';
+  else if(m && m[0] === 'BMW' && n > 1) alias = n === 2 ? 'LCI' : 'LCI ' + (n - 1);
+  else if(m && m[0] === 'AUDI' && /\(B8\)/.test(mod) && n === 2) alias = 'B8.5';
+  return 'Phase ' + n + (alias ? ' (' + alias + ')' : '');
+}
+function phasesDuModele(marque, modele){
+  const ans = anneesRestylage(marque, modele);
+  if(!ans) return [];
+  const l = [{ v: nomPhase(marque, modele, 1), txt: nomPhase(marque, modele, 1) + ' · ' + t('jusqu’à') + ' ' + (ans[0] - 1) }];
+  ans.forEach(function(a, i){
+    l.push({ v: nomPhase(marque, modele, i + 2), txt: nomPhase(marque, modele, i + 2) + ' · ' + t('à partir de') + ' ' + a });
+  });
+  return l;
+}
+function phaseDepuisDate(marque, modele, date){
+  const ans = anneesRestylage(marque, modele);
+  const an = Number(String(date || '').slice(0, 4));
+  if(!ans || !an) return '';
+  let n = 1;
+  ans.forEach(function(a, i){ if(an >= a) n = i + 2; });
+  return nomPhase(marque, modele, n);
+}
+/* « phase 2 (7.5) selon la date… » → la valeur de la liste. */
+function phaseDepuisTexte(marque, modele, texte){
+  const m = /phase\s*(\d)/i.exec(String(texte || ''));
+  const ph = phasesDuModele(marque, modele);
+  if(!m || !ph.length) return '';
+  const n = Number(m[1]);
+  return n >= 1 && n <= ph.length ? ph[n - 1].v : '';
+}
+
 /* --- Distribution : courroie ou chaine, d'apres le code moteur ----------
    Codes courants dont le type est connu avec certitude ; pour les autres,
    c'est l'identification par l'IA (ou le garage) qui le dit. */
@@ -36808,7 +37041,9 @@ function fenetreIdentification(v){
       if($('idMoto').value.trim()) c.motorisation = $('idMoto').value.trim();
       c.motorisationListe = motoChoisie ? { nom: motoChoisie.nom || '', code: motoChoisie.code_moteur || '',
         ch: motoChoisie.puissance_ch || '', periode: motoChoisie.periode || '', generation: motoChoisie.generation || '' } : null;
-      if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = romainEnChiffres(motoChoisie.generation);
+      const phaseAuto = phaseDepuisDate(veh.marque, veh.modele, veh.dateFirstImmat);
+      if(phaseAuto && (!c.generation || c.generationAuto)){ c.generation = phaseAuto; c.generationAuto = true; }
+      else if(motoChoisie && motoChoisie.generation && !c.generation) c.generation = romainEnChiffres(motoChoisie.generation);
       if(motoChoisie && !c.distribution){
         const d = distributionDuCode(motoChoisie.code_moteur) || (/^courroie$/i.test(motoChoisie.distribution || '') ? 'courroie' : (/^cha[iî]ne$/i.test(motoChoisie.distribution || '') ? 'chaîne' : ''));
         if(d) c.distribution = d;
@@ -36862,7 +37097,9 @@ async function identifierMoteur(v){
       if(d) c.distribution = d;
     }
   }
-  if(rep.generation && !c.generation) c.generation = romainEnChiffres(rep.generation);
+  const phaseAuto = phaseDepuisDate(veh.marque || rep.marque, veh.modele || rep.modele, veh.dateFirstImmat);
+  if(phaseAuto && (!c.generation || c.generationAuto)){ c.generation = phaseAuto; c.generationAuto = true; }
+  else if(rep.generation && !c.generation) c.generation = romainEnChiffres(rep.generation);
   if(rep.marque && !veh.marque) veh.marque = String(rep.marque).toUpperCase();
   if(rep.modele && !veh.modele) veh.modele = String(rep.modele).toUpperCase();
   saveVehicle(v);
@@ -37680,6 +37917,7 @@ async function genererCarnetPdf(v, d){
     return o;
   };
   const tc = typeDistrib ? corrigerTout(c.technique || {}) : (c.technique || {});
+  const P = pagesCarnetPdf(c);
   const T = tc.titre || {};
   const pdf = await PDFDocument.create();
   const norm = await pdf.embedFont(StandardFonts.Helvetica);
@@ -37696,7 +37934,7 @@ async function genererCarnetPdf(v, d){
   const moto = String(T.motorisation || c.motorisation || '').toUpperCase();
   const annee = anneeMec(v);
   const piedTexte = [T.marque || veh.marque, romainEnChiffres(T.modele || veh.modele), T.motorisation || c.motorisation].filter(Boolean).join(' ')
-    + (annee ? ' (' + annee + ')' : '') + ' — Fiche Technique & Atelier';
+    + (annee ? ' (' + annee + ')' : '') + ' — ' + (pagesCarnetPdf(c).technique || pagesCarnetPdf(c).references ? 'Fiche Technique & Atelier' : 'Carnet d’Entretien');
   const sousTitre = romainEnChiffres(T.sous_titre || [c.generation, veh.dateFirstImmat ? '1re mise en circulation le ' + fmtDate(veh.dateFirstImmat) : '', c.codeMoteur ? 'Moteur ' + c.codeMoteur : ''].filter(Boolean).join(' • '));
 
   const pages = [];
@@ -37792,12 +38030,13 @@ async function genererCarnetPdf(v, d){
     return yHaut - h;
   };
 
+  if(P.couverture){
   /* ---------------- 1. Couverture ---------------- */
   nouvellePage();
   page.drawRectangle({ x: 0, y: H - 8, width: L, height: 8, color: BLEU });
   page.drawRectangle({ x: 0, y: 0, width: L, height: 8, color: BLEU });
   y = H - 62;
-  puce(MG, y, 'FICHE TECHNIQUE & ATELIER');
+  puce(MG, y, P.technique || P.references ? 'FICHE TECHNIQUE & ATELIER' : 'CARNET D’ENTRETIEN');
   y -= 44;
   ecrire(marque || 'VÉHICULE', MG, y, 32, gras, ENCRE); y -= 36;
   if(modele.trim()){ ecrire(modele.trim(), MG, y, 32, gras, ENCRE); y -= 30; }
@@ -37824,14 +38063,17 @@ async function genererCarnetPdf(v, d){
     ecrire(m, MG + (LARG - largeur(m, 22, gras)) / 2, y - hPhoto / 2, 22, gras, TRAIT);
   }
   y -= hPhoto + 16;
-  await encadresChiffres(y);
+  const chiffresCouv = tc.chiffres || {};
+  if(chiffresCouv.puissance || chiffresCouv.couple || chiffresCouv.conso) await encadresChiffres(y);
   /* Le garage qui a etabli le document. */
   if(d && d.raisonSociale){
     const g = t('Établi par') + ' ' + d.raisonSociale + (d.ville ? ' — ' + d.ville : '') + (d.tel ? ' — ' + d.tel : '');
     ecrire(g, MG, 52, 7.5, norm, DOUX);
   }
+  }
 
   /* ---------------- 2. En-tete et sections ---------------- */
+  if(P.technique || P.references){
   nouvellePage();
   y = H - 52;
   puce(MG, y, 'FICHE TECHNIQUE & ATELIER');
@@ -37842,10 +38084,9 @@ async function genererCarnetPdf(v, d){
   page.drawLine({ start: { x: MG, y: y - 2 }, end: { x: MG + LARG, y: y - 2 }, thickness: 0.8, color: ENCRE });
   y -= 14;
   y = await encadresChiffres(y) - 6;
+  }
 
-  if(!c.technique){
-    encadre(t('Les données techniques de ce véhicule n’ont pas encore été générées. Dans Autivio, renseignez la motorisation puis appuyez sur « Générer avec l’IA ».'));
-  }else{
+  if(P.technique){
     titreSection('1. Motorisation et Transmission');
     tableau(['Caractéristique', 'Spécification Technique'], kv(tc.motorisation), [0.32, 0.68]);
     const perf = tc.performances || {};
@@ -37878,6 +38119,8 @@ async function genererCarnetPdf(v, d){
     tableau(['Composant de Freinage', 'Épaisseur Neuf', 'Cote Minimale / Limite d’Usure'], champs(tc.freins, ['composant', 'neuf', 'limite']), [0.4, 0.24, 0.36]);
     titreSection('8. Couples de Serrage Officiels (Nm)');
     tableau(['Élément / Assemblage', 'Couple (Nm)', 'Note d’Assemblage'], champs(tc.couples, ['element', 'couple', 'note']), [0.34, 0.18, 0.48]);
+  }
+  if(P.references){
     /* References : un seul tableau (consommables puis freinage) ; la
        colonne OEM est un lien vers la recherche de la piece en ligne. */
     const refs = (tc.refs_filtres || []).concat(tc.refs_freins || []).filter(function(x){ return x && (x.piece || x.oem || x.equivalents); });
@@ -37885,7 +38128,7 @@ async function genererCarnetPdf(v, d){
       tableau(['Pièce / Consommable', 'Référence Constructeur (OEM)', 'Équivalents Première Monte'],
         refs.map(function(x){ return [x.piece || '', oemPropre(x.oem), equivalentsPremium(x.equivalents)]; }), [0.28, 0.3, 0.42],
         refs.map(function(x){ const r = premiereReference(x.oem); return r ? { col: 1, url: 'https://www.google.com/search?q=' + encodeURIComponent(r) } : null; }),
-        { entier: true, titre: '9. Références OEM & Consommables' });
+        { entier: true, titre: (P.technique ? '9. ' : '') + 'Références OEM & Consommables' });
       ecrire('Cliquez sur une référence constructeur (en bleu) pour la rechercher chez les vendeurs en ligne avant de commander.', MG, y, 7, norm, DOUX);
       y -= 12;
     }
@@ -37893,10 +38136,11 @@ async function genererCarnetPdf(v, d){
 
   }
 
+  if(P.carnet){
   /* ---------------- 10. Carnet d'entretien ---------------- */
   nouvellePage();
   y = H - 52;
-  ecrire('10. Carnet d’Entretien', MG, y, 12.5, gras, ENCRE);
+  ecrire((P.technique ? '10. ' : '') + 'Carnet d’Entretien', MG, y, 12.5, gras, ENCRE);
   y -= 8;
   page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
   y -= 10;
@@ -37978,13 +38222,14 @@ async function genererCarnetPdf(v, d){
     }
     y = yb;
   }
+  }
 
   /* Pieds de page */
   const n = pages.length;
   pages.forEach(function(p, i){
     p.drawLine({ start: { x: MG, y: 40 }, end: { x: MG + LARG, y: 40 }, thickness: 0.5, color: TRAIT });
     p.drawText(texteCarnet(piedTexte), { x: MG, y: 28, size: 6.8, font: norm, color: DOUX });
-    const droite = i === 0 ? (veh.immat ? veh.immat : '') : 'Page ' + i + ' sur ' + (n - 1);
+    const droite = P.couverture && i === 0 ? (veh.immat ? veh.immat : '') : 'Page ' + (P.couverture ? i : i + 1) + ' sur ' + (P.couverture ? n - 1 : n);
     p.drawText(texteCarnet(droite), { x: MG + LARG - largeur(droite, 6.8), y: 28, size: 6.8, font: norm, color: DOUX });
   });
   return await pdf.save();
