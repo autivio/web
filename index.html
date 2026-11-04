@@ -9496,7 +9496,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '2.75';
+const VERSION = '2.76';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13689,6 +13689,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '2.76': { date: '04/11/2026', lignes: [
+    "Carnet d’entretien : corrige l’erreur « The compiled grammar is too large » à la génération de la fiche. La réponse de l’IA (découpée par la recherche web) est maintenant recollée et réparée correctement. À faire : recoller fiche-technique.ts dans Supabase."
+  ] },
   '2.75': { date: '04/11/2026', lignes: [
     "Le carnet d’entretien fonctionne maintenant avec un CRÉDIT en euros, comme un porte-monnaie : rechargez 5 €, 10 €, 20 €, 50 € ou le montant de votre choix (bouton « 🎟 Mon crédit » à gauche, avec votre solde). Chaque carnet généré débite 2 € ; avant de générer, le carnet indique « générer ce carnet : −2,00 € (il restera …) ».",
     "Par carte, la recharge coûte son montant ; avec PayPal, 1 € de plus. Administrateur : l’onglet « Crédits » affiche les montants en euros et permet de créditer un compte d’un montant au choix."
