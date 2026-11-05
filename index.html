@@ -9911,7 +9911,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.17';
+const VERSION = '3.18';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14105,6 +14105,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.18': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : l’interrupteur « Manuellement / Automatiquement » est retiré. Les cases se remplissent toujours toutes seules (d’après la motorisation, le code moteur et la date) et restent modifiables à la main ; pour tout trouver d’un coup, utilisez le bouton du VIN en bas du formulaire."
+  ] },
   '3.17': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : nouvelle partie « Réparations déjà faites » (date, kilométrage, travaux). Des boutons ajoutent les réparations courantes en un clic : embrayage complet, disque d’embrayage, volant moteur, kit de distribution, turbo, injecteurs… Elles sont imprimées sur la page « Entretien et Réparations » du PDF, avec une page de plus si besoin."
   ] },
@@ -36678,10 +36681,11 @@ const ETIQ_CHAMPS_TECH = {
 /* Remplissage du carnet : automatique (listes, phase et distribution
    deduites) ou manuel (tout a la main). Le dernier choix sert de valeur
    par defaut pour les autres vehicules. */
-function remplissageAuto(c){
-  if(c && (c.remplissage === 'auto' || c.remplissage === 'manuel')) return c.remplissage === 'auto';
-  try{ return localStorage.getItem('autivio:remplissageCarnet') !== 'manuel'; }catch(e){ return true; }
-}
+/* Depuis la 3.18 il n'y a plus d'interrupteur Manuellement / Automatiquement :
+   le remplissage est toujours automatique (phase et distribution d'apres le
+   modele, la date et le code moteur), chaque case reste modifiable a la main,
+   et « Identifier le vehicule » (VIN) est en bas du formulaire. */
+function remplissageAuto(c){ return true; }
 /* Une version choisie dans la liste remplit le reste. */
 /* Remplit le carnet d'apres la version choisie dans la liste deja recue :
    gratuit, aucun appel a l'IA. */
@@ -36976,11 +36980,7 @@ function carnetForm(v){
   const c = ensureCarnet(v);
   const tc = c.technique;
   return '<div class="cerfa-form carnet-form">'
-  + '<div class="cerfa-sec"><div class="cerfa-sec-title carnet-titre-mode"><span>' + esc(t('Véhicule et motorisation')) + '</span>'
-  +   '<label class="mode-remplissage" title="' + esc(t('Automatiquement : phase et distribution remplies d’après le modèle, la date et le code moteur. Manuellement : vous les choisissez vous-même. Les listes de la marque, du modèle et des motorisations sont proposées dans les deux cas.')) + '">'
-  +     '<span class="mode-txt' + (remplissageAuto(c) ? '' : ' actif') + '">' + esc(t('Manuellement')) + '</span>'
-  +     '<input type="checkbox" id="carnetModeAuto"' + (remplissageAuto(c) ? ' checked' : '') + '><span class="interrupteur" aria-hidden="true"></span>'
-  +     '<span class="mode-txt' + (remplissageAuto(c) ? ' actif' : '') + '">' + esc(t('Automatiquement')) + '</span></label></div>'
+  + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Véhicule et motorisation')) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Plus la motorisation est précise, plus les données seront justes : cylindrée, nom du moteur et puissance (ex. « 1.6 BlueHDi 120 », « 1.4 TSI 125 »). Le code moteur, s’il est connu, lève les ambiguïtés.')) + '</div>'
   + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. Phase 2') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('motorisation', 'Motorisation *', 'text', 'ex. 1.6 BlueHDi 120 ch')
@@ -37266,14 +37266,7 @@ function wireCarnetForm(v, d){
       saveVehicle(v); relancer();
     };
   });
-  /* Interrupteur Manuellement / Automatiquement */
   const modeAuto = remplissageAuto(c);
-  const sw = document.getElementById('carnetModeAuto');
-  if(sw) sw.onchange = function(){
-    c.remplissage = sw.checked ? 'auto' : 'manuel';
-    try{ localStorage.setItem('autivio:remplissageCarnet', c.remplissage); }catch(e){}
-    saveVehicle(v); renderMain();
-  };
   /* Marque et modele en listes dans les deux modes ; le mode manuel ne
      fait que laisser la motorisation, la phase et la distribution libres. */
   brancherMarqueModele(document.querySelector('input[data-cveh="marque"]'), document.querySelector('input[data-cveh="modele"]'));
