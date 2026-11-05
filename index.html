@@ -2228,6 +2228,11 @@
   .doss-fichier{display:flex;align-items:center;gap:8px;}
   .doss-croix{margin-left:auto;background:none;border:0;color:#b3261e;font-size:15px;
     line-height:1;cursor:pointer;padding:4px 6px;border-radius:6px;flex:0 0 auto;}
+  .doss-ligne{display:flex;align-items:stretch;gap:6px;}
+  .doss-ligne .doss-item{flex:1;min-width:0;}
+  .doss-suppr{margin-left:0;min-width:42px;border:1px solid var(--line,#dcdfe6);border-radius:10px;font-size:16px;display:flex;align-items:center;justify-content:center;}
+  .arch-ligne{display:flex;align-items:center;gap:4px;}
+  .arch-ligne .arch-fichier{flex:1;min-width:0;}
   .doss-croix:hover{background:rgba(179,38,30,.1);}
   .doss-croix:disabled{opacity:.4;cursor:default;}
 </style>
@@ -2960,6 +2965,37 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Le carnet ne dit pas la même chose que la fiche": "Il libretto non corrisponde alla scheda",
+    "Corriger la fiche avec les informations du carnet importé ?": "Correggere la scheda con i dati del libretto importato?",
+    "Attention : le VIN est différent, vérifiez que c’est bien la même voiture.": "Attenzione: il VIN è diverso, verifica che sia la stessa auto.",
+    "Fiche  →  carnet": "Scheda  →  libretto",
+    "Corriger avec le carnet": "Correggi con il libretto",
+    "Garder la fiche": "Tieni la scheda",
+    "informations corrigées": "dati corretti",
+    "information corrigée": "dato corretto",
+    "informations ajoutées": "dati aggiunti",
+    "information ajoutée": "dato aggiunto",
+    "fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)": "scheda lasciata così, senza la scheda tecnica del libretto (altra motorizzazione)",
+    "Le carnet et la fiche disent déjà la même chose : rien à changer.": "Libretto e scheda corrispondono già: niente da cambiare.",
+    "(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)": "(motorizzazione corretta: rigenera la scheda tecnica, non è salvata in questo libretto fatto con una versione precedente di Autivio)",
+    "Boîte": "Cambio",
+    "Stop & Start": "Start & Stop",
+    "Pays de la plaque": "Paese della targa",
+    "Puissance fiscale (CV)": "Cavalli fiscali (CV)",
+    "Type / variante / version (D.2)": "Tipo / variante / versione (D.2)",
+    "Genre": "Genere",
+    "sur ce PC": "su questo PC",
+    "sur ce téléphone": "su questo telefono",
+    "en ligne": "online",
+    "Mettez à jour le logiciel PC pour supprimer les documents.": "Aggiorna il software PC per eliminare i documenti.",
+    "refusé": "rifiutato",
+    "Google Drive non connecté": "Google Drive non collegato",
+    "non connecté": "non collegato",
+    "Supprimer ce document": "Elimina questo documento",
+    "Il est effacé partout où il se trouve": "Viene eliminato ovunque si trovi",
+    "C’est définitif.": "È definitivo.",
+    "Pas effacé partout": "Non eliminato ovunque",
+    "Il est effacé de ce PC. C’est définitif.": "Viene eliminato da questo PC. È definitivo.",
     "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Questa immagine non può essere presa direttamente dal sito. Salvala sul computer, poi trascina il file.",
     "Ce type de fichier ne va pas ici.": "Questo tipo di file non va qui.",
     "Il faut un PDF.": "Serve un PDF.",
@@ -4524,6 +4560,37 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Le carnet ne dit pas la même chose que la fiche": "D’Servicebuch seet net datselwecht wéi d’Fiche",
+    "Corriger la fiche avec les informations du carnet importé ?": "D’Fiche mat den Informatioune vum importéierte Buch verbesseren?",
+    "Attention : le VIN est différent, vérifiez que c’est bien la même voiture.": "Opgepasst: d’VIN ass anescht, kuckt ob et dee selwechten Auto ass.",
+    "Fiche  →  carnet": "Fiche  →  Buch",
+    "Corriger avec le carnet": "Mam Buch verbesseren",
+    "Garder la fiche": "Fiche behalen",
+    "informations corrigées": "Informatioune verbessert",
+    "information corrigée": "Informatioun verbessert",
+    "informations ajoutées": "Informatiounen derbäi",
+    "information ajoutée": "Informatioun derbäi",
+    "fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)": "Fiche gelooss wéi se ass, ouni technesch Fiche vum Buch (aner Motoriséierung)",
+    "Le carnet et la fiche disent déjà la même chose : rien à changer.": "Buch a Fiche soen schonn datselwecht: näischt ze änneren.",
+    "(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)": "(Motoriséierung verbessert: maacht d’technesch Fiche nei, si ass net an dësem Buch vun enger eelerer Autivio-Versioun)",
+    "Boîte": "Gangschaltung",
+    "Stop & Start": "Start-Stop",
+    "Pays de la plaque": "Land vun der Plack",
+    "Puissance fiscale (CV)": "Steier-PS (CV)",
+    "Type / variante / version (D.2)": "Typ / Variant / Versioun (D.2)",
+    "Genre": "Genre",
+    "sur ce PC": "op dësem PC",
+    "sur ce téléphone": "op dësem Telefon",
+    "en ligne": "online",
+    "Mettez à jour le logiciel PC pour supprimer les documents.": "Aktualiséiert d’PC-Software fir Dokumenter ze läschen.",
+    "refusé": "refuséiert",
+    "Google Drive non connecté": "Google Drive net verbonnen",
+    "non connecté": "net verbonnen",
+    "Supprimer ce document": "Dëst Dokument läschen",
+    "Il est effacé partout où il se trouve": "Et gëtt iwwerall geläscht, wou et ass",
+    "C’est définitif.": "Dat ass definitiv.",
+    "Pas effacé partout": "Net iwwerall geläscht",
+    "Il est effacé de ce PC. C’est définitif.": "Et gëtt vun dësem PC geläscht. Dat ass definitiv.",
     "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Dëst Bild kann net direkt vum Site geholl ginn. Späichert et um Computer an zitt dann de Fichier.",
     "Ce type de fichier ne va pas ici.": "Dësen Typ vu Fichier gehéiert net hei hin.",
     "Il faut un PDF.": "Et brauch eng PDF.",
@@ -6087,6 +6154,37 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Le carnet ne dit pas la même chose que la fiche": "The service book does not match the record",
+    "Corriger la fiche avec les informations du carnet importé ?": "Correct the record with the imported book’s details?",
+    "Attention : le VIN est différent, vérifiez que c’est bien la même voiture.": "Warning: the VIN is different, check it is the same car.",
+    "Fiche  →  carnet": "Record  →  book",
+    "Corriger avec le carnet": "Correct with the book",
+    "Garder la fiche": "Keep the record",
+    "informations corrigées": "details corrected",
+    "information corrigée": "detail corrected",
+    "informations ajoutées": "details added",
+    "information ajoutée": "detail added",
+    "fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)": "record kept as is, without the book’s technical sheet (different engine)",
+    "Le carnet et la fiche disent déjà la même chose : rien à changer.": "The book and the record already match: nothing to change.",
+    "(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)": "(engine corrected: regenerate the technical sheet, it is not stored in this book made with an older Autivio version)",
+    "Boîte": "Gearbox",
+    "Stop & Start": "Stop & Start",
+    "Pays de la plaque": "Plate country",
+    "Puissance fiscale (CV)": "Fiscal horsepower (CV)",
+    "Type / variante / version (D.2)": "Type / variant / version (D.2)",
+    "Genre": "Body type",
+    "sur ce PC": "on this PC",
+    "sur ce téléphone": "on this phone",
+    "en ligne": "online",
+    "Mettez à jour le logiciel PC pour supprimer les documents.": "Update the PC software to delete documents.",
+    "refusé": "refused",
+    "Google Drive non connecté": "Google Drive not connected",
+    "non connecté": "not connected",
+    "Supprimer ce document": "Delete this document",
+    "Il est effacé partout où il se trouve": "It is deleted everywhere it is stored",
+    "C’est définitif.": "This cannot be undone.",
+    "Pas effacé partout": "Not deleted everywhere",
+    "Il est effacé de ce PC. C’est définitif.": "It is deleted from this PC. This cannot be undone.",
     "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "This image cannot be taken directly from the site. Save it to the computer, then drag the file.",
     "Ce type de fichier ne va pas ici.": "This file type does not go here.",
     "Il faut un PDF.": "A PDF is needed.",
@@ -7649,6 +7747,37 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Le carnet ne dit pas la même chose que la fiche": "Das Serviceheft stimmt nicht mit dem Datensatz überein",
+    "Corriger la fiche avec les informations du carnet importé ?": "Datensatz mit den Angaben des importierten Heftes korrigieren?",
+    "Attention : le VIN est différent, vérifiez que c’est bien la même voiture.": "Achtung: die FIN ist anders, prüfen Sie, ob es dasselbe Auto ist.",
+    "Fiche  →  carnet": "Datensatz  →  Heft",
+    "Corriger avec le carnet": "Mit dem Heft korrigieren",
+    "Garder la fiche": "Datensatz behalten",
+    "informations corrigées": "Angaben korrigiert",
+    "information corrigée": "Angabe korrigiert",
+    "informations ajoutées": "Angaben ergänzt",
+    "information ajoutée": "Angabe ergänzt",
+    "fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)": "Datensatz unverändert, ohne Datenblatt des Heftes (andere Motorisierung)",
+    "Le carnet et la fiche disent déjà la même chose : rien à changer.": "Heft und Datensatz stimmen schon überein: nichts zu ändern.",
+    "(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)": "(Motorisierung korrigiert: erstellen Sie das Datenblatt neu, es ist in diesem mit einer älteren Autivio-Version erstellten Heft nicht gespeichert)",
+    "Boîte": "Getriebe",
+    "Stop & Start": "Start-Stopp",
+    "Pays de la plaque": "Land des Kennzeichens",
+    "Puissance fiscale (CV)": "Steuer-PS (CV)",
+    "Type / variante / version (D.2)": "Typ / Variante / Version (D.2)",
+    "Genre": "Fahrzeugart",
+    "sur ce PC": "auf diesem PC",
+    "sur ce téléphone": "auf diesem Telefon",
+    "en ligne": "online",
+    "Mettez à jour le logiciel PC pour supprimer les documents.": "Aktualisieren Sie die PC-Software, um Dokumente zu löschen.",
+    "refusé": "abgelehnt",
+    "Google Drive non connecté": "Google Drive nicht verbunden",
+    "non connecté": "nicht verbunden",
+    "Supprimer ce document": "Dieses Dokument löschen",
+    "Il est effacé partout où il se trouve": "Es wird überall gelöscht, wo es gespeichert ist",
+    "C’est définitif.": "Das ist endgültig.",
+    "Pas effacé partout": "Nicht überall gelöscht",
+    "Il est effacé de ce PC. C’est définitif.": "Es wird von diesem PC gelöscht. Das ist endgültig.",
     "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Dieses Bild kann nicht direkt von der Website übernommen werden. Speichern Sie es auf dem Computer und ziehen Sie dann die Datei.",
     "Ce type de fichier ne va pas ici.": "Dieser Dateityp passt hier nicht.",
     "Il faut un PDF.": "Es wird ein PDF benötigt.",
@@ -9231,6 +9360,37 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Le carnet ne dit pas la même chose que la fiche": "Het boekje zegt niet hetzelfde als de fiche",
+    "Corriger la fiche avec les informations du carnet importé ?": "De fiche verbeteren met de gegevens van het geïmporteerde boekje?",
+    "Attention : le VIN est différent, vérifiez que c’est bien la même voiture.": "Let op: het VIN is anders, controleer of het dezelfde auto is.",
+    "Fiche  →  carnet": "Fiche  →  boekje",
+    "Corriger avec le carnet": "Verbeteren met het boekje",
+    "Garder la fiche": "Fiche houden",
+    "informations corrigées": "gegevens verbeterd",
+    "information corrigée": "gegeven verbeterd",
+    "informations ajoutées": "gegevens toegevoegd",
+    "information ajoutée": "gegeven toegevoegd",
+    "fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)": "fiche ongewijzigd, zonder technische fiche van het boekje (andere motor)",
+    "Le carnet et la fiche disent déjà la même chose : rien à changer.": "Boekje en fiche zeggen al hetzelfde: niets te wijzigen.",
+    "(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)": "(motor verbeterd: maak de technische fiche opnieuw, ze zit niet in dit boekje van een oudere Autivio-versie)",
+    "Boîte": "Versnellingsbak",
+    "Stop & Start": "Start-stop",
+    "Pays de la plaque": "Land van de plaat",
+    "Puissance fiscale (CV)": "Fiscaal vermogen (CV)",
+    "Type / variante / version (D.2)": "Type / variant / versie (D.2)",
+    "Genre": "Soort",
+    "sur ce PC": "op deze pc",
+    "sur ce téléphone": "op deze telefoon",
+    "en ligne": "online",
+    "Mettez à jour le logiciel PC pour supprimer les documents.": "Werk de pc-software bij om documenten te verwijderen.",
+    "refusé": "geweigerd",
+    "Google Drive non connecté": "Google Drive niet verbonden",
+    "non connecté": "niet verbonden",
+    "Supprimer ce document": "Dit document verwijderen",
+    "Il est effacé partout où il se trouve": "Het wordt overal verwijderd waar het staat",
+    "C’est définitif.": "Dit is definitief.",
+    "Pas effacé partout": "Niet overal verwijderd",
+    "Il est effacé de ce PC. C’est définitif.": "Het wordt van deze pc verwijderd. Dit is definitief.",
     "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Deze afbeelding kan niet rechtstreeks van de site worden genomen. Sla ze op de computer op en sleep dan het bestand.",
     "Ce type de fichier ne va pas ici.": "Dit bestandstype hoort hier niet.",
     "Il faut un PDF.": "Er is een pdf nodig.",
@@ -10645,7 +10805,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.43';
+const VERSION = '3.45';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15126,6 +15286,14 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.45': { date: '05/11/2026', lignes: [
+    "Importer un carnet : le carnet fait foi. Si la fiche dit autre chose (motorisation, année / 1re mise en circulation, code moteur, génération, VIN...), Autivio montre les différences « fiche → carnet » et corrige la fiche d'un clic.",
+    "Carnet fait avec une ancienne version : la couverture est relue aussi (marque, modèle, motorisation, phase, date, code moteur, plaque, VIN), et la fiche technique du carnet partagé est reprise quand la motorisation est corrigée.",
+  ] },
+  '3.44': { date: '05/11/2026', lignes: [
+    "Supprimer un document : une petite croix ✕ à côté de chaque document, dans la fenêtre des documents d'un véhicule (tableau de bord) et dans les archives du PC. Confirmation demandée.",
+    "Le document est effacé partout où il se trouve (ce PC ou ce téléphone, en ligne, Google Drive — mis à la corbeille de Drive), pour qu'il ne revienne pas.",
+  ] },
   '3.43': { date: '05/11/2026', lignes: [
     "Glisser-déposer : on peut lâcher une photo directement sur un modèle de la base des photos, sans passer par « Importer ». Une image glissée depuis une page web marche aussi.",
     "Plusieurs photos lâchées d'un coup sur la liste : chacune va sur son modèle d'après son nom de fichier (golf-7.jpg, audi-rs6-c8.png...).",
@@ -17542,8 +17710,10 @@ function chercherArchives(){
             + (r.compte ? ' · ' + esc(r.compte) : '') + '</div>'
             + '<div class="arch-fichiers">'
             + (r.fichiers || []).map(function(f){
-                return '<button type="button" class="arch-fichier" data-doc="'
-                  + esc(r.chemin + SEPARATEUR + f) + '">📄 ' + esc(f) + '</button>';
+                return '<span class="arch-ligne"><button type="button" class="arch-fichier" data-doc="'
+                  + esc(r.chemin + SEPARATEUR + f) + '">📄 ' + esc(f) + '</button>'
+                  + '<button type="button" class="doss-croix" data-docsuppr="' + esc(r.chemin + SEPARATEUR + f)
+                  + '" title="' + esc(t('Supprimer ce document')) + '">✕</button></span>';
               }).join('')
             + '</div>'
             + '<button type="button" class="arch-explorateur" data-chemin="' + esc(r.chemin) + '">'
@@ -17554,6 +17724,21 @@ function chercherArchives(){
 
     zone.querySelectorAll('[data-doc]').forEach(function(bt){
       bt.onclick = function(){ afficherDocument(bt.dataset.doc); };
+    });
+    zone.querySelectorAll('[data-docsuppr]').forEach(function(bt){
+      bt.onclick = async function(){
+        const chemin = bt.dataset.docsuppr;
+        const nom = chemin.split(SEPARATEUR).pop();
+        const sur = await demander({ titre: t('Supprimer ce document ?'), texte: nom,
+          detail: t('Il est effacé de ce PC. C’est définitif.'), oui: t('Supprimer'), non: t('Annuler'), danger: true });
+        if(!sur) return;
+        try{
+          const r = await window.pywebview.api.supprimer_chemin_document(chemin);
+          if(!r || !r.ok) throw new Error((r && r.message) || t('refusé'));
+          const ligne = bt.closest('.arch-ligne');
+          if(ligne) ligne.remove();
+        }catch(e){ informer(e.message || String(e)); }
+      };
     });
     zone.querySelectorAll('[data-chemin]').forEach(function(bt){
       bt.onclick = async function(){
@@ -17721,8 +17906,12 @@ async function listerDocuments(v){
       if(!f || !f.nom) return;
       trouves++;
       const cle = titreDocument(v, f.nom);
-      if(vus[cle]) return;
-      vus[cle] = 1; f.sous = f.sous || sous; sortie.push(f);
+      f.sous = f.sous || sous;
+      /* Meme document a plusieurs endroits (PC, telephone, Drive, en
+         ligne) : une seule ligne, mais on garde les autres copies pour
+         pouvoir tout effacer d'un coup. */
+      if(vus[cle]){ (vus[cle].autres = vus[cle].autres || []).push(f); return; }
+      vus[cle] = f; sortie.push(f);
     };
     if(api && api.documents_vehicule){
       try{
@@ -17784,8 +17973,48 @@ async function ouvrirDocument(f){
   }catch(e){ return false; }
 }
 
+/* 3.44 : effacer un document (petite croix). Toutes ses copies partent :
+   PC, telephone, en ligne (serveur) et Google Drive (mis a la corbeille
+   de Drive) — sinon il reviendrait a la prochaine lecture. */
+function ouSontLesCopies(f){
+  const l = [f].concat(f.autres || []), ou = [];
+  const nom = { pc: t('sur ce PC'), local: t('sur ce téléphone'), serveur: t('en ligne'), drive: 'Google Drive' };
+  l.forEach(function(x){ const n = nom[x.ou]; if(n && ou.indexOf(n) === -1) ou.push(n); });
+  return ou;
+}
+async function supprimerDocumentPartout(f){
+  const l = [f].concat(f.autres || []);
+  const api = window.pywebview && window.pywebview.api;
+  let ok = 0; const rates = [];
+  for(const x of l){
+    try{
+      if(x.ou === 'pc'){
+        if(!api || !api.supprimer_document) throw new Error(t('Mettez à jour le logiciel PC pour supprimer les documents.'));
+        const r = await api.supprimer_document(x.sous, x.nom);
+        if(!r || !r.ok) throw new Error((r && r.message) || t('refusé'));
+      }else if(x.ou === 'local'){
+        const Filesystem = pluginAndroid('Filesystem');
+        if(!Filesystem) throw new Error(t('refusé'));
+        await Filesystem.deleteFile({ path: x.chemin, directory: x.dossier });
+      }else if(x.ou === 'drive'){
+        const jeton = await driveJeton();
+        if(!jeton || !x.id) throw new Error(t('Google Drive non connecté'));
+        const r = await fetch(G_FILES + '/' + encodeURIComponent(x.id), { method: 'PATCH',
+          headers: { Authorization: 'Bearer ' + jeton, 'Content-Type': 'application/json' }, body: JSON.stringify({ trashed: true }) });
+        if(!r.ok) throw new Error('Drive ' + r.status);
+      }else if(x.ou === 'serveur'){
+        const chemin = cheminDocument(x.sous, x.nom);
+        if(!chemin || !serveurPret()) throw new Error(t('non connecté'));
+        await serveurAppel('/storage/v1/object/documents', { method: 'DELETE', body: { prefixes: [chemin] } });
+      }else continue;
+      ok++;
+    }catch(e){ rates.push((ouSontLesCopies({ ou: x.ou })[0] || x.ou) + ' : ' + (e.message || e)); }
+  }
+  return { ok: ok, rates: rates };
+}
+
 /* Le panneau d'un dossier : tous les documents de cette plaque, dans
-   l'ordre, ouvrables d'un clic. */
+   l'ordre, ouvrables d'un clic, et une croix pour en effacer un. */
 function ouvrirDossierVehicule(id){
   const v = vehicles[id];
   if(!v) return;
@@ -17834,17 +18063,41 @@ function ouvrirDossierVehicule(id){
       return;
     }
     liste.innerHTML = fichiers.map(function(f, i){
-      return '<button type="button" class="doss-item" data-i="' + i + '">'
+      return '<div class="doss-ligne">'
+        + '<button type="button" class="doss-item" data-i="' + i + '">'
         + '<span class="doss-nom">' + esc(titreDocument(v, f.nom)) + '</span>'
         + (f.ou === 'drive' ? '<span class="doss-compte">Drive</span>' : '')
         + (f.ou === 'serveur' ? '<span class="doss-compte">' + esc(t('En ligne')) + '</span>' : '')
-        + '</button>';
+        + '</button>'
+        + '<button type="button" class="doss-croix doss-suppr" data-suppr="' + i + '" title="' + esc(t('Supprimer ce document')) + '" aria-label="' + esc(t('Supprimer ce document')) + '">✕</button>'
+        + '</div>';
     }).join('');
     liste.querySelectorAll('[data-i]').forEach(function(bt){
       bt.onclick = async function(){
         if(!await ouvrirDocument(fichiers[Number(bt.dataset.i)])){
           informer(t('Impossible d’ouvrir ce document.'));
         }
+      };
+    });
+    liste.querySelectorAll('[data-suppr]').forEach(function(bt){
+      bt.onclick = async function(e){
+        e.stopPropagation();
+        const f = fichiers[Number(bt.dataset.suppr)];
+        const ou = ouSontLesCopies(f);
+        const sur = await demander({
+          titre: t('Supprimer ce document ?'),
+          texte: titreDocument(v, f.nom),
+          detail: t('Il est effacé partout où il se trouve') + (ou.length ? ' (' + ou.join(', ') + ')' : '') + '. '
+            + t('C’est définitif.'),
+          oui: t('Supprimer'), non: t('Annuler'), danger: true
+        });
+        /* La confirmation ferme la fenetre : on la rouvre, relue, ce qui
+           montre aussi que le document est bien parti. */
+        if(!sur){ ouvrirDossierVehicule(id); return; }
+        const r = await supprimerDocumentPartout(f);
+        ouvrirDossierVehicule(id);
+        try{ compterDocuments(); }catch(err){}
+        if(r.rates.length) informer(t('Pas effacé partout') + ' — ' + r.rates.join(' · '));
       };
     });
   }).catch(function(){
@@ -42550,7 +42803,7 @@ async function textePdfCarnet(octets){
   await moteurPdfPret();
   const doc = await window.pdfjsLib.getDocument({ data: octets.slice() }).promise;
   const OPS = window.pdfjsLib.OPS || {};
-  const tout = [], ent = [];
+  const tout = [], ent = [], lignesPages = [];
   const reDate = /^\d{2}\/\d{2}\/\d{4}$/;
   for(let p = 1; p <= doc.numPages; p++){
     const page = await doc.getPage(p);
@@ -42559,6 +42812,14 @@ async function textePdfCarnet(octets){
       return { s: String(it.str).trim(), x: it.transform[4], y: it.transform[5], rot: Math.abs(it.transform[1]) > 0.01 };
     });
     tout.push(items.map(function(i){ return i.s; }).join(' '));
+    if(p <= 3){
+      const parY = {};
+      tc.items.forEach(function(it){ if(String(it.str || '').trim() && Math.abs(it.transform[1]) < 0.01){ const y = Math.round(it.transform[5]); (parY[y] = parY[y] || []).push(it); } });
+      lignesPages.push(Object.keys(parY).map(Number).sort(function(a, b){ return b - a; }).map(function(y){
+        const l = parY[y].sort(function(a, b){ return a.transform[4] - b.transform[4]; });
+        return { y: y, taille: Math.round(Math.abs(l[0].transform[3]) * 10) / 10, s: l.map(function(it){ return it.str; }).join('').replace(/\s+/g, ' ').trim() };
+      }));
+    }
     const hObs = items.find(function(i){ return /^Observations \/ Garage/.test(i.s); });
     const hPro = items.find(function(i){ return i.s === 'Prochain'; });
     if(!hObs || !hPro) continue;
@@ -42617,9 +42878,123 @@ async function textePdfCarnet(octets){
     });
   }
   const txt = tout.join('\n'), maj = txt.toUpperCase();
-  const vin = (maj.match(/\b[A-HJ-NPR-Z0-9]{17}\b/) || [''])[0];
-  const plaque = (maj.match(/\b[A-Z]{2}-\d{3}-[A-Z]{2}\b|\b\d-[A-Z]{3}-\d{3}\b/) || [''])[0];
-  return { autivio: /Fiche Technique & Atelier|Observations \/ Garage \/ Coût/.test(txt), vin: vin, plaque: plaque, entretiens: ent };
+  let vin = (maj.match(/\bVIN ([A-HJ-NPR-Z0-9]{17})\b/) || maj.match(/\b([A-HJ-NPR-Z0-9]{17})\b/) || ['', ''])[1];
+  let plaque = ((txt.match(/Immatriculation (.+?)(?:\s+•|\s+VIN\s|\n|$)/) || ['', ''])[1] || '').trim()
+    || (maj.match(/\b[A-Z]{2}-\d{3}-[A-Z]{2}\b|\b\d-[A-Z]{3}-\d{3}\b/) || [''])[0];
+  return { autivio: /Fiche Technique & Atelier|Carnet d’Entretien|Observations \/ Garage \/ Coût/.test(txt), vin: vin, plaque: plaque,
+           ident: identiteImprimee(lignesPages), entretiens: ent };
+}
+/* Ce que dit la couverture / l'en-tete d'un carnet Autivio imprime :
+   marque, modele, motorisation, generation, 1re mise en circulation,
+   code moteur. Le pied de page garde la motorisation avec ses
+   minuscules (« 1.6 HDi 110 »). */
+function identiteImprimee(pages){
+  const r = {};
+  const toutes = [].concat.apply([], pages || []);
+  const pied = toutes.map(function(l){ return /^(.+?)(?: \((\d{4})\))? — (?:Fiche Technique & Atelier|Carnet d’Entretien)/.exec(l.s); }).filter(Boolean)[0];
+  /* Sous-titre : « Phase 1 • 1re mise en circulation le 12/05/2011 • Moteur 9HR » */
+  const sous = toutes.filter(function(l){ return /mise en circulation le \d{2}\/\d{2}\/\d{4}|(^| • )Moteur [A-Z0-9]/.test(l.s); })[0];
+  if(sous){
+    sous.s.split(' • ').forEach(function(x){
+      x = x.trim();
+      const d = /mise en circulation le (\d{2})\/(\d{2})\/(\d{4})/.exec(x);
+      if(d){ r.dateFirstImmat = d[3] + '-' + d[2] + '-' + d[1]; return; }
+      const m = /^Moteur (.+)$/.exec(x);
+      if(m){ r.codeMoteur = m[1].trim(); return; }
+      if(!r.generation && x) r.generation = x;
+    });
+  }
+  if(!pied) return r;
+  const f = pied[1].trim();
+  /* La marque : la plus longue de la liste qui commence le pied de page. */
+  const N = function(x){ return String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(); };
+  let marque = null, lg = 0;
+  (typeof MARQUES_AUTO !== 'undefined' ? MARQUES_AUTO : []).forEach(function(m){
+    [m[0], m[1]].forEach(function(n){
+      const nn = N(n);
+      if(nn && (N(f) + ' ').indexOf(nn + ' ') === 0 && nn.length > lg){ lg = nn.length; marque = m; }
+    });
+  });
+  if(!marque) return r;
+  r.marque = marque[0];
+  const reste = f.slice(lg).trim();
+  /* La motorisation en majuscules (couverture : grande ligne bleue ;
+     page technique : « MARQUE MODELE — MOTO ») pour couper modele / moto. */
+  let motoMaj = '';
+  toutes.forEach(function(l){
+    const h = /^(.+?) — (.+)$/.exec(l.s);
+    if(!motoMaj && h && N(h[1]).indexOf(N(marque[0])) === 0 && !/Fiche Technique|Carnet d’Entretien/.test(l.s)) motoMaj = h[2].trim();
+  });
+  if(!motoMaj){
+    const c19 = (pages[0] || []).filter(function(l){ return Math.abs(l.taille - 19) < 0.6; })[0];
+    if(c19) motoMaj = c19.s;
+  }
+  if(motoMaj && N(reste).endsWith(N(motoMaj))){
+    r.motorisation = reste.slice(reste.length - motoMaj.length).trim();
+    r.modele = reste.slice(0, reste.length - motoMaj.length).trim();
+  }else{
+    /* Sinon : le modele le plus long de la liste de la marque. */
+    let mo = '', l2 = 0;
+    String(marque[2] || '').split(';').forEach(function(x){
+      const n = x.split('|')[0].trim(), nn = N(romainEnChiffres(n));
+      if(nn && (N(reste) + ' ').indexOf(nn + ' ') === 0 && nn.length > l2){ l2 = nn.length; mo = n; }
+    });
+    if(mo){ r.modele = reste.slice(0, l2).trim(); r.motorisation = reste.slice(l2).trim(); }
+    else r.modele = reste;
+  }
+  if(!r.motorisation) delete r.motorisation;
+  if(!r.modele) delete r.modele;
+  return r;
+}
+/* 3.45 : le carnet importe FAIT FOI. Ce qui est vide est rempli ; ce qui
+   differe (motorisation, annee, VIN...) est montre et corrige d'un clic. */
+const LIBELLES_CARNET = {
+  marque: 'Marque', modele: 'Modèle', motorisation: 'Motorisation', generation: 'Génération / phase', codeMoteur: 'Code moteur',
+  boite: 'Boîte', distribution: 'Distribution', startStop: 'Stop & Start', puissanceCh: 'Puissance (ch)',
+  vin: 'VIN', immat: 'Immatriculation', paysImmat: 'Pays de la plaque', dateFirstImmat: '1re mise en circulation', energie: 'Énergie',
+  puissanceFiscale: 'Puissance fiscale (CV)', typeVarianteVersion: 'Type / variante / version (D.2)', couleur: 'Couleur', genre: 'Genre'
+};
+const CHAMPS_VEH_CARNET = ['marque', 'modele', 'vin', 'immat', 'paysImmat', 'dateFirstImmat', 'energie', 'puissanceFiscale', 'typeVarianteVersion', 'couleur', 'genre'];
+const CHAMPS_CAR_CARNET = ['motorisation', 'generation', 'codeMoteur', 'boite', 'distribution', 'startStop', 'puissanceCh'];
+function valeurComparable(k, x){
+  if(x === undefined || x === null) return '';
+  if(k === 'dateFirstImmat') return String(x).replace(/\D/g, '');
+  if(k === 'vin') return vinNet(x);
+  return normPart(romainEnChiffres(String(x)));
+}
+function valeurLisible(k, x){
+  if(k === 'dateFirstImmat' && /^\d{4}-\d{2}-\d{2}$/.test(String(x))) return String(x).split('-').reverse().join('/');
+  return String(x);
+}
+async function appliquerIdentiteCarnet(v, cv, cc){
+  const veh = v.vehicule, c = ensureCarnet(v);
+  const vide = function(x){ return x === undefined || x === null || !String(x).trim(); };
+  let remplis = 0;
+  const diffs = [];
+  const voir = function(obj, src, k, ou){
+    if(vide(src[k])) return;
+    if(vide(obj[k])){ obj[k] = src[k]; remplis++; return; }
+    if(valeurComparable(k, obj[k]) !== valeurComparable(k, src[k])) diffs.push({ obj: obj, k: k, ou: ou, avant: obj[k], apres: src[k] });
+  };
+  CHAMPS_VEH_CARNET.forEach(function(k){ voir(veh, cv || {}, k, 'veh'); });
+  CHAMPS_CAR_CARNET.forEach(function(k){ voir(c, cc || {}, k, 'car'); });
+  let corrige = false;
+  if(diffs.length){
+    const autreVin = diffs.some(function(d){ return d.k === 'vin'; });
+    const lignes = diffs.map(function(d){
+      return (d.k === 'vin' ? '⚠ ' : '') + t(LIBELLES_CARNET[d.k] || d.k) + ' : ' + valeurLisible(d.k, d.avant) + '  →  ' + valeurLisible(d.k, d.apres);
+    });
+    corrige = await demander({
+      titre: t('Le carnet ne dit pas la même chose que la fiche'),
+      texte: t('Corriger la fiche avec les informations du carnet importé ?')
+        + (autreVin ? '\n' + t('Attention : le VIN est différent, vérifiez que c’est bien la même voiture.') : ''),
+      detail: t('Fiche  →  carnet') + '\n' + lignes.join('\n'),
+      oui: t('Corriger avec le carnet'), non: t('Garder la fiche')
+    });
+    if(corrige) diffs.forEach(function(d){ d.obj[d.k] = d.apres; });
+  }
+  return { remplis: remplis, diffs: diffs, corrige: corrige,
+           moteurChange: corrige && diffs.some(function(d){ return /^(marque|modele|motorisation|codeMoteur|generation)$/.test(d.k); }) };
 }
 /* Intitule de colonne parfois raccourci (« … ») : on retrouve l'operation complete. */
 function opsCompletes(v, ops){
@@ -42675,41 +43050,50 @@ async function importerCarnetPdf(v, fichier){
   catch(e){ informer(t('Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).')); return; }
   const veh = v.vehicule || (v.vehicule = {}), c = ensureCarnet(v);
   const faits = [];
-  const vide = function(x){ return x === undefined || x === null || !String(x).trim(); };
   const manuelles = lignesManuellesPdf(lu.champs, lu.bulles);
+  const compteIdentite = function(r){
+    if(r.corrige) faits.push(r.diffs.length + ' ' + t(r.diffs.length > 1 ? 'informations corrigées' : 'information corrigée')
+      + ' (' + r.diffs.map(function(d){ return t(LIBELLES_CARNET[d.k] || d.k).toLowerCase(); }).join(', ') + ')');
+    if(r.remplis) faits.push(r.remplis + ' ' + t(r.remplis > 1 ? 'informations ajoutées' : 'information ajoutée'));
+    if(r.diffs.length && !r.corrige) faits.push(t('fiche gardée telle quelle, sans la fiche technique du carnet (autre motorisation)'));
+  };
 
   if(lu.json){
     const jv = lu.json.vehicule || {}, jc = lu.json.carnet || {};
-    /* Un autre vehicule ? On demande avant de tout melanger. */
-    const vinIci = vinNet(veh.vin || ''), vinLa = vinNet(jv.vin || '');
-    if(vinBienForme(vinIci) && vinBienForme(vinLa) && vinIci !== vinLa){
-      const ok = await demander({ titre: t('Carnet d’un autre véhicule ?'),
-        texte: t('Ce carnet est celui du VIN') + ' ' + vinLa + ', ' + t('la fiche ouverte a le VIN') + ' ' + vinIci + '. ' + t('Importer quand même ?'),
-        oui: t('Importer'), non: t('Annuler') });
-      if(!ok) return;
+    const r = await appliquerIdentiteCarnet(v, jv, jc);
+    compteIdentite(r);
+    /* Les autres infos du vehicule (km...) : seulement si vides ici. */
+    Object.keys(jv).forEach(function(k){ if(CHAMPS_VEH_CARNET.indexOf(k) === -1 && (veh[k] === undefined || veh[k] === '' || veh[k] === null)) veh[k] = jv[k]; });
+    /* Fiche corrigee d'apres le carnet : ses reglages lies a la
+       motorisation suivent (generation, stop & start auto...). */
+    if(r.corrige){
+      ['generationAuto', 'startStopAuto', 'motorisationListe', 'cvEstime', 'intervalleVidange', 'identifie'].forEach(function(k){
+        if(jc[k] !== undefined) c[k] = jc[k]; else if(r.moteurChange) delete c[k];
+      });
     }
-    let remplacerTech = !!jc.technique && JSON.stringify(c.technique || null) !== JSON.stringify(jc.technique);
-    if(remplacerTech && c.technique){
-      remplacerTech = await demander({ titre: t('Remplacer la fiche technique ?'),
+    /* La fiche technique du carnet va avec SA motorisation : prise si la
+       fiche n'en a pas, si on vient de corriger la fiche d'apres le carnet,
+       ou si la fiche dit deja la meme chose que le carnet. */
+    const memeVoiture = !r.diffs.length || r.corrige;
+    const differente = !!jc.technique && JSON.stringify(c.technique || null) !== JSON.stringify(jc.technique);
+    let prendreTech = differente && memeVoiture;
+    if(prendreTech && c.technique && !r.corrige){
+      prendreTech = await demander({ titre: t('Remplacer la fiche technique ?'),
         texte: t('Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?'),
         oui: t('Prendre celle du carnet'), non: t('Garder la mienne') });
     }
-    let n = 0;
-    Object.keys(jv).forEach(function(k){ if(vide(veh[k]) && !vide(jv[k])){ veh[k] = jv[k]; n++; } });
-    if(n) faits.push(n + ' ' + t('informations du véhicule'));
-    ['motorisation', 'generation', 'boite', 'codeMoteur', 'distribution', 'startStop', 'puissanceCh'].forEach(function(k){
-      if(vide(c[k]) && !vide(jc[k])) c[k] = jc[k];
-    });
-    if(remplacerTech){
+    if(prendreTech){
       c.technique = jc.technique;
       c.techniqueDate = jc.techniqueDate || Date.now();
       c.techniqueWeb = jc.techniqueWeb !== false;
       c.techniqueImportee = true;
-      if(jc.techniqueCorrections) c.techniqueCorrections = jc.techniqueCorrections;
+      if(jc.techniqueCorrections) c.techniqueCorrections = jc.techniqueCorrections; else delete c.techniqueCorrections;
       faits.push(t('fiche technique et références OEM'));
     }
-    if(!c.photo && jc.photo){ c.photo = jc.photo; if(jc.photoGenerique) c.photoGenerique = jc.photoGenerique; faits.push(t('photo')); }
-    if(jc.identifie && !c.identifie) c.identifie = jc.identifie;
+    if(jc.photo && (!c.photo || (r.moteurChange && c.photoGenerique))){
+      c.photo = jc.photo; if(jc.photoGenerique) c.photoGenerique = jc.photoGenerique; else delete c.photoGenerique;
+      faits.push(t('photo'));
+    }
     if(jc.autoMoto && !c.autoMoto) c.autoMoto = jc.autoMoto;
     const norm = function(x){ return String(x || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); };
     const gI = norm((lu.json.garage || {}).raisonSociale), gM = norm(dealer && dealer.raisonSociale);
@@ -42719,25 +43103,27 @@ async function importerCarnetPdf(v, fichier){
     f.ne += fm.ne; f.nr += fm.nr;
     if(f.ne) faits.push(f.ne + ' ' + t(f.ne > 1 ? 'entretiens' : 'entretien'));
     if(f.nr) faits.push(f.nr + ' ' + t(f.nr > 1 ? 'réparations' : 'réparation'));
-    /* Les autres cles du carnet (colonnes, options du PDF...) si absentes ici. */
     Object.keys(jc).forEach(function(k){
       if(['technique', 'entretiens', 'reparations', 'photo', 'photoGenerique'].indexOf(k) !== -1) return;
       if(c[k] === undefined) c[k] = jc[k];
     });
-    c.techniqueCle = cleTechnique(v);
+    if(prendreTech || (c.technique && !r.moteurChange)) c.techniqueCle = cleTechnique(v);
   }else{
     let tx = null;
     try{ tx = await textePdfCarnet(octets); }catch(e){ tx = null; }
-    const nbChamps = manuelles.entretiens.length + manuelles.reparations.length;
     const formeAutivio = Object.keys(lu.champs).some(function(n){ return /^(date_\d+|rep_travaux_\d+)$/.test(n); });
-    if(!tx) tx = { autivio: false, vin: '', plaque: '', entretiens: [] };
+    if(!tx) tx = { autivio: false, vin: '', plaque: '', ident: {}, entretiens: [] };
     if(formeAutivio) tx.autivio = true;
     if(!tx.autivio){
       informer(t('Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).'));
       return;
     }
-    if(tx.vin && vide(veh.vin) && vinBienForme(tx.vin)){ veh.vin = tx.vin; faits.push('VIN ' + tx.vin); }
-    if(tx.plaque && vide(veh.immat)){ veh.immat = tx.plaque; faits.push(t('plaque') + ' ' + tx.plaque); }
+    const id = tx.ident || {};
+    const cv = { marque: id.marque, modele: id.modele, dateFirstImmat: id.dateFirstImmat,
+                 vin: vinBienForme(tx.vin) ? tx.vin : '', immat: tx.plaque };
+    const cc = { motorisation: id.motorisation, generation: id.generation, codeMoteur: id.codeMoteur };
+    const r = await appliquerIdentiteCarnet(v, cv, cc);
+    compteIdentite(r);
     const moi = String((dealer && dealer.raisonSociale) || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
     tx.entretiens.forEach(function(e){
       e.ops = opsCompletes(v, e.ops);
@@ -42748,18 +43134,23 @@ async function importerCarnetPdf(v, fichier){
     if(f.ne) faits.push(f.ne + ' ' + t(f.ne > 1 ? 'entretiens' : 'entretien'));
     if(f.nr) faits.push(f.nr + ' ' + t(f.nr > 1 ? 'réparations' : 'réparation'));
     await saveVehicle(v);
-    /* Fiche technique : celle du meme vehicule, gratuite, si un garage l'a deja faite. */
+    /* Fiche technique : celle du meme vehicule, gratuite, si un garage l'a
+       deja faite — et forcement si la motorisation vient d'etre corrigee. */
     let tech = false;
-    try{ tech = !c.technique && await recupererCarnetConnu(v, { force: true, silencieux: true }); }catch(e){}
+    if(!c.technique || r.moteurChange){
+      try{ tech = await recupererCarnetConnu(v, { force: true, silencieux: true }); }catch(e){}
+    }
     if(tech) faits.push(t('fiche technique et références OEM (carnet partagé)'));
     try{ await recupererHistorique(v, { force: true }); }catch(e){}
-    if(!c.technique && !tech) faits.push(t('(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)'));
+    if(!tech && (!c.technique || r.moteurChange)) faits.push(t(r.moteurChange
+      ? '(motorisation corrigée : régénérez la fiche technique, elle n’est pas enregistrée dans ce carnet fait avec une ancienne version d’Autivio)'
+      : '(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)'));
   }
   await saveVehicle(v);
   if(currentId === v.id){ try{ renderMain(); }catch(e){} }
-  informer(faits.length ? '✓ ' + t('Carnet importé, sans frais') + ' : ' + faits.join(' · ') + '.' : t('Ce carnet ne contient rien de plus que la fiche ouverte.'));
+  informer(faits.length ? '✓ ' + t('Carnet importé, sans frais') + ' : ' + faits.join(' · ') + '.'
+    : t('Le carnet et la fiche disent déjà la même chose : rien à changer.'));
 }
-
 async function genererCarnetPdf(v, d){
   if(typeof PDFLib === 'undefined') throw new Error(t('La bibliothèque PDF est introuvable.'));
   const { PDFDocument, StandardFonts, rgb, degrees } = PDFLib;
