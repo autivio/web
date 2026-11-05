@@ -954,6 +954,8 @@
   #idVin{font-size:17px;letter-spacing:.06em;text-transform:uppercase;}
   #idPlaque{font-size:17px;letter-spacing:.06em;text-transform:uppercase;flex:1;min-width:0;}
   .ident-plaque{display:flex;gap:8px;align-items:stretch;}
+  #idAlerte:not(:empty){color:#b42318;background:#fef3f2;border:1px solid #fda29b;font-weight:600;}
+  #idAlerte:empty{display:none;}
   .ligne-partagee{border-left:3px solid var(--accent,#7a3b2e);}
   .ligne-tampon{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px;}
   .tampon-apercu img{max-height:54px;max-width:140px;display:block;}
@@ -2950,6 +2952,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Ni plaque ni VIN ?": "Né targa né VIN?",
+    "Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.": "Non ha indicato né targa né VIN. Le altre officine non potranno ritrovare l’auto, ma motore, cavalli fiscali, potenza e codice motore arricchiscono comunque la banca dati di questo modello.",
+    "Enregistrer sans plaque ni VIN": "Salva senza targa né VIN",
+    "Je les tape": "Li digito",
+    "sans plaque ni VIN": "senza targa né VIN",
+    "une plaque complète (ou laissez la case vide)": "una targa completa (o lasci la casella vuota)",
+    "gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.": "conservato su questo dispositivo. Per condividerlo con le altre officine servono targa, VIN o codice motore.",
+    "Véhicule retrouvé dans vos fiches grâce au VIN": "Veicolo trovato nelle sue schede grazie al VIN",
+    "Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)": "Veicolo trovato grazie al VIN (già inserito da un’officina Autivio)",
     "Exporter dans le logiciel": "Esporta nel software",
     "La base est vide : construisez-la d’abord.": "La banca dati è vuota: la costruisca prima.",
     "Export": "Esportazione",
@@ -4469,6 +4480,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Ni plaque ni VIN ?": "Nach Nummerplack nach VIN?",
+    "Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.": "Dir hutt weder Nummerplack nach VIN uginn. Aner Garagen kënnen den Auto net erëmfannen, mee Motor, Steier-PS, Leeschtung a Motorcode ergänzen trotzdem d’Datebank vun dësem Modell.",
+    "Enregistrer sans plaque ni VIN": "Ouni Nummerplack a VIN späicheren",
+    "Je les tape": "Ech tippen se",
+    "sans plaque ni VIN": "ouni Nummerplack a VIN",
+    "une plaque complète (ou laissez la case vide)": "eng komplett Nummerplack (oder loosst d’Feld eidel)",
+    "gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.": "op dësem Apparat gehalen. Fir et mat aneren Garagen ze deelen, brauch een d’Nummerplack, de VIN oder de Motorcode.",
+    "Véhicule retrouvé dans vos fiches grâce au VIN": "Gefier iwwer de VIN an Äre Fichen fonnt",
+    "Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)": "Gefier iwwer de VIN fonnt (schonn vun enger Autivio-Garage agedroen)",
     "Exporter dans le logiciel": "An d’Software exportéieren",
     "La base est vide : construisez-la d’abord.": "D’Datebank ass eidel: baut se fir d’éischt op.",
     "Export": "Export",
@@ -5987,6 +6007,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Ni plaque ni VIN ?": "No plate or VIN?",
+    "Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.": "You have not entered the plate or the VIN. Other garages won’t be able to find this car, but its engine, tax horsepower, power and engine code still enrich this model’s database.",
+    "Enregistrer sans plaque ni VIN": "Save without plate or VIN",
+    "Je les tape": "I’ll type them",
+    "sans plaque ni VIN": "without plate or VIN",
+    "une plaque complète (ou laissez la case vide)": "a complete plate (or leave the box empty)",
+    "gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.": "kept on this device. To share it with other garages, the plate, VIN or engine code is needed.",
+    "Véhicule retrouvé dans vos fiches grâce au VIN": "Vehicle found in your records from the VIN",
+    "Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)": "Vehicle found from the VIN (already entered by an Autivio garage)",
     "Exporter dans le logiciel": "Export into the software",
     "La base est vide : construisez-la d’abord.": "The database is empty: build it first.",
     "Export": "Export",
@@ -7504,6 +7533,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Ni plaque ni VIN ?": "Weder Kennzeichen noch FIN?",
+    "Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.": "Sie haben weder Kennzeichen noch FIN angegeben. Andere Werkstätten können das Auto nicht finden, aber Motor, Steuer-PS, Leistung und Motorcode ergänzen trotzdem die Datenbank dieses Modells.",
+    "Enregistrer sans plaque ni VIN": "Ohne Kennzeichen und FIN speichern",
+    "Je les tape": "Ich gebe sie ein",
+    "sans plaque ni VIN": "ohne Kennzeichen und FIN",
+    "une plaque complète (ou laissez la case vide)": "ein vollständiges Kennzeichen (oder Feld leer lassen)",
+    "gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.": "auf diesem Gerät gespeichert. Zum Teilen mit anderen Werkstätten braucht es Kennzeichen, FIN oder Motorcode.",
+    "Véhicule retrouvé dans vos fiches grâce au VIN": "Fahrzeug über die FIN in Ihren Akten gefunden",
+    "Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)": "Fahrzeug über die FIN gefunden (bereits von einer Autivio-Werkstatt erfasst)",
     "Exporter dans le logiciel": "In die Software exportieren",
     "La base est vide : construisez-la d’abord.": "Die Datenbank ist leer: bauen Sie sie zuerst auf.",
     "Export": "Export",
@@ -9041,6 +9079,15 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Ni plaque ni VIN ?": "Geen kenteken of VIN?",
+    "Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.": "U heeft geen kenteken of VIN ingevuld. Andere garages kunnen de auto niet terugvinden, maar motor, fiscale pk, vermogen en motorcode vullen toch de database van dit model aan.",
+    "Enregistrer sans plaque ni VIN": "Opslaan zonder kenteken of VIN",
+    "Je les tape": "Ik typ ze in",
+    "sans plaque ni VIN": "zonder kenteken of VIN",
+    "une plaque complète (ou laissez la case vide)": "een volledig kenteken (of laat het vak leeg)",
+    "gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.": "op dit apparaat bewaard. Om het met andere garages te delen is het kenteken, VIN of de motorcode nodig.",
+    "Véhicule retrouvé dans vos fiches grâce au VIN": "Voertuig via het VIN in uw fiches gevonden",
+    "Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)": "Voertuig via het VIN gevonden (al ingevoerd door een Autivio-garage)",
     "Exporter dans le logiciel": "Exporteren naar de software",
     "La base est vide : construisez-la d’abord.": "De database is leeg: bouw ze eerst op.",
     "Export": "Export",
@@ -10410,7 +10457,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.37';
+const VERSION = '3.38';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14891,6 +14938,11 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.38': { date: '05/11/2026', lignes: [
+    "Alimenter la base : la plaque n'est plus obligatoire. Sans plaque ni VIN, Autivio demande confirmation puis enregistre quand même (motorisation, CV, puissance, code moteur).",
+    "Une voiture saisie avec le VIN seul est retrouvée par tout garage qui tape ce VIN (supabase/26-vehicules-par-vin.sql).",
+    "Puissance : les petites voitures sont acceptées (Citroën Ami 8 ch, Renault Twizy 5 kW). Les messages « Il manque » s'affichent en rouge."
+  ] },
   '3.37': { date: '05/11/2026', lignes: [
     "Photos des modèles embarquées dans le logiciel : bouton « 💾 Exporter dans le logiciel » (menu administrateur « Photos des modèles »). Sur le PC, les photos vont directement dans le dossier du programme ; elles marchent ensuite sans Internet.",
     "Le carnet prend d'abord la photo embarquée, puis celle du serveur, puis Wikipédia."
@@ -20010,7 +20062,9 @@ document.addEventListener('change', function(e){
     const w = vehicles[currentId];
     try{ remplirDepuisVin(w); }catch(err){}
     if(w && el.matches('input[data-field="vin"], input[data-cveh="vin"], input[data-cess="vehicule.vin"]')){
-      recupererCarnetConnu(w).catch(function(){}).then(function(){ recupererHistorique(w).catch(function(){}); });
+      retrouverParVin(w).catch(function(){}).then(function(){
+        recupererCarnetConnu(w).catch(function(){}).then(function(){ recupererHistorique(w).catch(function(){}); });
+      });
     }
   }, 80);
 });
@@ -37858,7 +37912,7 @@ function donneesPlaque(v){
 const plaquesEnvoyees = {}, plaquesAEnvoyer = {};
 let minuteurPlaques = null;
 function planifierPartagePlaque(v){
-  if(!v || !v.id || !v.vehicule || !plaquePartageable(v.vehicule.immat)) return;
+  if(!v || !v.id || !v.vehicule || (!plaquePartageable(v.vehicule.immat) && !vinBienForme(v.vehicule.vin))) return;
   plaquesAEnvoyer[v.id] = Date.now();
   if(!minuteurPlaques) minuteurPlaques = setTimeout(envoyerPlaques, 5000);
 }
@@ -37869,8 +37923,9 @@ async function envoyerPlaques(){
     delete plaquesAEnvoyer[id];
     const v = vehicles[id];
     if(!v || !v.vehicule || !serveurPret() || !sessionServeur || !sessionServeur.access_token) continue;
-    const p = String(v.vehicule.immat || '').trim();
-    if(!plaquePartageable(p)) continue;
+    let p = String(v.vehicule.immat || '').trim();
+    if(!plaquePartageable(p)) p = '';
+    if(!p && !vinBienForme(v.vehicule.vin)) continue;
     const d = donneesPlaque(v);
     if(!d.marque) continue;
     const sig = paysPlaque(v) + '|' + p.toUpperCase().replace(/[^A-Z0-9]/g, '') + '|' + JSON.stringify(d);
@@ -37894,9 +37949,11 @@ function contributions(){
 function contributionsEcrire(l){ try{ ls.set(CONTRIB_CLE, JSON.stringify(l.slice(-2000))); }catch(e){} }
 async function envoyerUneContribution(x){
   if(!serveurPret() || !sessionServeur || !sessionServeur.access_token) return false;
-  try{
-    await serveurAppel('/rest/v1/rpc/partager_plaque', { method: 'POST', body: { p_pays: x.pays, p_plaque: x.plaque, p_donnees: x.donnees } });
-  }catch(e){ return false; }
+  if(plaquePartageable(x.plaque) || vinBienForme((x.donnees || {}).vin)){
+    try{
+      await serveurAppel('/rest/v1/rpc/partager_plaque', { method: 'POST', body: { p_pays: x.pays, p_plaque: plaquePartageable(x.plaque) ? x.plaque : '', p_donnees: x.donnees } });
+    }catch(e){ return false; }
+  }
   const d = x.donnees;
   if(d.codeMoteur && d.motorisation && d.marque && d.modele){
     try{
@@ -37910,7 +37967,12 @@ async function envoyerUneContribution(x){
   return true;
 }
 async function ajouterContribution(pays, plaque, donnees){
-  const l = contributions().filter(function(x){ return !(x.pays === pays && plaqueCle(x.plaque) === plaqueCle(plaque)); });
+  const vin = vinNet(donnees.vin || '');
+  const l = contributions().filter(function(x){
+    if(plaqueCle(plaque)) return !(x.pays === pays && plaqueCle(x.plaque) === plaqueCle(plaque));
+    if(vin) return vinNet((x.donnees || {}).vin || '') !== vin;
+    return true;
+  });
   const x = { pays: pays, plaque: plaque, donnees: donnees, quand: Date.now(), envoye: false };
   x.envoye = await envoyerUneContribution(x);
   l.push(x);
@@ -37975,6 +38037,54 @@ function plaqueDansMesFiches(plaque, saufId, pays){
   });
   return o.marque || o.vin ? o : null;
 }
+/* 3.38 : RECHERCHE PAR VIN (sans plaque). Vos fiches, vos saisies, puis
+   les garages Autivio (supabase/26-vehicules-par-vin.sql). */
+function vinDansMesFiches(vin, saufId){
+  const n = vinNet(vin);
+  if(!vinBienForme(n)) return null;
+  const o = {};
+  Object.keys(vehicles || {}).map(function(id){ return vehicles[id]; })
+    .filter(function(x){ return x && x.id !== saufId && x.vehicule && vinNet(x.vehicule.vin) === n; })
+    .sort(function(a, b){ return (Number(b.maj) || 0) - (Number(a.maj) || 0); })
+    .forEach(function(x){ const d = donneesPlaque(x); Object.keys(d).forEach(function(k){ if(!o[k]) o[k] = d[k]; }); });
+  contributions().filter(function(x){ return vinNet((x.donnees || {}).vin || '') === n; })
+    .forEach(function(x){ Object.keys(x.donnees || {}).forEach(function(k){ if(!o[k]) o[k] = x.donnees[k]; }); });
+  return o.marque ? o : null;
+}
+let vinServeurAbsent = false;
+async function rechercherVin(vin, saufId){
+  const n = vinNet(vin);
+  if(!vinBienForme(n)) return null;
+  const ici = vinDansMesFiches(n, saufId);
+  let la = null;
+  if(!vinServeurAbsent && serveurPret() && sessionServeur && sessionServeur.access_token){
+    try{
+      const d = await serveurAppel('/rest/v1/rpc/vehicule_par_vin', { method: 'POST', body: { p_vin: n } });
+      if(d && typeof d === 'object' && d.marque){ la = Object.assign({}, d); delete la.maj; }
+    }catch(e){ if(/vehicule_par_vin|PGRST202|404/i.test(String(e && e.message || e))) vinServeurAbsent = true; }
+  }
+  if(!ici && !la) return null;
+  const donnees = Object.assign({}, la || {}, ici || {});
+  if(ici && la) Object.keys(la).forEach(function(k){ if(!donnees[k]) donnees[k] = la[k]; });
+  return { source: ici ? 'fiches' : 'garages', donnees: donnees };
+}
+/* VIN tape dans une fiche : les cases VIDES se remplissent. */
+async function retrouverParVin(v){
+  if(!v || !v.vehicule) return;
+  const veh = v.vehicule, vin = vinNet(veh.vin || '');
+  if(!vinBienForme(vin)) return;
+  const r = await rechercherVin(vin, v.id);
+  if(!r || vinNet(veh.vin || '') !== vin) return;
+  const d = r.donnees, c = ensureCarnet(v), remplis = [];
+  CHAMPS_PLAQUE_VEH.forEach(function(k){ if(k !== 'vin' && d[k] && !String(veh[k] || '').trim()){ veh[k] = d[k]; remplis.push(k); } });
+  CHAMPS_PLAQUE_CARNET.forEach(function(k){ if(d[k] && !String(c[k] == null ? '' : c[k]).trim()){ c[k] = k === 'puissanceCh' ? (parseInt(d[k], 10) || d[k]) : d[k]; remplis.push(k); } });
+  if(!remplis.length) return;
+  await saveVehicle(v);
+  if(currentId === v.id && !document.querySelector('.dlg-fond')){ try{ renderMain(); }catch(e){} }
+  bandeau((r.source === 'fiches' ? t('Véhicule retrouvé dans vos fiches grâce au VIN') : t('Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)'))
+    + ' : ' + [d.marque, d.modele, d.motorisation].filter(Boolean).join(' · '), 'ok');
+}
+
 async function rechercherPlaque(plaque, pays, saufId){
   const ici = plaqueDansMesFiches(plaque, saufId, pays);
   let la = null;
@@ -39831,7 +39941,7 @@ function chevauxDepuisSaisie(x){
   let n = Number(m[1]);
   if(m[2] && /kw/i.test(m[2])) n = n * 1.35962;
   n = Math.round(n);
-  return n >= 20 && n <= 2000 ? n : 0;
+  return n >= 3 && n <= 2000 ? n : 0;   // 3 ch : voitures sans permis (Ami 8 ch, Twizy 5 kW)
 }
 function vinNet(vin){ return String(vin || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 function vinBienForme(vin){ return /^[A-HJ-NPR-Z0-9]{17}$/.test(vinNet(vin)); }
@@ -40502,9 +40612,14 @@ function fenetreIdentification(v, opts){
           + (pp ? ' (' + t('pays') + ' : ' + nomPaysPlaque(pp) + ')' : '');
         return;
       }
+      remplirFenetreDepuis(r.donnees);
       const d = r.donnees;
+      z.className = 'ident-large ident-lu ok';
+      z.textContent = '✓ ' + texteSourcePlaque(r) + ' : ' + [d.marque, d.modele, d.vin ? 'VIN ' + d.vin : t('pas de VIN enregistré')].filter(Boolean).join(' · ');
+    };
+    const remplirFenetreDepuis = function(d){
       const poser = function(id, val){ const e = $(id); if(e && val && !String(e.value || '').trim()){ e.value = val; return true; } return false; };
-      const vinPose = poser('idVin', vinNet(d.vin || ''));
+      poser('idVin', vinNet(d.vin || ''));
       poser('idD2', d.typeVarianteVersion);
       if(/^\d{4}-\d{2}-\d{2}$/.test(d.dateFirstImmat || '')) poser('idDate', d.dateFirstImmat);
       const mq = poser('idMarque', d.marque), md = poser('idModele', romainEnChiffres(d.modele || ''));
@@ -40515,11 +40630,26 @@ function fenetreIdentification(v, opts){
       poser('idMoto', d.motorisation);
       if(d.boite && !$('idBoite').value) $('idBoite').value = d.boite;
       if(d.startStop && !$('idStartStop').value) $('idStartStop').value = d.startStop;
-      z.className = 'ident-large ident-lu ok';
-      z.textContent = '✓ ' + texteSourcePlaque(r) + ' : ' + [d.marque, d.modele, d.vin ? 'VIN ' + d.vin : t('pas de VIN enregistré')].filter(Boolean).join(' · ');
+      if($('idCodeMoteur')) poser('idCodeMoteur', d.codeMoteur);
+      if($('idCouleur')) poser('idCouleur', d.couleur);
       majVin();
       if(mq || md){ cleChargee = ''; chargerMotos(); }
     };
+    /* VIN complet tape sans plaque : la voiture est peut-etre deja connue. */
+    let vinCherche = '';
+    $('idVin').addEventListener('input', function(){
+      const n = vinNet($('idVin').value);
+      if(!vinBienForme(n) || n === vinCherche || plaqueCle($('idPlaque').value).length >= 4) return;
+      vinCherche = n;
+      rechercherVin(n, v.id).then(function(r){
+        if(!r || vinNet($('idVin').value) !== n) return;
+        remplirFenetreDepuis(r.donnees);
+        const z = $('idPlaqueLu'), d = r.donnees;
+        z.className = 'ident-large ident-lu ok';
+        z.textContent = '✓ ' + (r.source === 'fiches' ? t('Véhicule retrouvé dans vos fiches grâce au VIN') : t('Véhicule retrouvé grâce au VIN (déjà saisi par un garage Autivio)'))
+          + ' : ' + [d.marque, d.modele, d.motorisation].filter(Boolean).join(' · ');
+      }).catch(function(){});
+    });
     /* Plaque complete selon le pays : recherche aussitot. Sinon, une
        pause dans la frappe suffit (Allemagne, Suisse, autres pays). */
     const PLAQUE_COMPLETE = {
@@ -40576,8 +40706,8 @@ function fenetreIdentification(v, opts){
         const pl = paysId === 'XX' ? $('idPlaque').value.trim().toUpperCase() : formatPlate($('idPlaque').value.trim(), paysId);
         const vinA = vinNet($('idVin').value);
         const manqueA = [];
-        if(plaqueCle(pl).length < 4) manqueA.push(t('la plaque'));
-        else if(!plaquePartageable(pl)) manqueA.push(t('une vraie plaque (pas une plaque W garage)'));
+        if(plaqueCle(pl).length >= 1 && plaqueCle(pl).length < 4) manqueA.push(t('une plaque complète (ou laissez la case vide)'));
+        else if(plaqueCle(pl).length >= 4 && !plaquePartageable(pl)) manqueA.push(t('une vraie plaque (pas une plaque W garage)'));
         if(vinA && !vinBienForme(vinA)) manqueA.push(t('un VIN valide (17 caractères)'));
         if(!$('idMarque').value.trim() || !$('idModele').value.trim()) manqueA.push(t('la marque et le modèle'));
         const chA = chevauxDepuisSaisie($('idCh').value);
@@ -40596,14 +40726,30 @@ function fenetreIdentification(v, opts){
           if(dist) d.distribution = dist;
         }
         Object.keys(d).forEach(function(k){ if(!d[k]) delete d[k]; });
+        /* Ni plaque ni VIN : on demande, et on enregistre quand meme si
+           c'est voulu (la motorisation et son code moteur servent a tous). */
+        const sansRien = !plaqueCle(pl) && !vinA;
+        if(sansRien){
+          fond.remove();   // la question passe devant ; la fenetre revient ensuite telle quelle
+          const oui = await demander({
+            titre: t('Ni plaque ni VIN ?'),
+            texte: t('Vous n’avez pas indiqué la plaque ni le VIN. La voiture ne pourra pas être retrouvée par un autre garage, mais sa motorisation, ses CV, sa puissance et son code moteur enrichissent quand même la base de ce modèle.'),
+            oui: t('Enregistrer sans plaque ni VIN'), non: t('Je les tape')
+          });
+          document.body.appendChild(fond);
+          if(!oui){ try{ $('idPlaque').focus(); }catch(e){} return; }
+        }
         const bt = fond.querySelector('.dlg-oui');
         bt.disabled = true;
         const r = await ajouterContribution(paysId, pl, d);
         bt.disabled = false;
         fermer(true);
+        const ident = plaqueCle(pl) ? pl : (vinA ? 'VIN ' + vinA : t('sans plaque ni VIN'));
         fenetreIdentification(blankVehicle(), { alimenter: true, pays: paysId,
-          message: '✓ ' + pl + ' · ' + [d.marque, d.modele].join(' ') + ' — '
-            + (r.envoye ? t('ajouté à la base partagée. Vous pouvez en saisir un autre.') : t('gardé sur cet appareil, envoyé dès que vous serez connecté.')) });
+          message: '✓ ' + ident + ' · ' + [d.marque, d.modele, d.motorisation].filter(Boolean).join(' ') + ' — '
+            + (!r.envoye ? t('gardé sur cet appareil, envoyé dès que vous serez connecté.')
+               : sansRien && !d.codeMoteur ? t('gardé sur cet appareil. Pour le partager avec les autres garages, il faut la plaque, le VIN ou le code moteur.')
+               : t('ajouté à la base partagée. Vous pouvez en saisir un autre.')) });
         return;
       }
       const vin = vinNet($('idVin').value);
