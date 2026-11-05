@@ -10850,7 +10850,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.46';
+const VERSION = '3.48';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15331,6 +15331,13 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.48': { date: '05/11/2026', lignes: [
+    "Carnet d'entretien : nouvelle case « Filtre à carburant » (après les autres filtres), dans « Entretiens déjà faits » et dans le tableau du PDF. Pas de case pour les voitures électriques.",
+  ] },
+  '3.47': { date: '05/11/2026', lignes: [
+    "Carnet d'entretien : la case « Huile moteur » n'affiche plus le type d'huile (5W-30, normes...) dans « Entretiens déjà faits » ni dans le PDF ; le type d'huile reste dans la fiche technique.",
+    "Carnet d'entretien : le bouton « Importer un document » est retiré (il reste « Importer un carnet ») ; il est toujours là sur les autres documents.",
+  ] },
   '3.46': { date: '05/11/2026', lignes: [
     "Nouveau bouton « ♻ Reprendre le carnet importé » (en haut du carnet) et « Régénérer depuis le carnet importé (gratuit) » (Données techniques) : la fiche est remise comme dans le carnet importé — modèle, motorisation, code moteur, phase, année, fiche technique, références OEM — d'un clic, sans choisir les cases une par une, sans IA.",
     "Correction : un modèle écrit « Golf VII 1.4 TSI 125 » redevient « Golf 7 » dans la liste (plus de « Autre (saisie libre) ») ; un code moteur « Essence Turbo EA211 (CZCA) » devient « CZCA » ; « Golf 7 phase 2 (« 7.5 ») » devient « Phase 2 (7.5) ». Les fiches déjà abîmées se réparent à l'ouverture.",
@@ -18703,9 +18710,11 @@ function renderMain(){
               + '<input type="file" id="scanCGfichier" accept="image/*,application/pdf" class="champ-cache"></label>'
               + '<button type="button" class="btn-sec" id="scanCGguide" style="display:none"></button>'
             : '')
-    +     '<label class="btn-sec btn-import-doc" id="pjFiche">'
+    /* 3.47 : pas de « Importer un document » sur le carnet d'entretien
+       (il y a « Importer un carnet ») ; il reste sur les autres documents. */
+    +     (isCarnet ? '' : '<label class="btn-sec btn-import-doc" id="pjFiche">'
     +       '<span>' + esc(t('📎 Importer un document')) + '</span>'
-    +       '<input type="file" multiple style="display:none"></label>'
+    +       '<input type="file" multiple style="display:none"></label>')
     +   '</div>'
     + '</div>'
     + (isCession ? cessionForm(v) : (isAchat ? achatForm(v) : (isImmat ? immatForm(v) : (isNeuf ? neufForm(v) : (isMandat ? mandatForm(v) : (isWG ? wgarageForm(v) : (isPerte ? perteForm(v) : (isDestr ? destructionForm(v) : (isRetr ? retraitForm(v) : (isInt ? intentionForm(v) : (isCtr ? contratForm(v) : (isCPro ? contratProForm(v) : (isFac ? factureForm(v) : (isCarnet ? carnetForm(v) : editorForTab(v)))))))))))))))
@@ -38160,6 +38169,9 @@ function colonnesCarnet(v){
   (l.length ? l : CARNET_COLONNES_DEFAUT).forEach(function(o){
     o = String(o).trim();
     if(/^bougie/i.test(sansAccentsTxt(o))){ if(bougies) o = bougies; else return; }
+    /* 3.47 : « Huile moteur 5W-30 504 00 / 507 00 » -> « Huile moteur » :
+       le type d'huile reste dans la fiche technique, pas dans les cases. */
+    if(/^huile moteur/i.test(sansAccentsTxt(o))) o = 'Huile moteur';
     if(res.some(function(x){ return opMeme(x, o); })) return;
     res.push(o);
   });
@@ -38167,7 +38179,14 @@ function colonnesCarnet(v){
     const iFrein = res.findIndex(function(x){ return /liquide de frein/i.test(x); });
     res.splice(iFrein === -1 ? res.length : iFrein + 1, 0, 'Liquide de refroidissement');
   }
-  return res.slice(0, 16);
+  /* 3.48 : le filtre a carburant a toujours sa case (sauf electrique),
+     apres les autres filtres. */
+  if(bougies && !res.some(function(x){ return /filtre (a |de )?(carburant|gazole|gasoil|essence)|filtre a fuel/i.test(sansAccentsTxt(x)); })){
+    let iF = -1;
+    res.forEach(function(x, i){ if(/^filtre/i.test(sansAccentsTxt(x))) iF = i; });
+    res.splice(iF === -1 ? Math.min(3, res.length) : iF + 1, 0, 'Filtre à carburant');
+  }
+  return res.slice(0, 17);
 }
 function sansAccentsTxt(x){ return String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function nomBougies(v){
@@ -38184,6 +38203,9 @@ function opMeme(a, b){
   if(a === b) return true;
   const x = sansAccentsTxt(a).toLowerCase(), y = sansAccentsTxt(b).toLowerCase();
   if(/^bougie/.test(x) && /^bougie/.test(y)) return true;
+  if(/^huile moteur/.test(x) && /^huile moteur/.test(y)) return true;
+  const carb = /filtre (a |de )?(carburant|gazole|gasoil|essence)|filtre a fuel/;
+  if(carb.test(x) && carb.test(y)) return true;
   if(/refroidissement|antigel/.test(x) && /refroidissement|antigel/.test(y)) return true;
   return false;
 }
