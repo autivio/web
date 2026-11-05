@@ -967,6 +967,10 @@
   .carnet-tech-suppr{position:absolute;top:6px;right:6px;padding:2px 8px;}
   .carnet-tech-obj{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
   .carnet-ligne{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;}
+  .rep-travaux{width:100%;min-height:64px;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;resize:vertical;box-sizing:border-box;}
+  .rep-sugg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px;}
+  .rep-sugg button{font:inherit;font-size:12px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;color:#334155;cursor:pointer;}
+  .rep-sugg button:active{background:#e0ecff;}
   .dlg-oui:disabled{opacity:.45;cursor:not-allowed;}
   .ident-avert{margin:8px 0;padding:8px 10px;border-radius:8px;background:#fff7e6;border:1px solid #f5c26b;color:#7a4b00;font-size:12.5px;}
   .cert-ss{background:#e8f2fc;color:#0b4f86;}
@@ -2917,6 +2921,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Réparations déjà faites": "Riparazioni già effettuate",
+    "Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).": "Frizione, distribuzione, volano, turbo…: annotate le riparazioni già effettuate. Sono stampate nella pagina «Manutenzione e riparazioni» del PDF (le righe restanti restano da compilare).",
+    "+ Ajouter une réparation": "+ Aggiungi una riparazione",
+    "Aucune réparation enregistrée.": "Nessuna riparazione registrata.",
+    "Entretien / réparations": "Manutenzione / riparazioni",
+    "ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…": "es. Frizione rifatta: disco frizione, spingidisco, cuscinetto, volano. Officina, costo…",
+    "Supprimer cette réparation": "Elimina questa riparazione",
     "code partagé": "codice condiviso",
     "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :": "Veicolo trovato tramite la targa (già inserito da un'officina Autivio):",
     "Choisissez le bon moteur ci-dessous.": "Scegli il motore giusto qui sotto.",
@@ -4335,6 +4346,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Réparations déjà faites": "Reparaturen déi scho gemaach goufen",
+    "Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).": "Kupplung, Distributioun, Schwongrad, Turbo…: notéiert d'Reparaturen déi scho gemaach goufen. Si ginn op der Säit „Entretien a Reparaturen“ vum PDF gedréckt (déi aner Zeilen bleiwe fräi).",
+    "+ Ajouter une réparation": "+ Reparatur derbäisetzen",
+    "Aucune réparation enregistrée.": "Keng Reparatur agedroen.",
+    "Entretien / réparations": "Entretien / Reparaturen",
+    "ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…": "z. B. Kupplung erneiert: Kupplungsscheif, Drockplack, Ausréckläger, Schwongrad. Garage, Käschten…",
+    "Supprimer cette réparation": "Dës Reparatur läschen",
     "code partagé": "gedeelte Code",
     "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :": "Gefier iwwer d'Plack fonnt (scho vun enger Autivio-Garage aginn):",
     "Choisissez le bon moteur ci-dessous.": "Wielt hei ënnendrënner de richtege Motor.",
@@ -5752,6 +5770,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Réparations déjà faites": "Repairs already done",
+    "Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).": "Clutch, timing belt, flywheel, turbo…: record the repairs already done. They are printed on the “Maintenance and Repairs” page of the PDF (the remaining lines stay blank).",
+    "+ Ajouter une réparation": "+ Add a repair",
+    "Aucune réparation enregistrée.": "No repair recorded.",
+    "Entretien / réparations": "Maintenance / repairs",
+    "ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…": "e.g. Clutch replaced: clutch disc, pressure plate, release bearing, flywheel. Garage, cost…",
+    "Supprimer cette réparation": "Delete this repair",
     "code partagé": "shared code",
     "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :": "Vehicle found from its plate (already entered by an Autivio garage):",
     "Choisissez le bon moteur ci-dessous.": "Choose the right engine below.",
@@ -7168,6 +7193,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Réparations déjà faites": "Bereits durchgeführte Reparaturen",
+    "Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).": "Kupplung, Zahnriemen, Schwungrad, Turbo…: Notieren Sie die bereits durchgeführten Reparaturen. Sie werden auf der Seite „Wartung und Reparaturen“ des PDF gedruckt (die übrigen Zeilen bleiben frei).",
+    "+ Ajouter une réparation": "+ Reparatur hinzufügen",
+    "Aucune réparation enregistrée.": "Keine Reparatur erfasst.",
+    "Entretien / réparations": "Wartung / Reparaturen",
+    "ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…": "z. B. Kupplung erneuert: Kupplungsscheibe, Druckplatte, Ausrücklager, Schwungrad. Werkstatt, Kosten…",
+    "Supprimer cette réparation": "Diese Reparatur löschen",
     "code partagé": "geteilter Code",
     "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :": "Fahrzeug über das Kennzeichen gefunden (bereits von einer Autivio-Werkstatt erfasst):",
     "Choisissez le bon moteur ci-dessous.": "Wählen Sie unten den richtigen Motor.",
@@ -8604,6 +8636,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Réparations déjà faites": "Reeds uitgevoerde reparaties",
+    "Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).": "Koppeling, distributie, vliegwiel, turbo…: noteer de reeds uitgevoerde reparaties. Ze worden afgedrukt op de pagina „Onderhoud en reparaties” van de pdf (de overige regels blijven leeg).",
+    "+ Ajouter une réparation": "+ Reparatie toevoegen",
+    "Aucune réparation enregistrée.": "Geen reparatie geregistreerd.",
+    "Entretien / réparations": "Onderhoud / reparaties",
+    "ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…": "bv. Koppeling vervangen: koppelingsplaat, drukgroep, druklager, vliegwiel. Garage, kosten…",
+    "Supprimer cette réparation": "Deze reparatie verwijderen",
     "code partagé": "gedeelde code",
     "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :": "Voertuig gevonden via het kenteken (al ingevoerd door een Autivio-garage):",
     "Choisissez le bon moteur ci-dessous.": "Kies hieronder de juiste motor.",
@@ -9872,7 +9911,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.14';
+const VERSION = '3.17';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14066,6 +14105,15 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.17': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : nouvelle partie « Réparations déjà faites » (date, kilométrage, travaux). Des boutons ajoutent les réparations courantes en un clic : embrayage complet, disque d’embrayage, volant moteur, kit de distribution, turbo, injecteurs… Elles sont imprimées sur la page « Entretien et Réparations » du PDF, avec une page de plus si besoin."
+  ] },
+  '3.16': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien PDF : nouvelle page « Entretien et Réparations » à la fin du carnet — tableau Date / Entretien Réparations / Kilométrage de 11 lignes, à remplir au stylo ou à l’ordinateur (date avec barres automatiques, texte sur plusieurs lignes, kilométrage en chiffres)."
+  ] },
+  '3.15': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien : après avoir choisi une motorisation, la liste garde toutes les autres versions du modèle. Les CV, la boîte et le Start & Stop remplis automatiquement d’après la motorisation ne filtrent plus la liste : on peut corriger un mauvais choix directement."
+  ] },
   '3.14': { date: '05/11/2026', lignes: [
     "Conditions générales et politique de confidentialité mises à jour (5 novembre 2026) : nouvel article 8 sur les informations techniques partagées entre utilisateurs (codes moteur, véhicule retrouvé par sa plaque) — ce qui est partagé, ce qui ne l’est jamais, durée de conservation (10 ans), droit d’effacement et d’opposition — et article 4 « Prix et paiement » à jour avec les crédits du carnet d’entretien."
   ] },
@@ -36533,6 +36581,7 @@ function ensureCarnet(v){
     if(typeof c[k] !== 'string') c[k] = '';
   });
   if(!Array.isArray(c.entretiens)) c.entretiens = [];
+  if(!Array.isArray(c.reparations)) c.reparations = [];
   if(c.technique && typeof c.technique !== 'object') c.technique = null;
   /* Boite : « Manuelle » ou « Automatique », jamais un texte de l'IA. */
   if(c.boite && BOITES.indexOf(c.boite) === -1) c.boite = boiteDepuisTexte(c.boite);
@@ -36976,6 +37025,11 @@ function carnetForm(v){
   + '</div>'
   + '<div id="carnetLignes">' + lignesEntretienHtml(v) + '</div>'
   + '</div>'
+  + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Réparations déjà faites')) + '</div>'
+  + '<div class="cerfa-aide">' + esc(t('Embrayage, distribution, volant moteur, turbo… : notez les réparations déjà faites. Elles sont imprimées sur la page « Entretien et Réparations » du PDF (les lignes restantes restent à remplir).')) + '</div>'
+  + '<div class="gar-choix"><button type="button" class="btn-sec" id="carnetAjouterRep">' + esc(t('+ Ajouter une réparation')) + '</button></div>'
+  + '<div id="carnetReparations">' + lignesReparationHtml(v) + '</div>'
+  + '</div>'
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Pages du PDF')) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Choisissez ce que contient le PDF. Le carnet seul (couverture et tableau d’entretien à cocher : huile, filtres, freins…) n’utilise pas l’IA : il est immédiat et gratuit.')) + '</div>'
   + '<div class="carnet-pages">' + PAGES_CARNET_PDF.map(function(pp){
@@ -37057,6 +37111,28 @@ function lignesEntretienHtml(v){
       + '<div class="cerfa-grid"><div style="grid-column:span 3"><label>' + esc(t('Observations / garage / coût')) + '</label>'
       +   '<input data-cent="' + i + '" data-champ="obs" value="' + esc(e.obs || '') + '"></div></div>'
       + '<button type="button" class="btn-sec carnet-suppr" data-centsuppr="' + i + '">' + esc(t('Supprimer cet entretien')) + '</button>'
+      + '</div>';
+  }).join('');
+}
+
+/* --- Reparations deja faites (page « Entretien et Reparations ») ------- */
+const SUGGESTIONS_REPARATIONS = ['Embrayage complet (disque, mécanisme, butée)', 'Disque d’embrayage', 'Mécanisme d’embrayage', 'Butée d’embrayage',
+  'Volant moteur', 'Kit de distribution', 'Pompe à eau', 'Courroie d’accessoires', 'Chaîne de distribution', 'Turbo', 'Injecteurs', 'Vanne EGR', 'FAP nettoyé',
+  'Disques et plaquettes AV', 'Disques et plaquettes AR', 'Amortisseurs AV', 'Amortisseurs AR', 'Rotules / biellettes', 'Cardan', 'Batterie', 'Alternateur', 'Démarreur',
+  'Radiateur', 'Pneus AV', 'Pneus AR', 'Ligne d’échappement', 'Joint de culasse', 'Recharge climatisation', 'Géométrie / parallélisme', 'Fait'];
+function lignesReparationHtml(v){
+  const c = ensureCarnet(v);
+  if(!c.reparations.length) return '<div class="carnet-vide">' + esc(t('Aucune réparation enregistrée.')) + '</div>';
+  return c.reparations.map(function(r, i){
+    return '<div class="carnet-ligne">'
+      + '<div class="cerfa-grid">'
+      +   '<div><label>' + esc(t('Date')) + '</label><input data-crep="' + i + '" data-rchamp="date" inputmode="numeric" maxlength="10" placeholder="JJ/MM/AAAA" value="' + esc(r.date || '') + '"></div>'
+      +   '<div><label>' + esc(t('Kilométrage')) + '</label><input data-crep="' + i + '" data-rchamp="km" inputmode="numeric" placeholder="ex. 142000" value="' + esc(r.km || '') + '"></div>'
+      + '</div>'
+      + '<label>' + esc(t('Entretien / réparations')) + '</label>'
+      + '<textarea class="rep-travaux" data-crep="' + i + '" data-rchamp="travaux" placeholder="' + esc(t('ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…')) + '">' + esc(r.travaux || '') + '</textarea>'
+      + '<div class="rep-sugg">' + SUGGESTIONS_REPARATIONS.map(function(x){ return '<button type="button" data-crepsugg="' + i + '">' + esc(x) + '</button>'; }).join('') + '</div>'
+      + '<button type="button" class="btn-sec carnet-suppr" data-crepsuppr="' + i + '">' + esc(t('Supprimer cette réparation')) + '</button>'
       + '</div>';
   }).join('');
 }
@@ -37221,9 +37297,15 @@ function wireCarnetForm(v, d){
     const versions = function(){
       const l = listeEnCache();
       if(!l || !(l.motorisations || []).length) return [];
-      let liste = motosFiltrees(l.motorisations, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4), c.boite, c.startStop).liste;
+      /* Boite, Start & Stop et CV remplis par Autivio d'apres la motorisation
+         choisie ne filtrent PAS la liste : sinon, apres un mauvais choix, les
+         autres versions disparaissent. Seuls ceux saisis par l'utilisateur filtrent. */
+      const auto = c.autoMoto || {};
+      const deMoi = function(val, cle){ return val && !(auto[cle] != null && String(auto[cle]) === String(val)) ? val : ''; };
+      let liste = motosFiltrees(l.motorisations, veh.energie, String(veh.dateFirstImmat || '').slice(0, 4),
+                                deMoi(c.boite, 'boite'), deMoi(c.startStop, 'startStop')).liste;
       /* CV fiscaux de la carte grise connus : on garde les versions qui ont les memes. */
-      const cv = parseInt(String(veh.puissanceFiscale || ''), 10);
+      const cv = parseInt(String(deMoi(veh.puissanceFiscale, 'puissanceFiscale') || ''), 10);
       if(cv){
         const memesCv = liste.filter(function(m){ return parseInt(String(m.cv_fiscaux || ''), 10) === cv; });
         if(memesCv.length) liste = memesCv;
@@ -37537,6 +37619,44 @@ function wireCarnetForm(v, d){
   });
   document.querySelectorAll('[data-centsuppr]').forEach(function(b){
     b.onclick = function(){ c.entretiens.splice(Number(b.dataset.centsuppr), 1); saveVehicle(v); renderMain(); };
+  });
+  /* Reparations deja faites */
+  const ajRep = document.getElementById('carnetAjouterRep');
+  if(ajRep) ajRep.onclick = function(){
+    c.reparations.push({ date: '', km: '', travaux: '' });
+    saveVehicle(v); renderMain();
+    const champs = document.querySelectorAll('input[data-rchamp="date"]');
+    if(champs.length) champs[champs.length - 1].focus();
+  };
+  document.querySelectorAll('[data-crep]').forEach(function(inp){
+    const i = Number(inp.dataset.crep), champ = inp.dataset.rchamp;
+    inp.oninput = function(ev){
+      const r = c.reparations[i];
+      if(!r) return;
+      if(champ === 'date'){
+        const efface = !!(ev && ev.inputType && ev.inputType.indexOf('delete') === 0);
+        if(!efface){ const m = masquerDate(inp.value, false); if(m !== inp.value) inp.value = m; }
+      }else if(champ === 'km'){
+        const n = chiffresKm(inp.value);
+        if(n !== inp.value) inp.value = n;
+      }
+      r[champ] = inp.value;
+      saveVehicle(v); relancer();
+    };
+  });
+  document.querySelectorAll('[data-crepsugg]').forEach(function(b){
+    b.onclick = function(){
+      const i = Number(b.dataset.crepsugg), r = c.reparations[i];
+      const zone = document.querySelector('textarea[data-crep="' + i + '"]');
+      if(!r || !zone) return;
+      const txt = String(zone.value || '').replace(/[\s,;.]+$/, '');
+      zone.value = txt ? txt + ', ' + b.textContent.charAt(0).toLowerCase() + b.textContent.slice(1) : b.textContent;
+      r.travaux = zone.value;
+      saveVehicle(v); relancer();
+    };
+  });
+  document.querySelectorAll('[data-crepsuppr]').forEach(function(b){
+    b.onclick = function(){ c.reparations.splice(Number(b.dataset.crepsuppr), 1); saveVehicle(v); renderMain(); };
   });
 }
 function rouvrirSection(chemin){
@@ -39712,6 +39832,70 @@ async function genererCarnetPdf(v, d){
       const af = pdf.catalog.lookup(PDFLib.PDFName.of('AcroForm'));
       if(af) af.set(PDFLib.PDFName.of('CO'), pdf.context.obj(calculs));
     }catch(err){}
+  }
+
+  /* ---------------- Page « Entretien / Réparations » ----------------
+     Tableau libre Date | Entretien Réparations | Kilométrage, une page
+     entière, à remplir au stylo ou à l'ordinateur (date avec barres
+     automatiques, texte sur plusieurs lignes, kilometrage en chiffres). */
+  const reparations = (c.reparations || []).filter(function(r){ return r && (String(r.date || '').trim() || String(r.km || '').trim() || String(r.travaux || '').trim()); });
+  const NOIR = rgb(0.1, 0.12, 0.18), ENTETE = rgb(0.93, 0.94, 0.99);
+  const nbRep = 11;
+  /* Assez de pages pour toutes les reparations notees, et au moins 3 lignes libres. */
+  const nbPagesRep = Math.max(1, Math.ceil((reparations.length + 3) / nbRep));
+  let numRep = 0;
+  for(let pr = 0; pr < nbPagesRep; pr++){
+  nouvellePage();
+  y = H - 52;
+  ecrire('Entretien et Réparations' + (nbPagesRep > 1 ? ' (' + (pr + 1) + '/' + nbPagesRep + ')' : ''), MG, y, 12.5, gras, ENCRE);
+  y -= 8;
+  page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
+  y -= 10;
+  ecrire('Travaux hors carnet (réparations, pièces remplacées, pneus, carrosserie…) : au stylo ou à l’ordinateur.', MG, y - 2, 6.6, norm, DOUX);
+  y -= 14;
+  const rD = 0.156, rK = 0.167;
+  const wD = Math.round(LARG * rD), wK = Math.round(LARG * rK), wT = LARG - wD - wK;
+  const hE = 26;
+  const hR = Math.floor((y - hE - BAS - 4) / nbRep);
+  const yHautRep = y;
+  page.drawRectangle({ x: MG, y: y - hE, width: LARG, height: hE, color: ENTETE });
+  const centrer = function(txt, x0, w, yy, taille){ ecrire(txt, x0 + (w - largeur(txt, taille, gras)) / 2, yy, taille, gras, NOIR); };
+  centrer('DATE', MG, wD, y - hE / 2 - 3, 8.4);
+  centrer('ENTRETIEN RÉPARATIONS', MG + wD, wT, y - hE / 2 - 3, 8.4);
+  centrer('KILOMÉTRAGE', MG + wD + wT, wK, y - hE / 2 - 3, 8.4);
+  y -= hE;
+  for(let k = 0; k < nbRep; k++){
+    const i = numRep++, rp = reparations[i];
+    const yb = y - hR;
+    const fd = champTexte('rep_date_' + i, MG + 4, yb + (hR - 16) / 2, wD - 8, 16, 8.5);
+    fd.setMaxLength(10);
+    actionJs(fd, 'K', JS_PDF_DATE_K); actionJs(fd, 'F', JS_PDF_DATE_F);
+    bulle(fd, 'Date JJ/MM/AAAA : tapez seulement les chiffres, les barres se mettent toutes seules.');
+    const ft = champTexte('rep_travaux_' + i, MG + wD + 4, yb + 3, wT - 8, hR - 6, 8);
+    ft.enableMultiline();
+    bulle(ft, 'Entretien, réparations, pièces, garage, coût');
+    ecrire('km', MG + LARG - 6 - largeur('km', 6.4), yb + hR / 2 - 2.6, 6.4, norm, DOUX);
+    const fk = champTexte('rep_km_' + i, MG + wD + wT + 4, yb + (hR - 16) / 2, wK - 22, 16, 8.5);
+    actionJs(fk, 'K', JS_PDF_CHIFFRES_K); actionJs(fk, 'F', JS_PDF_MILLIERS_F);
+    bulle(fk, 'Kilométrage au compteur');
+    if(rp){
+      /* Reparation deja notee dans Autivio : imprimee, et toujours modifiable a l'ordinateur. */
+      try{
+        if(String(rp.date || '').trim()) fd.setText(texteCarnet(String(rp.date).trim()).slice(0, 10));
+        const kmR = chiffresKm(rp.km);
+        if(kmR) fk.setText(Number(kmR).toLocaleString('fr-FR').replace(/\s/g, ' '));
+        if(String(rp.travaux || '').trim()) ft.setText(texteCarnet(String(rp.travaux).trim()));
+      }catch(err){}
+    }
+    page.drawLine({ start: { x: MG, y: yb }, end: { x: MG + LARG, y: yb }, thickness: 0.7, color: NOIR });
+    y = yb;
+  }
+  /* Cadre et traits verticaux du tableau. */
+  page.drawLine({ start: { x: MG, y: yHautRep - hE }, end: { x: MG + LARG, y: yHautRep - hE }, thickness: 0.7, color: NOIR });
+  [MG, MG + wD, MG + wD + wT, MG + LARG].forEach(function(xx){
+    page.drawLine({ start: { x: xx, y: yHautRep }, end: { x: xx, y: y }, thickness: 0.7, color: NOIR });
+  });
+  page.drawLine({ start: { x: MG, y: yHautRep }, end: { x: MG + LARG, y: yHautRep }, thickness: 0.7, color: NOIR });
   }
   }
 
