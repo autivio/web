@@ -967,6 +967,9 @@
   .carnet-tech-suppr{position:absolute;top:6px;right:6px;padding:2px 8px;}
   .carnet-tech-obj{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
   .carnet-ligne{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;}
+  .ident-avert{margin:8px 0;padding:8px 10px;border-radius:8px;background:#fff7e6;border:1px solid #f5c26b;color:#7a4b00;font-size:12.5px;}
+  .cert-ss{background:#e8f2fc;color:#0b4f86;}
+  .cert-contre{background:#fdecec;color:#a32020;}
   .prochain-choix{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
   .prochain-opt{font:inherit;font-size:11.5px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;color:#334155;cursor:pointer;}
   .prochain-opt:hover{border-color:#94a3b8;}
@@ -2913,8 +2916,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Vous avez indiqué un moteur": "Hai indicato un motore",
+    "avec Start & Stop": "con Start & Stop",
+    "sans Start & Stop": "senza Start & Stop",
+    "est choisi. L’IA plaçait": "è scelto. L’IA metteva",
+    "en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).": "per primo (dal numero di telaio): verifica lo Start & Stop (tasto « A » o « STOP » vicino alla leva, spia sul cruscotto).",
     "estimés, vérifiez la case P.6": "stimati, verifica la casella P.6",
-    "Stop & Start": "Start & Stop",
+    "Start & Stop": "Start & Stop",
     "d’après la motorisation": "in base alla motorizzazione",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Scheda già generata per questa motorizzazione: ripresa senza nuova ricerca. Verificala prima di scaricare il PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Ricerca con l’IA (pochi centesimi), una sola volta: poi l’elenco è gratuito per tutte le officine.",
@@ -4301,8 +4309,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Vous avez indiqué un moteur": "Dir hutt e Motor uginn",
+    "avec Start & Stop": "mat Start-Stopp",
+    "sans Start & Stop": "ouni Start-Stopp",
+    "est choisi. L’IA plaçait": "ass gewielt. D’KI huet",
+    "en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).": "als éischt (no der Chassisnummer): kuckt de Start-Stopp (Knäppchen „A“ oder „STOP“ beim Hiewel, Luucht um Tableau).",
     "estimés, vérifiez la case P.6": "geschat, kuckt d’Feld P.6",
-    "Stop & Start": "Start-Stopp",
+    "Start & Stop": "Start-Stopp",
     "d’après la motorisation": "no der Motorisatioun",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche fir dës Motorisatioun schonn erstallt: ouni nei Sich iwwerholl. Iwwerpréift se ier Dir de PDF eroflued.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Sich mat der KI (e puer Cent), nëmmen eemol: duerno ass d’Lëscht gratis fir all Garagen.",
@@ -5688,8 +5701,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Vous avez indiqué un moteur": "You indicated an engine",
+    "avec Start & Stop": "with Start & Stop",
+    "sans Start & Stop": "without Start & Stop",
+    "est choisi. L’IA plaçait": "is selected. The AI put",
+    "en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).": "first (from the VIN): check the Start & Stop (“A” or “STOP” button near the gear lever, dashboard light).",
     "estimés, vérifiez la case P.6": "estimated, check box P.6",
-    "Stop & Start": "Stop & Start",
+    "Start & Stop": "Start & Stop",
     "d’après la motorisation": "based on the engine",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Data sheet already generated for this engine: reused without a new search. Check it before downloading the PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "AI search (a few cents), only once: the list is then free for every garage.",
@@ -7074,8 +7092,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Vous avez indiqué un moteur": "Sie haben einen Motor angegeben",
+    "avec Start & Stop": "mit Start-Stopp",
+    "sans Start & Stop": "ohne Start-Stopp",
+    "est choisi. L’IA plaçait": "wurde gewählt. Die KI setzte",
+    "en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).": "an die erste Stelle (laut FIN): prüfen Sie die Start-Stopp-Automatik (Taste „A“ oder „STOP“ am Schalthebel, Kontrollleuchte).",
     "estimés, vérifiez la case P.6": "geschätzt, Feld P.6 prüfen",
-    "Stop & Start": "Start-Stopp",
+    "Start & Stop": "Start-Stopp",
     "d’après la motorisation": "laut Motorisierung",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Datenblatt für diese Motorisierung bereits erstellt: ohne neue Suche übernommen. Prüfen Sie es vor dem Herunterladen der PDF.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Suche per KI (wenige Cent), nur einmal: danach steht die Liste allen Werkstätten kostenlos zur Verfügung.",
@@ -8480,8 +8503,13 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Vous avez indiqué un moteur": "U hebt een motor aangegeven",
+    "avec Start & Stop": "met start-stop",
+    "sans Start & Stop": "zonder start-stop",
+    "est choisi. L’IA plaçait": "is gekozen. De AI zette",
+    "en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).": "eerst (volgens het chassisnummer): controleer de start-stop (knop „A” of „STOP” bij de pook, lampje op het dashboard).",
     "estimés, vérifiez la case P.6": "geschat, controleer vak P.6",
-    "Stop & Start": "Start-stop",
+    "Start & Stop": "Start-stop",
     "d’après la motorisation": "volgens de motor",
     "Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.": "Fiche al gemaakt voor deze motor: overgenomen zonder nieuwe zoekopdracht. Controleer ze voordat u de PDF downloadt.",
     "Recherche par l’IA (quelques centimes), une seule fois : la liste sert ensuite gratuitement à tous les garages.": "Zoeken met AI (enkele centen), slechts één keer: daarna is de lijst gratis voor alle garages.",
@@ -9718,7 +9746,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.03';
+const VERSION = '3.05';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -13911,15 +13939,21 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.05': { date: '05/11/2026', lignes: [
+    "La case s’appelle maintenant « Start & Stop » (au lieu de « Stop & Start »)."
+  ] },
+  '3.04': { date: '05/11/2026', lignes: [
+    "« Identifier le véhicule » : le Start & Stop que vous indiquez fait foi. Dans « Quel moteur ? », le moteur qui le respecte est coché d’office (ex. 9HL e-HDi avec Start & Stop), ceux qui le contredisent sont marqués « ⚠ sans Start & Stop », et un avertissement explique quand l’IA plaçait un autre moteur en premier d’après le numéro de châssis."
+  ] },
   '3.03': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : quand les CV fiscaux sont vides et que la version n’est pas dans la liste (ex. 1.6 e-HDi 115), ils sont repris d’une version du même code moteur ou d’une version voisine (même cylindrée, puissance à 5 ch près), gratuitement. La case indique « estimés, vérifiez la case P.6 » tant que vous ne l’avez pas confirmée.",
-    "Une identification gardée par une ancienne version (sans CV fiscaux ni Stop & Start) est refaite une fois pour les obtenir."
+    "Une identification gardée par une ancienne version (sans CV fiscaux ni Start & Stop) est refaite une fois pour les obtenir."
   ] },
   '3.02': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : la motorisation du véhicule (ex. « 1.6 e-HDi 115 FAP ») est toujours choisie dans la liste, même quand la liste des versions du modèle ne la connaît pas ou l’a écartée : plus de « Autre (saisie libre) » pour une motorisation déjà trouvée."
   ] },
   '3.01': { date: '05/11/2026', lignes: [
-    "Carnet d’entretien et « Identifier le véhicule » : nouvelle case « Stop & Start » (Oui / Non / Je ne sais pas). Elle est envoyée à l’IA, qui ne confond plus deux moteurs voisins (ex. 1.6 HDi 110 9HR sans, 1.6 e-HDi 115 9HL avec), et elle filtre la liste des motorisations.",
+    "Carnet d’entretien et « Identifier le véhicule » : nouvelle case « Start & Stop » (Oui / Non / Je ne sais pas). Elle est envoyée à l’IA, qui ne confond plus deux moteurs voisins (ex. 1.6 HDi 110 9HR sans, 1.6 e-HDi 115 9HL avec), et elle filtre la liste des motorisations.",
     "Elle se remplit toute seule quand la motorisation l’indique (e-HDi, S&S, BlueMotion…)."
   ] },
   '3.00': { date: '05/11/2026', lignes: [
@@ -36527,7 +36561,7 @@ function carnetForm(v){
   +   '<div><label>' + esc(t('Énergie')) + '</label><select id="carnetEnergie" class="liste-large">' + optionsEnergieFacture((v.vehicule || {}).energie) + '</select></div>'
   +   champVeh('dateFirstImmat', '1re mise en circulation', 'date') + champVeh('km', 'Kilométrage') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('puissanceCh', 'Puissance (ch)', 'text', 'ex. 110') + champVeh('puissanceFiscale', 'CV fiscaux')
-  +   '<div><label>' + esc(t('Stop & Start')) + ' <span class="ident-etat" id="carnetStartStopAuto"></span></label><select id="carnetStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div></div>'
+  +   '<div><label>' + esc(t('Start & Stop')) + ' <span class="ident-etat" id="carnetStartStopAuto"></span></label><select id="carnetStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div></div>'
   + '<div class="cerfa-grid">' + champVeh('vin', 'N° de châssis (VIN)') + '</div>'
   + '<div class="gar-choix"><button type="button" class="btn-sec" id="carnetIdentifier">🔎 '
   +   esc(t('Identifier le véhicule (VIN → code moteur)')) + '</button></div>'
@@ -37265,7 +37299,7 @@ function boiteDepuisTexte(x){
   if(manu && !auto) return 'Manuelle';
   return '';
 }
-/* Stop & Start : « oui », « non » ou inconnu. Il departage deux moteurs
+/* Start & Stop : « oui », « non » ou inconnu. Il departage deux moteurs
    voisins (ex. 1.6 HDi 110 / 1.6 e-HDi 115, 9HR / 9HL) et change la
    batterie (EFB, AGM) et le demarreur. */
 function startStopDepuisTexte(x){
@@ -37280,7 +37314,7 @@ function optionsStartStop(valeur){
   return [['', t('— Je ne sais pas —')], ['oui', t('Oui')], ['non', t('Non')]].map(function(o){
     return '<option value="' + o[0] + '"' + (o[0] === v ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('');
 }
-function texteStartStop(v){ return v === 'oui' ? 'oui (moteur avec Stop & Start)' : (v === 'non' ? 'non (pas de Stop & Start)' : ''); }
+function texteStartStop(v){ return v === 'oui' ? 'oui (moteur avec Start & Stop)' : (v === 'non' ? 'non (pas de Start & Stop)' : ''); }
 function optionsBoite(valeur){
   const brut = String(valeur || '').trim();
   const v = boiteDepuisTexte(brut) || brut;
@@ -37540,7 +37574,7 @@ function libelleMoto(m){
   return [m.nom || '?',
           ch && !/\d\s*(ch|cv|hp)\b/i.test(m.nom || '') ? ch + ' ch' : '',
           /\d/.test(m.cv_fiscaux || '') ? m.cv_fiscaux + ' CV' : '',
-          m.code_moteur || '', startStopDepuisTexte(m.stop_start) === 'oui' && !/e-?hdi|stop|s&s/i.test(m.nom || '') ? 'Stop & Start' : '', m.periode || ''].filter(Boolean).join(' · ');
+          m.code_moteur || '', startStopDepuisTexte(m.stop_start) === 'oui' && !/e-?hdi|stop|s&s/i.test(m.nom || '') ? 'Start & Stop' : '', m.periode || ''].filter(Boolean).join(' · ');
 }
 function cleMotorisations(marque, modele, annee){
   return sansAccents([marque, modele, annee || ''].join('|')).toUpperCase().replace(/[^A-Z0-9|]/g, '');
@@ -37623,7 +37657,7 @@ function fenetreIdentification(v){
       +   '<div><label>' + esc(t('Puissance (ch)')) + ' — P.2</label><input id="idCh" inputmode="decimal" maxlength="10" placeholder="' + esc(t('ex. 125, ou 92 kW')) + '"></div>'
       +   '<div class="ident-large ident-lu" id="idChLu"></div>'
       +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="idBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
-      +   '<div><label>' + esc(t('Stop & Start')) + '</label><select id="idStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div>'
+      +   '<div><label>' + esc(t('Start & Stop')) + '</label><select id="idStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div>'
       + '</div>'
       + '<div class="dlg-detail" id="idAlerte"></div>'
       + '<div class="dlg-actions">'
@@ -37849,7 +37883,7 @@ async function identifierMoteur(v){
     return;
   }
   attente.fermer();
-  const choix = await choisirCandidatMoteur(rep || {});
+  const choix = await choisirCandidatMoteur(rep || {}, c.startStop);
   if(!choix) return;
   if(choix.manuel){
     c.identifie = { date: Date.now(), code: c.codeMoteur || '', certitude: 'saisi' };
@@ -37899,9 +37933,22 @@ async function identifierMoteur(v){
   if(go) await genererTechniqueIA(v, true);
 }
 
-function choisirCandidatMoteur(rep){
+function choisirCandidatMoteur(rep, startStop){
   return new Promise(function(resolve){
     const cands = (rep.candidats || []).filter(function(x){ return x && (x.code_moteur || x.motorisation); });
+    /* Start & Stop indique par le garage : il FAIT FOI. Le candidat qui
+       le respecte est choisi d'office, les autres sont signales. */
+    const ssDe = function(x){ return startStopDepuisTexte(x.stop_start) || (startStopDepuisTexte(x.motorisation) === 'oui' ? 'oui' : ''); };
+    const ssVoulu = startStopDepuisTexte(startStop);
+    const unOuiExplicite = cands.some(function(x){ return ssDe(x) === 'oui'; });
+    const contredit = function(x){
+      if(!ssVoulu) return false;
+      const ss = ssDe(x);
+      if(ss) return ss !== ssVoulu;
+      return ssVoulu === 'oui' ? unOuiExplicite : false;   /* inconnu, alors qu'un autre l'a */
+    };
+    let choisi = 0;
+    if(ssVoulu){ const i = cands.findIndex(function(x){ return !contredit(x); }); if(i !== -1) choisi = i; }
     document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
     const fond = document.createElement('div');
     fond.className = 'dlg-fond';
@@ -37911,12 +37958,16 @@ function choisirCandidatMoteur(rep){
     };
     fond.innerHTML = '<div class="dlg dlg-ident" role="dialog" aria-modal="true">'
       + '<div class="dlg-titre">' + esc(t('Quel moteur ?')) + '</div>'
-      + '<div class="dlg-texte">' + esc(romainEnChiffres([rep.marque, rep.modele, rep.generation].filter(Boolean).join(' '))
+      + '<div class="dlg-texte">' + esc(romainEnChiffres([rep.marque, rep.generation && normListe(romainEnChiffres(rep.generation)).indexOf(normListe(rep.modele)) === 0 ? '' : rep.modele, rep.generation].filter(Boolean).join(' '))
           + (rep.annee_modele ? ' — ' + t('année-modèle') + ' ' + rep.annee_modele : '')) + '</div>'
+      + (ssVoulu && choisi > 0 ? '<div class="ident-avert">⚠ ' + esc(t('Vous avez indiqué un moteur') + ' ' + (ssVoulu === 'oui' ? t('avec Start & Stop') : t('sans Start & Stop')) + ' : '
+          + (cands[choisi].code_moteur || '') + ' ' + t('est choisi. L’IA plaçait') + ' ' + (cands[0].code_moteur || '') + ' ' + t('en premier (d’après le numéro de châssis) : vérifiez le Start & Stop (touche « A » ou « STOP » près du levier, voyant au tableau de bord).')) + '</div>' : '')
       + (cands.length ? '<div class="ident-cands">' + cands.map(function(x, i){
-          return '<label class="ident-cand"><input type="radio" name="idCand" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>'
+          return '<label class="ident-cand"><input type="radio" name="idCand" value="' + i + '"' + (i === choisi ? ' checked' : '') + '>'
             + '<span class="ident-cand-corps"><b class="mono">' + esc(x.code_moteur || '?') + '</b> ' + badge(x.certitude)
-            + '<br>' + esc([x.motorisation, chevauxDepuisSaisie(x.puissance_ch) && !/\d\s*(ch|cv|hp)\b/i.test(x.motorisation || '') ? chevauxDepuisSaisie(x.puissance_ch) + ' ch' : '', x.cylindree ? x.cylindree + ' cm³' : '', x.boite, x.periode,
+            + (ssDe(x) === 'oui' ? ' <span class="cert cert-ss">Start & Stop</span>' : '')
+            + (contredit(x) ? ' <span class="cert cert-contre">⚠ ' + esc(ssVoulu === 'oui' ? t('sans Start & Stop') : t('avec Start & Stop')) + '</span>' : '')
+            + '<br>' + esc([x.motorisation, chevauxDepuisSaisie(x.puissance_ch) && !/\d\s*(ch|cv|hp)\b/i.test(x.motorisation || '') ? chevauxDepuisSaisie(x.puissance_ch) + ' ch' : '', x.cylindree ? String(x.cylindree).replace(/\s*cm(3|³)\s*$/i, '') + ' cm³' : '', x.boite, x.periode,
                 (distributionDuCode(x.code_moteur) || (/^(courroie|cha[iî]ne)$/i.test(x.distribution || '') ? x.distribution : '')) ? t('distribution') + ' : ' + t(distributionDuCode(x.code_moteur) || x.distribution) : ''].filter(Boolean).join(' · '))
             + (x.raison ? '<br><small>' + esc(x.raison) + '</small>' : '') + '</span></label>';
         }).join('') + '</div>' : '<div class="carnet-vide">' + esc(t('Aucun moteur trouvé avec certitude.')) + '</div>')
