@@ -960,6 +960,7 @@
   #idAlerte:not(:empty){color:#b42318;background:#fef3f2;border:1px solid #fda29b;font-weight:600;}
   #idAlerte:empty{display:none;}
   .ligne-partagee{border-left:3px solid var(--accent,#7a3b2e);}
+  .carnet-import-info{margin:0 0 12px;padding:9px 12px;border:1px dashed #9db3d6;border-radius:8px;background:#f4f8ff;font-size:13px;}
   .ligne-tampon{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px;}
   .tampon-apercu img{max-height:54px;max-width:140px;display:block;}
   
@@ -2955,6 +2956,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Scegli il PDF del libretto di manutenzione (file .pdf).",
+    "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Impossibile leggere questo PDF (file danneggiato o protetto).",
+    "Carnet d’un autre véhicule ?": "Libretto di un altro veicolo?",
+    "Ce carnet est celui du VIN": "Questo libretto è del VIN",
+    "la fiche ouverte a le VIN": "la scheda aperta ha il VIN",
+    "Importer quand même ?": "Importare comunque?",
+    "Remplacer la fiche technique ?": "Sostituire la scheda tecnica?",
+    "Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?": "Questa scheda ha già una scheda tecnica. Usare quella del libretto importato (riferimenti OEM, capacità, coppie)?",
+    "Prendre celle du carnet": "Usa quella del libretto",
+    "Garder la mienne": "Tieni la mia",
+    "informations du véhicule": "dati del veicolo",
+    "fiche technique et références OEM": "scheda tecnica e riferimenti OEM",
+    "photo": "foto",
+    "Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).": "Questo PDF non è un libretto Autivio: non contiene dati da riprendere. Per un libretto cartaceo o di un altro software usa «Leggi il libretto cartaceo (foto)» (lettura IA, a pagamento).",
+    "plaque": "targa",
+    "fiche technique et références OEM (carnet partagé)": "scheda tecnica e riferimenti OEM (libretto condiviso)",
+    "(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)": "(questo libretto è stato fatto con una versione precedente di Autivio: la scheda tecnica non è salvata)",
+    "Carnet importé, sans frais": "Libretto importato, gratis",
+    "Ce carnet ne contient rien de plus que la fiche ouverte.": "Questo libretto non contiene nulla in più della scheda aperta.",
+    "Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer": "Riprende tutto il libretto (scheda tecnica, riferimenti OEM, tagliandi) gratis",
+    "Importer un carnet": "Importa un libretto",
+    "Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.": "Hai già il libretto Autivio di questa auto (PDF)? Pulsante «Importa un libretto» in alto: tutto viene ripreso identico — scheda tecnica, riferimenti OEM, tagliandi, riparazioni — gratis.",
     "voiture électrique : boîte automatique": "auto elettrica: cambio automatico",
     "en {an}, ce modèle n’existait qu’en boîte manuelle": "nel {an} questo modello esisteva solo con cambio manuale",
     "en {an}, ce modèle n’existait qu’en boîte automatique": "nel {an} questo modello esisteva solo con cambio automatico",
@@ -4489,6 +4512,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Wielt de PDF vum Servicebuch (.pdf-Fichier).",
+    "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Dës PDF konnt net gelies ginn (Fichier beschiedegt oder geschützt).",
+    "Carnet d’un autre véhicule ?": "Servicebuch vun engem anere Gefier?",
+    "Ce carnet est celui du VIN": "Dëst Servicebuch gehéiert zur VIN",
+    "la fiche ouverte a le VIN": "déi oppe Fiche huet d’VIN",
+    "Importer quand même ?": "Trotzdeem importéieren?",
+    "Remplacer la fiche technique ?": "Technesch Fiche ersetzen?",
+    "Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?": "Dës Fiche huet schonn eng technesch Fiche. Déi vum importéierte Buch huelen (OEM-Referenzen, Kapazitéiten, Dréimomenter)?",
+    "Prendre celle du carnet": "Déi vum Buch huelen",
+    "Garder la mienne": "Meng behalen",
+    "informations du véhicule": "Gefierinformatiounen",
+    "fiche technique et références OEM": "technesch Fiche an OEM-Referenzen",
+    "photo": "Foto",
+    "Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).": "Dës PDF ass kee Servicebuch vun Autivio: et sinn keng Donnéeën dran. Fir e Pabeierbuch oder eent vun enger anerer Software benotzt „Pabeierbuch liesen (Fotoen)“ (IA-Liesung, bezuelt).",
+    "plaque": "Plack",
+    "fiche technique et références OEM (carnet partagé)": "technesch Fiche an OEM-Referenzen (gedeelt Buch)",
+    "(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)": "(dëst Buch gouf mat enger eelerer Autivio-Versioun gemaach: déi technesch Fiche ass net dran)",
+    "Carnet importé, sans frais": "Servicebuch importéiert, gratis",
+    "Ce carnet ne contient rien de plus que la fiche ouverte.": "Dëst Buch huet näischt méi wéi déi oppe Fiche.",
+    "Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer": "Iwwerhëlt dat ganzt Buch (technesch Fiche, OEM-Referenzen, Entretienen) gratis",
+    "Importer un carnet": "Servicebuch importéieren",
+    "Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.": "Dir hutt schonn d’Autivio-Servicebuch vun dësem Auto (PDF)? Knäppchen „Servicebuch importéieren“ uewen: alles gëtt genee iwwerholl — technesch Fiche, OEM-Referenzen, Entretienen, Reparaturen — gratis.",
     "voiture électrique : boîte automatique": "Elektroauto: automatesch Gangschaltung",
     "en {an}, ce modèle n’existait qu’en boîte manuelle": "{an} gouf et dëse Modell nëmme mat manueller Gangschaltung",
     "en {an}, ce modèle n’existait qu’en boîte automatique": "{an} gouf et dëse Modell nëmme mat Automatik",
@@ -6022,6 +6067,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Choose the service book PDF (.pdf file).",
+    "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "This PDF could not be read (damaged or protected file).",
+    "Carnet d’un autre véhicule ?": "Service book of another vehicle?",
+    "Ce carnet est celui du VIN": "This service book belongs to VIN",
+    "la fiche ouverte a le VIN": "the open record has VIN",
+    "Importer quand même ?": "Import anyway?",
+    "Remplacer la fiche technique ?": "Replace the technical sheet?",
+    "Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?": "This record already has a technical sheet. Use the one from the imported book (OEM references, capacities, torques)?",
+    "Prendre celle du carnet": "Use the book’s one",
+    "Garder la mienne": "Keep mine",
+    "informations du véhicule": "vehicle details",
+    "fiche technique et références OEM": "technical sheet and OEM references",
+    "photo": "photo",
+    "Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).": "This PDF is not an Autivio service book: it does not contain data to import. For a paper book or one from another software, use “Read the paper book (photos)” (AI reading, paid).",
+    "plaque": "plate",
+    "fiche technique et références OEM (carnet partagé)": "technical sheet and OEM references (shared book)",
+    "(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)": "(this book was made with an older Autivio version: the technical sheet is not stored in it)",
+    "Carnet importé, sans frais": "Service book imported, free of charge",
+    "Ce carnet ne contient rien de plus que la fiche ouverte.": "This book contains nothing more than the open record.",
+    "Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer": "Imports the whole book (technical sheet, OEM references, services) for free",
+    "Importer un carnet": "Import a service book",
+    "Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.": "Already have this car’s Autivio service book (PDF)? Use “Import a service book” at the top: everything is taken over exactly — technical sheet, OEM references, services, repairs — for free.",
     "voiture électrique : boîte automatique": "electric car: automatic gearbox",
     "en {an}, ce modèle n’existait qu’en boîte manuelle": "in {an}, this model only existed with a manual gearbox",
     "en {an}, ce modèle n’existait qu’en boîte automatique": "in {an}, this model only existed with an automatic gearbox",
@@ -7554,6 +7621,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Wählen Sie das PDF des Serviceheftes (.pdf-Datei).",
+    "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Dieses PDF konnte nicht gelesen werden (beschädigt oder geschützt).",
+    "Carnet d’un autre véhicule ?": "Serviceheft eines anderen Fahrzeugs?",
+    "Ce carnet est celui du VIN": "Dieses Serviceheft gehört zur FIN",
+    "la fiche ouverte a le VIN": "der geöffnete Datensatz hat die FIN",
+    "Importer quand même ?": "Trotzdem importieren?",
+    "Remplacer la fiche technique ?": "Technisches Datenblatt ersetzen?",
+    "Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?": "Dieser Datensatz hat bereits ein Datenblatt. Das aus dem importierten Heft übernehmen (OEM-Nummern, Füllmengen, Drehmomente)?",
+    "Prendre celle du carnet": "Die aus dem Heft nehmen",
+    "Garder la mienne": "Meines behalten",
+    "informations du véhicule": "Fahrzeugangaben",
+    "fiche technique et références OEM": "Datenblatt und OEM-Nummern",
+    "photo": "Foto",
+    "Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).": "Dieses PDF ist kein Autivio-Serviceheft: es enthält keine übernehmbaren Daten. Für ein Papierheft oder eines aus anderer Software nutzen Sie „Papierheft lesen (Fotos)“ (KI-Lesung, kostenpflichtig).",
+    "plaque": "Kennzeichen",
+    "fiche technique et références OEM (carnet partagé)": "Datenblatt und OEM-Nummern (geteiltes Heft)",
+    "(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)": "(dieses Heft wurde mit einer älteren Autivio-Version erstellt: das Datenblatt ist nicht darin gespeichert)",
+    "Carnet importé, sans frais": "Serviceheft importiert, kostenlos",
+    "Ce carnet ne contient rien de plus que la fiche ouverte.": "Dieses Heft enthält nichts, was der Datensatz nicht schon hat.",
+    "Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer": "Übernimmt das ganze Heft (Datenblatt, OEM-Nummern, Wartungen) kostenlos",
+    "Importer un carnet": "Serviceheft importieren",
+    "Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.": "Sie haben schon das Autivio-Serviceheft dieses Autos (PDF)? Knopf „Serviceheft importieren“ oben: alles wird genau übernommen — Datenblatt, OEM-Nummern, Wartungen, Reparaturen — kostenlos.",
     "voiture électrique : boîte automatique": "Elektroauto: Automatikgetriebe",
     "en {an}, ce modèle n’existait qu’en boîte manuelle": "{an} gab es dieses Modell nur mit Schaltgetriebe",
     "en {an}, ce modèle n’existait qu’en boîte automatique": "{an} gab es dieses Modell nur mit Automatikgetriebe",
@@ -9106,6 +9195,28 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Kies de pdf van het onderhoudsboekje (.pdf-bestand).",
+    "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Deze pdf kon niet worden gelezen (beschadigd of beveiligd bestand).",
+    "Carnet d’un autre véhicule ?": "Onderhoudsboekje van een ander voertuig?",
+    "Ce carnet est celui du VIN": "Dit boekje hoort bij VIN",
+    "la fiche ouverte a le VIN": "de open fiche heeft VIN",
+    "Importer quand même ?": "Toch importeren?",
+    "Remplacer la fiche technique ?": "Technische fiche vervangen?",
+    "Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?": "Deze fiche heeft al een technische fiche. Die van het geïmporteerde boekje nemen (OEM-referenties, inhouden, aanhaalmomenten)?",
+    "Prendre celle du carnet": "Die van het boekje nemen",
+    "Garder la mienne": "Die van mij houden",
+    "informations du véhicule": "voertuiggegevens",
+    "fiche technique et références OEM": "technische fiche en OEM-referenties",
+    "photo": "foto",
+    "Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).": "Deze pdf is geen Autivio-onderhoudsboekje: er staan geen gegevens in om over te nemen. Gebruik voor een papieren boekje of een uit andere software „Papieren boekje lezen (foto’s)” (AI-lezing, betalend).",
+    "plaque": "kenteken",
+    "fiche technique et références OEM (carnet partagé)": "technische fiche en OEM-referenties (gedeeld boekje)",
+    "(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)": "(dit boekje is met een oudere Autivio-versie gemaakt: de technische fiche zit er niet in)",
+    "Carnet importé, sans frais": "Onderhoudsboekje geïmporteerd, gratis",
+    "Ce carnet ne contient rien de plus que la fiche ouverte.": "Dit boekje bevat niets meer dan de open fiche.",
+    "Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer": "Neemt het hele boekje over (technische fiche, OEM-referenties, onderhoud) gratis",
+    "Importer un carnet": "Boekje importeren",
+    "Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.": "Heeft u al het Autivio-boekje van deze auto (pdf)? Knop „Boekje importeren” bovenaan: alles wordt exact overgenomen — technische fiche, OEM-referenties, onderhoud, reparaties — gratis.",
     "voiture électrique : boîte automatique": "elektrische auto: automatische versnellingsbak",
     "en {an}, ce modèle n’existait qu’en boîte manuelle": "in {an} bestond dit model alleen met handgeschakelde bak",
     "en {an}, ce modèle n’existait qu’en boîte automatique": "in {an} bestond dit model alleen met automaat",
@@ -10490,7 +10601,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.41';
+const VERSION = '3.42';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14971,6 +15082,11 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.42': { date: '05/11/2026', lignes: [
+    "Importer un carnet d'entretien : bouton « 📥 Importer un carnet » sur le carnet. Un carnet Autivio (PDF) est repris à l'identique — fiche technique, références OEM, capacités, entretiens, réparations, tampons, photo — sans payer et sans IA.",
+    "Chaque carnet PDF contient désormais ses données Autivio (fichier joint autivio-carnet.json). Les cases remplies à la main dans le PDF sont reprises aussi.",
+    "Carnet fait avec une ancienne version : plaque, VIN et entretiens sont repris ; la fiche technique revient gratuitement du carnet partagé du même véhicule s'il existe."
+  ] },
   '3.41': { date: '05/11/2026', lignes: [
     "Modèles annoncés pour 2026-2027 ajoutés d'avance : Audi RS5 (B10) hybride 639 ch, RS6 (C9), A2 e-tron, Q7 (2026), Q9 ; Mercedes Classe C électrique, GLA (2026), GLB (2025), AMG GT 4 portes électrique ; Peugeot 208 3 (2027) et e-208 GTi 280 ch ; Dacia Striker, Spring 2 ; DS N°7 ; Hyundai Ioniq 3, Tucson 5 ; Volvo EX60 ; VW ID.Cross, ID.Tiguan ; Opel Corsa GSE ; Lancia Gamma ; Fiat Grizzly ; Smart #2 ; Leapmotor B03, B05.",
     "Nouvelles marques : Chery, Genesis, Jaecoo, Omoda, Xpeng, Zeekr. 71 marques, 1 126 modèles."
@@ -18194,6 +18310,8 @@ function renderMain(){
     +   '<div style="display:flex;gap:8px;flex-shrink:0;margin-left:auto">'
     +     (OFFICIAL_PDF_GENERATORS[currentDoc] ? '<button class="official-btn" id="officialPdfBtn">'
             + ico('enregistrer') + '<span>' + esc(t('Télécharger le Cerfa officiel rempli')) + '</span></button>' : '')
+    +     (currentDoc === 'carnet' ? '<label class="btn-sec btn-import-doc" id="btImportCarnet" title="' + esc(t('Reprend tout le carnet (fiche technique, références OEM, entretiens) sans payer')) + '"><span>📥 ' + esc(t('Importer un carnet')) + '</span>'
+            + '<input type="file" accept="application/pdf,.pdf" style="display:none"></label>' : '')
     +     (currentDoc === 'carnet' ? '<button type="button" class="official-btn" id="btPdfCarnet">'
             + ico('enregistrer') + '<span>' + esc(t('Télécharger le carnet')) + '</span></button>' : '')
     +     (currentDoc === 'immatriculation' && docPermis('carnet') ? '<button type="button" class="btn-sec" id="btVersCarnet">'
@@ -18334,6 +18452,15 @@ function renderMain(){
 
   const btCarnet = document.getElementById('btPdfCarnet');
   if(btCarnet) btCarnet.onclick = function(){ telechargerCarnet(v, dealer); };
+  const btImpC = document.getElementById('btImportCarnet');
+  if(btImpC){
+    const champ = btImpC.querySelector('input');
+    champ.onchange = function(){
+      const f = champ.files && champ.files[0];
+      champ.value = '';
+      if(f) importerCarnetPdf(v, f).catch(function(e){ informer(e.message || String(e)); });
+    };
+  }
   const btVersCarnet = document.getElementById('btVersCarnet');
   if(btVersCarnet) btVersCarnet.onclick = function(){ currentDoc = 'carnet'; renderMain(); };
   const pjF = document.getElementById('pjFiche');
@@ -38760,6 +38887,7 @@ function carnetForm(v){
   const c = ensureCarnet(v);
   const tc = c.technique;
   return '<div class="cerfa-form carnet-form">'
+  + '<div class="carnet-import-info">📥 ' + esc(t('Vous avez déjà le carnet Autivio de cette voiture (PDF) ? Bouton « Importer un carnet » en haut : tout est repris à l’identique — fiche technique, références OEM, entretiens, réparations — sans payer.')) + '</div>'
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Véhicule et motorisation')) + '</div>'
   + '<div class="cerfa-aide">' + esc(t('Plus la motorisation est précise, plus les données seront justes : cylindrée, nom du moteur et puissance (ex. « 1.6 BlueHDi 120 », « 1.4 TSI 125 »). Le code moteur, s’il est connu, lève les ambiguïtés.')) + '</div>'
   + '<div class="cerfa-grid">' + champVeh('marque', 'Marque') + champVeh('modele', 'Modèle') + champCarnet('generation', 'Génération / phase', 'text', 'ex. Phase 2') + '</div>'
@@ -42133,6 +42261,305 @@ function jsPdfProchainC(km, moi, pas){
     + "if(k&&(!p||p<=k))event.value=String(k+" + Number(pas) + ");else if(!k&&p&&p<=100)event.value='';else event.value=p?String(p):'';";
 }
 
+/* 3.42 : IMPORTER UN CARNET D'ENTRETIEN.
+   - Carnet Autivio recent : les donnees jointes au PDF (autivio-carnet.json)
+     sont reprises a l'identique, plus ce qui a ete tape a la main dans le
+     PDF (lignes du tableau, reparations).
+   - Carnet Autivio plus ancien : plaque, VIN, entretiens imprimes et
+     cases remplies ; la fiche technique et les references OEM reviennent
+     gratuitement du carnet partage (meme voiture) quand il existe.
+   Rien n'est facture : aucun appel a l'IA. */
+const NOM_DONNEES_CARNET = 'autivio-carnet.json';
+function donneesCarnetExport(v, d){
+  const veh = v.vehicule || {}, c = ensureCarnet(v);
+  const vk = ['marque', 'modele', 'vin', 'immat', 'paysImmat', 'dateFirstImmat', 'energie', 'puissanceFiscale', 'typeVarianteVersion', 'couleur', 'genre', 'km'];
+  const vo = {};
+  vk.forEach(function(k){ if(veh[k] !== undefined && veh[k] !== null && String(veh[k]).trim()) vo[k] = veh[k]; });
+  const co = JSON.parse(JSON.stringify(c));
+  ['historiqueIgnore', 'historiquePartage', 'techniqueCle', 'photoGeneriqueRefusee', 'photoGeneriqueRang', 'boiteRaison'].forEach(function(k){ delete co[k]; });
+  return { format: 'autivio-carnet', version: 1, logiciel: 'Autivio ' + VERSION, cree_le: new Date().toISOString(),
+           vehicule: vo, carnet: co,
+           garage: d ? { raisonSociale: d.raisonSociale || '', ville: d.ville || '', siret: d.siret || '' } : {} };
+}
+async function donneesJointesPdf(octets){
+  const L = window.PDFLib;
+  const doc = await L.PDFDocument.load(octets, { ignoreEncryption: true, updateMetadata: false });
+  let json = null;
+  try{
+    const names = doc.catalog.lookup(L.PDFName.of('Names'));
+    const ef = names && names.lookup(L.PDFName.of('EmbeddedFiles'));
+    const fouiller = function(noeud){
+      if(!noeud || json) return;
+      const arr = noeud.lookup(L.PDFName.of('Names'));
+      if(arr){
+        for(let i = 0; i + 1 < arr.size(); i += 2){
+          const n = arr.lookup(i);
+          const nom = n && n.decodeText ? n.decodeText() : String(n || '');
+          if(nom.indexOf(NOM_DONNEES_CARNET) === -1) continue;
+          const st = arr.lookup(i + 1).lookup(L.PDFName.of('EF')).lookup(L.PDFName.of('F'));
+          const brut = L.decodePDFRawStream ? L.decodePDFRawStream(st).decode() : st.getContents();
+          const o = JSON.parse(new TextDecoder().decode(brut));
+          if(o && o.format === 'autivio-carnet') json = o;
+        }
+      }
+      const kids = noeud.lookup(L.PDFName.of('Kids'));
+      if(kids) for(let i = 0; i < kids.size(); i++) fouiller(kids.lookup(i));
+    };
+    fouiller(ef);
+  }catch(e){}
+  /* Ce qui a ete rempli a la main dans le PDF (lecteur PDF, tablette). */
+  const champs = {}, bulles = {};
+  try{
+    doc.getForm().getFields().forEach(function(f){
+      const n = f.getName();
+      try{
+        if(f.constructor.name === 'PDFCheckBox' || typeof f.isChecked === 'function'){ champs[n] = f.isChecked(); }
+        else if(typeof f.getText === 'function'){ champs[n] = f.getText() || ''; }
+        const tu = f.acroField.dict.lookup(L.PDFName.of('TU'));
+        if(tu && tu.decodeText) bulles[n] = tu.decodeText();
+      }catch(e){}
+    });
+  }catch(e){}
+  return { json: json, champs: champs, bulles: bulles };
+}
+function lignesManuellesPdf(champs, bulles){
+  const ent = [], rep = [];
+  Object.keys(champs).forEach(function(n){
+    const m = /^date_(\d+)$/.exec(n);
+    if(!m) return;
+    const r = m[1], date = String(champs[n] || '').trim(), km = String(champs['km_' + r] || '').replace(/\D/g, '');
+    if(!date && !km) return;
+    const ops = Object.keys(champs).filter(function(k){ return k.indexOf('op_' + r + '_') === 0 && champs[k] === true; })
+      .map(function(k){ return bulles[k] || ''; }).filter(Boolean);
+    ent.push({ date: date, km: km, ops: ops, obs: String(champs['obs_' + r] || '').trim(), prochain: String(champs['prochain_' + r] || '').replace(/\D/g, '') });
+  });
+  Object.keys(champs).forEach(function(n){
+    const m = /^rep_travaux_(\d+)$/.exec(n);
+    if(!m) return;
+    const i = m[1], tr = String(champs[n] || '').trim();
+    if(!tr) return;
+    rep.push({ date: String(champs['rep_date_' + i] || '').trim(), km: String(champs['rep_km_' + i] || '').replace(/\D/g, ''), travaux: tr });
+  });
+  return { entretiens: ent, reparations: rep };
+}
+/* Carnet Autivio sans donnees jointes : on relit la page imprimee.
+   Le tableau a toujours la meme forme : colonnes des operations (intitules
+   verticaux), observations a gauche de leur case, tampon ecrit a droite,
+   « Prochain » au bout ; les cases cochees sont deux traits bleus. */
+async function textePdfCarnet(octets){
+  await moteurPdfPret();
+  const doc = await window.pdfjsLib.getDocument({ data: octets.slice() }).promise;
+  const OPS = window.pdfjsLib.OPS || {};
+  const tout = [], ent = [];
+  const reDate = /^\d{2}\/\d{2}\/\d{4}$/;
+  for(let p = 1; p <= doc.numPages; p++){
+    const page = await doc.getPage(p);
+    const tc = await page.getTextContent();
+    const items = tc.items.filter(function(it){ return String(it.str || '').trim(); }).map(function(it){
+      return { s: String(it.str).trim(), x: it.transform[4], y: it.transform[5], rot: Math.abs(it.transform[1]) > 0.01 };
+    });
+    tout.push(items.map(function(i){ return i.s; }).join(' '));
+    const hObs = items.find(function(i){ return /^Observations \/ Garage/.test(i.s); });
+    const hPro = items.find(function(i){ return i.s === 'Prochain'; });
+    if(!hObs || !hPro) continue;
+    const entetes = items.filter(function(i){ return i.rot && i.x < hObs.x && Math.abs(i.y - (hObs.y - 10)) < 40; });
+    const dates = items.filter(function(i){ return !i.rot && reDate.test(i.s) && i.x < hObs.x - 200 && i.y < hObs.y - 10; });
+    if(!dates.length) continue;
+    /* Les coches : petits traits (« \ » puis « / ») dans les colonnes. */
+    const coches = [];
+    try{
+      const ol = await page.getOperatorList();
+      for(let k = 0; k < ol.fnArray.length; k++){
+        if(ol.fnArray[k] !== OPS.constructPath) continue;
+        const ops = ol.argsArray[k][0], co = ol.argsArray[k][1];
+        let j = 0, px = 0, py = 0;
+        for(let q = 0; q < ops.length; q++){
+          const op = ops[q];
+          if(op === OPS.moveTo){ px = co[j]; py = co[j + 1]; j += 2; }
+          else if(op === OPS.lineTo){
+            const nx = co[j], ny = co[j + 1]; j += 2;
+            if(Math.abs(nx - px - 2) < 0.3 && Math.abs(ny - py + 2.2) < 0.3) coches.push({ x: px + 2.6, y: py });
+            px = nx; py = ny;
+          }
+          else if(op === OPS.curveTo){ px = co[j + 4]; py = co[j + 5]; j += 6; }
+          else if(op === OPS.curveTo2 || op === OPS.curveTo3){ px = co[j + 2]; py = co[j + 3]; j += 4; }
+          else if(op === OPS.rectangle){ j += 4; }
+        }
+      }
+    }catch(e){}
+    dates.forEach(function(d){
+      const date = d.s;
+      const rang = items.filter(function(i){ return !i.rot && Math.abs(i.y - d.y) < 1.5; });
+      const km = (rang.find(function(i){ return /km$/.test(i.s) && i.x > d.x && i.x < hObs.x - 150; }) || {}).s || '';
+      const pro = (rang.find(function(i){ return i.x >= hPro.x - 3 && /^[\d\s  .]+$/.test(i.s); }) || {}).s || '';
+      /* Les observations sont en haut de la case, le tampon en dessous. */
+      const zone = items.filter(function(i){ return !i.rot && i.x >= hObs.x - 3 && i.x < hPro.x - 3 && Math.abs(i.y - d.y) < 27; })
+        .sort(function(a, b){ return b.y - a.y || a.x - b.x; });
+      const obs = zone.filter(function(i){ return Math.abs(i.x - (hObs.x - 1)) < 1.6 && i.y > d.y; }).map(function(i){ return i.s; }).join(' ');
+      const tpl = zone.filter(function(i){ return !(Math.abs(i.x - (hObs.x - 1)) < 1.6 && i.y > d.y); }).map(function(i){ return i.s; });
+      const ops = [];
+      coches.filter(function(c){ return Math.abs(c.y - d.y) < 27; }).forEach(function(c){
+        let mieux = null, ecart = 6;
+        entetes.forEach(function(h){ const e = Math.abs(h.x - c.x); if(e < ecart){ ecart = e; mieux = h; } });
+        if(mieux && ops.indexOf(mieux.s) === -1) ops.push(mieux.s);
+      });
+      const e = { date: date, km: km.replace(/\D/g, ''), ops: ops, obs: obs.trim().slice(0, 300), prochain: pro.replace(/\D/g, '') };
+      if(tpl.length){
+        const tp = { nom: tpl[0], ville: '', siret: '', date: '' };
+        tpl.slice(1).forEach(function(l){
+          if(/^SIRET\s/i.test(l)) tp.siret = l.replace(/^SIRET\s*/i, '');
+          else if(reDate.test(l)) tp.date = l.split('/').reverse().join('-');
+          else if(!tp.ville) tp.ville = l;
+        });
+        e.tampon = tp;
+      }
+      ent.push(e);
+    });
+  }
+  const txt = tout.join('\n'), maj = txt.toUpperCase();
+  const vin = (maj.match(/\b[A-HJ-NPR-Z0-9]{17}\b/) || [''])[0];
+  const plaque = (maj.match(/\b[A-Z]{2}-\d{3}-[A-Z]{2}\b|\b\d-[A-Z]{3}-\d{3}\b/) || [''])[0];
+  return { autivio: /Fiche Technique & Atelier|Observations \/ Garage \/ Coût/.test(txt), vin: vin, plaque: plaque, entretiens: ent };
+}
+/* Intitule de colonne parfois raccourci (« … ») : on retrouve l'operation complete. */
+function opsCompletes(v, ops){
+  const cols = colonnesCarnet(v).map(String);
+  return (ops || []).map(function(o){
+    const court = String(o).replace(/…$/, '').trim().toLowerCase();
+    const t = cols.find(function(c){ return c.toLowerCase() === court; })
+      || cols.find(function(c){ return c.toLowerCase().indexOf(court) === 0; });
+    return t || String(o).replace(/…$/, '');
+  });
+}
+function fusionnerLignes(c, ent, rep, autreGarage){
+  const connus = {};
+  c.entretiens.forEach(function(e){ connus[cleEntretien(e)] = 1; });
+  c.reparations.forEach(function(r){ connus[cleReparation(r)] = 1; });
+  /* Ligne reprise telle quelle (toutes ses informations), seulement nettoyee.
+     Faite par un autre garage : marquee comme telle, avec son tampon ecrit
+     (jamais le cachet du garage qui importe). */
+  const copie = function(x){
+    const o = JSON.parse(JSON.stringify(x));
+    if(o.tampon !== undefined){ const tp = tamponRecu(o.tampon); if(tp) o.tampon = tp; else delete o.tampon; }
+    if(autreGarage) o.partage = true;
+    return o;
+  };
+  let ne = 0, nr = 0;
+  (ent || []).forEach(function(e){
+    if(!e || typeof e !== 'object') return;
+    const k = cleEntretien(e);
+    if(k === 'E||' || connus[k]) return;
+    connus[k] = 1; ne++;
+    const x = copie(e);
+    x.date = String(e.date || ''); x.km = String(e.km || '').replace(/\D/g, ''); x.prochain = String(e.prochain || '').replace(/\D/g, '');
+    x.ops = Array.isArray(e.ops) ? e.ops.map(String) : []; x.obs = String(e.obs || '');
+    c.entretiens.push(x);
+  });
+  (rep || []).forEach(function(r){
+    if(!r || typeof r !== 'object' || !String(r.travaux || '').trim()) return;
+    const k = cleReparation(r);
+    if(connus[k]) return;
+    connus[k] = 1; nr++;
+    const x = copie(r);
+    x.date = String(r.date || ''); x.km = String(r.km || '').replace(/\D/g, ''); x.travaux = String(r.travaux || '');
+    c.reparations.push(x);
+  });
+  if(ne) trierEntretiens(c);
+  return { ne: ne, nr: nr };
+}
+async function importerCarnetPdf(v, fichier){
+  if(!estPdf(fichier)){ informer(t('Choisissez le PDF du carnet d’entretien (fichier .pdf).')); return; }
+  const octets = new Uint8Array(await fichier.arrayBuffer());
+  let lu;
+  try{ lu = await donneesJointesPdf(octets); }
+  catch(e){ informer(t('Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).')); return; }
+  const veh = v.vehicule || (v.vehicule = {}), c = ensureCarnet(v);
+  const faits = [];
+  const vide = function(x){ return x === undefined || x === null || !String(x).trim(); };
+  const manuelles = lignesManuellesPdf(lu.champs, lu.bulles);
+
+  if(lu.json){
+    const jv = lu.json.vehicule || {}, jc = lu.json.carnet || {};
+    /* Un autre vehicule ? On demande avant de tout melanger. */
+    const vinIci = vinNet(veh.vin || ''), vinLa = vinNet(jv.vin || '');
+    if(vinBienForme(vinIci) && vinBienForme(vinLa) && vinIci !== vinLa){
+      const ok = await demander({ titre: t('Carnet d’un autre véhicule ?'),
+        texte: t('Ce carnet est celui du VIN') + ' ' + vinLa + ', ' + t('la fiche ouverte a le VIN') + ' ' + vinIci + '. ' + t('Importer quand même ?'),
+        oui: t('Importer'), non: t('Annuler') });
+      if(!ok) return;
+    }
+    let remplacerTech = !!jc.technique && JSON.stringify(c.technique || null) !== JSON.stringify(jc.technique);
+    if(remplacerTech && c.technique){
+      remplacerTech = await demander({ titre: t('Remplacer la fiche technique ?'),
+        texte: t('Cette fiche a déjà une fiche technique. Prendre celle du carnet importé (références OEM, capacités, couples) ?'),
+        oui: t('Prendre celle du carnet'), non: t('Garder la mienne') });
+    }
+    let n = 0;
+    Object.keys(jv).forEach(function(k){ if(vide(veh[k]) && !vide(jv[k])){ veh[k] = jv[k]; n++; } });
+    if(n) faits.push(n + ' ' + t('informations du véhicule'));
+    ['motorisation', 'generation', 'boite', 'codeMoteur', 'distribution', 'startStop', 'puissanceCh'].forEach(function(k){
+      if(vide(c[k]) && !vide(jc[k])) c[k] = jc[k];
+    });
+    if(remplacerTech){
+      c.technique = jc.technique;
+      c.techniqueDate = jc.techniqueDate || Date.now();
+      c.techniqueWeb = jc.techniqueWeb !== false;
+      c.techniqueImportee = true;
+      if(jc.techniqueCorrections) c.techniqueCorrections = jc.techniqueCorrections;
+      faits.push(t('fiche technique et références OEM'));
+    }
+    if(!c.photo && jc.photo){ c.photo = jc.photo; if(jc.photoGenerique) c.photoGenerique = jc.photoGenerique; faits.push(t('photo')); }
+    if(jc.identifie && !c.identifie) c.identifie = jc.identifie;
+    if(jc.autoMoto && !c.autoMoto) c.autoMoto = jc.autoMoto;
+    const norm = function(x){ return String(x || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); };
+    const gI = norm((lu.json.garage || {}).raisonSociale), gM = norm(dealer && dealer.raisonSociale);
+    const autreGarage = !!(gI && gI !== gM);
+    const f = fusionnerLignes(c, jc.entretiens || [], jc.reparations || [], autreGarage);
+    const fm = fusionnerLignes(c, manuelles.entretiens, manuelles.reparations, false);
+    f.ne += fm.ne; f.nr += fm.nr;
+    if(f.ne) faits.push(f.ne + ' ' + t(f.ne > 1 ? 'entretiens' : 'entretien'));
+    if(f.nr) faits.push(f.nr + ' ' + t(f.nr > 1 ? 'réparations' : 'réparation'));
+    /* Les autres cles du carnet (colonnes, options du PDF...) si absentes ici. */
+    Object.keys(jc).forEach(function(k){
+      if(['technique', 'entretiens', 'reparations', 'photo', 'photoGenerique'].indexOf(k) !== -1) return;
+      if(c[k] === undefined) c[k] = jc[k];
+    });
+    c.techniqueCle = cleTechnique(v);
+  }else{
+    let tx = null;
+    try{ tx = await textePdfCarnet(octets); }catch(e){ tx = null; }
+    const nbChamps = manuelles.entretiens.length + manuelles.reparations.length;
+    const formeAutivio = Object.keys(lu.champs).some(function(n){ return /^(date_\d+|rep_travaux_\d+)$/.test(n); });
+    if(!tx) tx = { autivio: false, vin: '', plaque: '', entretiens: [] };
+    if(formeAutivio) tx.autivio = true;
+    if(!tx.autivio){
+      informer(t('Ce PDF n’est pas un carnet d’entretien Autivio : il ne contient pas les données à reprendre. Pour un carnet papier ou d’un autre logiciel, utilisez « Lire le carnet papier (photos) » (lecture par l’IA, payante).'));
+      return;
+    }
+    if(tx.vin && vide(veh.vin) && vinBienForme(tx.vin)){ veh.vin = tx.vin; faits.push('VIN ' + tx.vin); }
+    if(tx.plaque && vide(veh.immat)){ veh.immat = tx.plaque; faits.push(t('plaque') + ' ' + tx.plaque); }
+    const moi = String((dealer && dealer.raisonSociale) || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    tx.entretiens.forEach(function(e){
+      e.ops = opsCompletes(v, e.ops);
+      if(e.tampon && String(e.tampon.nom || '').toUpperCase().replace(/[^A-Z0-9]/g, '') !== moi) e.partage = true;
+    });
+    manuelles.entretiens.forEach(function(e){ e.ops = opsCompletes(v, e.ops); });
+    const f = fusionnerLignes(c, tx.entretiens.concat(manuelles.entretiens), manuelles.reparations);
+    if(f.ne) faits.push(f.ne + ' ' + t(f.ne > 1 ? 'entretiens' : 'entretien'));
+    if(f.nr) faits.push(f.nr + ' ' + t(f.nr > 1 ? 'réparations' : 'réparation'));
+    await saveVehicle(v);
+    /* Fiche technique : celle du meme vehicule, gratuite, si un garage l'a deja faite. */
+    let tech = false;
+    try{ tech = !c.technique && await recupererCarnetConnu(v, { force: true, silencieux: true }); }catch(e){}
+    if(tech) faits.push(t('fiche technique et références OEM (carnet partagé)'));
+    try{ await recupererHistorique(v, { force: true }); }catch(e){}
+    if(!c.technique && !tech) faits.push(t('(ce carnet a été fait avec une ancienne version d’Autivio : la fiche technique n’y est pas enregistrée)'));
+  }
+  await saveVehicle(v);
+  if(currentId === v.id){ try{ renderMain(); }catch(e){} }
+  informer(faits.length ? '✓ ' + t('Carnet importé, sans frais') + ' : ' + faits.join(' · ') + '.' : t('Ce carnet ne contient rien de plus que la fiche ouverte.'));
+}
+
 async function genererCarnetPdf(v, d){
   if(typeof PDFLib === 'undefined') throw new Error(t('La bibliothèque PDF est introuvable.'));
   const { PDFDocument, StandardFonts, rgb, degrees } = PDFLib;
@@ -42640,6 +43067,16 @@ async function genererCarnetPdf(v, d){
     const droite = P.couverture && i === 0 ? (veh.immat ? veh.immat : '') : 'Page ' + (P.couverture ? i : i + 1) + ' sur ' + (P.couverture ? n - 1 : n);
     p.drawText(texteCarnet(droite), { x: MG + LARG - largeur(droite, 6.8), y: 28, size: 6.8, font: norm, color: DOUX });
   });
+  /* 3.42 : toutes les donnees du carnet sont jointes au PDF (fichier
+     autivio-carnet.json) : un garage qui importe ce carnet retrouve tout
+     a l'identique (fiche technique, references OEM, entretiens...), sans
+     rien payer. */
+  try{
+    const json = JSON.stringify(donneesCarnetExport(v, d));
+    await pdf.attach(new TextEncoder().encode(json), NOM_DONNEES_CARNET, {
+      mimeType: 'application/json', description: 'Données Autivio du carnet d’entretien (réimportables)',
+      creationDate: new Date(), modificationDate: new Date() });
+  }catch(e){}
   return await pdf.save();
 
   /* ---- fonctions locales qui ont besoin de la page courante ---- */
