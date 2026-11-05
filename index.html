@@ -91,7 +91,7 @@
   #creditsBtn{background:rgba(255,196,57,.14);color:var(--sidebar-ink);border:1px solid rgba(255,196,57,.55);padding:8px;border-radius:8px;cursor:pointer;font-size:12px;text-align:center;font-weight:600;}
   #creditsBtn:hover{background:rgba(255,196,57,.24);}
   #creditsSolde{font-weight:700;}
-  #settingsBtn,#exportBtn,#logoutBtn,#dossiersBtn,#notesBtn,#dossierImportBtn,.btn-import{background:transparent;color:var(--sidebar-ink);border:1px solid rgba(var(--voile),.18);padding:8px;border-radius:8px;cursor:pointer;font-size:12px;text-align:center;}
+  #settingsBtn,#exportBtn,#logoutBtn,#dossiersBtn,#alimenterBtn,#notesBtn,#dossierImportBtn,.btn-import{background:transparent;color:var(--sidebar-ink);border:1px solid rgba(var(--voile),.18);padding:8px;border-radius:8px;cursor:pointer;font-size:12px;text-align:center;}
   /* La synchronisation est l'action vivante de cette barre : elle
      merite d'etre vue, sans crier plus fort que le reste. */
   #syncBtn{background:rgba(46,158,91,.14);color:#8fe3b0;
@@ -352,8 +352,21 @@
      manquer une fois qu'on la cherche. */
   /* L'onglet des comptes n'existe que pour un administrateur relie au
      serveur. La regle l'emporte sur tout redessin. */
-  #navComptes,#navCredits{display:none !important;}
-  body.est-admin #navComptes,body.est-admin #navCredits{display:flex !important;}
+  #navComptes,#navCredits,#navPhotos{display:none !important;}
+  body.est-admin #navComptes,body.est-admin #navCredits,body.est-admin #navPhotos{display:flex !important;}
+  .dlg.dlg-photos{max-width:980px;width:96vw;}
+  .photos-manque{display:flex;align-items:center;gap:6px;font-size:13px;}
+  .photos-manque input{width:auto;margin:0;}
+  .photos-filtre select{width:auto;min-width:200px;padding:7px 9px;}
+  .photos-barre{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;}
+  .photos-filtre{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0;}
+  .photos-filtre select{max-width:260px;}
+  .photos-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;max-height:52vh;overflow:auto;padding:2px;}
+  .photo-carte{border:1px solid var(--line,#d8d3c4);border-radius:8px;padding:6px;font-size:12px;display:flex;flex-direction:column;gap:4px;}
+  .photo-carte img,.photo-vide{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:5px;background:#eef1f5;}
+  .photo-vide{display:flex;align-items:center;justify-content:center;color:#8a93a0;}
+  .photo-nom span,.photo-cred{color:#6b7480;font-size:11px;}
+  .photo-actions{display:flex;gap:4px;flex-wrap:wrap;}
   .nav-pastille{margin-left:auto;background:#c0392b;color:#fff;
     min-width:18px;height:18px;border-radius:9px;font-size:11px;
     font-weight:700;display:inline-flex;align-items:center;
@@ -941,6 +954,13 @@
   #idVin{font-size:17px;letter-spacing:.06em;text-transform:uppercase;}
   #idPlaque{font-size:17px;letter-spacing:.06em;text-transform:uppercase;flex:1;min-width:0;}
   .ident-plaque{display:flex;gap:8px;align-items:stretch;}
+  .ligne-partagee{border-left:3px solid var(--accent,#7a3b2e);}
+  .ligne-tampon{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px;}
+  .tampon-apercu img{max-height:54px;max-width:140px;display:block;}
+  
+  .photo-credit{font-size:11.5px;}
+  .tampon-texte{display:inline-block;border:1.5px solid #214a9e;color:#214a9e;border-radius:4px;padding:3px 7px;font-size:11px;line-height:1.25;}
+  .ligne-partage{font-size:12px;font-weight:600;color:var(--accent,#7a3b2e);margin:0 0 6px;}
   .ident-pays{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px;}
   .ident-pays-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line,#d5dbe5);border-radius:8px;background:var(--panel,#fff);color:inherit;font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
   .ident-pays-btn svg{border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.12);}
@@ -2242,6 +2262,7 @@
     <nav class="nav-principal">
       <button class="nav-item" data-vue="tableau"><span class="nav-ico">▦</span><span data-fr="Tableau de bord">Tableau de bord</span></button>
       <button class="nav-item" data-vue="comptes" id="navComptes" hidden><span class="nav-ico">👥</span><span data-fr="Comptes">Comptes</span><span class="nav-pastille" id="pastilleComptes" hidden></span></button>
+      <button class="nav-item" data-vue="photos" id="navPhotos" hidden><span class="nav-ico">🖼</span><span data-fr="Photos des modèles">Photos des modèles</span></button>
       <button class="nav-item" data-vue="credits" id="navCredits" hidden><span class="nav-ico">🎟</span><span data-fr="Crédits">Crédits</span><span class="nav-pastille" id="pastilleCredits" hidden></span></button>
       <button class="nav-item" data-vue="reglages"><span class="nav-ico">⚙</span><span data-fr="Réglages">Réglages</span></button>
     </nav>
@@ -2254,6 +2275,7 @@
 
     <div class="sidebar-bas">
       <button type="button" id="creditsBtn" hidden><span data-fr="🎟 Mon crédit">🎟 Mon crédit</span> <b id="creditsSolde"></b></button>
+      <button type="button" id="alimenterBtn" data-fr="🗄 Alimenter la base véhicules">🗄 Alimenter la base véhicules</button>
       <button id="dossiersBtn" data-fr="📁 Mes documents en ligne">📁 Mes documents en ligne</button>
       <label class="btn-import" id="convBtn"><span data-fr="📄 Convertir en PDF">📄 Convertir en PDF</span><input type="file" id="convInput" accept="image/*,application/pdf,.heic,.heif" multiple style="display:none"></label>
       <button type="button" id="dossierImportBtn" data-fr="🗂 Importer un dossier">🗂 Importer un dossier</button>
@@ -2928,6 +2950,74 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Exporter dans le logiciel": "Esporta nel software",
+    "La base est vide : construisez-la d’abord.": "La banca dati è vuota: la costruisca prima.",
+    "Export": "Esportazione",
+    "Écriture impossible": "Scrittura impossibile",
+    "Photos enregistrées dans le logiciel": "Foto salvate nel software",
+    "Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.": "Copi questa cartella «photos-modeles» accanto a index.html per Android (cartella www) e per il sito, poi ricompili.",
+    "photos exportées": "foto esportate",
+    "Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».": "Decomprima lo ZIP accanto a index.html: crea la cartella «photos-modeles».",
+    "Photos des modèles": "Foto dei modelli",
+    "Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.": "Una foto per modello, comune a tutti gli utenti: fa la copertina del libretto delle auto senza foto. «Costruisci la banca dati» prende una foto libera da diritti su Wikimedia Commons per ogni modello che non ne ha (20-40 minuti, tenga la finestra aperta). Poi può cambiare o importare una foto modello per modello.",
+    "Construire / compléter la base": "Costruisci / completa la banca dati",
+    "Arrêter": "Ferma",
+    "seulement les modèles sans photo": "solo i modelli senza foto",
+    "modèles avec photo": "modelli con foto",
+    "pas de photo": "nessuna foto",
+    "photo importée": "foto importata",
+    "Chercher": "Cerca",
+    "Importer": "Importa",
+    "Aucun modèle.": "Nessun modello.",
+    "pas d’autre photo libre trouvée. Importez-en une.": "nessun’altra foto libera trovata. Ne importi una.",
+    "trouvées": "trovate",
+    "sans photo libre": "senza foto libera",
+    "Arrêté.": "Fermato.",
+    "Terminé.": "Finito.",
+    "photos ajoutées": "foto aggiunte",
+    "modèles sans photo libre (importez-les ou réessayez plus tard)": "modelli senza foto libera (li importi o riprovi più tardi)",
+    "Réservé aux administrateurs connectés.": "Riservato agli amministratori connessi.",
+    "Envoi de la photo refusé": "Invio della foto rifiutato",
+    "Photo générique du modèle": "Foto generica del modello",
+    "Autre photo du modèle": "Altra foto del modello",
+    "Photo d’illustration": "Foto illustrativa",
+    "Remplacez-la par une photo de la voiture quand vous l’avez.": "La sostituisca con una foto dell’auto quando ce l’ha.",
+    "Indiquez d’abord la marque et le modèle.": "Indichi prima marca e modello.",
+    "Pas d’autre photo libre de droits trouvée pour ce modèle.": "Nessun’altra foto libera da diritti trovata per questo modello.",
+    "Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.": "Nessuna foto libera da diritti trovata per questo modello (o nessuna connessione Internet). Aggiunga una foto dell’auto.",
+    "Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.": "Foto generica del modello aggiunta al libretto (Wikimedia Commons). La sostituisca con una foto dell’auto quando ce l’ha.",
+    "Ajouter mon tampon": "Aggiungi il mio timbro",
+    "Retirer le tampon": "Togli il timbro",
+    "Tamponner toutes mes lignes": "Timbra tutte le mie righe",
+    "Garage": "Officina",
+    "Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).": "Aggiunga prima il timbro dell’azienda: Impostazioni › Timbro e firmatario (e la ragione sociale in Recapiti).",
+    "Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.": "Timbro scritto apposto (ragione sociale, città, SIRET). Aggiunga l’immagine del timbro in Impostazioni › Timbro e firmatario per stamparla.",
+    "Toutes vos lignes sont déjà tamponnées.": "Tutte le sue righe sono già timbrate.",
+    "lignes tamponnées": "righe timbrate",
+    "ligne tamponnée": "riga timbrata",
+    "Noté par un autre garage Autivio": "Annotato da un’altra officina Autivio",
+    "Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :": "Storico trovato grazie a targa / VIN (annotato da altre officine Autivio):",
+    "entretien": "manutenzione",
+    "entretiens": "manutenzioni",
+    "réparation": "riparazione",
+    "réparations": "riparazioni",
+    "Carnet déjà réalisé pour ce véhicule": "Libretto già realizzato per questo veicolo",
+    "Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :": "Un’officina Autivio ha già fatto il libretto di quest’auto, ma per:",
+    "Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.": "Riprenderlo gratis? I suoi dati saranno sostituiti da questi.",
+    "Reprendre gratuitement": "Riprendi gratis",
+    "carnet partagé": "libretto condiviso",
+    "Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.": "Libretto già realizzato da un’officina Autivio per questo veicolo: scheda tecnica e riferimenti OEM recuperati gratis.",
+    "Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.": "Targa non ancora nella banca dati: compili ciò che sa, verrà aggiunta.",
+    "Alimenter la base véhicules": "Alimentare la banca dati veicoli",
+    "🗄 Alimenter la base véhicules": "🗄 Alimentare la banca dati veicoli",
+    "Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.": "Un’auto vista passare, anche senza pratica da lei: i dati tecnici vanno nella banca dati condivisa. La prossima officina che digita questa targa trova VIN, motore, cavalli fiscali… Mai proprietario, chilometraggio o prezzi.",
+    "Enregistrer dans la base": "Salva nella banca dati",
+    "ex. 9HR": "es. 9HR",
+    "la plaque": "la targa",
+    "une vraie plaque (pas une plaque W garage)": "una vera targa (non una targa prova W)",
+    "la marque et le modèle": "marca e modello",
+    "ajouté à la base partagée. Vous pouvez en saisir un autre.": "aggiunto alla banca dati condivisa. Può inserirne un altro.",
+    "gardé sur cet appareil, envoyé dès que vous serez connecté.": "conservato su questo dispositivo, inviato appena sarà connesso.",
     "pays": "paese",
     "ex.": "es.",
     "Plaque d’immatriculation": "Targa",
@@ -4379,6 +4469,74 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Exporter dans le logiciel": "An d’Software exportéieren",
+    "La base est vide : construisez-la d’abord.": "D’Datebank ass eidel: baut se fir d’éischt op.",
+    "Export": "Export",
+    "Écriture impossible": "Schreiwen net méiglech",
+    "Photos enregistrées dans le logiciel": "Fotoen an der Software gespäichert",
+    "Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.": "Kopéiert dësen Dossier „photos-modeles“ niewent index.html fir Android (Dossier www) a fir de Site, a kompiléiert nei.",
+    "photos exportées": "Fotoen exportéiert",
+    "Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».": "Paakt den ZIP niewent index.html aus: hien erstellt den Dossier „photos-modeles“.",
+    "Photos des modèles": "Modellfotoen",
+    "Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.": "Ee Foto pro Modell, fir all Benotzer: et mécht den Deckel vum Servicebuch fir Autoen ouni Foto. „Datebank opbauen“ hëlt fir all Modell ouni Foto e fräit Foto vu Wikimedia Commons (20 bis 40 Minutten, Fënster op loossen). Duerno kënnt Dir Modell fir Modell e Foto änneren oder importéieren.",
+    "Construire / compléter la base": "Datebank opbauen / ergänzen",
+    "Arrêter": "Stoppen",
+    "seulement les modèles sans photo": "nëmmen d’Modeller ouni Foto",
+    "modèles avec photo": "Modeller mat Foto",
+    "pas de photo": "keen Foto",
+    "photo importée": "importéiert Foto",
+    "Chercher": "Sichen",
+    "Importer": "Importéieren",
+    "Aucun modèle.": "Keen Modell.",
+    "pas d’autre photo libre trouvée. Importez-en une.": "keen anert fräit Foto fonnt. Importéiert eent.",
+    "trouvées": "fonnt",
+    "sans photo libre": "ouni fräit Foto",
+    "Arrêté.": "Gestoppt.",
+    "Terminé.": "Fäerdeg.",
+    "photos ajoutées": "Fotoen derbäigesat",
+    "modèles sans photo libre (importez-les ou réessayez plus tard)": "Modeller ouni fräit Foto (importéiert se oder probéiert méi spéit nach eng Kéier)",
+    "Réservé aux administrateurs connectés.": "Nëmme fir ugemellt Administrateuren.",
+    "Envoi de la photo refusé": "Eropluede vum Foto refuséiert",
+    "Photo générique du modèle": "Allgemengt Foto vum Modell",
+    "Autre photo du modèle": "Anert Foto vum Modell",
+    "Photo d’illustration": "Illustratiounsfoto",
+    "Remplacez-la par une photo de la voiture quand vous l’avez.": "Ersetzt et duerch e Foto vum Auto, soubal Dir eent hutt.",
+    "Indiquez d’abord la marque et le modèle.": "Gitt fir d’éischt Mark a Modell un.",
+    "Pas d’autre photo libre de droits trouvée pour ce modèle.": "Keen anert fräit Foto fir dëse Modell fonnt.",
+    "Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.": "Keen fräit Foto fir dëse Modell fonnt (oder keng Internetverbindung). Setzt e Foto vum Auto derbäi.",
+    "Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.": "Allgemengt Foto vum Modell an d’Servicebuch gesat (Wikimedia Commons). Ersetzt et duerch e Foto vum Auto, soubal Dir eent hutt.",
+    "Ajouter mon tampon": "Mäin Stempel derbäisetzen",
+    "Retirer le tampon": "Stempel ewechhuelen",
+    "Tamponner toutes mes lignes": "All meng Zeilen stempelen",
+    "Garage": "Garage",
+    "Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).": "Setzt fir d’éischt de Stempel vun Ärer Firma derbäi: Astellungen › Stempel an Ënnerschreiwer (an Äre Firmennumm bei Koordinaten).",
+    "Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.": "Geschriwwene Stempel gesat (Firmennumm, Uertschaft, SIRET). Setzt d’Bild vun Ärem Stempel an Astellungen › Stempel an Ënnerschreiwer derbäi fir et ze drécken.",
+    "Toutes vos lignes sont déjà tamponnées.": "All Är Zeilen sinn scho gestempelt.",
+    "lignes tamponnées": "Zeilen gestempelt",
+    "ligne tamponnée": "Zeil gestempelt",
+    "Noté par un autre garage Autivio": "Vun enger anerer Autivio-Garage agedroen",
+    "Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :": "Historique iwwer Nummerplack / VIN fonnt (vun aneren Autivio-Garagen agedroen):",
+    "entretien": "Entretien",
+    "entretiens": "Entretienen",
+    "réparation": "Reparatur",
+    "réparations": "Reparaturen",
+    "Carnet déjà réalisé pour ce véhicule": "Servicebuch fir dëst Gefier schonn erstallt",
+    "Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :": "Eng Autivio-Garage huet d’Servicebuch vun dësem Auto scho gemaach, mee fir:",
+    "Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.": "Gratis iwwerhuelen? Är Donnéeë ginn duerch dës ersat.",
+    "Reprendre gratuitement": "Gratis iwwerhuelen",
+    "carnet partagé": "gedeelt Servicebuch",
+    "Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.": "Servicebuch fir dëst Gefier scho vun enger Autivio-Garage gemaach: technesch Fiche an OEM-Referenze gratis iwwerholl.",
+    "Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.": "Nummerplack nach net an der Datebank: fëllt aus, wat Dir wësst, se gëtt derbäigesat.",
+    "Alimenter la base véhicules": "Gefierdatebank ergänzen",
+    "🗄 Alimenter la base véhicules": "🗄 Gefierdatebank ergänzen",
+    "Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.": "En Auto, deen Dir gesinn hutt, och ouni Dossier bei Iech: seng technesch Donnéeën ginn an déi gedeelt Datebank. Déi nächst Garage, déi dës Nummerplack tippt, fënnt VIN, Motor, Steier-PS… Ni de Besëtzer, de Kilometerstand oder d’Präisser.",
+    "Enregistrer dans la base": "An der Datebank späicheren",
+    "ex. 9HR": "z. B. 9HR",
+    "la plaque": "d’Nummerplack",
+    "une vraie plaque (pas une plaque W garage)": "eng richteg Nummerplack (keng W-Garagenplack)",
+    "la marque et le modèle": "d’Mark an de Modell",
+    "ajouté à la base partagée. Vous pouvez en saisir un autre.": "an déi gedeelt Datebank derbäigesat. Dir kënnt en aneren aginn.",
+    "gardé sur cet appareil, envoyé dès que vous serez connecté.": "op dësem Apparat gehalen, geschéckt soubal Dir ugemellt sidd.",
     "pays": "Land",
     "ex.": "z. B.",
     "Plaque d’immatriculation": "Nummerplack",
@@ -5829,6 +5987,74 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Exporter dans le logiciel": "Export into the software",
+    "La base est vide : construisez-la d’abord.": "The database is empty: build it first.",
+    "Export": "Export",
+    "Écriture impossible": "Cannot write",
+    "Photos enregistrées dans le logiciel": "Photos saved in the software",
+    "Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.": "Copy this “photos-modeles” folder next to index.html for Android (www folder) and for the website, then rebuild.",
+    "photos exportées": "photos exported",
+    "Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».": "Unzip next to index.html: it creates the “photos-modeles” folder.",
+    "Photos des modèles": "Model photos",
+    "Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.": "One photo per model, shared by all users: it makes the logbook cover for cars without a photo. “Build the database” takes a royalty-free photo from Wikimedia Commons for each model without one (allow 20 to 40 minutes, keep the window open). You can then change or import a photo model by model.",
+    "Construire / compléter la base": "Build / complete the database",
+    "Arrêter": "Stop",
+    "seulement les modèles sans photo": "only models without a photo",
+    "modèles avec photo": "models with a photo",
+    "pas de photo": "no photo",
+    "photo importée": "imported photo",
+    "Chercher": "Search",
+    "Importer": "Import",
+    "Aucun modèle.": "No model.",
+    "pas d’autre photo libre trouvée. Importez-en une.": "no other free photo found. Import one.",
+    "trouvées": "found",
+    "sans photo libre": "without a free photo",
+    "Arrêté.": "Stopped.",
+    "Terminé.": "Done.",
+    "photos ajoutées": "photos added",
+    "modèles sans photo libre (importez-les ou réessayez plus tard)": "models without a free photo (import them or try again later)",
+    "Réservé aux administrateurs connectés.": "For signed-in administrators only.",
+    "Envoi de la photo refusé": "Photo upload refused",
+    "Photo générique du modèle": "Generic photo of the model",
+    "Autre photo du modèle": "Another photo of the model",
+    "Photo d’illustration": "Illustrative photo",
+    "Remplacez-la par une photo de la voiture quand vous l’avez.": "Replace it with a photo of the car when you have one.",
+    "Indiquez d’abord la marque et le modèle.": "First enter the make and model.",
+    "Pas d’autre photo libre de droits trouvée pour ce modèle.": "No other royalty-free photo found for this model.",
+    "Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.": "No royalty-free photo found for this model (or no Internet connection). Add a photo of the car.",
+    "Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.": "Generic photo of the model added to the logbook (Wikimedia Commons). Replace it with a photo of the car when you have one.",
+    "Ajouter mon tampon": "Add my stamp",
+    "Retirer le tampon": "Remove the stamp",
+    "Tamponner toutes mes lignes": "Stamp all my lines",
+    "Garage": "Garage",
+    "Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).": "First add your company stamp: Settings › Stamp and signatory (and your company name in Contact details).",
+    "Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.": "Written stamp added (company name, town, SIRET). Add your stamp image in Settings › Stamp and signatory to print it.",
+    "Toutes vos lignes sont déjà tamponnées.": "All your lines are already stamped.",
+    "lignes tamponnées": "lines stamped",
+    "ligne tamponnée": "line stamped",
+    "Noté par un autre garage Autivio": "Entered by another Autivio garage",
+    "Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :": "History found from the plate / VIN (entered by other Autivio garages):",
+    "entretien": "service",
+    "entretiens": "services",
+    "réparation": "repair",
+    "réparations": "repairs",
+    "Carnet déjà réalisé pour ce véhicule": "Logbook already made for this vehicle",
+    "Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :": "An Autivio garage has already made this car’s logbook, but for:",
+    "Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.": "Take it over for free? Your details will be replaced by these.",
+    "Reprendre gratuitement": "Take over for free",
+    "carnet partagé": "shared logbook",
+    "Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.": "Logbook already made by an Autivio garage for this vehicle: technical sheet and OEM references retrieved for free.",
+    "Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.": "Plate not in the database yet: fill in what you know and it will be added.",
+    "Alimenter la base véhicules": "Feed the vehicle database",
+    "🗄 Alimenter la base véhicules": "🗄 Feed the vehicle database",
+    "Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.": "A car you came across, even without a file with you: its technical details go into the shared database. The next garage typing this plate finds the VIN, engine, tax horsepower… Never the owner, mileage or prices.",
+    "Enregistrer dans la base": "Save to the database",
+    "ex. 9HR": "e.g. 9HR",
+    "la plaque": "the plate",
+    "une vraie plaque (pas une plaque W garage)": "a real plate (not a W garage plate)",
+    "la marque et le modèle": "the make and model",
+    "ajouté à la base partagée. Vous pouvez en saisir un autre.": "added to the shared database. You can enter another one.",
+    "gardé sur cet appareil, envoyé dès que vous serez connecté.": "kept on this device, sent as soon as you are signed in.",
     "pays": "country",
     "ex.": "e.g.",
     "Plaque d’immatriculation": "Registration plate",
@@ -7278,6 +7504,74 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Exporter dans le logiciel": "In die Software exportieren",
+    "La base est vide : construisez-la d’abord.": "Die Datenbank ist leer: bauen Sie sie zuerst auf.",
+    "Export": "Export",
+    "Écriture impossible": "Schreiben nicht möglich",
+    "Photos enregistrées dans le logiciel": "Fotos in der Software gespeichert",
+    "Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.": "Kopieren Sie diesen Ordner „photos-modeles“ neben index.html für Android (Ordner www) und für die Website, dann neu kompilieren.",
+    "photos exportées": "Fotos exportiert",
+    "Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».": "Entpacken Sie das ZIP neben index.html: es erstellt den Ordner „photos-modeles“.",
+    "Photos des modèles": "Modellfotos",
+    "Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.": "Ein Foto pro Modell, für alle Nutzer: es bildet den Umschlag des Servicehefts für Autos ohne Foto. „Datenbank aufbauen“ holt für jedes Modell ohne Foto ein lizenzfreies Foto von Wikimedia Commons (20 bis 40 Minuten, Fenster offen lassen). Danach können Sie Modell für Modell ein Foto ändern oder importieren.",
+    "Construire / compléter la base": "Datenbank aufbauen / ergänzen",
+    "Arrêter": "Anhalten",
+    "seulement les modèles sans photo": "nur Modelle ohne Foto",
+    "modèles avec photo": "Modelle mit Foto",
+    "pas de photo": "kein Foto",
+    "photo importée": "importiertes Foto",
+    "Chercher": "Suchen",
+    "Importer": "Importieren",
+    "Aucun modèle.": "Kein Modell.",
+    "pas d’autre photo libre trouvée. Importez-en une.": "kein weiteres freies Foto gefunden. Importieren Sie eines.",
+    "trouvées": "gefunden",
+    "sans photo libre": "ohne freies Foto",
+    "Arrêté.": "Angehalten.",
+    "Terminé.": "Fertig.",
+    "photos ajoutées": "Fotos hinzugefügt",
+    "modèles sans photo libre (importez-les ou réessayez plus tard)": "Modelle ohne freies Foto (importieren oder später erneut versuchen)",
+    "Réservé aux administrateurs connectés.": "Nur für angemeldete Administratoren.",
+    "Envoi de la photo refusé": "Hochladen des Fotos abgelehnt",
+    "Photo générique du modèle": "Allgemeines Foto des Modells",
+    "Autre photo du modèle": "Anderes Foto des Modells",
+    "Photo d’illustration": "Symbolfoto",
+    "Remplacez-la par une photo de la voiture quand vous l’avez.": "Ersetzen Sie es durch ein Foto des Autos, sobald Sie eines haben.",
+    "Indiquez d’abord la marque et le modèle.": "Geben Sie zuerst Marke und Modell an.",
+    "Pas d’autre photo libre de droits trouvée pour ce modèle.": "Kein weiteres lizenzfreies Foto für dieses Modell gefunden.",
+    "Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.": "Kein lizenzfreies Foto für dieses Modell gefunden (oder keine Internetverbindung). Fügen Sie ein Foto des Autos hinzu.",
+    "Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.": "Allgemeines Foto des Modells zum Serviceheft hinzugefügt (Wikimedia Commons). Ersetzen Sie es durch ein Foto des Autos, sobald Sie eines haben.",
+    "Ajouter mon tampon": "Meinen Stempel hinzufügen",
+    "Retirer le tampon": "Stempel entfernen",
+    "Tamponner toutes mes lignes": "Alle meine Zeilen stempeln",
+    "Garage": "Werkstatt",
+    "Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).": "Fügen Sie zuerst Ihren Firmenstempel hinzu: Einstellungen › Stempel und Unterzeichner (und Ihren Firmennamen unter Kontaktdaten).",
+    "Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.": "Schriftlicher Stempel gesetzt (Firmenname, Ort, SIRET). Fügen Sie Ihr Stempelbild unter Einstellungen › Stempel und Unterzeichner hinzu, um es zu drucken.",
+    "Toutes vos lignes sont déjà tamponnées.": "Alle Ihre Zeilen sind bereits gestempelt.",
+    "lignes tamponnées": "Zeilen gestempelt",
+    "ligne tamponnée": "Zeile gestempelt",
+    "Noté par un autre garage Autivio": "Von einer anderen Autivio-Werkstatt eingetragen",
+    "Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :": "Historie über Kennzeichen / FIN gefunden (von anderen Autivio-Werkstätten eingetragen):",
+    "entretien": "Wartung",
+    "entretiens": "Wartungen",
+    "réparation": "Reparatur",
+    "réparations": "Reparaturen",
+    "Carnet déjà réalisé pour ce véhicule": "Serviceheft für dieses Fahrzeug bereits erstellt",
+    "Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :": "Eine Autivio-Werkstatt hat das Serviceheft dieses Autos bereits erstellt, aber für:",
+    "Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.": "Kostenlos übernehmen? Ihre Angaben werden durch diese ersetzt.",
+    "Reprendre gratuitement": "Kostenlos übernehmen",
+    "carnet partagé": "geteiltes Serviceheft",
+    "Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.": "Serviceheft für dieses Fahrzeug bereits von einer Autivio-Werkstatt erstellt: Datenblatt und OEM-Nummern kostenlos übernommen.",
+    "Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.": "Kennzeichen noch nicht in der Datenbank: tragen Sie ein, was Sie wissen, es wird hinzugefügt.",
+    "Alimenter la base véhicules": "Fahrzeugdatenbank ergänzen",
+    "🗄 Alimenter la base véhicules": "🗄 Fahrzeugdatenbank ergänzen",
+    "Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.": "Ein Auto, das Ihnen begegnet ist, auch ohne Akte bei Ihnen: seine technischen Daten kommen in die gemeinsame Datenbank. Die nächste Werkstatt, die dieses Kennzeichen eingibt, findet FIN, Motor, Steuer-PS… Nie Halter, Kilometerstand oder Preise.",
+    "Enregistrer dans la base": "In der Datenbank speichern",
+    "ex. 9HR": "z. B. 9HR",
+    "la plaque": "das Kennzeichen",
+    "une vraie plaque (pas une plaque W garage)": "ein echtes Kennzeichen (kein Händlerkennzeichen W)",
+    "la marque et le modèle": "Marke und Modell",
+    "ajouté à la base partagée. Vous pouvez en saisir un autre.": "zur gemeinsamen Datenbank hinzugefügt. Sie können ein weiteres eingeben.",
+    "gardé sur cet appareil, envoyé dès que vous serez connecté.": "auf diesem Gerät gespeichert, wird gesendet, sobald Sie angemeldet sind.",
     "pays": "Land",
     "ex.": "z. B.",
     "Plaque d’immatriculation": "Kennzeichen",
@@ -8747,6 +9041,74 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Exporter dans le logiciel": "Exporteren naar de software",
+    "La base est vide : construisez-la d’abord.": "De database is leeg: bouw ze eerst op.",
+    "Export": "Export",
+    "Écriture impossible": "Schrijven onmogelijk",
+    "Photos enregistrées dans le logiciel": "Foto’s opgeslagen in de software",
+    "Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.": "Kopieer deze map „photos-modeles“ naast index.html voor Android (map www) en voor de site, en compileer opnieuw.",
+    "photos exportées": "foto’s geëxporteerd",
+    "Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».": "Pak de ZIP uit naast index.html: hij maakt de map „photos-modeles“.",
+    "Photos des modèles": "Modelfoto’s",
+    "Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.": "Eén foto per model, voor alle gebruikers: de omslag van het boekje voor auto’s zonder foto. „Database opbouwen“ haalt voor elk model zonder foto een rechtenvrije foto van Wikimedia Commons (reken op 20 tot 40 minuten, laat het venster open). Daarna kunt u per model een foto wijzigen of importeren.",
+    "Construire / compléter la base": "Database opbouwen / aanvullen",
+    "Arrêter": "Stoppen",
+    "seulement les modèles sans photo": "alleen modellen zonder foto",
+    "modèles avec photo": "modellen met foto",
+    "pas de photo": "geen foto",
+    "photo importée": "geïmporteerde foto",
+    "Chercher": "Zoeken",
+    "Importer": "Importeren",
+    "Aucun modèle.": "Geen model.",
+    "pas d’autre photo libre trouvée. Importez-en une.": "geen andere vrije foto gevonden. Importeer er een.",
+    "trouvées": "gevonden",
+    "sans photo libre": "zonder vrije foto",
+    "Arrêté.": "Gestopt.",
+    "Terminé.": "Klaar.",
+    "photos ajoutées": "foto’s toegevoegd",
+    "modèles sans photo libre (importez-les ou réessayez plus tard)": "modellen zonder vrije foto (importeer ze of probeer later opnieuw)",
+    "Réservé aux administrateurs connectés.": "Alleen voor ingelogde beheerders.",
+    "Envoi de la photo refusé": "Uploaden van de foto geweigerd",
+    "Photo générique du modèle": "Algemene foto van het model",
+    "Autre photo du modèle": "Andere foto van het model",
+    "Photo d’illustration": "Illustratieve foto",
+    "Remplacez-la par une photo de la voiture quand vous l’avez.": "Vervang ze door een foto van de auto zodra u die heeft.",
+    "Indiquez d’abord la marque et le modèle.": "Vul eerst merk en model in.",
+    "Pas d’autre photo libre de droits trouvée pour ce modèle.": "Geen andere rechtenvrije foto gevonden voor dit model.",
+    "Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.": "Geen rechtenvrije foto gevonden voor dit model (of geen internetverbinding). Voeg een foto van de auto toe.",
+    "Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.": "Algemene foto van het model toegevoegd aan het boekje (Wikimedia Commons). Vervang ze door een foto van de auto zodra u die heeft.",
+    "Ajouter mon tampon": "Mijn stempel toevoegen",
+    "Retirer le tampon": "Stempel verwijderen",
+    "Tamponner toutes mes lignes": "Al mijn regels stempelen",
+    "Garage": "Garage",
+    "Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).": "Voeg eerst uw bedrijfsstempel toe: Instellingen › Stempel en ondertekenaar (en uw bedrijfsnaam bij Contactgegevens).",
+    "Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.": "Geschreven stempel geplaatst (bedrijfsnaam, plaats, SIRET). Voeg uw stempelafbeelding toe in Instellingen › Stempel en ondertekenaar om die af te drukken.",
+    "Toutes vos lignes sont déjà tamponnées.": "Al uw regels zijn al gestempeld.",
+    "lignes tamponnées": "regels gestempeld",
+    "ligne tamponnée": "regel gestempeld",
+    "Noté par un autre garage Autivio": "Ingevoerd door een andere Autivio-garage",
+    "Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :": "Historiek gevonden via kenteken / VIN (ingevoerd door andere Autivio-garages):",
+    "entretien": "onderhoud",
+    "entretiens": "onderhoudsbeurten",
+    "réparation": "reparatie",
+    "réparations": "reparaties",
+    "Carnet déjà réalisé pour ce véhicule": "Onderhoudsboekje voor dit voertuig al gemaakt",
+    "Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :": "Een Autivio-garage heeft het onderhoudsboekje van deze auto al gemaakt, maar voor:",
+    "Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.": "Gratis overnemen? Uw gegevens worden hierdoor vervangen.",
+    "Reprendre gratuitement": "Gratis overnemen",
+    "carnet partagé": "gedeeld boekje",
+    "Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.": "Onderhoudsboekje al gemaakt door een Autivio-garage voor dit voertuig: technische fiche en OEM-referenties gratis opgehaald.",
+    "Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.": "Kenteken nog niet in de database: vul in wat u weet, het wordt toegevoegd.",
+    "Alimenter la base véhicules": "Voertuigdatabase aanvullen",
+    "🗄 Alimenter la base véhicules": "🗄 Voertuigdatabase aanvullen",
+    "Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.": "Een auto die u tegenkwam, ook zonder dossier bij u: de technische gegevens gaan naar de gedeelde database. De volgende garage die dit kenteken typt, vindt het VIN, de motor, de fiscale pk… Nooit eigenaar, kilometerstand of prijzen.",
+    "Enregistrer dans la base": "Opslaan in de database",
+    "ex. 9HR": "bijv. 9HR",
+    "la plaque": "het kenteken",
+    "une vraie plaque (pas une plaque W garage)": "een echt kenteken (geen W-handelaarsplaat)",
+    "la marque et le modèle": "het merk en model",
+    "ajouté à la base partagée. Vous pouvez en saisir un autre.": "toegevoegd aan de gedeelde database. U kunt er nog een invoeren.",
+    "gardé sur cet appareil, envoyé dès que vous serez connecté.": "op dit apparaat bewaard, verzonden zodra u bent ingelogd.",
     "pays": "land",
     "ex.": "bijv.",
     "Plaque d’immatriculation": "Kenteken",
@@ -10048,7 +10410,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.30';
+const VERSION = '3.37';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -12573,6 +12935,7 @@ document.addEventListener('visibilitychange', function(){
 async function synchroniserServeur(discret){
   if(!serveurPret()) return { ignore: true };
   try{ await synchroniserGarage(); }catch(e){}
+  envoyerContributions().catch(function(){});
   /* La synchronisation par la carte du serveur. L'ancienne methode —
      « tout ce qui a change depuis ma derniere date » — comparait des
      heures tirees d'horloges DIFFERENTES : il suffisait que le
@@ -12856,6 +13219,7 @@ async function saveVehicle(v){
   try{ ls.set('vehicle:'+v.id, JSON.stringify(v)); }catch(e){}
   planifierSync();
   try{ planifierPartagePlaque(v); }catch(e){}
+  try{ planifierPartageHistorique(v); }catch(e){}
   try{ planifierDeduction(v); }catch(e){}
 }
 
@@ -14355,6 +14719,7 @@ function allerA(vue){
      l'ecran precedent. */
   if(vue === 'comptes'){ fenetreComptes(); return; }
   if(vue === 'credits'){ fenetreCreditsAdmin(); return; }
+  if(vue === 'photos'){ fenetrePhotosModeles(); return; }
   vueCourante = vue;
   renderAll();
 }
@@ -14526,6 +14891,34 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.37': { date: '05/11/2026', lignes: [
+    "Photos des modèles embarquées dans le logiciel : bouton « 💾 Exporter dans le logiciel » (menu administrateur « Photos des modèles »). Sur le PC, les photos vont directement dans le dossier du programme ; elles marchent ensuite sans Internet.",
+    "Le carnet prend d'abord la photo embarquée, puis celle du serveur, puis Wikipédia."
+  ] },
+  '3.36': { date: '05/11/2026', lignes: [
+    "Base des photos de modèles, commune à tous : une photo par modèle (Golf 7, C4 2, X5 F15…) pour la couverture du carnet, immédiate et identique pour tous les garages. Nécessite supabase/25-photos-modeles.sql.",
+    "Administrateur : menu « Photos des modèles » — « Construire la base » remplit tous les modèles depuis Wikimedia Commons ; chaque modèle peut ensuite être changé, importé ou retiré."
+  ] },
+  '3.35': { date: '05/11/2026', lignes: [
+    "Photo générique du modèle sur le carnet d'entretien : sans photo de la voiture, celle de son modèle (ex. Volkswagen Golf VII) se pose toute seule, prise sur Wikimedia Commons (photos libres de droits, crédit imprimé sous la photo). Boutons « Photo générique du modèle » et « Autre photo du modèle ».",
+    "Votre propre photo la remplace dès que vous l'ajoutez."
+  ] },
+  '3.34': { date: '05/11/2026', lignes: [
+    "Tampon de l'entreprise sur chaque ligne du carnet : bouton « 🖃 Ajouter mon tampon » sous chaque entretien et chaque réparation, et « Tamponner toutes mes lignes ». Le cachet enregistré dans Réglages s'imprime dans la case de la ligne (tableau du carnet et page Entretien et Réparations).",
+    "Une ligne tamponnée par un autre garage arrive avec son tampon écrit (raison sociale, ville, SIRET, date) ; l'image de son cachet ne circule jamais."
+  ] },
+  '3.33': { date: '05/11/2026', lignes: [
+    "Entretiens et réparations partagés entre garages : ce qui est noté dans le carnet d'un véhicule le suit. Un autre garage qui tape sa plaque ou son VIN retrouve tout l'historique, marqué « Noté par un autre garage Autivio ».",
+    "Chaque garage ne peut modifier ou retirer que ses propres lignes. Une ligne venue d'ailleurs supprimée ici ne revient pas. Nécessite supabase/24-historique-partage.sql."
+  ] },
+  '3.32': { date: '05/11/2026', lignes: [
+    "Carnet d'entretien partagé par véhicule : quand un garage Autivio a déjà généré le carnet d'une voiture (fiche technique, références OEM, couverture), tout autre garage qui tape sa plaque ou son VIN le récupère gratuitement, sans crédit et sans nouvelle recherche.",
+    "Nécessite supabase/23-carnets-vehicules.sql et la fonction « fiche-technique » mise à jour."
+  ] },
+  '3.31': { date: '05/11/2026', lignes: [
+    "Nouveau bouton « 🗄 Alimenter la base véhicules » : saisissez une voiture vue passer (plaque, VIN, motorisation, CV, code moteur…) sans créer de fiche ni de document. Elle va dans la base partagée : le prochain garage qui tape la plaque retrouve tout.",
+    "Les voitures saisies ainsi sont aussi retrouvées par la recherche par plaque de votre appareil, même hors ligne, et envoyées dès que vous êtes connecté."
+  ] },
   '3.30': { date: '05/11/2026', lignes: [
     "Recherche par plaque : choix du pays (France, Belgique, Allemagne, Pays-Bas, Italie, Luxembourg, Suisse, autre) par drapeaux dans « Identifier le véhicule ». La plaque est mise au format du pays et la recherche se fait dans ce pays.",
     "Le choix du pays de la plaque est aussi sous la case Immatriculation du carnet d'entretien."
@@ -18211,9 +18604,17 @@ function texteConditionsGenerales(){
   +     'marque, modèle, type (D.2), numéro de châssis (VIN), date de 1re immatriculation, énergie, puissance '
   +     'fiscale, couleur, genre, motorisation, code moteur, puissance, boîte, Start &amp; Stop, distribution, '
   +     'phase. Quand un Utilisateur tape une plaque déjà connue, les cases vides de sa fiche se remplissent.</li>'
+  +   '<li><b>Le carnet d’entretien généré pour un véhicule</b> (fiche technique et références de pièces, '
+  +     'qui composent aussi la couverture) : l’Utilisateur qui tape ensuite la plaque ou le numéro de châssis '
+  +     'de ce véhicule le récupère gratuitement, sans débit de crédit.</li>'
+  +   '<li><b>L’historique d’entretien et de réparation d’un véhicule</b> noté dans son carnet : date, '
+  +     'kilométrage, opérations, observations, travaux. Il suit le véhicule : l’Utilisateur qui tape sa plaque '
+  +     'ou son numéro de châssis le retrouve. Chaque Utilisateur ne peut modifier ou retirer que ce qu’il a '
+  +     'lui-même noté. Les champs « observations » et « travaux » ne doivent contenir aucune donnée personnelle '
+  +     '(nom, téléphone, adresse du client).</li>'
   + '</ul>'
   + '<p>Ne sont <b>jamais</b> partagés : le nom, l’adresse ou toute autre donnée du propriétaire, du vendeur ou '
-  +   'de l’acheteur, le kilométrage, les prix, les documents, les photos et les données du compte. '
+  +   'de l’acheteur, le kilométrage du véhicule (hors kilométrages des entretiens et réparations ci-dessus), les prix, les documents, les photos et les données du compte. '
   +   'L’Utilisateur qui retrouve un véhicule ne sait pas quel autre Utilisateur l’a saisi. Les plaques « W '
   +   'garage » ne sont jamais partagées. Une plaque n’est consultable qu’en la tapant en entier, dans la '
   +   'limite de 300 recherches par jour et par compte ; elle n’est pas enregistrée en clair (voir la '
@@ -18350,6 +18751,9 @@ function texteConfidentialite(){
   +     'sur leur page : Autivio ne voit jamais votre numéro de carte ni vos identifiants PayPal. Autivio leur '
   +     'transmet le montant, l’offre choisie et, pour Stripe, votre adresse e-mail (pour le reçu) ; il garde la '
   +     'référence du paiement, son montant et sa date, au titre de ses obligations comptables.</li>'
+  +   '<li><b>Wikipédia et Wikimedia Commons</b> (Wikimedia Foundation) : uniquement pour la photo générique '
+  +     'd’un modèle sur le carnet d’entretien. Ils reçoivent la marque et le modèle (ex. « Volkswagen Golf VII ») '
+  +     'et voient l’adresse IP de l’appareil ; rien d’autre.</li>'
   +   '<li><b>jsDelivr, unpkg, cdnjs</b> : fourniture de bibliothèques techniques (lecture des photos, des '
   +     'PDF). Ces services voient l’adresse IP de l’appareil qui les télécharge.</li>'
   +   '<li><b>geo.api.gouv.fr, Zippopotam, Photon (OpenStreetMap)</b> : proposition des villes à partir '
@@ -18375,7 +18779,7 @@ function texteConfidentialite(){
   +     'l’hébergeur sont écrasées dans un délai limité.</li>'
   +   '<li>Informations techniques partagées : elles restent disponibles même après la suppression de la '
   +     'fiche ou du compte qui les a saisies (elles ne sont plus liées à ce compte). Les informations '
-  +     'retrouvées par une plaque sont effacées <b>10 ans</b> après leur dernière mise à jour, ou plus tôt '
+  +     'retrouvées par une plaque ou un numéro de châssis (dont le carnet d’entretien et l’historique partagés) sont effacées <b>10 ans</b> après leur dernière mise à jour, ou plus tôt '
   +     'sur simple demande. Le compteur de recherches de plaques est effacé au bout de 30 jours.</li>'
   +   '<li>Journaux techniques : selon la durée fixée par l’hébergeur pour la sécurité.</li>'
   + '</ul>'
@@ -19602,7 +20006,13 @@ document.addEventListener('change', function(e){
   const el = e.target;
   if(!el || el.tagName !== 'INPUT') return;
   if(!el.matches('input[data-field="vin"], input[data-cveh="vin"], input[data-cess="vehicule.vin"], input[data-field="typeVarianteVersion"], input[data-cveh="typeVarianteVersion"], input[data-cess="vehicule.typeVarianteVersion"]')) return;
-  setTimeout(function(){ try{ remplirDepuisVin(vehicles[currentId]); }catch(err){} }, 80);
+  setTimeout(function(){
+    const w = vehicles[currentId];
+    try{ remplirDepuisVin(w); }catch(err){}
+    if(w && el.matches('input[data-field="vin"], input[data-cveh="vin"], input[data-cess="vehicule.vin"]')){
+      recupererCarnetConnu(w).catch(function(){}).then(function(){ recupererHistorique(w).catch(function(){}); });
+    }
+  }, 80);
 });
 
 /* Une plaque saisie puis quittee est retenue par la fiche. */
@@ -19619,7 +20029,11 @@ document.addEventListener('change', function(e){
     }
     if(el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-cveh="immat"]')){
       const plaqueTapee = el.value;
-      setTimeout(function(){ retrouverParPlaque(v, plaqueTapee); }, 300);
+      setTimeout(function(){
+        retrouverParPlaque(v, plaqueTapee).catch(function(){}).then(function(){
+          recupererCarnetConnu(v).catch(function(){}).then(function(){ recupererHistorique(v).catch(function(){}); });
+        });
+      }, 300);
       clearTimeout(window.__minuteurRenommer);
       window.__minuteurRenommer = setTimeout(function(){
         renommerDocumentsServeur(v).then(function(n){
@@ -37469,6 +37883,66 @@ async function envoyerPlaques(){
   }
   if(Object.keys(plaquesAEnvoyer).length && !minuteurPlaques) minuteurPlaques = setTimeout(envoyerPlaques, 4000);
 }
+/* 3.31 : ALIMENTER LA BASE. Une voiture saisie pour la base partagee,
+   sans fiche ni document : gardee sur l'appareil (la recherche par
+   plaque la retrouve, meme hors ligne) et envoyee au serveur (SQL 20).
+   Le code moteur tape part aussi vers les codes partages. */
+const CONTRIB_CLE = 'contributionsBase';
+function contributions(){
+  try{ const r = ls.get(CONTRIB_CLE); const l = r ? JSON.parse(r.value) : []; return Array.isArray(l) ? l : []; }catch(e){ return []; }
+}
+function contributionsEcrire(l){ try{ ls.set(CONTRIB_CLE, JSON.stringify(l.slice(-2000))); }catch(e){} }
+async function envoyerUneContribution(x){
+  if(!serveurPret() || !sessionServeur || !sessionServeur.access_token) return false;
+  try{
+    await serveurAppel('/rest/v1/rpc/partager_plaque', { method: 'POST', body: { p_pays: x.pays, p_plaque: x.plaque, p_donnees: x.donnees } });
+  }catch(e){ return false; }
+  const d = x.donnees;
+  if(d.codeMoteur && d.motorisation && d.marque && d.modele){
+    try{
+      await serveurAppel('/rest/v1/rpc/partager_code_moteur', { method: 'POST', body: {
+        p_marque_modele: cleMarqueModele(d.marque, d.modele), p_moto_cle: normPart(d.motorisation).slice(0, 80),
+        p_motorisation: d.motorisation.slice(0, 80), p_energie: ENERGIE_FAMILLE[String(d.energie || '').toUpperCase()] || '',
+        p_ch: parseInt(d.puissanceCh, 10) || null, p_code: d.codeMoteur } });
+      try{ delete CODES_PARTAGES[cleMarqueModele(d.marque, d.modele)]; }catch(e){}
+    }catch(e){}
+  }
+  return true;
+}
+async function ajouterContribution(pays, plaque, donnees){
+  const l = contributions().filter(function(x){ return !(x.pays === pays && plaqueCle(x.plaque) === plaqueCle(plaque)); });
+  const x = { pays: pays, plaque: plaque, donnees: donnees, quand: Date.now(), envoye: false };
+  x.envoye = await envoyerUneContribution(x);
+  l.push(x);
+  contributionsEcrire(l);
+  return x;
+}
+let contribEnCours = false;
+async function envoyerContributions(){
+  if(contribEnCours || !serveurPret()) return;
+  const l = contributions();
+  if(!l.some(function(x){ return !x.envoye; })) return;
+  contribEnCours = true;
+  try{
+    for(const x of l){ if(!x.envoye) x.envoye = await envoyerUneContribution(x); }
+    contributionsEcrire(l);
+  }finally{ contribEnCours = false; }
+}
+function ouvrirAlimenterBase(){
+  fenetreIdentification(blankVehicle(), { alimenter: true });
+}
+document.addEventListener('click', function(e){
+  const b = e.target && e.target.closest && e.target.closest('#alimenterBtn');
+  if(!b) return;
+  e.preventDefault();
+  try{
+    const barre = document.getElementById('sidebar'); if(barre) barre.classList.remove('ouvert');
+    const voile = document.getElementById('voileMenu'); if(voile) voile.classList.remove('ouvert');
+    document.body.classList.remove('menu-ouvert');
+  }catch(x){}
+  ouvrirAlimenterBase();
+});
+
 /* 3.29 : RECHERCHE PAR PLAQUE. D'abord vos propres fiches (meme hors
    ligne : une voiture deja passee chez vous, sous cette plaque ou une
    ancienne), puis les infos techniques partagees par les autres garages
@@ -37488,7 +37962,10 @@ function plaqueDansMesFiches(plaque, saufId, pays){
     const memePays = trouves.filter(function(x){ return paysPlaque(x) === pays; });
     if(memePays.length) trouves = memePays;
   }
-  if(!trouves.length) return null;
+  const contrib = contributions().filter(function(x){ return plaqueCle(x.plaque) === n && (!pays || x.pays === pays); })
+    .sort(function(a, b){ return (b.quand || 0) - (a.quand || 0); });
+  if(!trouves.length && !contrib.length) return null;
+  if(!trouves.length){ const o = Object.assign({}, contrib[0].donnees); return o.marque || o.vin ? o : null; }
   /* La plus recente d'abord ; une plus ancienne complete ce qui manque
      (le VIN saisi sur la fiche d'achat, la motorisation sur le carnet). */
   const o = {};
@@ -37535,6 +38012,465 @@ async function retrouverParPlaque(v, plaque){
   if(remplis.indexOf('vin') >= 0 || remplis.indexOf('typeVarianteVersion') >= 0){ try{ remplirDepuisVin(v); }catch(e){} }
   if(currentId === v.id && !document.querySelector('.dlg-fond')){ try{ renderMain(); }catch(e){} }
   bandeau(texteSourcePlaque(r) + ' : ' + [d.marque, d.modele, d.vin ? 'VIN ' + d.vin : ''].filter(Boolean).join(' · '), 'ok');
+}
+
+/* 3.35 : PHOTO GENERIQUE DU MODELE. Une voiture sans photo recoit celle
+   de son modele (ex. Volkswagen Golf VII), prise sur Wikimedia Commons :
+   photos libres de droits, sous licence Creative Commons, avec le credit
+   imprime sous la photo comme la licence le demande. Rien n'est stocke
+   dans Autivio (le poids et les droits d'auteur l'interdisent) : la
+   photo est cherchee au moment voulu, puis gardee dans la fiche. */
+const ROMAINS_GEN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+const WIKI_FR = 'https://fr.wikipedia.org/w/api.php', WIKI_COMMONS = 'https://commons.wikimedia.org/w/api.php';
+function infosModeleVehicule(v){
+  const veh = v.vehicule || {};
+  const nm = normListe(veh.marque || '');
+  if(!nm || !String(veh.modele || '').trim()) return null;
+  const mq = MARQUES_AUTO.filter(function(m){ return normListe(m[0]) === nm || normListe(m[1]) === nm; })[0];
+  const marque = mq ? mq[1] : String(veh.marque).trim();
+  const modeleSaisi = romainEnChiffres(String(veh.modele).trim());
+  let modele = modeleSaisi, periode = '';
+  if(mq){
+    const e = String(mq[2] || '').split(';').map(function(x){ return x.split('|'); })
+      .filter(function(x){ return normListe(x[0]) === normListe(modeleSaisi); })[0];
+    if(e){ modele = e[0].trim(); periode = e[1] || ''; }
+  }
+  return { marque: marque, modele: modele, periode: periode };
+}
+function sansGeneration(modele){ return String(modele).replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d{1,2}$/, '').trim(); }
+function titresWikipedia(info){
+  const out = [], m = info.modele.trim(), mq = info.marque;
+  const g = /^(.*?)\s+(\d{1,2})$/.exec(m);
+  if(g && Number(g[2]) >= 1 && Number(g[2]) < ROMAINS_GEN.length) out.push(mq + ' ' + g[1] + ' ' + ROMAINS_GEN[Number(g[2])]);
+  out.push(mq + ' ' + m);
+  const base = sansGeneration(m), an = (String(info.periode || '').match(/\d{4}/) || [''])[0];
+  if(an) out.push(mq + ' ' + base + ' (' + an + ')');
+  if(g && Number(g[2]) === 1) out.push(mq + ' ' + g[1]);
+  return out.filter(function(x, i){ return out.indexOf(x) === i; });
+}
+/* Le titre parle bien de CE modele : la marque, le modele, et au plus une
+   generation (VII, Mk7, F15, 2012...) — pas « C4 Picasso » pour une C4. */
+function titreDuModele(titre, info){
+  const brut = String(titre).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+  const n = brut.replace(/[^A-Z0-9]/g, '');
+  const mq = sansAccents(info.marque), base = sansAccents(sansGeneration(info.modele));
+  if(n.indexOf(mq + base) !== 0) return false;
+  const reste = n.slice((mq + base).length);
+  const gen = /\s(\d{1,2})$/.exec(info.modele), code = /\(([^)]+)\)\s*$/.exec(info.modele);
+  const ans = (String(info.periode || '').match(/\d{4}/g) || []).map(Number);
+  if(!reste) return !gen && !code;   // article general : seulement si le modele n'a pas de generation
+  if(gen){
+    const g = Number(gen[1]);
+    return reste === ROMAINS_GEN[g] || reste === String(g) || reste === 'MK' + g
+      || (/^\d{4}$/.test(reste) && ans.length > 0 && Math.abs(Number(reste) - ans[0]) <= 1);
+  }
+  if(code) return reste.indexOf(sansAccents(code[1])) !== -1;
+  /* Modele sans generation dans la liste : une annee dans sa periode. */
+  return /^\d{4}$/.test(reste) && ans.length > 0 && Number(reste) >= ans[0] - 1 && Number(reste) <= (ans[1] || 2100);
+}
+async function wikiJson(base, params){
+  const q = Object.keys(params).map(function(k){ return k + '=' + encodeURIComponent(params[k]); }).join('&');
+  const r = await fetch(base + '?format=json&origin=*&' + q);
+  if(!r.ok) throw new Error('Wikipedia ' + r.status);
+  return r.json();
+}
+function texteSansHtml(h){ const d = document.createElement('div'); d.innerHTML = String(h || ''); return (d.textContent || '').replace(/\s+/g, ' ').trim(); }
+/* La licence de l'image : seulement les photos libres de Commons (jamais
+   une image « fair use » propre a Wikipedia), en JPEG (pas un logo). */
+async function licencePhoto(fichier){
+  if(!/\.jpe?g$/i.test(fichier) || /logo|emblem|badge/i.test(fichier)) return null;
+  const j = await wikiJson(WIKI_COMMONS, { action: 'query', titles: 'File:' + fichier, prop: 'imageinfo', iiprop: 'extmetadata|url', iiurlwidth: 1200 });
+  const pages = (j.query && j.query.pages) || {};
+  const pg = pages[Object.keys(pages)[0]];
+  const ii = pg && !pg.missing && pg.imageinfo && pg.imageinfo[0];
+  if(!ii) return null;
+  const md = ii.extmetadata || {};
+  const lic = texteSansHtml(md.LicenseShortName && md.LicenseShortName.value);
+  if(!lic || !/(^|\s)(CC|Public domain|PD|GFDL|FAL|Licence Art Libre)/i.test(lic) || /non[- ]?free|fair use/i.test(lic)) return null;
+  const auteur = texteSansHtml(md.Artist && md.Artist.value).slice(0, 80) || texteSansHtml(md.Credit && md.Credit.value).slice(0, 80);
+  return { url: ii.thumburl || ii.url, page: ii.descriptionurl || ('https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(fichier)),
+           credit: t('Photo d’illustration') + ' : ' + (auteur ? auteur + ' — ' : '') + lic + ' — Wikimedia Commons' };
+}
+/* Les photos possibles du modele, la plus sure d'abord. */
+async function candidatsPhotoModele(info){
+  const titres = titresWikipedia(info), trouves = [];
+  const j = await wikiJson(WIKI_FR, { action: 'query', redirects: 1, prop: 'pageimages', piprop: 'name', titles: titres.join('|') });
+  const q = j.query || {};
+  const vers = {};
+  (q.normalized || []).forEach(function(x){ vers[x.from] = x.to; });
+  (q.redirects || []).forEach(function(x){ vers[x.from] = x.to; });
+  const final = function(tt){ let x = tt, n = 0; while(vers[x] && n++ < 4) x = vers[x]; return x; };
+  const parTitre = {};
+  Object.keys(q.pages || {}).forEach(function(k){ const pg = q.pages[k]; if(pg && !pg.missing && pg.pageimage) parTitre[pg.title] = pg.pageimage; });
+  titres.forEach(function(tt){
+    const f = final(tt), img = parTitre[f];
+    if(img && titreDuModele(f, info) && !trouves.some(function(c){ return c.fichier === img; })) trouves.push({ titre: f, fichier: img, sur: true });
+  });
+  try{
+    const an = (String(info.periode || '').match(/\d{4}/) || [''])[0];
+    const r = await wikiJson(WIKI_FR, { action: 'query', generator: 'search', gsrsearch: info.marque + ' ' + info.modele + (an ? ' ' + an : '') + ' automobile',
+                                         gsrnamespace: 0, gsrlimit: 8, prop: 'pageimages', piprop: 'name' });
+    const pages = (r.query && r.query.pages) || {};
+    Object.keys(pages).map(function(k){ return pages[k]; }).sort(function(a, b){ return (a.index || 0) - (b.index || 0); }).forEach(function(pg){
+      if(pg.pageimage && titreDuModele(pg.title, info) && !trouves.some(function(c){ return c.fichier === pg.pageimage; }))
+        trouves.push({ titre: pg.title, fichier: pg.pageimage, sur: false });
+    });
+  }catch(e){}
+  return trouves;
+}
+function lirePhotosModeles(){ try{ const r = ls.get('photosModeles'); return r ? JSON.parse(r.value) || {} : {}; }catch(e){ return {}; } }
+function ecrirePhotosModeles(o){ try{ ls.set('photosModeles', JSON.stringify(o)); }catch(e){} }
+async function imageEnDataUrl(url){
+  const r = await fetch(url, { mode: 'cors' });
+  if(!r.ok) throw new Error('image ' + r.status);
+  const blob = await r.blob();
+  const im = await chargerImage(blob);
+  return compresserImage(im, 220 * 1024).url;
+}
+/* 3.36 : BASE DES PHOTOS DE MODELES (supabase/25-photos-modeles.sql).
+   Une photo par modele, commune a tous, preparee par l'administrateur
+   (menu « Photos des modeles »). Elle passe AVANT la recherche sur
+   Wikipedia : immediate, et la meme pour tous les garages. */
+const PHOTOS_BUCKET = 'photos-modeles';
+let indexPhotosEnCours = null, basePhotosAbsente = false;
+function urlPhotoModele(ligne){ return SUPABASE_URL + '/storage/v1/object/public/' + PHOTOS_BUCKET + '/' + ligne.chemin + '?v=' + encodeURIComponent(ligne.maj || ''); }
+function cheminPhotoModele(cle){ return String(cle).replace(/[^A-Z0-9]+/g, '_') + '.jpg'; }
+function lireIndexPhotos(){ try{ const r = ls.get('indexPhotosModeles'); return r ? JSON.parse(r.value) : null; }catch(e){ return null; } }
+function ecrireIndexPhotos(o){ try{ ls.set('indexPhotosModeles', JSON.stringify(o)); }catch(e){} }
+async function indexPhotosModeles(forcer){
+  const memo = lireIndexPhotos();
+  if(!forcer && memo && memo.lignes && Date.now() - (memo.quand || 0) < 6 * 3600000) return memo.lignes;
+  if(basePhotosAbsente) return (memo && memo.lignes) || {};
+  if(indexPhotosEnCours) return indexPhotosEnCours;
+  indexPhotosEnCours = (async function(){
+    const lignes = {};
+    try{
+      for(let debut = 0; debut < 20000; debut += 1000){
+        const r = await serveurAppel('/rest/v1/photos_modeles?select=cle,marque,modele,titre,credit,page,chemin,source,maj&order=cle&offset=' + debut + '&limit=1000');
+        (Array.isArray(r) ? r : []).forEach(function(x){ if(x && x.cle && x.chemin) lignes[x.cle] = x; });
+        if(!Array.isArray(r) || r.length < 1000) break;
+      }
+      ecrireIndexPhotos({ quand: Date.now(), lignes: lignes });
+      return lignes;
+    }catch(e){
+      if(/photos_modeles|PGRST205|404|relation/i.test(String(e && e.message || e))) basePhotosAbsente = true;
+      return (memo && memo.lignes) || {};
+    }finally{ indexPhotosEnCours = null; }
+  })();
+  return indexPhotosEnCours;
+}
+
+/* 3.37 : PHOTOS EMBARQUEES DANS LE LOGICIEL. Un fichier par marque dans
+   le dossier « photos-modeles » a cote de index.html (PC, Android, site),
+   exporte par l'administrateur. Lu en premier : sans Internet, sans
+   serveur. Charge a la demande (une marque a la fois), jamais au demarrage. */
+const PREFIXE_PHOTOS = 'window.__photosModeles=window.__photosModeles||{};window.__photosModeles[';
+function fichierPhotosMarque(codeMarque){ return String(codeMarque).replace(/[^A-Z0-9]+/g, '_') + '.js'; }
+const photosLocalesMarques = {};
+function photosLocalesDe(codeMarque){
+  if(photosLocalesMarques[codeMarque]) return photosLocalesMarques[codeMarque];
+  const nom = fichierPhotosMarque(codeMarque);
+  photosLocalesMarques[codeMarque] = (async function(){
+    const deja = function(){ return (window.__photosModeles && window.__photosModeles[codeMarque]) || null; };
+    if(deja()) return deja();
+    /* PC : lu par le programme (dossier a cote du .exe, ou integre). */
+    try{
+      if(window.pywebview && window.pywebview.api && window.pywebview.api.photos_lire){
+        const tx = await window.pywebview.api.photos_lire(nom);
+        if(tx && tx.indexOf(PREFIXE_PHOTOS) === 0){
+          const debut = tx.indexOf(']=') + 2, fin = tx.lastIndexOf(';');
+          window.__photosModeles = window.__photosModeles || {};
+          window.__photosModeles[codeMarque] = JSON.parse(tx.slice(debut, fin > debut ? fin : tx.length));
+          return deja();
+        }
+      }
+    }catch(e){}
+    /* Site et Android : le fichier a cote de index.html. */
+    return await new Promise(function(res){
+      const sc = document.createElement('script');
+      sc.src = 'photos-modeles/' + nom;
+      sc.onload = function(){ res(deja()); };
+      sc.onerror = function(){ sc.remove(); res(null); };
+      document.head.appendChild(sc);
+    });
+  })();
+  return photosLocalesMarques[codeMarque];
+}
+async function photoLocaleModele(cle){
+  try{
+    const l = await photosLocalesDe(String(cle).split('|')[0]);
+    const x = l && l[cle];
+    return x && x.d ? { data: x.d, titre: x.t || '', credit: x.c || '', page: x.p || '' } : null;
+  }catch(e){ return null; }
+}
+
+/* Pose la photo generique (rang = la suivante pour « Autre photo »). */
+async function poserPhotoGenerique(v, opts){
+  opts = opts || {};
+  const c = ensureCarnet(v);
+  const info = infosModeleVehicule(v);
+  if(!info) throw new Error(t('Indiquez d’abord la marque et le modèle.'));
+  const cle = cleMarqueModele(info.marque, info.modele);
+  /* Les photos embarquees d'abord, puis la base commune (sauf « Autre
+     photo », qui cherche ailleurs). */
+  if(!opts.suivante){
+    const loc = await photoLocaleModele(cle);
+    if(loc){
+      if(opts.auto && (c.photo || c.photoGeneriqueRefusee)) return false;
+      c.photo = loc.data;
+      c.photoGenerique = { titre: loc.titre || (info.marque + ' ' + info.modele), credit: loc.credit, page: loc.page, base: true, locale: true };
+      c.photoGeneriqueRang = -1;
+      await saveVehicle(v);
+      return true;
+    }
+    let ligne = null;
+    try{ ligne = (await indexPhotosModeles())[cle] || null; }catch(e){ ligne = null; }
+    if(ligne){
+      try{
+        const data = await imageEnDataUrl(urlPhotoModele(ligne));
+        if(opts.auto && (c.photo || c.photoGeneriqueRefusee)) return false;
+        c.photo = data;
+        c.photoGenerique = { titre: ligne.titre || (info.marque + ' ' + info.modele), credit: ligne.credit || '', page: ligne.page || '', base: true };
+        c.photoGeneriqueRang = -1;
+        await saveVehicle(v);
+        return true;
+      }catch(e){}
+    }
+  }
+  const memo = lirePhotosModeles();
+  let liste = memo[cle] && Array.isArray(memo[cle].liste) && Date.now() - (memo[cle].quand || 0) < 30 * 86400000 ? memo[cle].liste : null;
+  if(!liste){
+    liste = await candidatsPhotoModele(info);
+    memo[cle] = { liste: liste, quand: Date.now() };
+    ecrirePhotosModeles(memo);
+  }
+  if(!liste.length) return false;
+  if(opts.auto && !liste[0].sur) return false;   // seule une page exacte se pose d'elle-meme
+  let i = opts.suivante ? Math.max(-1, Number(c.photoGeneriqueRang) || 0) + 1 : 0;
+  for(let n = 0; n < liste.length; n++, i++){
+    const cand = liste[i % liste.length];
+    let lic = null;
+    try{ lic = await licencePhoto(cand.fichier); }catch(e){ lic = null; }
+    if(!lic) continue;
+    let data;
+    try{ data = await imageEnDataUrl(lic.url); }catch(e){ continue; }
+    if(opts.auto && (c.photo || c.photoGeneriqueRefusee)) return false;   // l'utilisateur a agi entre-temps
+    c.photo = data;
+    c.photoGenerique = { titre: cand.titre, fichier: cand.fichier, credit: lic.credit, page: lic.page };
+    c.photoGeneriqueRang = i % liste.length;
+    await saveVehicle(v);
+    return true;
+  }
+  return false;
+}
+
+/* --- Administrateur : construire et corriger la base des photos ------- */
+function tousLesModeles(){
+  const l = [];
+  MARQUES_AUTO.forEach(function(m){
+    String(m[2] || '').split(';').forEach(function(e){
+      const x = e.split('|'), n = (x[0] || '').trim();
+      if(n) l.push({ marque: m[1], code: m[0], modele: n, periode: x[1] || '', cle: cleMarqueModele(m[1], n) });
+    });
+  });
+  return l;
+}
+/* Une photo libre de Wikimedia Commons pour un modele, a partir du rang. */
+async function photoCommonsPourModele(info, depuis){
+  const liste = await candidatsPhotoModele(info);
+  for(let i = depuis || 0; i < liste.length; i++){
+    let lic = null;
+    try{ lic = await licencePhoto(liste[i].fichier); }catch(e){ lic = null; }
+    if(!lic) continue;
+    try{
+      const r = await fetch(lic.url, { mode: 'cors' });
+      if(!r.ok) continue;
+      const im = await chargerImage(await r.blob());
+      return { data: compresserImage(im, 150 * 1024).url, titre: liste[i].titre, credit: lic.credit, page: lic.page, rang: i, total: liste.length };
+    }catch(e){ continue; }
+  }
+  return null;
+}
+async function enregistrerPhotoModele(m, photo, source){
+  const chemin = cheminPhotoModele(m.cle);
+  const blob = await (await fetch(photo.data)).blob();
+  const r = await appelStockage(PHOTOS_BUCKET + '/' + chemin, { method: 'POST', body: blob,
+    headers: { 'Content-Type': 'image/jpeg', 'x-upsert': 'true', 'cache-control': '86400' } });
+  if(!r.ok){ const tx = await r.text().catch(function(){ return ''; }); throw new Error(t('Envoi de la photo refusé') + ' (' + r.status + ') ' + tx.slice(0, 120)); }
+  const ligne = { cle: m.cle, marque: m.marque, modele: m.modele, titre: photo.titre || '', credit: photo.credit || '', page: photo.page || '',
+                  chemin: chemin, source: source || 'commons', auteur: sessionServeur.user.id, maj: new Date().toISOString() };
+  await serveurAppel('/rest/v1/photos_modeles', { method: 'POST', headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' }, body: [ligne] });
+  const memo = lireIndexPhotos() || { quand: Date.now(), lignes: {} };
+  memo.lignes[m.cle] = ligne; ecrireIndexPhotos(memo);
+  return ligne;
+}
+async function retirerPhotoModele(m){
+  const memo = lireIndexPhotos() || { lignes: {} };
+  const ligne = memo.lignes[m.cle];
+  if(ligne) try{ await appelStockage(PHOTOS_BUCKET + '/' + ligne.chemin, { method: 'DELETE' }); }catch(e){}
+  await serveurAppel('/rest/v1/photos_modeles?cle=eq.' + encodeURIComponent(m.cle), { method: 'DELETE' });
+  delete memo.lignes[m.cle]; ecrireIndexPhotos(memo);
+}
+/* Exporte toute la base en fichiers par marque. Sur le PC, ils vont tout
+   droit dans le dossier « photos-modeles » du programme ; ailleurs, un ZIP
+   a decompresser a cote de index.html. */
+async function exporterPhotosModeles(idx, etat){
+  const lignes = Object.keys(idx).map(function(k){ return idx[k]; }).filter(function(x){ return x && x.chemin; });
+  if(!lignes.length) throw new Error(t('La base est vide : construisez-la d’abord.'));
+  const parMarque = {};
+  lignes.forEach(function(x){ const m = String(x.cle).split('|')[0]; (parMarque[m] = parMarque[m] || []).push(x); });
+  const pc = !!(window.pywebview && window.pywebview.api && window.pywebview.api.photos_ecrire);
+  const entrees = [], marques = Object.keys(parMarque).sort();
+  let n = 0, dossier = '', poids = 0;
+  for(const m of marques){
+    const contenu = {};
+    for(const x of parMarque[m]){
+      n++;
+      etat('⏳ ' + t('Export') + ' ' + n + ' / ' + lignes.length + ' — ' + (x.marque || '') + ' ' + (x.modele || ''));
+      try{
+        const r = await fetch(urlPhotoModele(x));
+        if(!r.ok) continue;
+        const im = await chargerImage(await r.blob());
+        contenu[x.cle] = { t: x.titre || '', c: x.credit || '', p: x.page || '', d: compresserImage(im, 90 * 1024).url };
+      }catch(e){}
+    }
+    if(!Object.keys(contenu).length) continue;
+    const texte = PREFIXE_PHOTOS + JSON.stringify(m) + ']=' + JSON.stringify(contenu) + ';\n';
+    poids += texte.length;
+    if(pc){
+      const r = await window.pywebview.api.photos_ecrire(fichierPhotosMarque(m), texte);
+      if(!r || !r.ok) throw new Error((r && r.message) || t('Écriture impossible'));
+      dossier = r.dossier || dossier;
+    }else{
+      entrees.push({ nom: 'photos-modeles/' + fichierPhotosMarque(m), donnees: new TextEncoder().encode(texte) });
+    }
+    window.__photosModeles = window.__photosModeles || {};
+    window.__photosModeles[m] = contenu;
+  }
+  const mo = Math.round(poids / 1048576);
+  if(pc){
+    etat('✓ ' + t('Photos enregistrées dans le logiciel') + ' (' + n + ', ' + mo + ' Mo) : ' + dossier + '. '
+      + t('Copiez ce dossier « photos-modeles » à côté de index.html pour Android (dossier www) et pour le site, puis recompilez.'));
+    try{ window.pywebview.api.photos_ouvrir_dossier(); }catch(e){}
+  }else{
+    etat('✓ ' + n + ' ' + t('photos exportées') + ' (' + mo + ' Mo). ' + t('Décompressez le ZIP à côté de index.html : il crée le dossier « photos-modeles ».'));
+    telechargerFichier(fabriquerZip(entrees), 'photos-modeles.zip', 'application/zip');
+  }
+}
+let constructionPhotos = null;
+async function fenetrePhotosModeles(){
+  if(!estAdministrateur() || !serveurPret()){ informer(t('Réservé aux administrateurs connectés.')); return; }
+  document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
+  const fond = document.createElement('div');
+  fond.className = 'dlg-fond';
+  const marques = MARQUES_AUTO.map(function(m){ return m[1]; });
+  fond.innerHTML = '<div class="dlg dlg-photos" role="dialog" aria-modal="true">'
+    + '<div class="dlg-titre">🖼 ' + esc(t('Photos des modèles')) + '</div>'
+    + '<div class="dlg-texte">' + esc(t('Une photo par modèle, commune à tous les utilisateurs : elle fait la couverture du carnet des voitures sans photo. « Construire la base » prend une photo libre de droits sur Wikimedia Commons pour chaque modèle qui n’en a pas (comptez 20 à 40 minutes, gardez la fenêtre ouverte). Vous pouvez ensuite changer ou importer une photo modèle par modèle.')) + '</div>'
+    + '<div class="photos-barre"><b id="phCompte"></b>'
+    +   '<button type="button" class="btn-prim" id="phConstruire">▶ ' + esc(t('Construire / compléter la base')) + '</button>'
+    +   '<button type="button" class="btn-sec" id="phStop" style="display:none">⏸ ' + esc(t('Arrêter')) + '</button>'
+    +   '<button type="button" class="btn-sec" id="phExporter">💾 ' + esc(t('Exporter dans le logiciel')) + '</button></div>'
+    + '<div class="dlg-detail" id="phEtat"></div>'
+    + '<div class="photos-filtre"><select id="phMarque" class="liste-large">' + marques.map(function(n){ return '<option>' + esc(n) + '</option>'; }).join('') + '</select>'
+    +   '<label class="photos-manque"><input type="checkbox" id="phManque"> ' + esc(t('seulement les modèles sans photo')) + '</label></div>'
+    + '<div class="photos-grille" id="phGrille"></div>'
+    + '<input type="file" id="phFichier" accept="image/*" style="display:none">'
+    + '<div class="dlg-actions"><button type="button" class="dlg-non">' + esc(t('Fermer')) + '</button></div></div>';
+  document.body.appendChild(fond);
+  const $ = function(id){ return fond.querySelector('#' + id); };
+  const modeles = tousLesModeles();
+  let idx = await indexPhotosModeles(true);
+  const majCompte = function(){ $('phCompte').textContent = Object.keys(idx).length + ' / ' + modeles.length + ' ' + t('modèles avec photo'); };
+  let importCible = null;
+  const dessiner = function(){
+    majCompte();
+    const mq = $('phMarque').value, manque = $('phManque').checked;
+    const l = modeles.filter(function(m){ return (manque ? !idx[m.cle] : m.marque === mq); });
+    $('phGrille').innerHTML = l.slice(0, 300).map(function(m){
+      const x = idx[m.cle];
+      return '<div class="photo-carte" data-cle="' + esc(m.cle) + '">'
+        + (x ? '<img loading="lazy" src="' + esc(urlPhotoModele(x)) + '" alt="">' : '<div class="photo-vide">' + esc(t('pas de photo')) + '</div>')
+        + '<div class="photo-nom"><b>' + esc(m.marque + ' ' + m.modele) + '</b>' + (m.periode ? ' <span>' + esc(m.periode) + '</span>' : '') + '</div>'
+        + (x ? '<div class="photo-cred">' + esc(x.source === 'import' ? t('photo importée') : (x.titre || '')) + '</div>' : '')
+        + '<div class="photo-actions"><button type="button" class="btn-sec btn-petit" data-ph="autre">🔄 ' + esc(t(x ? 'Autre' : 'Chercher')) + '</button>'
+        + '<button type="button" class="btn-sec btn-petit" data-ph="importer">📷 ' + esc(t('Importer')) + '</button>'
+        + (x ? '<button type="button" class="btn-sec btn-petit" data-ph="retirer">✕</button>' : '') + '</div></div>';
+    }).join('') || '<div class="partage-vide">' + esc(t('Aucun modèle.')) + '</div>';
+    $('phGrille').querySelectorAll('.photo-carte').forEach(function(carte){
+      const m = modeles.filter(function(x){ return x.cle === carte.dataset.cle; })[0];
+      carte.querySelectorAll('[data-ph]').forEach(function(b){
+        b.onclick = async function(){
+          const quoi = b.dataset.ph;
+          if(quoi === 'importer'){ importCible = m; $('phFichier').click(); return; }
+          b.disabled = true;
+          try{
+            if(quoi === 'retirer'){ await retirerPhotoModele(m); }
+            else{
+              const rangs = carte.__rang === undefined ? (idx[m.cle] ? 1 : 0) : carte.__rang + 1;
+              const ph = await photoCommonsPourModele(m, rangs);
+              if(!ph){ $('phEtat').textContent = m.marque + ' ' + m.modele + ' : ' + t('pas d’autre photo libre trouvée. Importez-en une.'); b.disabled = false; return; }
+              await enregistrerPhotoModele(m, ph, 'commons');
+              carte.__rang = ph.rang;
+            }
+            idx = (lireIndexPhotos() || {}).lignes || idx;
+            dessiner();
+          }catch(e){ $('phEtat').textContent = e.message || String(e); b.disabled = false; }
+        };
+      });
+    });
+  };
+  $('phFichier').onchange = async function(){
+    const f = $('phFichier').files && $('phFichier').files[0];
+    $('phFichier').value = '';
+    if(!f || !importCible) return;
+    try{
+      const im = await chargerImage(f);
+      await enregistrerPhotoModele(importCible, { data: compresserImage(im, 150 * 1024).url, titre: t('photo importée'), credit: '', page: '' }, 'import');
+      idx = (lireIndexPhotos() || {}).lignes || idx;
+      dessiner();
+    }catch(e){ $('phEtat').textContent = e.message || String(e); }
+  };
+  $('phExporter').onclick = async function(){
+    if(constructionPhotos) return;
+    const b = $('phExporter');
+    b.disabled = true;
+    try{ await exporterPhotosModeles(idx, function(tx){ $('phEtat').textContent = tx; }); }
+    catch(e){ $('phEtat').textContent = e.message || String(e); }
+    b.disabled = false;
+  };
+  $('phMarque').onchange = dessiner;
+  $('phManque').onchange = dessiner;
+  const fermer = function(){ if(constructionPhotos) constructionPhotos.arret = true; fond.remove(); };
+  fond.querySelector('.dlg-non').onclick = fermer;
+  $('phStop').onclick = function(){ if(constructionPhotos) constructionPhotos.arret = true; };
+  $('phConstruire').onclick = async function(){
+    if(constructionPhotos) return;
+    const etat = constructionPhotos = { arret: false };
+    $('phConstruire').disabled = true; $('phStop').style.display = '';
+    const essais = (function(){ try{ const r = ls.get('photosModelesEssais'); return r ? JSON.parse(r.value) : {}; }catch(e){ return {}; } })();
+    const aFaire = modeles.filter(function(m){ return !idx[m.cle] && !(essais[m.cle] && Date.now() - essais[m.cle] < 7 * 86400000); });
+    let n = 0, ok = 0, sans = 0;
+    for(const m of aFaire){
+      if(etat.arret) break;
+      n++;
+      $('phEtat').textContent = '⏳ ' + n + ' / ' + aFaire.length + ' — ' + m.marque + ' ' + m.modele + ' · ' + ok + ' ' + t('trouvées') + ' · ' + sans + ' ' + t('sans photo libre');
+      try{
+        const ph = await photoCommonsPourModele(m, 0);
+        if(ph){ await enregistrerPhotoModele(m, ph, 'commons'); ok++; idx[m.cle] = (lireIndexPhotos() || { lignes: {} }).lignes[m.cle]; majCompte(); }
+        else{ sans++; essais[m.cle] = Date.now(); try{ ls.set('photosModelesEssais', JSON.stringify(essais)); }catch(e){} }
+      }catch(e){
+        $('phEtat').textContent = e.message || String(e);
+        if(/refus|401|403|row-level|policy/i.test(String(e.message || ''))) break;
+      }
+      await new Promise(function(r){ setTimeout(r, 250); });
+    }
+    constructionPhotos = null;
+    $('phConstruire').disabled = false; $('phStop').style.display = 'none';
+    $('phEtat').textContent = (etat.arret ? t('Arrêté.') : t('Terminé.')) + ' ' + ok + ' ' + t('photos ajoutées') + ', ' + sans + ' ' + t('modèles sans photo libre (importez-les ou réessayez plus tard)') + '.';
+    dessiner();
+  };
+  dessiner();
 }
 
 function champCarnet(cle, libelle, type, aide){
@@ -37588,8 +38524,12 @@ function carnetForm(v){
   + '<div class="carnet-photo">'
   +   (c.photo ? '<img src="' + c.photo + '" alt="">' : '<div class="carnet-photo-vide">' + esc(t('Aucune photo : la couverture affichera seulement le nom du véhicule.')) + '</div>')
   + '</div>'
+  + (c.photo && c.photoGenerique ? '<div class="cerfa-aide photo-credit">🖼 ' + esc(t('Photo générique du modèle')) + ' (' + esc(c.photoGenerique.titre || '') + ') — '
+      + esc(c.photoGenerique.credit || '') + '. ' + esc(t('Remplacez-la par une photo de la voiture quand vous l’avez.')) + '</div>' : '')
   + '<div class="gar-choix">'
-  +   '<label class="btn-sec btn-import-doc"><span>📷 ' + esc(t(c.photo ? 'Changer la photo' : 'Ajouter la photo')) + '</span><input type="file" id="carnetPhoto" accept="image/*" style="display:none"></label>'
+  +   '<label class="btn-sec btn-import-doc"><span>📷 ' + esc(t(c.photo && !c.photoGenerique ? 'Changer la photo' : 'Ajouter la photo')) + '</span><input type="file" id="carnetPhoto" accept="image/*" style="display:none"></label>'
+  +   (!c.photo ? '<button type="button" class="btn-sec" id="carnetPhotoGenerique">🖼 ' + esc(t('Photo générique du modèle')) + '</button>' : '')
+  +   (c.photo && c.photoGenerique ? '<button type="button" class="btn-sec" id="carnetPhotoAutre">🔄 ' + esc(t('Autre photo du modèle')) + '</button>' : '')
   +   (c.photo ? '<button type="button" class="btn-sec" id="carnetPhotoRetirer">' + esc(t('Retirer')) + '</button>' : '')
   + '</div></div>'
 
@@ -37608,6 +38548,7 @@ function carnetForm(v){
   +   '<label class="btn-sec btn-import-doc"><span>📷 ' + esc(t('Lire le carnet papier (photos)')) + '</span><input type="file" id="carnetPapier" accept="image/*" multiple style="display:none"></label>'
   +   '<button type="button" class="btn-sec" id="carnetAjouter">' + esc(t('+ Ajouter un entretien')) + '</button>'
   + '</div>'
+  + '<div class="gar-choix"><button type="button" class="btn-sec btn-petit" id="carnetToutTamponner">🖃 ' + esc(t('Tamponner toutes mes lignes')) + '</button></div>'
   + '<div id="carnetLignes">' + lignesEntretienHtml(v) + '</div>'
   + '</div>'
   + '<div class="cerfa-sec"><div class="cerfa-sec-title">' + esc(t('Réparations déjà faites')) + '</div>'
@@ -37677,12 +38618,35 @@ function propositionsProchain(c, e){
   }).join('');
 }
 
+/* 3.34 : TAMPON DE L'ENTREPRISE sur chaque ligne du carnet. La ligne
+   garde qui l'a tamponnee (raison sociale, ville, SIRET, date) ; le PDF
+   pose l'image du cachet enregistre dans Reglages (lignes de ce garage),
+   ou un tampon ecrit (lignes venues d'un autre garage : son image ne
+   circule jamais, pour qu'elle ne puisse pas etre recopiee). */
+function tamponDuGarage(){
+  return { nom: String(dealer.raisonSociale || '').trim(), ville: String(dealer.ville || '').trim(),
+           siret: String(dealer.siret || '').trim(), date: new Date().toISOString().slice(0, 10) };
+}
+function apercuTampon(ligne){
+  const tp = ligne.tampon || {};
+  if(!ligne.partage && dealer.cachet) return '<span class="tampon-apercu"><img src="' + dealer.cachet + '" alt=""></span>';
+  return '<span class="tampon-texte"><b>' + esc(tp.nom || t('Garage')) + '</b>' + (tp.ville ? '<br>' + esc(tp.ville) : '')
+    + (tp.siret ? '<br>SIRET ' + esc(tp.siret) : '') + '</span>';
+}
+function zoneTamponHtml(ligne, attr, i){
+  return '<div class="ligne-tampon">'
+    + (ligne.tampon && ligne.tampon.nom !== undefined
+        ? apercuTampon(ligne) + '<button type="button" class="btn-sec btn-petit" data-' + attr + '-retirer="' + i + '">' + esc(t('Retirer le tampon')) + '</button>'
+        : '<button type="button" class="btn-sec btn-petit btn-tampon" data-' + attr + '="' + i + '">🖃 ' + esc(t('Ajouter mon tampon')) + '</button>')
+    + '</div>';
+}
 function lignesEntretienHtml(v){
   const c = ensureCarnet(v), cols = colonnesCarnet(v);
   if(!c.entretiens.length) return '<div class="carnet-vide">' + esc(t('Aucun entretien enregistré.')) + '</div>';
   return c.entretiens.map(function(e, i){
     const ops = e.ops || [];
-    return '<div class="carnet-ligne">'
+    return '<div class="carnet-ligne' + (e.partage ? ' ligne-partagee' : '') + '">'
+      + (e.partage ? '<div class="ligne-partage">🔧 ' + esc(t('Noté par un autre garage Autivio')) + '</div>' : '')
       + '<div class="cerfa-grid">'
       +   '<div><label>' + esc(t('Date')) + '</label><input data-cent="' + i + '" data-champ="date" inputmode="numeric" maxlength="10" placeholder="JJ/MM/AAAA" value="' + esc(e.date || '') + '"></div>'
       +   '<div><label>' + esc(t('Kilométrage')) + '</label><input data-cent="' + i + '" data-champ="km" inputmode="numeric" placeholder="ex. 142000" value="' + esc(e.km || '') + '"></div>'
@@ -37695,6 +38659,7 @@ function lignesEntretienHtml(v){
         }).join('') + '</div>'
       + '<div class="cerfa-grid"><div style="grid-column:span 3"><label>' + esc(t('Observations / garage / coût')) + '</label>'
       +   '<input data-cent="' + i + '" data-champ="obs" value="' + esc(e.obs || '') + '"></div></div>'
+      + zoneTamponHtml(e, 'centtampon', i)
       + '<button type="button" class="btn-sec carnet-suppr" data-centsuppr="' + i + '">' + esc(t('Supprimer cet entretien')) + '</button>'
       + '</div>';
   }).join('');
@@ -37709,7 +38674,8 @@ function lignesReparationHtml(v){
   const c = ensureCarnet(v);
   if(!c.reparations.length) return '<div class="carnet-vide">' + esc(t('Aucune réparation enregistrée.')) + '</div>';
   return c.reparations.map(function(r, i){
-    return '<div class="carnet-ligne">'
+    return '<div class="carnet-ligne' + (r.partage ? ' ligne-partagee' : '') + '">'
+      + (r.partage ? '<div class="ligne-partage">🔧 ' + esc(t('Noté par un autre garage Autivio')) + '</div>' : '')
       + '<div class="cerfa-grid">'
       +   '<div><label>' + esc(t('Date')) + '</label><input data-crep="' + i + '" data-rchamp="date" inputmode="numeric" maxlength="10" placeholder="JJ/MM/AAAA" value="' + esc(r.date || '') + '"></div>'
       +   '<div><label>' + esc(t('Kilométrage')) + '</label><input data-crep="' + i + '" data-rchamp="km" inputmode="numeric" placeholder="ex. 142000" value="' + esc(r.km || '') + '"></div>'
@@ -37717,6 +38683,7 @@ function lignesReparationHtml(v){
       + '<label>' + esc(t('Entretien / réparations')) + '</label>'
       + '<textarea class="rep-travaux" data-crep="' + i + '" data-rchamp="travaux" placeholder="' + esc(t('ex. Embrayage refait : disque d’embrayage, mécanisme, butée, volant moteur. Garage, coût…')) + '">' + esc(r.travaux || '') + '</textarea>'
       + '<div class="rep-sugg">' + SUGGESTIONS_REPARATIONS.map(function(x){ return '<button type="button" data-crepsugg="' + i + '">' + esc(x) + '</button>'; }).join('') + '</div>'
+      + zoneTamponHtml(r, 'creptampon', i)
       + '<button type="button" class="btn-sec carnet-suppr" data-crepsuppr="' + i + '">' + esc(t('Supprimer cette réparation')) + '</button>'
       + '</div>';
   }).join('');
@@ -37785,6 +38752,10 @@ function ecrireChemin(obj, chemin, valeur){
 /* --- Branchements ------------------------------------------------------ */
 let minuteurCarnet = null;
 function wireCarnetForm(v, d){
+  /* A l'ouverture du carnet : carnet et historique deja notes ailleurs. */
+  setTimeout(function(){
+    recupererCarnetConnu(v, { silencieux: true }).catch(function(){}).then(function(){ recupererHistorique(v).catch(function(){}); });
+  }, 400);
   const c = ensureCarnet(v);
   const relancer = function(){
     clearTimeout(minuteurCarnet);
@@ -38101,11 +39072,39 @@ function wireCarnetForm(v, d){
     try{
       const im = await chargerImage(f);
       c.photo = compresserImage(im, 220 * 1024).url;
+      delete c.photoGenerique; delete c.photoGeneriqueRang;
       saveVehicle(v); renderMain();
     }catch(e){ informer(e.message); }
   };
   const phr = document.getElementById('carnetPhotoRetirer');
-  if(phr) phr.onclick = function(){ c.photo = ''; saveVehicle(v); renderMain(); };
+  if(phr) phr.onclick = function(){
+    if(c.photoGenerique) c.photoGeneriqueRefusee = true;   // ne revient pas toute seule
+    c.photo = ''; delete c.photoGenerique; saveVehicle(v); renderMain();
+  };
+  const lancerGenerique = async function(bouton, suivante){
+    const avant = bouton ? bouton.innerHTML : '';
+    if(bouton){ bouton.disabled = true; bouton.innerHTML = '⏳ ' + esc(t('Recherche…')); }
+    let ok = false, err = null;
+    try{ ok = await poserPhotoGenerique(v, { suivante: suivante }); }catch(e){ err = e; }
+    if(bouton){ bouton.disabled = false; bouton.innerHTML = avant; }
+    if(ok){ delete c.photoGeneriqueRefusee; saveVehicle(v); renderMain(); return; }
+    informer(err && /marque/i.test(err.message || '') ? err.message
+      : t(suivante ? 'Pas d’autre photo libre de droits trouvée pour ce modèle.' : 'Aucune photo libre de droits trouvée pour ce modèle (ou pas de connexion Internet). Ajoutez une photo de la voiture.'));
+  };
+  const phg = document.getElementById('carnetPhotoGenerique');
+  if(phg) phg.onclick = function(){ lancerGenerique(phg, false); };
+  const pha = document.getElementById('carnetPhotoAutre');
+  if(pha) pha.onclick = function(){ lancerGenerique(pha, true); };
+  /* Sans photo : celle du modele se pose toute seule (page exacte seulement). */
+  if(!c.photo && !c.photoGeneriqueRefusee && infosModeleVehicule(v)){
+    poserPhotoGenerique(v, { auto: true }).then(function(ok){
+      if(ok && currentId === v.id && !document.querySelector('.dlg-fond')){
+        const actif = document.activeElement;
+        if(!(actif && /^(INPUT|TEXTAREA|SELECT)$/.test(actif.tagName))) renderMain();
+        bandeau('🖼 ' + t('Photo générique du modèle ajoutée au carnet (Wikimedia Commons). Remplacez-la par une photo de la voiture quand vous l’avez.'), 'ok');
+      }
+    }).catch(function(){});
+  }
 
   const idb = document.getElementById('carnetIdentifier');
   if(idb) idb.onclick = function(){ fenetreIdentification(v); };
@@ -38184,6 +39183,7 @@ function wireCarnetForm(v, d){
         const n = chiffresKm(inp.value);
         if(n !== inp.value) inp.value = n;
       }
+      if(e.partage){ ignorerLignePartagee(c, cleEntretien(e)); delete e.partage; }
       e[champ] = inp.value;
       if(champ === 'prochain') e.prochainAuto = false;
       if(champ === 'km'){
@@ -38205,6 +39205,7 @@ function wireCarnetForm(v, d){
     inp.onchange = function(){
       const e = c.entretiens[Number(inp.dataset.centop)];
       if(!e) return;
+      if(e.partage){ ignorerLignePartagee(c, cleEntretien(e)); delete e.partage; }
       e.ops = (e.ops || []).filter(function(x){ return !opMeme(x, inp.value); });
       if(inp.checked) e.ops.push(inp.value);
       inp.closest('.gar-opt').classList.toggle('actif', inp.checked);
@@ -38212,8 +39213,44 @@ function wireCarnetForm(v, d){
     };
   });
   document.querySelectorAll('[data-centsuppr]').forEach(function(b){
-    b.onclick = function(){ c.entretiens.splice(Number(b.dataset.centsuppr), 1); saveVehicle(v); renderMain(); };
+    b.onclick = function(){
+      const e = c.entretiens[Number(b.dataset.centsuppr)];
+      if(e && e.partage) ignorerLignePartagee(c, cleEntretien(e));
+      c.entretiens.splice(Number(b.dataset.centsuppr), 1); saveVehicle(v); renderMain();
+    };
   });
+  /* Tampon de l'entreprise, ligne par ligne */
+  const tamponner = async function(ligne, cleIgnore){
+    if(!String(dealer.raisonSociale || '').trim() && !dealer.cachet){
+      await informer(t('Ajoutez d’abord le cachet de votre entreprise : Réglages › Cachet et signataire (et votre raison sociale dans Coordonnées).'));
+      return false;
+    }
+    if(ligne.partage){ ignorerLignePartagee(c, cleIgnore); delete ligne.partage; }
+    ligne.tampon = tamponDuGarage();
+    if(!dealer.cachet) bandeau(t('Tampon écrit posé (raison sociale, ville, SIRET). Ajoutez l’image de votre cachet dans Réglages › Cachet et signataire pour l’imprimer.'), 'ok');
+    return true;
+  };
+  document.querySelectorAll('[data-centtampon]').forEach(function(b){
+    b.onclick = async function(){ const e = c.entretiens[Number(b.dataset.centtampon)]; if(e && await tamponner(e, cleEntretien(e))){ saveVehicle(v); renderMain(); } };
+  });
+  document.querySelectorAll('[data-centtampon-retirer]').forEach(function(b){
+    b.onclick = function(){ const e = c.entretiens[Number(b.dataset.centtamponRetirer)]; if(e){ if(e.partage){ ignorerLignePartagee(c, cleEntretien(e)); delete e.partage; } delete e.tampon; saveVehicle(v); renderMain(); } };
+  });
+  document.querySelectorAll('[data-creptampon]').forEach(function(b){
+    b.onclick = async function(){ const r = c.reparations[Number(b.dataset.creptampon)]; if(r && await tamponner(r, cleReparation(r))){ saveVehicle(v); renderMain(); } };
+  });
+  document.querySelectorAll('[data-creptampon-retirer]').forEach(function(b){
+    b.onclick = function(){ const r = c.reparations[Number(b.dataset.creptamponRetirer)]; if(r){ if(r.partage){ ignorerLignePartagee(c, cleReparation(r)); delete r.partage; } delete r.tampon; saveVehicle(v); renderMain(); } };
+  });
+  const toutT = document.getElementById('carnetToutTamponner');
+  if(toutT) toutT.onclick = async function(){
+    const miennes = c.entretiens.filter(function(e){ return !e.partage && !e.tampon && (String(e.date || '').trim() || String(e.km || '').trim()); })
+      .concat(c.reparations.filter(function(r){ return !r.partage && !r.tampon && String(r.travaux || '').trim(); }));
+    if(!miennes.length){ bandeau(t('Toutes vos lignes sont déjà tamponnées.'), 'ok'); return; }
+    for(const l of miennes){ if(!(await tamponner(l, ''))) return; }
+    saveVehicle(v); renderMain();
+    bandeau(miennes.length + ' ' + t(miennes.length > 1 ? 'lignes tamponnées' : 'ligne tamponnée'), 'ok');
+  };
   /* Reparations deja faites */
   const ajRep = document.getElementById('carnetAjouterRep');
   if(ajRep) ajRep.onclick = function(){
@@ -38234,6 +39271,7 @@ function wireCarnetForm(v, d){
         const n = chiffresKm(inp.value);
         if(n !== inp.value) inp.value = n;
       }
+      if(r.partage){ ignorerLignePartagee(c, cleReparation(r)); delete r.partage; }
       r[champ] = inp.value;
       saveVehicle(v); relancer();
     };
@@ -38245,12 +39283,17 @@ function wireCarnetForm(v, d){
       if(!r || !zone) return;
       const txt = String(zone.value || '').replace(/[\s,;.]+$/, '');
       zone.value = txt ? txt + ', ' + b.textContent.charAt(0).toLowerCase() + b.textContent.slice(1) : b.textContent;
+      if(r.partage){ ignorerLignePartagee(c, cleReparation(r)); delete r.partage; }
       r.travaux = zone.value;
       saveVehicle(v); relancer();
     };
   });
   document.querySelectorAll('[data-crepsuppr]').forEach(function(b){
-    b.onclick = function(){ c.reparations.splice(Number(b.dataset.crepsuppr), 1); saveVehicle(v); renderMain(); };
+    b.onclick = function(){
+      const r = c.reparations[Number(b.dataset.crepsuppr)];
+      if(r && r.partage) ignorerLignePartagee(c, cleReparation(r));
+      c.reparations.splice(Number(b.dataset.crepsuppr), 1); saveVehicle(v); renderMain();
+    };
   });
 }
 function rouvrirSection(chemin){
@@ -38978,7 +40021,14 @@ function resumeVersions(versions, annee){
     const bons = cles.filter(function(k){ const n = nomModeleDeCle(k); const p = n && anneesPeriode(n.periode); return p && a >= p.debut && a <= p.fin; });
     if(bons.length === 1){ cle = bons[0]; l = l.filter(function(m){ return m.cle === cle; }); }
   }
-  const boites = seul(function(m){ return boiteDepuisTexte(m.boites) || ''; });
+  /* La boite seulement si TOUTES les versions possibles la donnent : une
+     version « Manuelle 5 / Automatique 6 » (les deux existent) suffit a
+     laisser la case vide. Avant, elle etait ignoree, et la C4 2 1.6 HDi
+     110 sortait « Automatique » a cause de sa seule voisine e-HDi BMP6. */
+  const boites = (function(){
+    const v = l.map(function(m){ return boiteDepuisTexte(m.boites) || ''; });
+    return v.length && v.every(function(x){ return x && x === v[0]; }) ? v[0] : '';
+  })();
   const grp = regrouperVersions(l, annee, 0);
   return {
     cle: cle, nom: cle ? nomModeleDeCle(cle) : null, versions: grp,
@@ -39176,15 +40226,21 @@ function choisirMoteurVin(lu, startStop, alternatives){
   });
 }
 
-function fenetreIdentification(v){
+function fenetreIdentification(v, opts){
+  opts = opts || {};
+  const alimenter = !!opts.alimenter;
   return new Promise(function(resolve){
     const c = ensureCarnet(v), veh = v.vehicule || {};
     document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
     const fond = document.createElement('div');
     fond.className = 'dlg-fond';
     fond.innerHTML = '<div class="dlg dlg-ident" role="dialog" aria-modal="true">'
-      + '<div class="dlg-titre">🔎 ' + esc(t('Identifier le véhicule')) + '</div>'
-      + '<div class="dlg-texte">' + esc(t('Ces informations permettent de trouver le code moteur exact, et donc les bonnes pièces.')) + '</div>'
+      + (alimenter
+          ? '<div class="dlg-titre">🗄 ' + esc(t('Alimenter la base véhicules')) + '</div>'
+            + '<div class="dlg-texte">' + esc(t('Une voiture vue passer, même sans dossier chez vous : ses infos techniques vont dans la base partagée. Le prochain garage qui tape cette plaque retrouve le VIN, la motorisation, les CV… Jamais de propriétaire, de kilométrage ni de prix.')) + '</div>'
+            + (opts.message ? '<div class="ident-lu ok">' + esc(opts.message) + '</div>' : '')
+          : '<div class="dlg-titre">🔎 ' + esc(t('Identifier le véhicule')) + '</div>'
+            + '<div class="dlg-texte">' + esc(t('Ces informations permettent de trouver le code moteur exact, et donc les bonnes pièces.')) + '</div>')
       + '<div class="ident-grille">'
       +   '<div class="ident-large"><label>' + esc(t('Plaque d’immatriculation')) + ' — A <span class="ident-etat">' + esc(t('retrouve le VIN si la voiture est déjà connue')) + '</span></label>'
       +     '<div class="ident-pays" id="idPays" role="radiogroup" aria-label="' + esc(t("Pays d'immatriculation")) + '">'
@@ -39210,17 +40266,19 @@ function fenetreIdentification(v){
       +   '<div class="ident-large ident-lu" id="idChLu"></div>'
       +   '<div><label>' + esc(t('Boîte de vitesses')) + '</label><select id="idBoite" class="liste-large">' + optionsBoite(c.boite) + '</select></div>'
       +   '<div><label>' + esc(t('Start & Stop')) + '</label><select id="idStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div>'
+      +   (alimenter ? '<div><label>' + esc(t('Code moteur')) + ' <span class="ident-etat">' + esc(t('facultatif')) + '</span></label><input id="idCodeMoteur" class="mono" maxlength="30" autocapitalize="characters" spellcheck="false" placeholder="' + esc(t('ex. 9HR')) + '"></div>'
+                     + '<div><label>' + esc(t('Couleur')) + ' <span class="ident-etat">' + esc(t('facultatif')) + '</span></label><input id="idCouleur" maxlength="30"></div>' : '')
       + '</div>'
       + '<div class="dlg-detail" id="idAlerte"></div>'
       + '<div class="dlg-actions">'
-      +   '<button type="button" class="dlg-non">' + esc(t('Plus tard')) + '</button>'
-      +   '<button type="button" class="dlg-oui">' + esc(t('Trouver le code moteur')) + '</button>'
+      +   '<button type="button" class="dlg-non">' + esc(t(alimenter ? 'Fermer' : 'Plus tard')) + '</button>'
+      +   '<button type="button" class="dlg-oui">' + esc(t(alimenter ? 'Enregistrer dans la base' : 'Trouver le code moteur')) + '</button>'
       + '</div></div>';
     document.body.appendChild(fond);
     const $ = function(id){ return fond.querySelector('#' + id); };
     $('idPlaque').value = veh.immat || '';
     /* Pays de la plaque : celui de la fiche, sinon le dernier choisi ici. */
-    let paysId = veh.paysImmat && PAYS_PLAQUE.some(function(x){ return x[0] === veh.paysImmat; }) ? veh.paysImmat : '';
+    let paysId = opts.pays ? opts.pays : veh.paysImmat && PAYS_PLAQUE.some(function(x){ return x[0] === veh.paysImmat; }) ? veh.paysImmat : '';
     if(!paysId){ try{ const d = ls.get('paysPlaqueDernier'); paysId = d && PAYS_PLAQUE.some(function(x){ return x[0] === d.value; }) ? d.value : 'FR'; }catch(e){ paysId = 'FR'; } }
     const majPays = function(){
       fond.querySelectorAll('.ident-pays-btn').forEach(function(b){
@@ -39432,6 +40490,11 @@ function fenetreIdentification(v){
       z.className = 'ident-large ident-lu'; z.textContent = t('Recherche…');
       const r = await rechercherPlaque(brut, paysId, v.id);
       if(paysId + ':' + plaqueCle($('idPlaque').value) !== n) return;
+      if(!r && alimenter){
+        z.className = 'ident-large ident-lu';
+        z.textContent = t('Plaque pas encore dans la base : remplissez ce que vous savez, elle y sera ajoutée.');
+        return;
+      }
       if(!r){
         z.className = 'ident-large ident-lu ko';
         const pp = PAYS_PLAQUE.filter(function(x){ return x[0] === paysId; })[0];
@@ -39498,7 +40561,51 @@ function fenetreIdentification(v){
     chargerMotos();
     const fermer = function(r){ fond.remove(); resolve(r); };
     fond.querySelector('.dlg-non').onclick = function(){ fermer(false); };
+    const codeIn = alimenter ? $('idCodeMoteur') : null;
+    if(alimenter){
+      if(codeIn) codeIn.addEventListener('input', function(){ replaceKeepingCaret(codeIn, codeIn.value.toUpperCase()); });
+      /* La motorisation choisie dans la liste apporte son code moteur. */
+      const listeM = $('idMotoListe');
+      if(listeM) listeM.addEventListener('change', function(){
+        setTimeout(function(){ if(motoChoisie && motoChoisie.code_moteur && codeIn && !codeIn.value.trim()) codeIn.value = String(motoChoisie.code_moteur).split(/\s*[\/,(]/)[0].trim(); }, 0);
+      });
+      setTimeout(function(){ try{ $('idPlaque').focus(); }catch(e){} }, 50);
+    }
     fond.querySelector('.dlg-oui').onclick = async function(){
+      if(alimenter){
+        const pl = paysId === 'XX' ? $('idPlaque').value.trim().toUpperCase() : formatPlate($('idPlaque').value.trim(), paysId);
+        const vinA = vinNet($('idVin').value);
+        const manqueA = [];
+        if(plaqueCle(pl).length < 4) manqueA.push(t('la plaque'));
+        else if(!plaquePartageable(pl)) manqueA.push(t('une vraie plaque (pas une plaque W garage)'));
+        if(vinA && !vinBienForme(vinA)) manqueA.push(t('un VIN valide (17 caractères)'));
+        if(!$('idMarque').value.trim() || !$('idModele').value.trim()) manqueA.push(t('la marque et le modèle'));
+        const chA = chevauxDepuisSaisie($('idCh').value);
+        if($('idCh').value.trim() && !chA) manqueA.push(t('une puissance lisible (ex. 125 ou 92 kW)'));
+        if(manqueA.length){ $('idAlerte').textContent = t('Il manque :') + ' ' + manqueA.join(', ') + '.'; return; }
+        const d = {
+          marque: $('idMarque').value.trim().toUpperCase(), modele: $('idModele').value.trim().toUpperCase(),
+          vin: vinA, typeVarianteVersion: $('idD2').value.trim().toUpperCase(), dateFirstImmat: $('idDate').value,
+          energie: $('idEnergie').value, puissanceFiscale: $('idCv').value, motorisation: $('idMoto').value.trim(),
+          codeMoteur: codeIn ? codeIn.value.trim().toUpperCase() : '', puissanceCh: chA ? String(chA) : '',
+          boite: $('idBoite').value, startStop: $('idStartStop').value,
+          couleur: $('idCouleur') ? $('idCouleur').value.trim() : ''
+        };
+        if(motoChoisie && !d.distribution){
+          const dist = distributionDuCode(motoChoisie.code_moteur) || '';
+          if(dist) d.distribution = dist;
+        }
+        Object.keys(d).forEach(function(k){ if(!d[k]) delete d[k]; });
+        const bt = fond.querySelector('.dlg-oui');
+        bt.disabled = true;
+        const r = await ajouterContribution(paysId, pl, d);
+        bt.disabled = false;
+        fermer(true);
+        fenetreIdentification(blankVehicle(), { alimenter: true, pays: paysId,
+          message: '✓ ' + pl + ' · ' + [d.marque, d.modele].join(' ') + ' — '
+            + (r.envoye ? t('ajouté à la base partagée. Vous pouvez en saisir un autre.') : t('gardé sur cet appareil, envoyé dès que vous serez connecté.')) });
+        return;
+      }
       const vin = vinNet($('idVin').value);
       const manque = [];
       if(vin && !vinBienForme(vin)) manque.push(t('un VIN valide (17 caractères)'));
@@ -39532,6 +40639,8 @@ function fenetreIdentification(v){
       if($('idStartStop').value){ c.startStop = $('idStartStop').value; c.startStopAuto = $('idStartStop').dataset.auto === '1'; }
       saveVehicle(v);
       fermer(true);
+      recupererHistorique(v).catch(function(){});
+      if(!c.technique && await recupererCarnetConnu(v, { force: true })) return;
       await identifierMoteur(v);
     };
   });
@@ -40222,8 +41331,213 @@ async function manqueDeCredit(v, etape){
   majBoutonCredits();
 }
 
+/* Ce qui decrit la motorisation pour le serveur (fiche technique). */
+function descripteurFiche(v){
+  const c = ensureCarnet(v), veh = v.vehicule || {};
+  return {
+    marque: veh.marque, modele: veh.modele, generation: c.generation, motorisation: c.motorisation,
+    boite: c.boite, code_moteur: c.codeMoteur, energie: libelleEnergie(veh.energie || '') || veh.energie, energie_code: veh.energie || '',
+    stop_start: texteStartStop(c.startStop),
+    distribution: distributionEffective(c) ? distributionEffective(c) + (c.distribution ? ' (confirmé par le garage, fait foi)' : ' (d’après le code moteur, fait foi)') : '',
+    type_variante_version: veh.typeVarianteVersion, premiere_mise_en_circulation: fmtDate(veh.dateFirstImmat),
+    puissance_fiscale: veh.puissanceFiscale, puissance_ch: c.puissanceCh || '', vin: veh.vin, pays_immatriculation: paysPlaque(v)
+  };
+}
+
+/* 3.32 : CARNET DEJA FAIT POUR CETTE VOITURE. Un garage Autivio a deja
+   genere (et paye) le carnet de ce vehicule : sa fiche technique et ses
+   references OEM reviennent GRATUITEMENT des que la plaque ou le VIN est
+   tape (supabase/23-carnets-vehicules.sql). La demande porte aussi
+   « liste: motorisations » : une ancienne fonction serveur y repond
+   « Marque et modele requis » sans rien couter, au lieu de generer. */
+const carnetConnuDemande = {};
+let carnetConnuAbsent = false;
+async function recupererCarnetConnu(v, opts){
+  opts = opts || {};
+  if(!v || carnetConnuAbsent || !serveurPret() || !sessionServeur || !sessionServeur.access_token) return false;
+  const c = ensureCarnet(v), veh = v.vehicule || {};
+  if(c.technique && !opts.force) return false;
+  const vin = vinNet(veh.vin || ''), plaque = String(veh.immat || '').trim();
+  const okVin = vinBienForme(vin), okPlaque = plaquePartageable(plaque);
+  if(!okVin && !okPlaque) return false;
+  const sig = (okVin ? vin : '') + '|' + paysPlaque(v) + '|' + plaqueCle(plaque);
+  if(!opts.force && carnetConnuDemande[v.id] === sig) return false;
+  carnetConnuDemande[v.id] = sig;
+  let rep;
+  try{
+    rep = await appelFicheTechnique({ mode: 'carnet_connu', liste: 'motorisations', vehicule: {},
+      vin: okVin ? vin : '', plaque: okPlaque ? plaque : '', pays: paysPlaque(v) });
+  }catch(e){
+    if(/marque et mod/i.test(String(e.message || ''))) carnetConnuAbsent = true;   // fonction pas encore mise a jour
+    return false;
+  }
+  if(!rep || !rep.connu || !rep.fiche || !rep.fiche.titre) return false;
+  if(c.technique && !opts.force) return false;
+  const d = rep.vehicule || {};
+  /* Une autre voiture sous la meme plaque (plaque reattribuee, erreur de
+     saisie) : on demande avant de remplir. */
+  const diffMarque = veh.marque && d.marque && normPart(veh.marque) !== normPart(d.marque);
+  const diffModele = veh.modele && d.modele && normPart(romainEnChiffres(veh.modele)) !== normPart(romainEnChiffres(d.modele));
+  const diffMoteur = c.motorisation && d.motorisation && normPart(c.motorisation) !== normPart(d.motorisation)
+    && !(c.codeMoteur && d.code_moteur && normPart(c.codeMoteur).slice(0, 3) === normPart(d.code_moteur).slice(0, 3));
+  const nom = [d.marque, d.modele, d.motorisation, d.code_moteur ? '(' + d.code_moteur + ')' : ''].filter(Boolean).join(' ');
+  if(diffMarque || diffModele || diffMoteur){
+    if(opts.silencieux) return false;
+    const ok = await demander({
+      titre: t('Carnet déjà réalisé pour ce véhicule'),
+      texte: t('Un garage Autivio a déjà fait le carnet d’entretien de cette voiture, mais pour :') + ' ' + nom + '. ' + t('Le reprendre gratuitement ? Vos informations seront remplacées par celles-ci.'),
+      oui: t('Reprendre gratuitement'), non: t('Non')
+    });
+    if(!ok) return false;
+  }
+  const remplace = diffMarque || diffModele || diffMoteur;
+  const poser = function(obj, k, val){ if(val && (remplace || !String(obj[k] == null ? '' : obj[k]).trim())) obj[k] = val; };
+  poser(veh, 'marque', d.marque); poser(veh, 'modele', d.modele);
+  poser(c, 'generation', d.generation); poser(c, 'motorisation', d.motorisation); poser(c, 'codeMoteur', d.code_moteur);
+  if(d.boite && /^(Manuelle|Automatique)$/.test(d.boite)) poser(c, 'boite', d.boite);
+  if(d.energie_code) poser(veh, 'energie', d.energie_code);
+  const ch = parseInt(d.puissance_ch, 10); if(ch) poser(c, 'puissanceCh', ch);
+  const cv = String(d.puissance_fiscale || '').replace(/[^0-9]/g, ''); if(cv) poser(veh, 'puissanceFiscale', cv);
+  const dist = /cha[iî]ne/i.test(d.distribution || '') ? 'chaîne' : (/courroie/i.test(d.distribution || '') ? 'courroie' : '');
+  if(dist) poser(c, 'distribution', dist);
+  const ss = startStopDepuisTexte(d.stop_start); if(ss && ss !== 'deux') poser(c, 'startStop', ss);
+  if(d.vin && vinBienForme(vinNet(d.vin))) poser(veh, 'vin', vinNet(d.vin));
+  const f = JSON.parse(JSON.stringify(rep.fiche));
+  ['refs_filtres', 'refs_freins'].forEach(function(k){
+    (f[k] || []).forEach(function(x){ if(x){ x.oem = oemPropre(x.oem); x.equivalents = equivalentsPremium(x.equivalents); } });
+  });
+  c.technique = f;
+  c.techniqueDate = Date.now();
+  c.techniqueWeb = rep.recherche_web !== false;
+  c.techniqueCle = cleTechnique(v);
+  c.techniqueGratuite = true;
+  if(!c.identifie) c.identifie = { date: Date.now(), code: c.codeMoteur || '', certitude: t('carnet partagé') };
+  await saveVehicle(v);
+  if(currentId === v.id && !document.querySelector('.dlg-fond')){ try{ renderMain(); }catch(e){} }
+  bandeau('🎁 ' + t('Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.') + (nom ? ' — ' + nom : ''), 'ok');
+  return true;
+}
+
+/* 3.33 : ENTRETIENS ET REPARATIONS PARTAGES (supabase/24-historique-
+   partage.sql). Ce que ce garage note dans le carnet d'un vehicule part
+   sous sa plaque et son VIN ; les autres garages le retrouvent en tapant
+   l'une ou l'autre. Chaque garage n'envoie que SES lignes : celles venues
+   d'ailleurs portent « partage » et ne repartent pas. */
+let historiqueAbsent = false;
+const historiqueEnvoye = {}, historiqueDemande = {};
+const minuteursHistorique = {};
+function cleEntretien(e){ return 'E|' + String(e.date || '').replace(/\D/g, '') + '|' + String(e.km || '').replace(/\D/g, ''); }
+function cleReparation(r){ return 'R|' + String(r.date || '').replace(/\D/g, '') + '|' + String(r.km || '').replace(/\D/g, '') + '|' + normPart(String(r.travaux || '').slice(0, 40)); }
+function cleIdentiteHistorique(v){
+  const veh = v.vehicule || {};
+  const vin = vinNet(veh.vin || ''), plaque = String(veh.immat || '').trim();
+  return { vin: vinBienForme(vin) ? vin : '', plaque: plaquePartageable(plaque) ? plaque : '', pays: paysPlaque(v) };
+}
+function historiqueAEnvoyer(v){
+  const c = ensureCarnet(v);
+  return {
+    entretiens: c.entretiens.filter(function(e){ return e && !e.partage && (String(e.date || '').trim() || String(e.km || '').trim()); })
+      .map(function(e){ const o = { date: e.date || '', km: e.km || '', prochain: e.prochain || '', ops: (e.ops || []).slice(0, 30), obs: e.obs || '' };
+        if(e.tampon && e.tampon.nom !== undefined) o.tampon = { nom: e.tampon.nom || '', ville: e.tampon.ville || '', siret: e.tampon.siret || '', date: e.tampon.date || '' };
+        return o; }),
+    reparations: c.reparations.filter(function(r){ return r && !r.partage && String(r.travaux || '').trim(); })
+      .map(function(r){ const o = { date: r.date || '', km: r.km || '', travaux: r.travaux || '' };
+        if(r.tampon && r.tampon.nom !== undefined) o.tampon = { nom: r.tampon.nom || '', ville: r.tampon.ville || '', siret: r.tampon.siret || '', date: r.tampon.date || '' };
+        return o; })
+  };
+}
+function planifierPartageHistorique(v){
+  if(!v || !v.id || historiqueAbsent || !v.carnet) return;
+  clearTimeout(minuteursHistorique[v.id]);
+  minuteursHistorique[v.id] = setTimeout(function(){ envoyerHistorique(v).catch(function(){}); }, 6000);
+}
+async function envoyerHistorique(v){
+  if(historiqueAbsent || !serveurPret() || !sessionServeur || !sessionServeur.access_token) return;
+  const id = cleIdentiteHistorique(v);
+  if(!id.vin && !id.plaque) return;
+  const d = historiqueAEnvoyer(v);
+  const sig = id.vin + '|' + id.pays + '|' + plaqueCle(id.plaque) + '|' + JSON.stringify(d);
+  if(historiqueEnvoye[v.id] === sig) return;
+  /* Rien a soi et rien d'envoye avant : inutile d'appeler le serveur. */
+  if(!d.entretiens.length && !d.reparations.length && historiqueEnvoye[v.id] === undefined && !v.carnet.historiquePartage) return;
+  try{
+    await serveurAppel('/rest/v1/rpc/partager_historique', { method: 'POST',
+      body: { p_vin: id.vin, p_pays: id.pays, p_plaque: id.plaque, p_donnees: d } });
+    historiqueEnvoye[v.id] = sig;
+    if((d.entretiens.length || d.reparations.length) && !v.carnet.historiquePartage){ v.carnet.historiquePartage = true; }
+  }catch(e){
+    if(/partager_historique|PGRST202|404/i.test(String(e && e.message || e))) historiqueAbsent = true;
+  }
+}
+async function recupererHistorique(v, opts){
+  opts = opts || {};
+  if(!v || historiqueAbsent || !serveurPret() || !sessionServeur || !sessionServeur.access_token) return 0;
+  const id = cleIdentiteHistorique(v);
+  if(!id.vin && !id.plaque) return 0;
+  const sig = id.vin + '|' + id.pays + '|' + plaqueCle(id.plaque);
+  if(!opts.force && historiqueDemande[v.id] === sig) return 0;
+  historiqueDemande[v.id] = sig;
+  let rep;
+  try{
+    rep = await serveurAppel('/rest/v1/rpc/historique_vehicule', { method: 'POST',
+      body: { p_vin: id.vin, p_pays: id.pays, p_plaque: id.plaque } });
+  }catch(e){
+    if(/historique_vehicule|PGRST202|404/i.test(String(e && e.message || e))) historiqueAbsent = true;
+    return 0;
+  }
+  if(!rep || typeof rep !== 'object') return 0;
+  const c = ensureCarnet(v);
+  const ignores = Array.isArray(c.historiqueIgnore) ? c.historiqueIgnore : [];
+  const connus = {};
+  c.entretiens.forEach(function(e){ connus[cleEntretien(e)] = 1; });
+  c.reparations.forEach(function(r){ connus[cleReparation(r)] = 1; });
+  let ne = 0, nr = 0;
+  (Array.isArray(rep.entretiens) ? rep.entretiens : []).forEach(function(e){
+    if(!e || typeof e !== 'object') return;
+    const k = cleEntretien(e);
+    if(k === 'E||' || connus[k] || ignores.indexOf(k) !== -1) return;
+    connus[k] = 1; ne++;
+    c.entretiens.push({ date: String(e.date || ''), km: String(e.km || ''), prochain: String(e.prochain || ''),
+      ops: Array.isArray(e.ops) ? e.ops.map(String) : [], obs: String(e.obs || ''), partage: true,
+      tampon: tamponRecu(e.tampon) });
+  });
+  (Array.isArray(rep.reparations) ? rep.reparations : []).forEach(function(r){
+    if(!r || typeof r !== 'object' || !String(r.travaux || '').trim()) return;
+    const k = cleReparation(r);
+    if(connus[k] || ignores.indexOf(k) !== -1) return;
+    connus[k] = 1; nr++;
+    c.reparations.push({ date: String(r.date || ''), km: String(r.km || ''), travaux: String(r.travaux || ''), partage: true,
+      tampon: tamponRecu(r.tampon) });
+  });
+  if(!ne && !nr) return 0;
+  trierEntretiens(c);
+  const cleR = function(r){ const p = dparts(r.date || ''); return p.y ? p.y + p.m + p.d : '99999999'; };
+  c.reparations.sort(function(a, b){ return cleR(a).localeCompare(cleR(b)); });
+  await saveVehicle(v);
+  if(currentId === v.id && !document.querySelector('.dlg-fond')){
+    const actif = document.activeElement;
+    if(!(actif && /^(INPUT|TEXTAREA|SELECT)$/.test(actif.tagName) && actif.closest('.carnet-ligne'))){ try{ renderMain(); }catch(e){} }
+  }
+  const morceaux = [];
+  if(ne) morceaux.push(ne + ' ' + t(ne > 1 ? 'entretiens' : 'entretien'));
+  if(nr) morceaux.push(nr + ' ' + t(nr > 1 ? 'réparations' : 'réparation'));
+  bandeau('🔧 ' + t('Historique retrouvé grâce à la plaque / au VIN (notés par d’autres garages Autivio) :') + ' ' + morceaux.join(' · '), 'ok');
+  return ne + nr;
+}
+function tamponRecu(x){
+  if(!x || typeof x !== 'object' || !String(x.nom || '').trim()) return undefined;
+  return { nom: String(x.nom).slice(0, 80), ville: String(x.ville || '').slice(0, 60), siret: String(x.siret || '').slice(0, 20), date: String(x.date || '').slice(0, 10) };
+}
+/* Une ligne venue d'un autre garage, supprimee ici : elle ne revient pas. */
+function ignorerLignePartagee(c, cle){
+  if(!Array.isArray(c.historiqueIgnore)) c.historiqueIgnore = [];
+  if(c.historiqueIgnore.indexOf(cle) === -1) c.historiqueIgnore.push(cle);
+}
+
 async function genererTechniqueIA(v, apresIdentification){
   const c = ensureCarnet(v), veh = v.vehicule || {};
+  /* Carnet deja fait pour cette voiture par un garage Autivio : gratuit. */
+  if(!c.technique && await recupererCarnetConnu(v, { force: true })) return;
   /* Sans identification ni code moteur : on identifie d'abord. */
   if(!apresIdentification && !c.identifie && !String(c.codeMoteur || '').trim()){
     await fenetreIdentification(v);
@@ -40249,7 +41563,8 @@ async function genererTechniqueIA(v, apresIdentification){
     });
     if(reprendre){
       /* Reprendre compte comme un carnet : un credit pour ce vehicule. */
-      try{ await appelFicheTechnique({ mode: 'reprendre', vehicule_id: v.id, vin: veh.vin || '' }); }
+      try{ await appelFicheTechnique({ mode: 'reprendre', vehicule_id: v.id, vin: veh.vin || '',
+                                       vehicule: descripteurFiche(source), plaque: veh.immat || '', pays: paysPlaque(v) }); }
       catch(e){
         if(e.code === 'credit'){ await manqueDeCredit(v, 'reprendre'); return; }
         await informer(e.message || String(e)); return;
@@ -40274,14 +41589,8 @@ async function genererTechniqueIA(v, apresIdentification){
   const attente = fenetreAttente(t('Recherche des données techniques…'),
     t('L’IA recherche et vérifie les caractéristiques, les références de pièces et les couples de serrage de ce moteur. Comptez une à deux minutes.'));
   try{
-    const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, nouvelle: nouvelle, vehicule: {
-      marque: veh.marque, modele: veh.modele, generation: c.generation, motorisation: c.motorisation,
-      boite: c.boite, code_moteur: c.codeMoteur, energie: libelleEnergie(veh.energie || '') || veh.energie,
-      stop_start: texteStartStop(c.startStop),
-      distribution: distributionEffective(c) ? distributionEffective(c) + (c.distribution ? ' (confirmé par le garage, fait foi)' : ' (d’après le code moteur, fait foi)') : '',
-      type_variante_version: veh.typeVarianteVersion, premiere_mise_en_circulation: fmtDate(veh.dateFirstImmat),
-      puissance_fiscale: veh.puissanceFiscale, puissance_ch: c.puissanceCh || '', vin: veh.vin, pays_immatriculation: paysPlaque(v)
-    } });
+    const rep = await appelFicheTechnique({ mode: 'fiche', vehicule_id: v.id, nouvelle: nouvelle, vehicule: descripteurFiche(v),
+      plaque: veh.immat || '', pays: paysPlaque(v) });
     const f = rep.fiche;
     if(!f || !f.titre) throw new Error(t('Réponse incomplète. Réessayez.'));
     ['refs_filtres', 'refs_freins'].forEach(function(k){
@@ -40294,7 +41603,10 @@ async function genererTechniqueIA(v, apresIdentification){
     saveVehicle(v);
     attente.fermer();
     renderMain();
-    bandeau(rep.partagee
+    if(rep.vehicule_connu) c.techniqueGratuite = true;
+    bandeau(rep.vehicule_connu
+      ? '🎁 ' + t('Carnet d’entretien déjà réalisé par un garage Autivio pour ce véhicule : fiche technique et références OEM récupérées gratuitement.')
+      : rep.partagee
       ? t('Fiche déjà générée pour cette motorisation : reprise sans nouvelle recherche. Vérifiez-la avant de télécharger le PDF.')
       : t('Données techniques prêtes : vérifiez-les avant de télécharger le PDF.'), 'ok');
   }catch(e){
@@ -40630,6 +41942,12 @@ async function genererCarnetPdf(v, d){
       const cadre = await recadrerPhoto(c.photo, LARG / hPhoto);
       const img = await pdf.embedJpg(b64ToBytes(cadre.split(',')[1]));
       page.drawImage(img, { x: MG, y: y - hPhoto, width: LARG, height: hPhoto });
+      /* Photo generique : son credit (licence Creative Commons) sous l'image. */
+      if(c.photoGenerique && c.photoGenerique.credit){
+        let cr = texteCarnet(c.photoGenerique.credit);
+        while(cr.length > 10 && largeur(cr, 6, norm) > LARG) cr = cr.slice(0, -2);
+        ecrire(cr, MG + LARG - largeur(cr, 6, norm), y - hPhoto - 8, 6, norm, DOUX);
+      }
     }catch(e){
       page.drawRectangle({ x: MG, y: y - hPhoto, width: LARG, height: hPhoto, color: FOND });
     }
@@ -40803,6 +42121,36 @@ async function genererCarnetPdf(v, d){
     return f;
   };
   let nChamp = 0;
+  /* Tampons : l'image du cachet (lignes de ce garage), sinon un tampon ecrit. */
+  let imgCachet = null;
+  if(d && d.cachet && /^data:image/.test(d.cachet)){
+    try{
+      const brut = d.cachet.split(',')[1] || '';
+      imgCachet = /^data:image\/png/i.test(d.cachet) ? await pdf.embedPng(b64ToBytes(brut)) : await pdf.embedJpg(b64ToBytes(brut));
+    }catch(err){ imgCachet = null; }
+  }
+  const TAMPON = rgb(0.13, 0.29, 0.62);
+  const poserTampon = function(ligne, xG, yB, wMax, hMax){
+    const tp = ligne && ligne.tampon;
+    if(!tp || tp.nom === undefined || wMax < 20 || hMax < 12) return;
+    if(!ligne.partage && imgCachet){
+      let h = hMax, w = imgCachet.width * (h / imgCachet.height);
+      if(w > wMax){ w = wMax; h = imgCachet.height * (w / imgCachet.width); }
+      page.drawImage(imgCachet, { x: xG + wMax - w, y: yB + (hMax - h) / 2, width: w, height: h });
+      return;
+    }
+    const lignes = [String(tp.nom || 'Garage'), tp.ville || '', tp.siret ? 'SIRET ' + tp.siret : '', tp.date ? fmtDate(tp.date) : ''].filter(Boolean);
+    const taille = Math.max(4.6, Math.min(6.4, (hMax - 6) / lignes.length / 1.15));
+    const wTxt = Math.min(wMax, 8 + Math.max.apply(null, lignes.map(function(l, k){ return largeur(texteCarnet(l), taille, k ? norm : gras); })));
+    const hTxt = Math.min(hMax, 6 + lignes.length * taille * 1.15);
+    const x0 = xG + wMax - wTxt, y0 = yB + (hMax - hTxt) / 2;
+    page.drawRectangle({ x: x0, y: y0, width: wTxt, height: hTxt, borderColor: TAMPON, borderWidth: 1, opacity: 0, borderOpacity: 0.9 });
+    lignes.forEach(function(l, k){
+      let txt = texteCarnet(l);
+      while(txt.length > 3 && largeur(txt, taille, k ? norm : gras) > wTxt - 8) txt = txt.slice(0, -2) + '…';
+      page.drawText(txt, { x: x0 + 4, y: y0 + hTxt - 3 - (k + 1) * taille * 1.08, size: taille, font: k ? norm : gras, color: TAMPON });
+    });
+  };
   const entretiens = (c.entretiens || []).slice();
   const nbVides = function(){ return Math.max(0, Math.floor((y - BAS) / hRang)); };
   const total = Math.max(entretiens.length + 4, entretiens.length + nbVides());
@@ -40861,6 +42209,8 @@ async function genererCarnetPdf(v, d){
     if(e){
       const obs = lignesDe(e.obs || '', norm, 6.6, wObs - 8).slice(0, 2);
       obs.forEach(function(l, k){ ecrire(l, x + 4, yb + hRang - 10 - k * 8, 6.6, norm, ENCRE); });
+      /* Le tampon sous les observations, a droite de la case. */
+      poserTampon(e, x + 4, yb + 3, wObs - 8, hRang - 6 - (obs.length ? 8 + obs.length * 8 : 0));
       const pr = String(e.prochain || '').replace(/\D/g, '');
       if(pr) ecrire(Number(pr).toLocaleString('fr-FR'), x + wObs + 4, ym, 7.2, norm, ENCRE);
     }
@@ -40910,7 +42260,10 @@ async function genererCarnetPdf(v, d){
     fd.setMaxLength(10);
     actionJs(fd, 'K', JS_PDF_DATE_K); actionJs(fd, 'F', JS_PDF_DATE_F);
     bulle(fd, 'Date JJ/MM/AAAA : tapez seulement les chiffres, les barres se mettent toutes seules.');
-    const ft = champTexte('rep_travaux_' + i, MG + wD + 4, yb + 3, wT - 8, hR - 6, 8);
+    const avecTampon = !!(rp && rp.tampon && rp.tampon.nom !== undefined);
+    const wTampon = avecTampon ? Math.min(Math.round(wT * 0.3), Math.round((hR - 8) * 2)) : 0;
+    const ft = champTexte('rep_travaux_' + i, MG + wD + 4, yb + 3, wT - 8 - (wTampon ? wTampon + 6 : 0), hR - 6, 8);
+    if(avecTampon) poserTampon(rp, MG + wD + wT - 4 - wTampon, yb + 4, wTampon, hR - 8);
     ft.enableMultiline();
     bulle(ft, 'Entretien, réparations, pièces, garage, coût');
     ecrire('km', MG + LARG - 6 - largeur('km', 6.4), yb + hR / 2 - 2.6, 6.4, norm, DOUX);
