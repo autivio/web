@@ -9911,7 +9911,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.18';
+const VERSION = '3.22';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14042,6 +14042,7 @@ function demanderTexte(options){
       + (options.texte ? '<div class="dlg-texte">' + esc(options.texte) + '</div>' : '')
       + '<input class="dlg-champ" type="' + (options.type || 'text') + '"'
       +   ' value="' + esc(options.valeur || '') + '"'
+      +   (options.type === 'email' ? ' autocomplete="off" autocapitalize="off" spellcheck="false"' : '')
       +   ' placeholder="' + esc(options.exemple || '') + '">'
       + ((options.choix || []).length
           ? '<div class="dlg-choix">' + options.choix.map(function(c){
@@ -14105,6 +14106,19 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.22': { date: '05/11/2026', lignes: [
+    "Signature des e-mails plus aérée : textes plus grands, plus d’espace entre les lignes, et logo du garage nettement plus grand (jusqu’à 340 px de large)."
+  ] },
+  '3.21': { date: '05/11/2026', lignes: [
+    "Signature des e-mails refaite comme une carte de visite d’entreprise, sans cadre ni fond : nom en gras, fonction en italique à la couleur du garage, téléphone en gras cliquable, adresse (qui ouvre le plan) et e-mail en gris soulignés, SIRET, puis le logo du garage en bas."
+  ] },
+  '3.20': { date: '05/11/2026', lignes: [
+    "Carnet d’entretien envoyé par e-mail : il arrive aussi vite que les autres documents. Le PDF joint au message n’a plus les petits programmes des cases (date avec barres, « Prochain » calculé), que les antivirus des messageries (Outlook surtout) gardaient plusieurs minutes en analyse. Les cases restent remplissables ; le carnet téléchargé garde ses calculs automatiques."
+  ] },
+  '3.19': { date: '05/11/2026', lignes: [
+    "Envoyer par e-mail : la case de l’adresse reste vide ; les adresses déjà enregistrées sont proposées juste en dessous, un clic suffit.",
+    "Carte de visite des e-mails : transparente (plus de fond blanc ni de panneau foncé) et avec le logo de votre garage à la place des initiales. Le logo est mis en ligne juste avant l’envoi pour s’afficher chez le destinataire. Sans logo, ce sont les initiales du garage ; sans nom de garage, rien."
+  ] },
   '3.18': { date: '05/11/2026', lignes: [
     "Carnet d’entretien : l’interrupteur « Manuellement / Automatiquement » est retiré. Les cases se remplissent toujours toutes seules (d’après la motorisation, le code moteur et la date) et restent modifiables à la main ; pour tout trouver d’un coup, utilisez le bouton du VIN en bas du formulaire."
   ] },
@@ -28305,8 +28319,17 @@ async function pdfDuDocument(v, d){
    message seul : le destinataire recevait « veuillez trouver ci-joint »
    et aucune piece jointe. Desormais l'envoi s'arrete, et la raison
    s'affiche. */
+/* PDF fabrique pour un e-mail : sans scripts. Un PDF qui contient du
+   JavaScript (les cases intelligentes du carnet : date avec barres,
+   « Prochain » calcule) est mis en quarantaine plusieurs minutes par les
+   antivirus des messageries (Outlook / Microsoft surtout) avant d'etre
+   livre. Les cases restent remplissables, seuls les calculs automatiques
+   manquent ; le PDF telecharge, lui, garde tout. */
+let PDF_POUR_MAIL = false;
 async function piecesJointes(v, d){
-  const p = await pdfDuDocument(v, d);
+  PDF_POUR_MAIL = true;
+  let p = null;
+  try{ p = await pdfDuDocument(v, d); }finally{ PDF_POUR_MAIL = false; }
   if(!p){
     if(PDF_DOCUMENTS[currentDoc]){
       throw new Error(t('Le PDF n’a pas pu être fabriqué, le message n’est pas parti.')
@@ -28879,14 +28902,18 @@ function nomDocCourant(){
 function envoyerParMail(v, d){
   const f = (v && v.facture) || {};
   const veh = (v && v.vehicule) || {};
-  let dest = (f.clientEmail || '').trim();
-  if(!dest) dest = (carnetMails()[0] || '');
+  /* La case reste vide : les adresses deja enregistrees sont seulement
+     proposees en dessous (celle du client de la facture en premier). */
+  const client = (f.clientEmail || '').trim();
+  const proposees = [client].concat(carnetMails()).filter(function(x, i, l){
+    return x && l.findIndex(function(y){ return String(y).toLowerCase() === String(x).toLowerCase(); }) === i;
+  }).slice(0, 6);
   demanderTexte({
     titre: t('Envoyer par e-mail'),
     texte: t('Le document part avec son PDF en pièce jointe.'),
-    valeur: dest, type: 'email', obligatoire: true,
+    valeur: '', type: 'email', obligatoire: true,
     exemple: 'client@exemple.fr',
-    choix: carnetMails().slice(0, 6),
+    choix: proposees,
     oui: t('Envoyer')
   }).then(function(adresse){
     if(!adresse) return;
@@ -33730,6 +33757,10 @@ function initialesGarage(nom){
    Outlook ignore les tailles maximales, et un logo tout en longueur
    serait sinon deforme ou demesure. */
 function medaillonCarte(d, marque){
+  if(!d.logoUrl && typeof dealer !== 'undefined' && dealer && dealer.logoUrl && (!d.raisonSociale || d.raisonSociale === dealer.raisonSociale)){
+    d = Object.assign({}, d, { logoUrl: dealer.logoUrl, logoDim: dealer.logoDim });
+  }
+  if(!d.logoUrl && !String(d.raisonSociale || '').trim()) return '';
   if(d.logoUrl){
     const dim = d.logoDim || { w: 120, h: 64 };
     const e = Math.min(120 / (dim.w || 120), 64 / (dim.h || 64), 1);
@@ -33750,58 +33781,53 @@ function medaillonCarte(d, marque){
 function carteSignatureHtml(d){
   d = d || {};
   const th = themeCourant();
-  const panneau = th.barre, texte = th.barreInk;
-  const accent = th.cta, accentInk = th.ctaInk, marque = th.brand;
-  /* Signataire : « M. DUPONT, gerant » donne le nom et la fonction. */
+  /* Signature façon carte de visite d'entreprise, sans cadre ni fond :
+       NOM (gras)
+       Fonction (italique, couleur du garage)
+       Téléphone (gras, souligné, cliquable)
+       Adresse (gris, soulignée, ouvre le plan) — e-mail — SIRET
+       logo du garage en bas. */
+  const marque = th.brand || '#1f5f9f';
+  const gris = '#8a96a3', noir = '#111111';
   const signe = String(d.signataire || d.representant || '').trim();
   const coupe = signe.indexOf(',');
   const nomSigne = coupe > 0 ? signe.slice(0, coupe).trim() : signe;
-  const fonction = coupe > 0 ? signe.slice(coupe + 1).trim() : '';
-  const adresse = [d.adresse || '', ((d.cp || '') + ' ' + (d.ville || '')).trim()]
-    .filter(Boolean).join(', ');
-  const ligne = function(symbole, valeur, lien){
-    if(!valeur) return '';
-    const v = lien
-      ? '<a href="' + lien + '" style="color:' + texte + ';text-decoration:none">' + esc(valeur) + '</a>'
-      : esc(valeur);
-    return '<tr>'
-      + '<td valign="top" style="padding:3px 8px 3px 0;color:' + accent + ';font-size:13px;width:16px">' + symbole + '</td>'
-      + '<td style="padding:3px 0;color:' + texte + ';font-size:13px;line-height:1.4">' + v + '</td>'
-      + '</tr>';
+  const fonctionBrute = coupe > 0 ? signe.slice(coupe + 1).trim() : '';
+  const fonction = fonctionBrute ? fonctionBrute.charAt(0).toUpperCase() + fonctionBrute.slice(1) : '';
+  const raison = String(d.raisonSociale || '').trim();
+  /* Le logo, s'il est en ligne (sinon la raison sociale reste ecrite). */
+  let logoUrl = d.logoUrl, logoDim = d.logoDim;
+  if(!logoUrl && typeof dealer !== 'undefined' && dealer && dealer.logoUrl && (!raison || raison === dealer.raisonSociale)){
+    logoUrl = dealer.logoUrl; logoDim = dealer.logoDim;
+  }
+  const titre = nomSigne || raison;
+  const sousTitre = [fonction, (nomSigne && raison && !logoUrl) ? raison : ''].filter(Boolean).join(' — ')
+    || (!nomSigne ? '' : '');
+  const adresse = [d.adresse || '', ((d.cp || '') + ' ' + (d.ville || '')).trim()].filter(Boolean).join(' ');
+  const p = function(contenu, style){ return '<p style="margin:0 0 12px;' + (style || '') + '">' + contenu + '</p>'; };
+  const lien = function(href, txt, couleur, gras){
+    return '<a href="' + esc(href) + '" style="color:' + couleur + ';text-decoration:underline;' + (gras ? 'font-weight:bold;' : '') + '">' + esc(txt) + '</a>';
   };
-  const telLien = d.tel ? 'tel:' + String(d.tel).replace(/[^0-9+]/g, '') : '';
+  let logo = '';
+  if(logoUrl){
+    /* Logo bien visible : jusqu'a 340 px de large et 110 px de haut. */
+    const dim = logoDim || { w: 340, h: 110 };
+    const e = Math.min(340 / (dim.w || 340), 110 / (dim.h || 110), 1);
+    const w = Math.max(1, Math.round((dim.w || 340) * e)), h = Math.max(1, Math.round((dim.h || 110) * e));
+    logo = '<img src="' + esc(logoUrl) + '" width="' + w + '" height="' + h + '" alt="' + esc(raison) + '" '
+      + 'style="display:block;border:0;width:' + w + 'px;height:' + h + 'px;margin:16px 0 0">';
+  }
   return ''
-    + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" '
-    +   'style="max-width:560px;margin:22px 0 0;border-collapse:separate;'
-    +   'border:1px solid ' + th.ligne + ';border-radius:12px;overflow:hidden;'
-    +   'font-family:Arial,Helvetica,sans-serif">'
-    + '<tr>'
-    /* --- partie claire : medaillon et signataire --- */
-    + '<td width="36%" valign="middle" align="center" bgcolor="#ffffff" '
-    +   'style="padding:20px 12px;background:#ffffff;border-right:5px solid ' + accent + '">'
-    +   medaillonCarte(d, marque)
-    +   (nomSigne
-        ? '<div style="margin:10px 0 0;font-size:15px;font-weight:bold;color:' + marque + ';'
-          + 'line-height:1.25">' + esc(nomSigne) + '</div>' : '')
-    +   (fonction
-        ? '<div style="margin:3px 0 0;font-size:12px;color:#6b7686">' + esc(fonction) + '</div>' : '')
-    + '</td>'
-    /* --- partie foncee : raison sociale et coordonnees --- */
-    + '<td valign="middle" bgcolor="' + panneau + '" '
-    +   'style="padding:18px 20px;background:' + panneau + '">'
-    +   (d.raisonSociale
-        ? '<div style="margin:0 0 12px"><span style="display:inline-block;padding:6px 12px;'
-          + 'background:' + accent + ';color:' + accentInk + ';font-size:13px;font-weight:bold;'
-          + 'letter-spacing:1.2px;text-transform:uppercase">' + esc(d.raisonSociale) + '</span></div>'
-        : '')
-    +   '<table role="presentation" cellpadding="0" cellspacing="0" border="0">'
-    +     ligne('&#9679;', adresse)
-    +     ligne('&#9742;', d.tel, telLien)
-    +     ligne('&#9993;', d.email, d.email ? 'mailto:' + d.email : '')
-    +     (d.siret ? ligne('&#9670;', 'SIRET ' + String(d.siret).replace(/(\d{3})(\d{3})(\d{3})(\d{5})/, '$1 $2 $3 $4')) : '')
-    +   '</table>'
-    + '</td>'
-    + '</tr></table>';
+    + '<div style="margin:28px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.4;background:transparent">'
+    + (titre ? p(esc(titre), 'font-size:24px;font-weight:bold;color:' + noir + ';margin-bottom:10px') : '')
+    + (sousTitre ? p(esc(sousTitre), 'font-size:18px;font-weight:bold;font-style:italic;color:' + marque) : '')
+    + (!nomSigne && raison && !titre ? p(esc(raison), 'font-weight:bold;color:' + noir) : '')
+    + (d.tel ? p(lien('tel:' + String(d.tel).replace(/[^0-9+]/g, ''), d.tel, noir, true), 'font-size:18px') : '')
+    + (adresse ? p(lien('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(adresse), adresse, gris), 'color:' + gris) : '')
+    + (d.email ? p(lien('mailto:' + d.email, d.email, gris), 'color:' + gris) : '')
+    + (d.siret ? p(esc('SIRET ' + String(d.siret).replace(/(\d{3})(\d{3})(\d{3})(\d{5})/, '$1 $2 $3 $4')), 'color:' + gris + ';font-size:13px') : '')
+    + logo
+    + '</div>';
 }
 
 function corpsHtmlMessage(lignes, d){
@@ -33815,7 +33841,7 @@ function corpsHtmlMessage(lignes, d){
   return '<!doctype html><html><head><meta charset="utf-8"></head>'
     + '<body style="margin:0;padding:0;background:#ffffff">'
     + '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;'
-    +   'line-height:1.55;color:#1a2233;max-width:560px">'
+    +   'line-height:1.55;color:#1a2233;max-width:680px">'
     +   html
     +   carteSignatureHtml(d)
     +   '<p style="margin:16px 0 0;padding-top:10px;border-top:1px solid #e4e9f0;'
@@ -33836,6 +33862,9 @@ function envoyerParSmtp(dest, objet, lignes, v, d){
   bandeau(t('Envoi en cours…'), 'attente');
   let joints = [];
   smtpAssurerDefaut()
+    /* Le logo du garage doit etre en ligne pour s'afficher dans la carte
+       (les messageries bloquent les images incrustees) : 6 s au plus. */
+    .then(function(){ return Promise.race([publierLogo().catch(function(){}), new Promise(function(r){ setTimeout(r, 6000); })]); })
     .then(function(){ return piecesJointes(v, d); })
     .then(function(pieces){
       joints = pieces || [];
@@ -39744,6 +39773,7 @@ async function genererCarnetPdf(v, d){
   const pasProchain = ecartProchain(c);
   const calculs = [];
   const actionJs = function(champ, cle, js){
+    if(PDF_POUR_MAIL) return;   // e-mail : pas de script (voir piecesJointes)
     const ctx = pdf.context, dict = champ.acroField.dict, N = PDFLib.PDFName;
     let aa = dict.lookup(N.of('AA'));
     if(!aa){ aa = ctx.obj({}); dict.set(N.of('AA'), aa); }
@@ -39820,7 +39850,7 @@ async function genererCarnetPdf(v, d){
     }
     y = yb;
   }
-  if(calculs.length){
+  if(calculs.length && !PDF_POUR_MAIL){
     try{
       const af = pdf.catalog.lookup(PDFLib.PDFName.of('AcroForm'));
       if(af) af.set(PDFLib.PDFName.of('CO'), pdf.context.obj(calculs));
