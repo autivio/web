@@ -939,6 +939,13 @@
   .ident-large{grid-column:1/-1;}
   .ident-grille select{min-height:42px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:15px;color:var(--ink);}
   #idVin{font-size:17px;letter-spacing:.06em;text-transform:uppercase;}
+  #idPlaque{font-size:17px;letter-spacing:.06em;text-transform:uppercase;flex:1;min-width:0;}
+  .ident-plaque{display:flex;gap:8px;align-items:stretch;}
+  .ident-pays{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px;}
+  .ident-pays-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line,#d5dbe5);border-radius:8px;background:var(--panel,#fff);color:inherit;font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+  .ident-pays-btn svg{border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.12);}
+  .ident-pays-btn.actif{border-color:var(--accent,#1d4ed8);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent,#1d4ed8) 30%,transparent);background:color-mix(in srgb,var(--accent,#1d4ed8) 8%,var(--panel,#fff));}
+  .ident-plaque .btn-sec{white-space:nowrap;}
   .ident-lu{font-size:12.5px;margin-top:-4px;}
   .ident-lu.ok{color:#0f7a3d;} .ident-lu.ko{color:var(--danger);}
   @media(max-width:520px){ .ident-grille{grid-template-columns:1fr;} }
@@ -2921,6 +2928,17 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "pays": "paese",
+    "ex.": "es.",
+    "Plaque d’immatriculation": "Targa",
+    "retrouve le VIN si la voiture est déjà connue": "trova il VIN se l’auto è già nota",
+    "ex. AB-123-CD": "es. AB-123-CD",
+    "Rechercher": "Cerca",
+    "Recherche…": "Ricerca…",
+    "Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).": "Targa sconosciuta: né nelle sue schede né presso altre officine Autivio. Inserisca il VIN (casella E).",
+    "pas de VIN enregistré": "nessun VIN registrato",
+    "Véhicule retrouvé dans vos fiches grâce à la plaque": "Veicolo trovato nelle sue schede grazie alla targa",
+    "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)": "Veicolo trovato grazie alla targa (già inserito da un’officina Autivio)",
     "Trouvé d’après le modèle, l’année et les autres infos (fichiers officiels)": "Trovato da modello, anno e altri dati (file ufficiali)",
     "Tél.": "Tel.",
     "diesel": "diesel",
@@ -4361,6 +4379,17 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "pays": "Land",
+    "ex.": "z. B.",
+    "Plaque d’immatriculation": "Nummerplack",
+    "retrouve le VIN si la voiture est déjà connue": "fënnt de VIN, wann den Auto scho bekannt ass",
+    "ex. AB-123-CD": "z. B. AB-123-CD",
+    "Rechercher": "Sichen",
+    "Recherche…": "Sichen…",
+    "Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).": "Onbekannt Nummerplack: weder an Äre Fichen nach bei aneren Autivio-Garagen. Tippt de VIN (Feld E).",
+    "pas de VIN enregistré": "keen VIN gespäichert",
+    "Véhicule retrouvé dans vos fiches grâce à la plaque": "Gefier iwwer d’Nummerplack an Äre Fichen fonnt",
+    "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)": "Gefier iwwer d’Nummerplack fonnt (schonn vun enger Autivio-Garage agedroen)",
     "Trouvé d’après le modèle, l’année et les autres infos (fichiers officiels)": "Fonnt no Modell, Joer an aneren Donnéeën (offiziell Fichieren)",
     "Tél.": "Tel.",
     "diesel": "Diesel",
@@ -5800,6 +5829,17 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "pays": "country",
+    "ex.": "e.g.",
+    "Plaque d’immatriculation": "Registration plate",
+    "retrouve le VIN si la voiture est déjà connue": "finds the VIN if the car is already known",
+    "ex. AB-123-CD": "e.g. AB-123-CD",
+    "Rechercher": "Search",
+    "Recherche…": "Searching…",
+    "Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).": "Unknown plate: not in your records nor at other Autivio garages. Type the VIN (box E).",
+    "pas de VIN enregistré": "no VIN saved",
+    "Véhicule retrouvé dans vos fiches grâce à la plaque": "Vehicle found in your records from the plate",
+    "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)": "Vehicle found from the plate (already entered by an Autivio garage)",
     "Trouvé d’après le modèle, l’année et les autres infos (fichiers officiels)": "Found from the model, year and other details (official files)",
     "Tél.": "Tel.",
     "diesel": "diesel",
@@ -7238,6 +7278,17 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "pays": "Land",
+    "ex.": "z. B.",
+    "Plaque d’immatriculation": "Kennzeichen",
+    "retrouve le VIN si la voiture est déjà connue": "findet die FIN, wenn das Auto schon bekannt ist",
+    "ex. AB-123-CD": "z. B. AB-123-CD",
+    "Rechercher": "Suchen",
+    "Recherche…": "Suche…",
+    "Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).": "Unbekanntes Kennzeichen: weder in Ihren Akten noch bei anderen Autivio-Werkstätten. Geben Sie die FIN ein (Feld E).",
+    "pas de VIN enregistré": "keine FIN gespeichert",
+    "Véhicule retrouvé dans vos fiches grâce à la plaque": "Fahrzeug über das Kennzeichen in Ihren Akten gefunden",
+    "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)": "Fahrzeug über das Kennzeichen gefunden (bereits von einer Autivio-Werkstatt erfasst)",
     "Trouvé d’après le modèle, l’année et les autres infos (fichiers officiels)": "Ermittelt aus Modell, Jahr und weiteren Angaben (amtliche Dateien)",
     "Tél.": "Tel.",
     "diesel": "Diesel",
@@ -8696,6 +8747,17 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "pays": "land",
+    "ex.": "bijv.",
+    "Plaque d’immatriculation": "Kenteken",
+    "retrouve le VIN si la voiture est déjà connue": "vindt het VIN als de auto al bekend is",
+    "ex. AB-123-CD": "bijv. AB-123-CD",
+    "Rechercher": "Zoeken",
+    "Recherche…": "Zoeken…",
+    "Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).": "Onbekend kenteken: niet in uw fiches en niet bij andere Autivio-garages. Typ het VIN (vak E).",
+    "pas de VIN enregistré": "geen VIN opgeslagen",
+    "Véhicule retrouvé dans vos fiches grâce à la plaque": "Voertuig via het kenteken in uw fiches gevonden",
+    "Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)": "Voertuig via het kenteken gevonden (al ingevoerd door een Autivio-garage)",
     "Trouvé d’après le modèle, l’année et les autres infos (fichiers officiels)": "Gevonden op basis van model, jaar en andere gegevens (officiële bestanden)",
     "Tél.": "Tel.",
     "diesel": "diesel",
@@ -9986,7 +10048,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.28';
+const VERSION = '3.30';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -14055,7 +14117,7 @@ function brancherSignaturesFacture(v){
 
 function champImmat(){
   return document.querySelector('input[data-field="immat"], '
-    + 'input[data-cess="vehicule.immat"], input[data-fac="immat"], '
+    + 'input[data-cess="vehicule.immat"], input[data-fac="immat"], input[data-cveh="immat"], '
     + 'input[data-ctr="plaque"], input[data-cpro="plaque"]');
 }
 
@@ -14464,6 +14526,14 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.30': { date: '05/11/2026', lignes: [
+    "Recherche par plaque : choix du pays (France, Belgique, Allemagne, Pays-Bas, Italie, Luxembourg, Suisse, autre) par drapeaux dans « Identifier le véhicule ». La plaque est mise au format du pays et la recherche se fait dans ce pays.",
+    "Le choix du pays de la plaque est aussi sous la case Immatriculation du carnet d'entretien."
+  ] },
+  '3.29': { date: '05/11/2026', lignes: [
+    "Recherche par plaque : la plaque retrouve le VIN (et la date, le modèle, l'énergie, les CV, la motorisation…) d'une voiture déjà connue, d'abord dans vos fiches, puis chez les autres garages Autivio. Le VIN complète ensuite le reste d'après les fichiers officiels.",
+    "Nouvelle case « Plaque d'immatriculation » avec un bouton Rechercher dans la fenêtre « Identifier le véhicule », et case Immatriculation dans le carnet d'entretien."
+  ] },
   '3.28': { date: '05/11/2026', lignes: [
     "Coordonnées en temps réel : une modification dans les Réglages (raison sociale, adresse, téléphone, e-mail, SIRET, banque, logo, cachet…) est enregistrée pendant la frappe et arrive en une ou deux secondes sur le PC, la tablette et le téléphone.",
     "Deux appareils qui modifient en même temps ne s'écrasent plus : chacun garde les champs qu'il a changés.",
@@ -19539,11 +19609,15 @@ document.addEventListener('change', function(e){
 document.addEventListener('change', function(e){
   const el = e.target;
   if(!el || el.tagName !== 'INPUT') return;
-  if(!el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-fac="immat"]')) return;
+  if(!el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-fac="immat"], input[data-cveh="immat"]')) return;
   try{
     const v = vehicles[currentId];
     memoriserPlaque(v, el.value);
-    if(el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"]')){
+    if(el.matches('input[data-cveh="immat"]') && v){
+      const pays = paysPlaque(v), f = pays === 'XX' ? el.value.trim().toUpperCase() : formatPlate(el.value, pays);
+      if(f !== el.value){ el.value = f; v.vehicule.immat = f; saveVehicle(v); }
+    }
+    if(el.matches('input[data-field="immat"], input[data-cess="vehicule.immat"], input[data-cveh="immat"]')){
       const plaqueTapee = el.value;
       setTimeout(function(){ retrouverParPlaque(v, plaqueTapee); }, 300);
       clearTimeout(window.__minuteurRenommer);
@@ -37395,24 +37469,72 @@ async function envoyerPlaques(){
   }
   if(Object.keys(plaquesAEnvoyer).length && !minuteurPlaques) minuteurPlaques = setTimeout(envoyerPlaques, 4000);
 }
-/* Plaque tapee : si un garage Autivio a deja eu ce vehicule, les cases
-   VIDES de la fiche (et du carnet) sont remplies. */
+/* 3.29 : RECHERCHE PAR PLAQUE. D'abord vos propres fiches (meme hors
+   ligne : une voiture deja passee chez vous, sous cette plaque ou une
+   ancienne), puis les infos techniques partagees par les autres garages
+   Autivio (SQL 20). Rend { source, donnees } ou null. Le VIN fait partie
+   des infos rendues : avec lui, le reste se deduit des fichiers officiels. */
+function plaqueCle(p){ return String(p || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function plaqueDansMesFiches(plaque, saufId, pays){
+  const n = plaqueCle(plaque);
+  if(n.length < 4) return null;
+  let trouves = Object.keys(vehicles || {}).map(function(id){ return vehicles[id]; }).filter(function(x){
+    if(!x || x.id === saufId || !x.vehicule) return false;
+    if(plaqueCle(x.vehicule.immat) === n) return true;
+    return Array.isArray(x.plaques) && x.plaques.some(function(q){ return plaqueCle(q) === n; });
+  }).sort(function(a, b){ return (Number(b.maj) || 0) - (Number(a.maj) || 0); });
+  /* Meme plaque dans deux pays (rare) : celle du pays choisi d'abord. */
+  if(pays){
+    const memePays = trouves.filter(function(x){ return paysPlaque(x) === pays; });
+    if(memePays.length) trouves = memePays;
+  }
+  if(!trouves.length) return null;
+  /* La plus recente d'abord ; une plus ancienne complete ce qui manque
+     (le VIN saisi sur la fiche d'achat, la motorisation sur le carnet). */
+  const o = {};
+  trouves.forEach(function(x){
+    const d = donneesPlaque(x);
+    Object.keys(d).forEach(function(k){ if(!o[k]) o[k] = d[k]; });
+  });
+  return o.marque || o.vin ? o : null;
+}
+async function rechercherPlaque(plaque, pays, saufId){
+  const ici = plaqueDansMesFiches(plaque, saufId, pays);
+  let la = null;
+  if(plaquePartageable(plaque) && serveurPret() && sessionServeur && sessionServeur.access_token){
+    try{
+      const d = await serveurAppel('/rest/v1/rpc/vehicule_par_plaque', { method: 'POST', body: { p_pays: pays || 'FR', p_plaque: plaque } });
+      if(d && typeof d === 'object' && (d.marque || d.vin)){ la = Object.assign({}, d); delete la.maj; }
+    }catch(e){}
+  }
+  if(!ici && !la) return null;
+  const donnees = Object.assign({}, la || {}, ici || {});
+  if(ici && la) Object.keys(la).forEach(function(k){ if(!donnees[k]) donnees[k] = la[k]; });
+  return { source: ici ? 'fiches' : 'garages', donnees: donnees };
+}
+function texteSourcePlaque(r){
+  return r.source === 'fiches' ? t('Véhicule retrouvé dans vos fiches grâce à la plaque')
+                               : t('Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio)');
+}
+
+/* Plaque tapee dans une fiche : les cases VIDES de la fiche (et du
+   carnet) sont remplies, VIN compris ; puis le VIN complete le reste. */
 async function retrouverParPlaque(v, plaque){
-  if(!v || !plaquePartageable(plaque) || !serveurPret() || !sessionServeur || !sessionServeur.access_token) return;
-  let d = null;
-  try{ d = await serveurAppel('/rest/v1/rpc/vehicule_par_plaque', { method: 'POST', body: { p_pays: paysPlaque(v), p_plaque: plaque } }); }
-  catch(e){ return; }
-  if(!d || typeof d !== 'object' || !d.marque) return;
+  if(!v || plaqueCle(plaque).length < 4) return;
+  const r = await rechercherPlaque(plaque, paysPlaque(v), v.id);
+  if(!r) return;
+  const d = r.donnees;
   const veh = v.vehicule || (v.vehicule = {});
-  if(String(veh.immat || '').toUpperCase().replace(/[^A-Z0-9]/g, '') !== String(plaque).toUpperCase().replace(/[^A-Z0-9]/g, '')) return;
+  if(plaqueCle(veh.immat) !== plaqueCle(plaque)) return;
   const c = ensureCarnet(v), remplis = [];
   CHAMPS_PLAQUE_VEH.forEach(function(k){ if(d[k] && !String(veh[k] || '').trim()){ veh[k] = d[k]; remplis.push(k); } });
   CHAMPS_PLAQUE_CARNET.forEach(function(k){ if(d[k] && !String(c[k] == null ? '' : c[k]).trim()){ c[k] = k === 'puissanceCh' ? (parseInt(d[k], 10) || d[k]) : d[k]; remplis.push(k); } });
   if(!remplis.length) return;
-  plaquesEnvoyees[v.id] = paysPlaque(v) + '|' + String(plaque).toUpperCase().replace(/[^A-Z0-9]/g, '') + '|' + JSON.stringify(donneesPlaque(v));
+  plaquesEnvoyees[v.id] = paysPlaque(v) + '|' + plaqueCle(plaque) + '|' + JSON.stringify(donneesPlaque(v));
   await saveVehicle(v);
-  if(currentId === v.id) renderMain();
-  bandeau(t('Véhicule retrouvé grâce à la plaque (déjà saisi par un garage Autivio) :') + ' ' + [d.marque, d.modele, d.vin].filter(Boolean).join(' · '), 'ok');
+  if(remplis.indexOf('vin') >= 0 || remplis.indexOf('typeVarianteVersion') >= 0){ try{ remplirDepuisVin(v); }catch(e){} }
+  if(currentId === v.id && !document.querySelector('.dlg-fond')){ try{ renderMain(); }catch(e){} }
+  bandeau(texteSourcePlaque(r) + ' : ' + [d.marque, d.modele, d.vin ? 'VIN ' + d.vin : ''].filter(Boolean).join(' · '), 'ok');
 }
 
 function champCarnet(cle, libelle, type, aide){
@@ -37455,7 +37577,7 @@ function carnetForm(v){
   +   champVeh('dateFirstImmat', '1re mise en circulation', 'date') + champVeh('km', 'Kilométrage') + '</div>'
   + '<div class="cerfa-grid">' + champCarnet('puissanceCh', 'Puissance (ch)', 'text', 'ex. 110') + champVeh('puissanceFiscale', 'CV fiscaux')
   +   '<div><label>' + esc(t('Start & Stop')) + ' <span class="ident-etat" id="carnetStartStopAuto"></span></label><select id="carnetStartStop" class="liste-large">' + optionsStartStop(c.startStop) + '</select></div></div>'
-  + '<div class="cerfa-grid">' + champVeh('vin', 'N° de châssis (VIN)') + '</div>'
+  + '<div class="cerfa-grid">' + champVeh('immat', 'Immatriculation') + champVeh('vin', 'N° de châssis (VIN)') + '</div>'
   + '<div class="gar-choix"><button type="button" class="btn-sec" id="carnetIdentifier">🔎 '
   +   esc(t('Identifier le véhicule (VIN → code moteur)')) + '</button></div>'
   + (c.identifie ? '<div class="cerfa-aide">✓ ' + esc(t('Code moteur')) + ' <b>' + esc(c.identifie.code || c.codeMoteur || '—') + '</b>'
@@ -39064,6 +39186,14 @@ function fenetreIdentification(v){
       + '<div class="dlg-titre">🔎 ' + esc(t('Identifier le véhicule')) + '</div>'
       + '<div class="dlg-texte">' + esc(t('Ces informations permettent de trouver le code moteur exact, et donc les bonnes pièces.')) + '</div>'
       + '<div class="ident-grille">'
+      +   '<div class="ident-large"><label>' + esc(t('Plaque d’immatriculation')) + ' — A <span class="ident-etat">' + esc(t('retrouve le VIN si la voiture est déjà connue')) + '</span></label>'
+      +     '<div class="ident-pays" id="idPays" role="radiogroup" aria-label="' + esc(t("Pays d'immatriculation")) + '">'
+      +       PAYS_PLAQUE.map(function(pp){ return '<button type="button" role="radio" class="ident-pays-btn" data-pays="' + pp[0] + '" title="' + esc(nomPaysPlaque(pp)) + '">'
+                + drapeauSVG(pp[3], 20) + '<span>' + (pp[0] === 'XX' ? esc(t('Autre')) : pp[0]) + '</span></button>'; }).join('')
+      +     '</div>'
+      +     '<div class="ident-plaque"><input id="idPlaque" class="mono" maxlength="20" autocapitalize="characters" spellcheck="false" placeholder="' + esc(t('ex. AB-123-CD')) + '">'
+      +     '<button type="button" class="btn-sec" id="idPlaqueChercher">🔎 ' + esc(t('Rechercher')) + '</button></div></div>'
+      +   '<div class="ident-large ident-lu" id="idPlaqueLu"></div>'
       +   '<div class="ident-large"><label>' + esc(t('N° de châssis (VIN)')) + ' — E</label><input id="idVin" class="mono" maxlength="20" autocapitalize="characters" spellcheck="false"></div>'
       +   '<div class="ident-large ident-lu" id="idVinLu"></div>'
       +   '<div class="ident-large"><label>' + esc(t('Type, variante, version')) + ' — D.2 <span class="ident-etat">' + esc(t('facultatif, mais donne la version exacte')) + '</span></label><input id="idD2" class="mono" maxlength="40" autocapitalize="characters" spellcheck="false" placeholder="' + esc(t('ex. NC9HRC/1')) + '"></div>'
@@ -39088,6 +39218,19 @@ function fenetreIdentification(v){
       + '</div></div>';
     document.body.appendChild(fond);
     const $ = function(id){ return fond.querySelector('#' + id); };
+    $('idPlaque').value = veh.immat || '';
+    /* Pays de la plaque : celui de la fiche, sinon le dernier choisi ici. */
+    let paysId = veh.paysImmat && PAYS_PLAQUE.some(function(x){ return x[0] === veh.paysImmat; }) ? veh.paysImmat : '';
+    if(!paysId){ try{ const d = ls.get('paysPlaqueDernier'); paysId = d && PAYS_PLAQUE.some(function(x){ return x[0] === d.value; }) ? d.value : 'FR'; }catch(e){ paysId = 'FR'; } }
+    const majPays = function(){
+      fond.querySelectorAll('.ident-pays-btn').forEach(function(b){
+        const oui = b.dataset.pays === paysId;
+        b.classList.toggle('actif', oui); b.setAttribute('aria-checked', oui ? 'true' : 'false');
+      });
+      const pp = PAYS_PLAQUE.filter(function(x){ return x[0] === paysId; })[0];
+      $('idPlaque').placeholder = pp && pp[2] ? t('ex.') + ' ' + pp[2] : t('format libre');
+    };
+    majPays();
     $('idVin').value = veh.vin || '';
     $('idD2').value = veh.typeVarianteVersion || '';
     $('idDate').value = /^\d{4}-\d{2}-\d{2}$/.test(veh.dateFirstImmat || '') ? veh.dateFirstImmat : '';
@@ -39276,6 +39419,81 @@ function fenetreIdentification(v){
     $('idVin').addEventListener('input', function(){ replaceKeepingCaret($('idVin'), $('idVin').value.toUpperCase()); majVin(); });
     $('idDate').addEventListener('change', majVin);
     fond.addEventListener('input', function(){ $('idAlerte').textContent = ''; });
+    /* Plaque : VIN, D.2, date, marque, modele, energie, CV, puissance,
+       motorisation... d'une voiture deja connue (vos fiches, puis les
+       autres garages). Cases vides seulement ; le VIN fait le reste. */
+    let plaqueCherchee = '';
+    const chercherPlaque = async function(force){
+      const brut = $('idPlaque').value.trim(), n = plaqueCle(brut) ? paysId + ':' + plaqueCle(brut) : '';
+      const z = $('idPlaqueLu');
+      if(plaqueCle(brut).length < 4){ z.className = 'ident-large ident-lu'; z.textContent = ''; return; }
+      if(!force && n === plaqueCherchee) return;
+      plaqueCherchee = n;
+      z.className = 'ident-large ident-lu'; z.textContent = t('Recherche…');
+      const r = await rechercherPlaque(brut, paysId, v.id);
+      if(paysId + ':' + plaqueCle($('idPlaque').value) !== n) return;
+      if(!r){
+        z.className = 'ident-large ident-lu ko';
+        const pp = PAYS_PLAQUE.filter(function(x){ return x[0] === paysId; })[0];
+        z.textContent = t('Plaque inconnue : ni dans vos fiches, ni chez les autres garages Autivio. Tapez le VIN (case E).')
+          + (pp ? ' (' + t('pays') + ' : ' + nomPaysPlaque(pp) + ')' : '');
+        return;
+      }
+      const d = r.donnees;
+      const poser = function(id, val){ const e = $(id); if(e && val && !String(e.value || '').trim()){ e.value = val; return true; } return false; };
+      const vinPose = poser('idVin', vinNet(d.vin || ''));
+      poser('idD2', d.typeVarianteVersion);
+      if(/^\d{4}-\d{2}-\d{2}$/.test(d.dateFirstImmat || '')) poser('idDate', d.dateFirstImmat);
+      const mq = poser('idMarque', d.marque), md = poser('idModele', romainEnChiffres(d.modele || ''));
+      if(mq || md){ $('idMarque')._rendreListe && $('idMarque')._rendreListe(); $('idModele')._rendreListe && $('idModele')._rendreListe(); }
+      if(d.energie && !$('idEnergie').value){ $('idEnergie').value = d.energie; }
+      poser('idCv', String(d.puissanceFiscale || '').replace(/[^0-9]/g, ''));
+      if(poser('idCh', String(d.puissanceCh || ''))) majCh();
+      poser('idMoto', d.motorisation);
+      if(d.boite && !$('idBoite').value) $('idBoite').value = d.boite;
+      if(d.startStop && !$('idStartStop').value) $('idStartStop').value = d.startStop;
+      z.className = 'ident-large ident-lu ok';
+      z.textContent = '✓ ' + texteSourcePlaque(r) + ' : ' + [d.marque, d.modele, d.vin ? 'VIN ' + d.vin : t('pas de VIN enregistré')].filter(Boolean).join(' · ');
+      majVin();
+      if(mq || md){ cleChargee = ''; chargerMotos(); }
+    };
+    /* Plaque complete selon le pays : recherche aussitot. Sinon, une
+       pause dans la frappe suffit (Allemagne, Suisse, autres pays). */
+    const PLAQUE_COMPLETE = {
+      FR: /^([A-Z]{2}\d{3}[A-Z]{2}|\d{1,4}[A-Z]{1,3}\d{2,3})$/,
+      BE: /^(\d[A-Z]{3}\d{3}|[A-Z]{3}\d{3})$/,
+      NL: /^[A-Z0-9]{6}$/,
+      IT: /^[A-Z]{2}\d{3}[A-Z]{2}$/,
+      LU: /^[A-Z]{2}\d{4}$/
+    };
+    $('idPlaque').addEventListener('input', function(){
+      replaceKeepingCaret($('idPlaque'), $('idPlaque').value.toUpperCase());
+      clearTimeout($('idPlaque').__m);
+      const n = plaqueCle($('idPlaque').value);
+      if(n.length < 4) return;
+      const re = PLAQUE_COMPLETE[paysId];
+      $('idPlaque').__m = setTimeout(function(){ chercherPlaque(false); }, re && re.test(n) ? 400 : 1200);
+    });
+    $('idPlaque').addEventListener('change', function(){
+      const f = paysId === 'XX' ? $('idPlaque').value.trim().toUpperCase() : formatPlate($('idPlaque').value, paysId);
+      if(f && f !== $('idPlaque').value) $('idPlaque').value = f;
+      chercherPlaque(false);
+    });
+    fond.querySelectorAll('.ident-pays-btn').forEach(function(b){
+      b.onclick = function(){
+        if(paysId === b.dataset.pays) return;
+        paysId = b.dataset.pays;
+        try{ ls.set('paysPlaqueDernier', paysId); }catch(e){}
+        majPays();
+        if($('idPlaque').value.trim()){
+          if(paysId !== 'XX') $('idPlaque').value = formatPlate($('idPlaque').value, paysId);
+          chercherPlaque(true);
+        }
+        $('idPlaque').focus();
+      };
+    });
+    $('idPlaque').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); chercherPlaque(true); } });
+    $('idPlaqueChercher').onclick = function(){ chercherPlaque(true); };
     majVin();
     chargerMotos();
     const fermer = function(r){ fond.remove(); resolve(r); };
@@ -39291,6 +39509,10 @@ function fenetreIdentification(v){
       if($('idCh').value.trim() && !chSaisis) manque.push(t('une puissance lisible (ex. 125 ou 92 kW)'));
       else if(!$('idCv').value && !chSaisis) manque.push(t('les chevaux fiscaux (CV) ou la puissance (ch)'));
       if(manque.length){ $('idAlerte').textContent = t('Il manque :') + ' ' + manque.join(', ') + '.'; return; }
+      { const pl = paysId === 'XX' ? $('idPlaque').value.trim().toUpperCase() : formatPlate($('idPlaque').value.trim(), paysId);
+        if(pl && !String(veh.immat || '').trim()){ veh.immat = pl; veh.paysImmat = paysId; }
+        else if(pl && plaqueCle(pl) === plaqueCle(veh.immat) && !veh.paysImmat) veh.paysImmat = paysId;
+        if(pl && plaqueCle(pl) !== plaqueCle(veh.immat)) memoriserPlaque(v, pl); }
       veh.vin = vin; veh.dateFirstImmat = $('idDate').value; veh.energie = $('idEnergie').value;
       if($('idD2').value.trim()) veh.typeVarianteVersion = $('idD2').value.trim().toUpperCase();
       veh.marque = $('idMarque').value.trim().toUpperCase(); veh.modele = $('idModele').value.trim().toUpperCase();
