@@ -353,6 +353,7 @@
   /* L'onglet des comptes n'existe que pour un administrateur relie au
      serveur. La regle l'emporte sur tout redessin. */
   #navComptes,#navCredits,#navPhotos{display:none !important;}
+  body.est-particulier #alimenterBtn{display:none !important;}
   body.est-admin #navComptes,body.est-admin #navCredits,body.est-admin #navPhotos{display:flex !important;}
   .dlg.dlg-photos{max-width:980px;width:96vw;}
   .photos-manque{display:flex;align-items:center;gap:6px;font-size:13px;}
@@ -2965,6 +2966,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Réservé aux comptes professionnels.": "Riservato agli account professionali.",
     "Importez d’abord le carnet (bouton « Importer un carnet »).": "Importa prima il libretto (pulsante «Importa un libretto»).",
     "Reprendre le carnet importé ?": "Riprendere il libretto importato?",
     "Toutes les informations du carnet importé remplacent celles de la fiche : modèle, motorisation, code moteur, phase, année, fiche technique et références OEM. Gratuit, sans IA.": "Tutti i dati del libretto importato sostituiscono quelli della scheda: modello, motorizzazione, codice motore, fase, anno, scheda tecnica e riferimenti OEM. Gratis, senza IA.",
@@ -4569,6 +4571,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Réservé aux comptes professionnels.": "Reservéiert fir professionell Konten.",
     "Importez d’abord le carnet (bouton « Importer un carnet »).": "Importéiert fir d’éischt d’Servicebuch (Knäppchen „Servicebuch importéieren“).",
     "Reprendre le carnet importé ?": "Dat importéiert Servicebuch iwwerhuelen?",
     "Toutes les informations du carnet importé remplacent celles de la fiche : modèle, motorisation, code moteur, phase, année, fiche technique et références OEM. Gratuit, sans IA.": "All Informatioune vum importéierte Buch ersetzen déi vun der Fiche: Modell, Motoriséierung, Motorcode, Phase, Joer, technesch Fiche an OEM-Referenzen. Gratis, ouni IA.",
@@ -6172,6 +6175,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Réservé aux comptes professionnels.": "Reserved for professional accounts.",
     "Importez d’abord le carnet (bouton « Importer un carnet »).": "Import the service book first (“Import a service book” button).",
     "Reprendre le carnet importé ?": "Re-apply the imported service book?",
     "Toutes les informations du carnet importé remplacent celles de la fiche : modèle, motorisation, code moteur, phase, année, fiche technique et références OEM. Gratuit, sans IA.": "All details of the imported book replace the record’s: model, engine, engine code, phase, year, technical sheet and OEM references. Free, no AI.",
@@ -7774,6 +7778,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Réservé aux comptes professionnels.": "Nur für Geschäftskonten.",
     "Importez d’abord le carnet (bouton « Importer un carnet »).": "Importieren Sie zuerst das Serviceheft (Knopf „Serviceheft importieren“).",
     "Reprendre le carnet importé ?": "Importiertes Serviceheft übernehmen?",
     "Toutes les informations du carnet importé remplacent celles de la fiche : modèle, motorisation, code moteur, phase, année, fiche technique et références OEM. Gratuit, sans IA.": "Alle Angaben des importierten Heftes ersetzen die des Datensatzes: Modell, Motorisierung, Motorkennbuchstabe, Phase, Jahr, Datenblatt und OEM-Nummern. Kostenlos, ohne KI.",
@@ -9396,6 +9401,7 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Réservé aux comptes professionnels.": "Alleen voor professionele accounts.",
     "Importez d’abord le carnet (bouton « Importer un carnet »).": "Importeer eerst het boekje (knop „Boekje importeren”).",
     "Reprendre le carnet importé ?": "Het geïmporteerde boekje overnemen?",
     "Toutes les informations du carnet importé remplacent celles de la fiche : modèle, motorisation, code moteur, phase, année, fiche technique et références OEM. Gratuit, sans IA.": "Alle gegevens van het geïmporteerde boekje vervangen die van de fiche: model, motor, motorcode, fase, jaar, technische fiche en OEM-referenties. Gratis, zonder AI.",
@@ -10850,7 +10856,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.48';
+const VERSION = '3.49';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15149,6 +15155,9 @@ function majOngletComptes(){
      Une classe sur le corps survit a tous les redessins. */
   const admin = estAdministrateur() && serveurPret();
   document.body.classList.toggle('est-admin', admin);
+  /* 3.49 : « Alimenter la base véhicules » : administrateur et pros
+     seulement, pas les particuliers. */
+  document.body.classList.toggle('est-particulier', compteParticulier());
   const onglet = document.getElementById('navComptes');
   if(onglet) onglet.hidden = !admin;
 }
@@ -15331,6 +15340,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.49': { date: '05/11/2026', lignes: [
+    "« Alimenter la base véhicules » est maintenant réservé à l'administrateur et aux comptes professionnels : le bouton n'apparaît plus pour les particuliers.",
+  ] },
   '3.48': { date: '05/11/2026', lignes: [
     "Carnet d'entretien : nouvelle case « Filtre à carburant » (après les autres filtres), dans « Entretiens déjà faits » et dans le tableau du PDF. Pas de case pour les voitures électriques.",
   ] },
@@ -38555,6 +38567,7 @@ async function envoyerContributions(){
   }finally{ contribEnCours = false; }
 }
 function ouvrirAlimenterBase(){
+  if(compteParticulier()){ informer(t('Réservé aux comptes professionnels.')); return; }
   fenetreIdentification(blankVehicle(), { alimenter: true });
 }
 document.addEventListener('click', function(e){
