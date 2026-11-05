@@ -362,6 +362,10 @@
   .photos-filtre{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0;}
   .photos-filtre select{max-width:260px;}
   .photos-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;max-height:52vh;overflow:auto;padding:2px;}
+  .depot-survol{outline:2px dashed #2f6fde !important;outline-offset:2px;background-color:rgba(47,111,222,.08) !important;}
+  .photo-carte.depot-survol .photo-vide,.photo-carte.depot-survol img{opacity:.55;}
+  .photos-depot-aide{font-size:12px;color:var(--muted,#6b7280);margin:4px 0 6px;}
+  .photo-carte.photo-envoi{opacity:.5;}
   .photo-carte{border:1px solid var(--line,#d8d3c4);border-radius:8px;padding:6px;font-size:12px;display:flex;flex-direction:column;gap:4px;}
   .photo-carte img,.photo-vide{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:5px;background:#eef1f5;}
   .photo-vide{display:flex;align-items:center;justify-content:center;color:#8a93a0;}
@@ -2956,6 +2960,14 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Questa immagine non può essere presa direttamente dal sito. Salvala sul computer, poi trascina il file.",
+    "Ce type de fichier ne va pas ici.": "Questo tipo di file non va qui.",
+    "Il faut un PDF.": "Serve un PDF.",
+    "Il faut une image (photo).": "Serve un’immagine (foto).",
+    "Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).": "Trascina una foto su un modello (da una cartella o da una pagina web). Più foto lasciate sull’elenco vengono assegnate secondo il nome del file (es. «golf-7.jpg», «audi-rs6-c8.png»).",
+    "Glissez une photo ici": "Trascina qui una foto",
+    "glissez-en une ici": "trascinane una qui",
+    "modèle non reconnu, glissez-les sur le bon modèle": "modello non riconosciuto, trascinale sul modello giusto",
     "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Scegli il PDF del libretto di manutenzione (file .pdf).",
     "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Impossibile leggere questo PDF (file danneggiato o protetto).",
     "Carnet d’un autre véhicule ?": "Libretto di un altro veicolo?",
@@ -4512,6 +4524,14 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Dëst Bild kann net direkt vum Site geholl ginn. Späichert et um Computer an zitt dann de Fichier.",
+    "Ce type de fichier ne va pas ici.": "Dësen Typ vu Fichier gehéiert net hei hin.",
+    "Il faut un PDF.": "Et brauch eng PDF.",
+    "Il faut une image (photo).": "Et brauch e Bild (Foto).",
+    "Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).": "Zitt eng Foto op e Modell (aus engem Dossier oder enger Websäit). Méi Fotoen op der Lëscht lassgelooss ginn no hirem Fichiersnumm zougeuerdnet (z. B. „golf-7.jpg“, „audi-rs6-c8.png“).",
+    "Glissez une photo ici": "Zitt eng Foto heihin",
+    "glissez-en une ici": "zitt eng heihin",
+    "modèle non reconnu, glissez-les sur le bon modèle": "Modell net erkannt, zitt se op dat richtegt Modell",
     "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Wielt de PDF vum Servicebuch (.pdf-Fichier).",
     "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Dës PDF konnt net gelies ginn (Fichier beschiedegt oder geschützt).",
     "Carnet d’un autre véhicule ?": "Servicebuch vun engem anere Gefier?",
@@ -6067,6 +6087,14 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "This image cannot be taken directly from the site. Save it to the computer, then drag the file.",
+    "Ce type de fichier ne va pas ici.": "This file type does not go here.",
+    "Il faut un PDF.": "A PDF is needed.",
+    "Il faut une image (photo).": "An image (photo) is needed.",
+    "Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).": "Drag a photo onto a model (from a folder or a web page). Several photos dropped on the list are sorted by file name (e.g. “golf-7.jpg”, “audi-rs6-c8.png”).",
+    "Glissez une photo ici": "Drag a photo here",
+    "glissez-en une ici": "drag one here",
+    "modèle non reconnu, glissez-les sur le bon modèle": "model not recognised, drag them onto the right model",
     "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Choose the service book PDF (.pdf file).",
     "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "This PDF could not be read (damaged or protected file).",
     "Carnet d’un autre véhicule ?": "Service book of another vehicle?",
@@ -7621,6 +7649,14 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Dieses Bild kann nicht direkt von der Website übernommen werden. Speichern Sie es auf dem Computer und ziehen Sie dann die Datei.",
+    "Ce type de fichier ne va pas ici.": "Dieser Dateityp passt hier nicht.",
+    "Il faut un PDF.": "Es wird ein PDF benötigt.",
+    "Il faut une image (photo).": "Es wird ein Bild (Foto) benötigt.",
+    "Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).": "Ziehen Sie ein Foto auf ein Modell (aus einem Ordner oder einer Webseite). Mehrere auf die Liste gezogene Fotos werden nach Dateinamen zugeordnet (z. B. „golf-7.jpg“, „audi-rs6-c8.png“).",
+    "Glissez une photo ici": "Foto hierher ziehen",
+    "glissez-en une ici": "hierher ziehen",
+    "modèle non reconnu, glissez-les sur le bon modèle": "Modell nicht erkannt, ziehen Sie sie auf das richtige Modell",
     "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Wählen Sie das PDF des Serviceheftes (.pdf-Datei).",
     "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Dieses PDF konnte nicht gelesen werden (beschädigt oder geschützt).",
     "Carnet d’un autre véhicule ?": "Serviceheft eines anderen Fahrzeugs?",
@@ -9195,6 +9231,14 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.": "Deze afbeelding kan niet rechtstreeks van de site worden genomen. Sla ze op de computer op en sleep dan het bestand.",
+    "Ce type de fichier ne va pas ici.": "Dit bestandstype hoort hier niet.",
+    "Il faut un PDF.": "Er is een pdf nodig.",
+    "Il faut une image (photo).": "Er is een afbeelding (foto) nodig.",
+    "Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).": "Sleep een foto op een model (uit een map of een webpagina). Meerdere foto’s op de lijst losgelaten worden op bestandsnaam geplaatst (bv. „golf-7.jpg”, „audi-rs6-c8.png”).",
+    "Glissez une photo ici": "Sleep hier een foto",
+    "glissez-en une ici": "sleep er hier een",
+    "modèle non reconnu, glissez-les sur le bon modèle": "model niet herkend, sleep ze op het juiste model",
     "Choisissez le PDF du carnet d’entretien (fichier .pdf).": "Kies de pdf van het onderhoudsboekje (.pdf-bestand).",
     "Ce PDF n’a pas pu être lu (fichier abîmé ou protégé).": "Deze pdf kon niet worden gelezen (beschadigd of beveiligd bestand).",
     "Carnet d’un autre véhicule ?": "Onderhoudsboekje van een ander voertuig?",
@@ -10601,7 +10645,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.42';
+const VERSION = '3.43';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15082,6 +15126,11 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.43': { date: '05/11/2026', lignes: [
+    "Glisser-déposer : on peut lâcher une photo directement sur un modèle de la base des photos, sans passer par « Importer ». Une image glissée depuis une page web marche aussi.",
+    "Plusieurs photos lâchées d'un coup sur la liste : chacune va sur son modèle d'après son nom de fichier (golf-7.jpg, audi-rs6-c8.png...).",
+    "Tous les boutons d'import du logiciel acceptent aussi le glisser-déposer (photo du carnet, carnet papier, « Importer un carnet », documents...)."
+  ] },
   '3.42': { date: '05/11/2026', lignes: [
     "Importer un carnet d'entretien : bouton « 📥 Importer un carnet » sur le carnet. Un carnet Autivio (PDF) est repris à l'identique — fiche technique, références OEM, capacités, entretiens, réparations, tampons, photo — sans payer et sans IA.",
     "Chaque carnet PDF contient désormais ses données Autivio (fichier joint autivio-carnet.json). Les cases remplies à la main dans le PDF sont reprises aussi.",
@@ -38645,6 +38694,134 @@ async function exporterPhotosModeles(idx, etat){
   }
 }
 let constructionPhotos = null;
+/* 3.43 : GLISSER-DEPOSER. Tous les boutons d'import (« Importer »,
+   « Ajouter la photo », « Importer un carnet »...) acceptent qu'on y lache
+   un fichier ; une carte de la base des photos aussi. Une image glissee
+   depuis une page web est telechargee (logiciel PC : par Python, sans la
+   limite du navigateur). Lache a cote : rien ne se passe (la page n'est
+   plus remplacee par le fichier). */
+function fichierAccepte(f, accept){
+  accept = String(accept || '').trim();
+  if(!accept) return true;
+  const nom = String(f.name || '').toLowerCase(), typ = String(f.type || '').toLowerCase();
+  return accept.split(',').some(function(a){
+    a = a.trim().toLowerCase();
+    if(!a) return false;
+    if(a[0] === '.') return nom.endsWith(a);
+    if(a.endsWith('/*')) return typ.indexOf(a.slice(0, -1)) === 0;
+    return typ === a;
+  });
+}
+function zoneDepot(cible){
+  let el = cible && cible.nodeType === 1 ? cible : (cible && cible.parentElement);
+  while(el && el !== document.body){
+    if(typeof el.__depot === 'function') return { el: el, accept: el.dataset.depotAccept || 'image/*', faire: el.__depot };
+    if(el.tagName === 'LABEL'){
+      const inp = el.querySelector('input[type="file"]') || (el.control && el.control.type === 'file' ? el.control : null);
+      if(inp && !inp.disabled) return { el: el, accept: inp.accept, input: inp };
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
+async function fichiersDuDepot(dt, accept){
+  const l = Array.prototype.slice.call(dt.files || []);
+  if(l.length) return l;
+  /* Image tiree d'une page web : on a son adresse, pas le fichier. */
+  if(!/image/.test(accept || 'image/*')) return [];
+  let url = '';
+  try{
+    const html = dt.getData('text/html') || '';
+    const m = /<img[^>]+src=["']([^"']+)["']/i.exec(html);
+    if(m) url = m[1].replace(/&amp;/g, '&');
+  }catch(e){}
+  if(!url){ try{ url = (dt.getData('text/uri-list') || dt.getData('text/plain') || '').split(/\r?\n/).filter(function(x){ return x && x[0] !== '#'; })[0] || ''; }catch(e){} }
+  url = String(url || '').trim();
+  if(!/^(https?:|data:image\/)/i.test(url)) return [];
+  let blob = null;
+  try{ const r = await fetch(url, { mode: 'cors' }); if(r.ok) blob = await r.blob(); }catch(e){ blob = null; }
+  if((!blob || !/^image\//.test(blob.type)) && window.pywebview && window.pywebview.api && window.pywebview.api.image_web && /^https?:/i.test(url)){
+    try{ const d = await window.pywebview.api.image_web(url); if(d) blob = await (await fetch(d)).blob(); }catch(e){ blob = null; }
+  }
+  if(!blob || !/^image\//.test(blob.type)) throw new Error(t('Cette image ne peut pas être prise directement depuis le site. Enregistrez-la sur l’ordinateur, puis glissez le fichier.'));
+  const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+  return [new File([blob], 'image-web.' + ext, { type: blob.type })];
+}
+(function(){
+  let survol = null;
+  const poser = function(el){
+    if(survol === el) return;
+    if(survol) survol.classList.remove('depot-survol');
+    survol = el;
+    if(el) el.classList.add('depot-survol');
+  };
+  const avecFichier = function(e){
+    const ty = Array.prototype.slice.call((e.dataTransfer && e.dataTransfer.types) || []);
+    return ty.indexOf('Files') !== -1 || ty.indexOf('text/uri-list') !== -1 || ty.indexOf('text/html') !== -1;
+  };
+  document.addEventListener('dragover', function(e){
+    if(!avecFichier(e)) return;
+    const z = zoneDepot(e.target);
+    const champTexte = e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName) && e.target.type !== 'file';
+    if(!z && champTexte) return;            // texte glisse dans un champ : comportement normal
+    e.preventDefault();
+    if(e.dataTransfer) e.dataTransfer.dropEffect = z ? 'copy' : 'none';
+    poser(z ? z.el : null);
+  });
+  document.addEventListener('dragleave', function(e){
+    if(!e.relatedTarget || !document.documentElement.contains(e.relatedTarget)) poser(null);
+  });
+  document.addEventListener('dragend', function(){ poser(null); });
+  document.addEventListener('drop', async function(e){
+    if(!avecFichier(e)) return;
+    const z = zoneDepot(e.target);
+    const champTexte = e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName) && e.target.type !== 'file';
+    if(!z && champTexte) return;
+    e.preventDefault();
+    poser(null);
+    if(!z) return;
+    let l;
+    try{ l = await fichiersDuDepot(e.dataTransfer, z.accept); }
+    catch(err){ informer(err.message || String(err)); return; }
+    const bons = l.filter(function(f){ return fichierAccepte(f, z.accept); });
+    if(!bons.length){
+      if(l.length) informer(t('Ce type de fichier ne va pas ici.') + (/pdf/i.test(z.accept) ? ' ' + t('Il faut un PDF.') : /image/i.test(z.accept) ? ' ' + t('Il faut une image (photo).') : ''));
+      return;
+    }
+    if(z.faire){ z.faire(bons); return; }
+    const inp = z.input;
+    try{
+      const dt = new DataTransfer();
+      (inp.multiple ? bons : bons.slice(0, 1)).forEach(function(f){ dt.items.add(f); });
+      inp.files = dt.files;
+      inp.dispatchEvent(new Event('change', { bubbles: true }));
+    }catch(err){ informer(err.message || String(err)); }
+  });
+})();
+/* Nom de fichier -> modele (« golf-7.jpg », « Audi_RS6_C8.png »...). */
+function modeleDuNomFichier(nom, modeles, marquePref){
+  const ROM = { II: '2', III: '3', IV: '4', V: '5', VI: '6', VII: '7', VIII: '8', IX: '9', X: '10' };
+  const net = function(x){
+    return String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ')
+      .replace(/([A-Z])(\d)/g, '$1 $2').replace(/(\d)([A-Z])/g, '$1 $2').trim()
+      .split(' ').map(function(w){ return ROM[w] || w; }).join(' ');
+  };
+  const n = ' ' + net(String(nom || '').replace(/\.[a-z0-9]{2,5}$/i, '')) + ' ';
+  let mieux = null, score = 0;
+  modeles.forEach(function(m){
+    const mo = net(m.modele), ma = net(m.marque);
+    const sansPar = net(String(m.modele).replace(/\(.*?\)/g, ''));
+    const gen = (/\(([^)]+)\)/.exec(m.modele) || [])[1];
+    let s = 0;
+    if(n.indexOf(' ' + mo + ' ') !== -1) s = 10 + mo.length;
+    else if(sansPar && n.indexOf(' ' + sansPar + ' ') !== -1) s = 5 + sansPar.length + (gen && n.indexOf(' ' + net(gen) + ' ') !== -1 ? 6 : 0);
+    if(!s) return;
+    if(n.indexOf(' ' + ma + ' ') !== -1) s += 8;
+    else if(marquePref && m.marque !== marquePref) s -= 4;
+    if(s > score){ score = s; mieux = m; }
+  });
+  return score > 6 ? mieux : null;
+}
 async function fenetrePhotosModeles(){
   if(!estAdministrateur() || !serveurPret()){ informer(t('Réservé aux administrateurs connectés.')); return; }
   document.querySelectorAll('.dlg-fond').forEach(function(e){ e.remove(); });
@@ -38661,6 +38838,7 @@ async function fenetrePhotosModeles(){
     + '<div class="dlg-detail" id="phEtat"></div>'
     + '<div class="photos-filtre"><select id="phMarque" class="liste-large">' + marques.map(function(n){ return '<option>' + esc(n) + '</option>'; }).join('') + '</select>'
     +   '<label class="photos-manque"><input type="checkbox" id="phManque"> ' + esc(t('seulement les modèles sans photo')) + '</label></div>'
+    + '<div class="photos-depot-aide">⤵ ' + esc(t('Glissez une photo sur un modèle (depuis un dossier ou une page web). Plusieurs photos lâchées sur la liste : rangées d’après leur nom de fichier (ex. « golf-7.jpg », « audi-rs6-c8.png »).')) + '</div>'
     + '<div class="photos-grille" id="phGrille"></div>'
     + '<input type="file" id="phFichier" accept="image/*" style="display:none">'
     + '<div class="dlg-actions"><button type="button" class="dlg-non">' + esc(t('Fermer')) + '</button></div></div>';
@@ -38677,7 +38855,7 @@ async function fenetrePhotosModeles(){
     $('phGrille').innerHTML = l.slice(0, 300).map(function(m){
       const x = idx[m.cle];
       return '<div class="photo-carte" data-cle="' + esc(m.cle) + '">'
-        + (x ? '<img loading="lazy" src="' + esc(urlPhotoModele(x)) + '" alt="">' : '<div class="photo-vide">' + esc(t('pas de photo')) + '</div>')
+        + (x ? '<img loading="lazy" src="' + esc(urlPhotoModele(x)) + '" alt="">' : '<div class="photo-vide">' + esc(t('pas de photo')) + '<br><small>' + esc(t('glissez-en une ici')) + '</small></div>')
         + '<div class="photo-nom"><b>' + esc(m.marque + ' ' + m.modele) + '</b>' + (m.periode ? ' <span>' + esc(m.periode) + '</span>' : '') + '</div>'
         + (x ? '<div class="photo-cred">' + esc(x.source === 'import' ? t('photo importée') : (x.titre || '')) + '</div>' : '')
         + '<div class="photo-actions"><button type="button" class="btn-sec btn-petit" data-ph="autre">🔄 ' + esc(t(x ? 'Autre' : 'Chercher')) + '</button>'
@@ -38686,6 +38864,13 @@ async function fenetrePhotosModeles(){
     }).join('') || '<div class="partage-vide">' + esc(t('Aucun modèle.')) + '</div>';
     $('phGrille').querySelectorAll('.photo-carte').forEach(function(carte){
       const m = modeles.filter(function(x){ return x.cle === carte.dataset.cle; })[0];
+      carte.title = t('Glissez une photo ici');
+      carte.__depot = async function(fichiers){
+        carte.classList.add('photo-envoi');
+        $('phEtat').textContent = '⏳ ' + m.marque + ' ' + m.modele;
+        try{ await importerPour(m, fichiers[0]); $('phEtat').textContent = '✓ ' + m.marque + ' ' + m.modele; dessiner(); }
+        catch(e){ $('phEtat').textContent = e.message || String(e); carte.classList.remove('photo-envoi'); }
+      };
       carte.querySelectorAll('[data-ph]').forEach(function(b){
         b.onclick = async function(){
           const quoi = b.dataset.ph;
@@ -38707,16 +38892,31 @@ async function fenetrePhotosModeles(){
       });
     });
   };
+  const importerPour = async function(m, f){
+    const im = await chargerImage(f);
+    await enregistrerPhotoModele(m, { data: compresserImage(im, 150 * 1024).url, titre: t('photo importée'), credit: '', page: '' }, 'import');
+    idx = (lireIndexPhotos() || {}).lignes || idx;
+  };
   $('phFichier').onchange = async function(){
     const f = $('phFichier').files && $('phFichier').files[0];
     $('phFichier').value = '';
     if(!f || !importCible) return;
-    try{
-      const im = await chargerImage(f);
-      await enregistrerPhotoModele(importCible, { data: compresserImage(im, 150 * 1024).url, titre: t('photo importée'), credit: '', page: '' }, 'import');
-      idx = (lireIndexPhotos() || {}).lignes || idx;
-      dessiner();
-    }catch(e){ $('phEtat').textContent = e.message || String(e); }
+    try{ await importerPour(importCible, f); dessiner(); }
+    catch(e){ $('phEtat').textContent = e.message || String(e); }
+  };
+  /* Plusieurs photos lachees sur la liste : rangees d'apres leur nom. */
+  $('phGrille').__depot = async function(fichiers){
+    let ok = 0; const rates = [];
+    for(let i = 0; i < fichiers.length; i++){
+      const f = fichiers[i];
+      const m = modeleDuNomFichier(f.name, modeles, $('phManque').checked ? '' : $('phMarque').value);
+      if(!m){ rates.push(f.name); continue; }
+      $('phEtat').textContent = '⏳ ' + (i + 1) + ' / ' + fichiers.length + ' — ' + m.marque + ' ' + m.modele;
+      try{ await importerPour(m, f); ok++; }
+      catch(e){ rates.push(f.name + ' (' + (e.message || e) + ')'); }
+    }
+    dessiner();
+    $('phEtat').textContent = '✓ ' + ok + ' ' + t('photos ajoutées') + (rates.length ? ' · ' + t('modèle non reconnu, glissez-les sur le bon modèle') + ' : ' + rates.join(', ') : '');
   };
   $('phExporter').onclick = async function(){
     if(constructionPhotos) return;
