@@ -11145,7 +11145,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.59';
+const VERSION = '3.60';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15630,6 +15630,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.60': { date: '06/11/2026', lignes: [
+    "Adresse de contact autivio59@gmail.com : dans les mentions légales et dans le pied des e-mails automatiques (« Une question ? Contactez-nous à autivio59@gmail.com ») et sur les reçus.",
+  ] },
   '3.59': { date: '06/11/2026', lignes: [
     "E-mails automatiques (reçu de paiement, paiement validé ou refusé, crédit modifié) : nouvelle mise en page professionnelle (en-tête Autivio, tableau des montants, encadré pour le motif ou la raison, « Cordialement, l'équipe Autivio »). Le pied indique clairement que c'est un message automatique, qu'il ne faut pas y répondre, et comment nous contacter.",
   ] },
@@ -19342,7 +19345,7 @@ const INFOS_LEGALES = {
   siret:          '',   // 14 chiffres
   immatriculation:'',   // ex. « Registre national des entreprises (RNE) »
   adresse:        '',   // adresse postale de l'activite
-  email:          '',   // adresse de contact publique, ex. contact@autivio.fr
+  email:          'autivio59@gmail.com',   // adresse de contact publique (provisoire, en attendant contact@autivio.fr)
   telephone:      '',
   tva:            '',   // numero de TVA, ou « TVA non applicable, art. 293 B du CGI »
   directeur:      '',   // directeur de la publication ; vide = l'editeur
