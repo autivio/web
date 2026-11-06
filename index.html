@@ -2998,6 +2998,9 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Le client a reçu un e-mail avec la raison.": "Il cliente ha ricevuto un’e-mail con il motivo.",
+    "E-mail au client non envoyé (secret BREVO_API_KEY absent ?).": "E-mail al cliente non inviata (segreto BREVO_API_KEY mancante?).",
+    "Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)": "Motivo, inviato al cliente via e-mail (es. pagato 20 €, accreditati 30 € per errore)",
     "Pro": "Pro",
     "particulier": "privato",
     "Modifier le porte-monnaie d’un compte": "Modifica il portafoglio di un account",
@@ -4651,6 +4654,9 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Le client a reçu un e-mail avec la raison.": "De Client krut eng E-Mail mam Grond.",
+    "E-mail au client non envoyé (secret BREVO_API_KEY absent ?).": "E-Mail un de Client net geschéckt (Secret BREVO_API_KEY feelt?).",
+    "Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)": "Grond, per E-Mail un de Client (z. B. 20 € bezuelt, 30 € aus Versinn gutgeschriwwen)",
     "Pro": "Pro",
     "particulier": "Privatpersoun",
     "Modifier le porte-monnaie d’un compte": "Guthaben vun engem Kont änneren",
@@ -6303,6 +6309,9 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Le client a reçu un e-mail avec la raison.": "The customer received an e-mail with the reason.",
+    "E-mail au client non envoyé (secret BREVO_API_KEY absent ?).": "E-mail to the customer not sent (BREVO_API_KEY secret missing?).",
+    "Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)": "Reason, e-mailed to the customer (e.g. paid €20, credited €30 by mistake)",
     "Pro": "Pro",
     "particulier": "private",
     "Modifier le porte-monnaie d’un compte": "Edit an account’s wallet",
@@ -7954,6 +7963,9 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Le client a reçu un e-mail avec la raison.": "Der Kunde hat eine E-Mail mit dem Grund erhalten.",
+    "E-mail au client non envoyé (secret BREVO_API_KEY absent ?).": "E-Mail an den Kunden nicht gesendet (Secret BREVO_API_KEY fehlt?).",
+    "Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)": "Grund, per E-Mail an den Kunden (z. B. 20 € bezahlt, 30 € irrtümlich gutgeschrieben)",
     "Pro": "Profi",
     "particulier": "Privatperson",
     "Modifier le porte-monnaie d’un compte": "Guthaben eines Kontos ändern",
@@ -9626,6 +9638,9 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Le client a reçu un e-mail avec la raison.": "De klant kreeg een e-mail met de reden.",
+    "E-mail au client non envoyé (secret BREVO_API_KEY absent ?).": "E-mail naar de klant niet verstuurd (geheim BREVO_API_KEY ontbreekt?).",
+    "Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)": "Reden, per e-mail naar de klant (bv. 20 € betaald, per vergissing 30 € gecrediteerd)",
     "Pro": "Pro",
     "particulier": "particulier",
     "Modifier le porte-monnaie d’un compte": "Tegoed van een account wijzigen",
@@ -11130,7 +11145,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.57';
+const VERSION = '3.58';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15615,6 +15630,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.58': { date: '06/11/2026', lignes: [
+    "Quand l'administrateur modifie le crédit d'un compte, le client reçoit un e-mail « Votre crédit Autivio a été modifié » avec l'ancien crédit, le nouveau et la raison écrite dans la case « Raison ».",
+  ] },
   '3.57': { date: '06/11/2026', lignes: [
     "Administrateur, « Crédits » : chaque compte proposé (et le porte-monnaie ouvert) porte une étiquette PRO (verte) ou PARTICULIER (grise).",
   ] },
@@ -43014,7 +43032,7 @@ async function fenetreCreditsAdmin(){
     pmZone.innerHTML = '<div class="pm-carte">'
       + '<div class="pm-tete">' + badgeTypeCompte(r.type_compte || ((comptesPourSuggestions || []).filter(function(c){ return c.email === String(r.email || '').toLowerCase(); })[0] || {}).type) + '<b>' + esc(r.email) + '</b>' + (r.nom ? ' · ' + esc(r.nom) : '') + '<span class="pm-solde">' + esc(t('Crédit actuel :')) + ' <b>' + esc(eurosCredit(r.solde)) + '</b></span></div>'
       + '<div class="pm-form"><label>' + esc(t('Nouveau crédit')) + ' <span class="cred-montant"><input id="pmNouveau" type="text" inputmode="decimal" value="' + esc((r.solde / 100).toFixed(2).replace('.', ',')) + '"><span>€</span></span></label>'
-      +   '<input id="pmMotif" type="text" maxlength="300" placeholder="' + esc(t('Motif (ex. payé 20 €, crédité 30 € par erreur)')) + '">'
+      +   '<input id="pmMotif" type="text" maxlength="300" placeholder="' + esc(t('Raison, envoyée au client par e-mail (ex. payé 20 €, crédité 30 € par erreur)')) + '">'
       +   '<button type="button" class="dlg-oui" id="pmEnregistrer">' + esc(t('Enregistrer')) + '</button></div>'
       + '<div class="dlg-detail" id="pmMsg">' + (message ? esc(message) : '') + '</div>'
       + (hist.length ? '<details class="cred-histo" open><summary>' + esc(t('Derniers paiements et corrections')) + '</summary>' + hist.join('') + '</details>' : '')
@@ -43040,7 +43058,8 @@ async function fenetreCreditsAdmin(){
       bt.disabled = true;
       try{
         const r2 = await appelPaiement({ action: 'admin-ajuster', email: r.email, nouveau: n, attendu: r.solde, motif: pmZone.querySelector('#pmMotif').value });
-        await pmAfficher(r.email, '✓ ' + t('Crédit modifié :') + ' ' + eurosCredit(r.solde) + ' → ' + eurosCredit(r2.solde) + '.');
+        await pmAfficher(r.email, '✓ ' + t('Crédit modifié :') + ' ' + eurosCredit(r.solde) + ' → ' + eurosCredit(r2.solde) + '. '
+          + (r2.mail ? t('Le client a reçu un e-mail avec la raison.') : t('E-mail au client non envoyé (secret BREVO_API_KEY absent ?).')));
       }catch(e){
         m.textContent = e.message || String(e);
         bt.disabled = false; confirme = false; bt.textContent = t('Enregistrer');
