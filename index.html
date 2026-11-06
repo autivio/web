@@ -11145,7 +11145,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.58';
+const VERSION = '3.59';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15630,6 +15630,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.59': { date: '06/11/2026', lignes: [
+    "E-mails automatiques (reçu de paiement, paiement validé ou refusé, crédit modifié) : nouvelle mise en page professionnelle (en-tête Autivio, tableau des montants, encadré pour le motif ou la raison, « Cordialement, l'équipe Autivio »). Le pied indique clairement que c'est un message automatique, qu'il ne faut pas y répondre, et comment nous contacter.",
+  ] },
   '3.58': { date: '06/11/2026', lignes: [
     "Quand l'administrateur modifie le crédit d'un compte, le client reçoit un e-mail « Votre crédit Autivio a été modifié » avec l'ancien crédit, le nouveau et la raison écrite dans la case « Raison ».",
   ] },
