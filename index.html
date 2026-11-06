@@ -410,6 +410,37 @@
   .menu-fiche button.rouge{color:#b3261e;}
   .menu-fiche button.rouge:hover{background:#fdecec;}
   .sidebar-bas{margin-top:auto;display:flex;flex-direction:column;gap:6px;}
+  /* 3.53 : notifications de paiement (restent jusqu'a la croix). */
+  .sugg-env{position:relative;flex:1;min-width:0;display:flex;}
+  .sugg-env > input{flex:1;min-width:0;width:100%;}
+  .sugg-liste{position:fixed;z-index:100000;max-height:280px;overflow:auto;background:#fff;color:#0f172a;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 28px rgba(15,23,42,.18);padding:4px;}
+  .sugg-liste[hidden]{display:none;}
+  .sugg-item{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13.5px;line-height:1.35;}
+  .sugg-item span{color:#475569;}
+  .badge-compte{display:inline-block;margin-right:7px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;vertical-align:1px;}
+  .badge-pro{background:#dcfce7;color:#166534;border:1px solid #86efac;}
+  .badge-part{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
+  .sugg-item.actif,.sugg-item:hover{background:#eef4ff;}
+  .pm-recherche{display:flex;gap:8px;align-items:center;}
+  .pm-recherche #pmEmail{flex:1;min-width:0;}
+  .pm-form #pmEnregistrer{padding:8px 14px;}
+  .pm-zone .pm-carte{margin:6px 0 4px;padding:10px 12px;border:1px solid var(--line,#dcdfe6);border-radius:10px;background:var(--bg-soft,#f8fafc);}
+  .pm-tete{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;margin-bottom:8px;}
+  .pm-solde{margin-left:auto;font-size:14px;}
+  .pm-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .pm-form label{display:flex;align-items:center;gap:6px;}
+  .pm-form #pmMotif{flex:1;min-width:180px;}
+  .notifs-gauche{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;}
+  .notifs-gauche[hidden]{display:none;}
+  .notif-carte{position:relative;padding:10px 30px 10px 12px;border-radius:10px;font-size:12.5px;line-height:1.45;color:#0f172a;background:#ecfdf3;border:1px solid #86efac;box-shadow:0 2px 8px rgba(0,0,0,.18);animation:notifEntre .25s ease-out;}
+  .notif-carte.notif-refus{background:#fef2f2;border-color:#fca5a5;}
+  .notif-carte.notif-merci{background:#eff6ff;border-color:#93c5fd;}
+  .notif-carte b{display:block;margin-bottom:2px;font-size:13px;}
+  .notif-carte .notif-motif{display:block;margin-top:4px;font-style:italic;}
+  .notif-croix{position:absolute;top:4px;right:4px;width:26px;height:26px;border:0;border-radius:6px;background:transparent;color:#334155;font-size:15px;line-height:1;cursor:pointer;}
+  .notif-croix:hover{background:rgba(0,0,0,.08);}
+  @keyframes notifEntre{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+  #menuMobile.a-notif::after{content:'';position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:#ef4444;border:2px solid #fff;}
 
   /* ---------- Bouton de synchronisation ----------
      Le rond dit l'etat sans un mot : gris quand le serveur n'est pas
@@ -2284,6 +2315,7 @@
     </nav>
 
     <button id="newVehicleBtn" data-fr="+ Nouveau véhicule">+ Nouveau véhicule</button>
+    <div id="notifsGauche" class="notifs-gauche" hidden aria-live="polite"></div>
 
     <div class="liste-titre"><span data-fr="Vos véhicules">Vos véhicules</span> <span id="nbVehicules"></span><button type="button" id="btnSelection" data-fr-title="Sélectionner" title="Sélectionner">☑</button></div>
     <div id="barreSelection"></div>
@@ -2966,6 +2998,45 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Pro": "Pro",
+    "particulier": "privato",
+    "Modifier le porte-monnaie d’un compte": "Modifica il portafoglio di un account",
+    "Afficher": "Mostra",
+    "Indiquez l’adresse e-mail du compte.": "Inserisci l’indirizzo e-mail dell’account.",
+    "carte": "carta",
+    "à la main / PayPal.Me": "manuale / PayPal.Me",
+    "correction": "correzione",
+    "Crédit actuel :": "Credito attuale:",
+    "Nouveau crédit": "Nuovo credito",
+    "Motif (ex. payé 20 €, crédité 30 € par erreur)": "Motivo (es. pagato 20 €, accreditati 30 € per errore)",
+    "Derniers paiements et corrections": "Ultimi pagamenti e correzioni",
+    "Montant invalide (0 € à 100 000 €).": "Importo non valido (da 0 € a 100 000 €).",
+    "C’est déjà le crédit du compte.": "È già il credito dell’account.",
+    "Confirmer :": "Conferma:",
+    "Cliquez encore pour confirmer.": "Clicca di nuovo per confermare.",
+    "Crédit modifié :": "Credito modificato:",
+    "Corriger le crédit": "Correggi il credito",
+    "Votre reçu vous a été envoyé par e-mail.": "La ricevuta ti è stata inviata via e-mail.",
+    "Votre reçu est envoyé par e-mail.": "La ricevuta viene inviata via e-mail.",
+    "Votre paiement a été validé": "Il tuo pagamento è stato convalidato",
+    "de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.": "di credito aggiunti al tuo account. Puoi usare il tuo credito.",
+    "Votre paiement n’a pas été validé": "Il tuo pagamento non è stato convalidato",
+    "Paiement de": "Pagamento di",
+    "Motif :": "Motivo:",
+    "Merci pour votre paiement !": "Grazie per il pagamento!",
+    "de crédit ajoutés. Vous pouvez utiliser votre crédit.": "di credito aggiunti. Puoi usare il tuo credito.",
+    "Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.": "È in verifica: sarai avvisato qui appena sarà convalidato.",
+    "Merci pour votre paiement ! Il est en cours de vérification.": "Grazie per il pagamento! È in verifica.",
+    "Refuser ce paiement": "Rifiuta questo pagamento",
+    "Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :": "Motivo inviato al cliente (visibile in Autivio e via e-mail):",
+    "ex. Paiement non reçu sur PayPal": "es. Pagamento non ricevuto su PayPal",
+    "Paiement non reçu sur PayPal": "Pagamento non ricevuto su PayPal",
+    "Montant différent de la demande": "Importo diverso dalla richiesta",
+    "Référence absente du message PayPal": "Riferimento assente nel messaggio PayPal",
+    "Paiement en double": "Pagamento doppio",
+    "Le client est prévenu": "Il cliente è stato avvisato",
+    "(notification + e-mail).": "(notifica + e-mail).",
+    "(notification dans Autivio).": "(notifica in Autivio).",
     "probable, modifiable": "probabile, modificabile",
     "marque passée à l’automatique": "marca passata all’automatico",
     "manuelles": "manuali",
@@ -4580,6 +4651,45 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Pro": "Pro",
+    "particulier": "Privatpersoun",
+    "Modifier le porte-monnaie d’un compte": "Guthaben vun engem Kont änneren",
+    "Afficher": "Weisen",
+    "Indiquez l’adresse e-mail du compte.": "Gitt d’E-Mail-Adress vum Kont an.",
+    "carte": "Kaart",
+    "à la main / PayPal.Me": "manuell / PayPal.Me",
+    "correction": "Korrektur",
+    "Crédit actuel :": "Aktuellt Guthaben:",
+    "Nouveau crédit": "Neit Guthaben",
+    "Motif (ex. payé 20 €, crédité 30 € par erreur)": "Grond (z. B. 20 € bezuelt, 30 € aus Versinn gutgeschriwwen)",
+    "Derniers paiements et corrections": "Lescht Bezuelungen a Korrekturen",
+    "Montant invalide (0 € à 100 000 €).": "Ongültege Betrag (0 € bis 100 000 €).",
+    "C’est déjà le crédit du compte.": "Dat ass schonn d’Guthaben vum Kont.",
+    "Confirmer :": "Bestätegen:",
+    "Cliquez encore pour confirmer.": "Klickt nach eng Kéier fir ze bestätegen.",
+    "Crédit modifié :": "Guthaben geännert:",
+    "Corriger le crédit": "Guthaben korrigéieren",
+    "Votre reçu vous a été envoyé par e-mail.": "Är Quittung gouf Iech per E-Mail geschéckt.",
+    "Votre reçu est envoyé par e-mail.": "Är Quittung gëtt per E-Mail geschéckt.",
+    "Votre paiement a été validé": "Är Bezuelung gouf validéiert",
+    "de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.": "Guthaben op Äre Kont derbäigesat. Dir kënnt Äert Guthaben benotzen.",
+    "Votre paiement n’a pas été validé": "Är Bezuelung gouf net validéiert",
+    "Paiement de": "Bezuelung vun",
+    "Motif :": "Grond:",
+    "Merci pour votre paiement !": "Merci fir Är Bezuelung!",
+    "de crédit ajoutés. Vous pouvez utiliser votre crédit.": "Guthaben derbäigesat. Dir kënnt Äert Guthaben benotzen.",
+    "Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.": "Si gëtt iwwerpréift: Dir gitt hei informéiert soubal se validéiert ass.",
+    "Merci pour votre paiement ! Il est en cours de vérification.": "Merci fir Är Bezuelung! Si gëtt iwwerpréift.",
+    "Refuser ce paiement": "Dës Bezuelung refuséieren",
+    "Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :": "Grond un de Client (an Autivio a per E-Mail):",
+    "ex. Paiement non reçu sur PayPal": "z. B. Bezuelung net op PayPal ukomm",
+    "Paiement non reçu sur PayPal": "Bezuelung net op PayPal ukomm",
+    "Montant différent de la demande": "Betrag anescht wéi d’Ufro",
+    "Référence absente du message PayPal": "Referenz feelt am PayPal-Message",
+    "Paiement en double": "Duebel Bezuelung",
+    "Le client est prévenu": "De Client ass informéiert",
+    "(notification + e-mail).": "(Notifikatioun + E-Mail).",
+    "(notification dans Autivio).": "(Notifikatioun an Autivio).",
     "probable, modifiable": "wahrscheinlech, ännerbar",
     "marque passée à l’automatique": "Mark op Automatik ëmgestallt",
     "manuelles": "manuell",
@@ -6193,6 +6303,45 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Pro": "Pro",
+    "particulier": "private",
+    "Modifier le porte-monnaie d’un compte": "Edit an account’s wallet",
+    "Afficher": "Show",
+    "Indiquez l’adresse e-mail du compte.": "Enter the account’s e-mail address.",
+    "carte": "card",
+    "à la main / PayPal.Me": "manual / PayPal.Me",
+    "correction": "correction",
+    "Crédit actuel :": "Current credit:",
+    "Nouveau crédit": "New credit",
+    "Motif (ex. payé 20 €, crédité 30 € par erreur)": "Reason (e.g. paid €20, credited €30 by mistake)",
+    "Derniers paiements et corrections": "Latest payments and corrections",
+    "Montant invalide (0 € à 100 000 €).": "Invalid amount (€0 to €100,000).",
+    "C’est déjà le crédit du compte.": "That is already the account’s credit.",
+    "Confirmer :": "Confirm:",
+    "Cliquez encore pour confirmer.": "Click again to confirm.",
+    "Crédit modifié :": "Credit changed:",
+    "Corriger le crédit": "Correct the credit",
+    "Votre reçu vous a été envoyé par e-mail.": "Your receipt has been sent to you by e-mail.",
+    "Votre reçu est envoyé par e-mail.": "Your receipt is sent by e-mail.",
+    "Votre paiement a été validé": "Your payment has been approved",
+    "de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.": "of credit added to your account. You can use your credit.",
+    "Votre paiement n’a pas été validé": "Your payment was not approved",
+    "Paiement de": "Payment of",
+    "Motif :": "Reason:",
+    "Merci pour votre paiement !": "Thank you for your payment!",
+    "de crédit ajoutés. Vous pouvez utiliser votre crédit.": "of credit added. You can use your credit.",
+    "Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.": "It is being checked: you will be notified here as soon as it is approved.",
+    "Merci pour votre paiement ! Il est en cours de vérification.": "Thank you for your payment! It is being checked.",
+    "Refuser ce paiement": "Reject this payment",
+    "Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :": "Reason sent to the customer (shown in Autivio and sent by e-mail):",
+    "ex. Paiement non reçu sur PayPal": "e.g. Payment not received on PayPal",
+    "Paiement non reçu sur PayPal": "Payment not received on PayPal",
+    "Montant différent de la demande": "Amount differs from the request",
+    "Référence absente du message PayPal": "Reference missing from the PayPal message",
+    "Paiement en double": "Duplicate payment",
+    "Le client est prévenu": "The customer has been notified",
+    "(notification + e-mail).": "(notification + e-mail).",
+    "(notification dans Autivio).": "(notification in Autivio).",
     "probable, modifiable": "likely, can be changed",
     "marque passée à l’automatique": "brand moved to automatic",
     "manuelles": "manual",
@@ -7805,6 +7954,46 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Pro": "Profi",
+    "particulier": "Privatperson",
+    "Modifier le porte-monnaie d’un compte": "Guthaben eines Kontos ändern",
+    "Afficher": "Anzeigen",
+    "Indiquez l’adresse e-mail du compte.": "Geben Sie die E-Mail-Adresse des Kontos ein.",
+    "carte": "Karte",
+    "à la main / PayPal.Me": "manuell / PayPal.Me",
+    "correction": "Korrektur",
+    "Crédit actuel :": "Aktuelles Guthaben:",
+    "Nouveau crédit": "Neues Guthaben",
+    "Motif (ex. payé 20 €, crédité 30 € par erreur)": "Grund (z. B. 20 € bezahlt, 30 € irrtümlich gutgeschrieben)",
+    "Enregistrer": "Speichern",
+    "Derniers paiements et corrections": "Letzte Zahlungen und Korrekturen",
+    "Montant invalide (0 € à 100 000 €).": "Ungültiger Betrag (0 € bis 100 000 €).",
+    "C’est déjà le crédit du compte.": "Das ist bereits das Guthaben des Kontos.",
+    "Confirmer :": "Bestätigen:",
+    "Cliquez encore pour confirmer.": "Zum Bestätigen erneut klicken.",
+    "Crédit modifié :": "Guthaben geändert:",
+    "Corriger le crédit": "Guthaben korrigieren",
+    "Votre reçu vous a été envoyé par e-mail.": "Ihre Quittung wurde Ihnen per E-Mail gesendet.",
+    "Votre reçu est envoyé par e-mail.": "Ihre Quittung wird per E-Mail gesendet.",
+    "Votre paiement a été validé": "Ihre Zahlung wurde bestätigt",
+    "de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.": "Guthaben wurde Ihrem Konto gutgeschrieben. Sie können Ihr Guthaben nutzen.",
+    "Votre paiement n’a pas été validé": "Ihre Zahlung wurde nicht bestätigt",
+    "Paiement de": "Zahlung von",
+    "Motif :": "Grund:",
+    "Merci pour votre paiement !": "Vielen Dank für Ihre Zahlung!",
+    "de crédit ajoutés. Vous pouvez utiliser votre crédit.": "Guthaben hinzugefügt. Sie können Ihr Guthaben nutzen.",
+    "Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.": "Sie wird geprüft: Sie werden hier benachrichtigt, sobald sie bestätigt ist.",
+    "Merci pour votre paiement ! Il est en cours de vérification.": "Vielen Dank für Ihre Zahlung! Sie wird geprüft.",
+    "Refuser ce paiement": "Diese Zahlung ablehnen",
+    "Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :": "Grund an den Kunden (in Autivio angezeigt und per E-Mail gesendet):",
+    "ex. Paiement non reçu sur PayPal": "z. B. Zahlung auf PayPal nicht eingegangen",
+    "Paiement non reçu sur PayPal": "Zahlung auf PayPal nicht eingegangen",
+    "Montant différent de la demande": "Betrag weicht von der Anfrage ab",
+    "Référence absente du message PayPal": "Referenz fehlt in der PayPal-Nachricht",
+    "Paiement en double": "Doppelte Zahlung",
+    "Le client est prévenu": "Der Kunde wurde benachrichtigt",
+    "(notification + e-mail).": "(Benachrichtigung + E-Mail).",
+    "(notification dans Autivio).": "(Benachrichtigung in Autivio).",
     "probable, modifiable": "wahrscheinlich, änderbar",
     "marque passée à l’automatique": "Marke auf Automatik umgestellt",
     "manuelles": "manuell",
@@ -9437,6 +9626,46 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Pro": "Pro",
+    "particulier": "particulier",
+    "Modifier le porte-monnaie d’un compte": "Tegoed van een account wijzigen",
+    "Afficher": "Tonen",
+    "Indiquez l’adresse e-mail du compte.": "Vul het e-mailadres van de account in.",
+    "carte": "kaart",
+    "à la main / PayPal.Me": "handmatig / PayPal.Me",
+    "correction": "correctie",
+    "Crédit actuel :": "Huidig tegoed:",
+    "Nouveau crédit": "Nieuw tegoed",
+    "Motif (ex. payé 20 €, crédité 30 € par erreur)": "Reden (bv. 20 € betaald, per vergissing 30 € gecrediteerd)",
+    "Enregistrer": "Opslaan",
+    "Derniers paiements et corrections": "Laatste betalingen en correcties",
+    "Montant invalide (0 € à 100 000 €).": "Ongeldig bedrag (0 € tot 100 000 €).",
+    "C’est déjà le crédit du compte.": "Dat is al het tegoed van de account.",
+    "Confirmer :": "Bevestigen:",
+    "Cliquez encore pour confirmer.": "Klik nogmaals om te bevestigen.",
+    "Crédit modifié :": "Tegoed gewijzigd:",
+    "Corriger le crédit": "Tegoed corrigeren",
+    "Votre reçu vous a été envoyé par e-mail.": "Uw ontvangstbewijs is per e-mail verstuurd.",
+    "Votre reçu est envoyé par e-mail.": "Uw ontvangstbewijs wordt per e-mail verstuurd.",
+    "Votre paiement a été validé": "Uw betaling is goedgekeurd",
+    "de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.": "tegoed toegevoegd aan uw account. U kunt uw tegoed gebruiken.",
+    "Votre paiement n’a pas été validé": "Uw betaling is niet goedgekeurd",
+    "Paiement de": "Betaling van",
+    "Motif :": "Reden:",
+    "Merci pour votre paiement !": "Bedankt voor uw betaling!",
+    "de crédit ajoutés. Vous pouvez utiliser votre crédit.": "tegoed toegevoegd. U kunt uw tegoed gebruiken.",
+    "Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.": "Ze wordt gecontroleerd: u krijgt hier bericht zodra ze is goedgekeurd.",
+    "Merci pour votre paiement ! Il est en cours de vérification.": "Bedankt voor uw betaling! Ze wordt gecontroleerd.",
+    "Refuser ce paiement": "Deze betaling weigeren",
+    "Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :": "Reden naar de klant (zichtbaar in Autivio en per e-mail):",
+    "ex. Paiement non reçu sur PayPal": "bv. Betaling niet ontvangen op PayPal",
+    "Paiement non reçu sur PayPal": "Betaling niet ontvangen op PayPal",
+    "Montant différent de la demande": "Bedrag verschilt van de aanvraag",
+    "Référence absente du message PayPal": "Referentie ontbreekt in het PayPal-bericht",
+    "Paiement en double": "Dubbele betaling",
+    "Le client est prévenu": "De klant is verwittigd",
+    "(notification + e-mail).": "(melding + e-mail).",
+    "(notification dans Autivio).": "(melding in Autivio).",
     "probable, modifiable": "waarschijnlijk, aanpasbaar",
     "marque passée à l’automatique": "merk overgestapt op automaat",
     "manuelles": "handgeschakeld",
@@ -10901,7 +11130,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.52';
+const VERSION = '3.57';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -11149,7 +11378,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '05/11/2026';
+const VERSION_DATE = '06/11/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -12807,6 +13036,7 @@ async function enterApp(){
   if(bd) bd.onclick = fenetreDossiers;
   /* Les credits du carnet d'entretien s'achetent a tout moment. */
   majBoutonCredits();
+  demarrerNotifications();
   /* Le numero de version rouvre la note des nouveautes a la demande. */
   /* La note des nouveautes se relit quand on veut : par ce bouton, ou
      en cliquant le numero de version en haut a gauche. */
@@ -15385,6 +15615,24 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.57': { date: '06/11/2026', lignes: [
+    "Administrateur, « Crédits » : chaque compte proposé (et le porte-monnaie ouvert) porte une étiquette PRO (verte) ou PARTICULIER (grise).",
+  ] },
+  '3.56': { date: '06/11/2026', lignes: [
+    "Administrateur, « Crédits » : plus besoin de retaper l'adresse d'un pro. Dès les premières lettres (de l'adresse ou du nom du garage), une liste déroulante propose les comptes ; un clic ou Entrée la choisit (et ouvre directement son porte-monnaie).",
+  ] },
+  '3.55': { date: '06/11/2026', lignes: [
+    "Administrateur, « Crédits » : nouveau bloc « Modifier le porte-monnaie d'un compte ». On tape l'adresse du compte, on voit son crédit, ses derniers paiements et corrections, on met le bon montant (ex. 30 € → 20 €) avec un motif, et on confirme. Chaque correction est gardée (avant, après, motif, date).",
+    "Bouton « ✎ Corriger le crédit » sur chaque demande validée des « Dernières demandes traitées ». Serveur : script supabase/28-corriger-porte-monnaie.sql et fonction « paiement » mise à jour.",
+  ] },
+  '3.54': { date: '06/11/2026', lignes: [
+    "Reçu de paiement par e-mail, automatiquement : à chaque paiement de crédit (carte, PayPal, ou PayPal.Me validé par l'administrateur), le client reçoit un e-mail avec son reçu en PDF — date et heure, moyen de paiement, montant payé, crédit ajouté, crédit disponible, numéro de reçu. C'est un reçu, pas une facture.",
+  ] },
+  '3.53': { date: '06/11/2026', lignes: [
+    "Notifications de paiement dans la colonne de gauche (elles restent jusqu'à ce qu'on clique la croix) : « Merci pour votre paiement ! » dès que le client paie (carte, PayPal, ou « J'ai payé »), puis « Votre paiement a été validé — vous pouvez utiliser votre crédit » quand l'administrateur valide. Sur téléphone, un point rouge sur le menu le signale.",
+    "Administrateur : « Refuser » demande un motif (propositions toutes prêtes). Le client le voit dans sa notification « Votre paiement n'a pas été validé » et le reçoit par e-mail. Le motif apparaît aussi dans les demandes traitées.",
+    "Serveur : script supabase/27-notifications-paiements.sql et fonction « paiement » mise à jour.",
+  ] },
   '3.52': { date: '05/11/2026', lignes: [
     "Boîte de vitesses : plus de question « Manuelle ou automatique ? ». La case se remplit toute seule avec la boîte la plus probable (fichiers officiels de l'année, versions de la base, marque, hybride, puissance, année) ; si elle est fausse, il suffit de la changer dans la liste.",
   ] },
@@ -42188,7 +42436,9 @@ async function appelPaiement(corps){
   let r = await envoi();
   if(r.status === 401 && sessionServeur && sessionServeur.refresh_token && await serveurRenouveler()) r = await envoi();
   const rep = await r.json().catch(function(){ return null; });
-  if(r.status === 404) throw new Error(t('La fonction « paiement » n’est pas encore installée sur le serveur (voir supabase/PAIEMENT.txt).'));
+  /* 404 sans message : la fonction n'existe pas ; 404 avec message : la
+     fonction repond (« Aucun compte Autivio avec cette adresse. »...). */
+  if(r.status === 404 && !(rep && rep.erreur)) throw new Error(t('La fonction « paiement » n’est pas encore installée sur le serveur (voir supabase/PAIEMENT.txt).'));
   if(!r.ok || !rep) throw new Error((rep && rep.erreur) || (t('Erreur du serveur') + ' ' + r.status));
   return rep;
 }
@@ -42454,11 +42704,189 @@ function etapePaypalMe(fond, r, montant, fermer){
       await appelPaiement({ action: 'paypal-me-paye', montant: montant, reference: r.reference });
       etatCreditsCache = {};
       fermer(true);
-      await informer(t('Merci ! Votre paiement va être vérifié : votre crédit sera ajouté dès sa validation.'));
+      ajouterNotifLocale('merci', '🙏 ' + t('Merci pour votre paiement !'),
+        t('Il est en cours de vérification : vous serez prévenu ici dès qu’il sera validé.'));
+      bandeau(t('Merci pour votre paiement ! Il est en cours de vérification.'), 'ok');
       const zone = document.getElementById('carnetCredits');
       if(zone && vehicles[currentId]) afficherCreditsCarnet(vehicles[currentId]);
     }catch(e){ msg.textContent = e.message || String(e); b.disabled = false; }
   };
+}
+
+/* 3.56 : SUGGESTIONS D'ADRESSES (administrateur). Quelques lettres de
+   l'adresse ou du nom du garage -> liste deroulante des comptes ; un clic
+   (ou Entree) remplit la case. La liste des comptes est lue une fois. */
+let comptesPourSuggestions = null;
+async function chargerComptesSuggestions(){
+  if(comptesPourSuggestions) return comptesPourSuggestions;
+  try{
+    const l = await serveurListeComptes();
+    comptesPourSuggestions = (Array.isArray(l) ? l : []).filter(function(c){ return c && c.email; })
+      .map(function(c){ return { email: String(c.email).toLowerCase(), nom: c.nom || '', type: c.type_compte || '' }; })
+      .sort(function(a, b){ return (a.type === 'particulier') - (b.type === 'particulier') || a.email.localeCompare(b.email); });
+  }catch(e){ comptesPourSuggestions = []; }
+  return comptesPourSuggestions;
+}
+/* 3.57 : PRO / PARTICULIER bien visible. */
+function badgeTypeCompte(type){
+  if(type === 'particulier') return '<span class="badge-compte badge-part">' + esc(t('Particulier')) + '</span>';
+  if(type) return '<span class="badge-compte badge-pro">' + esc(t('Pro')) + '</span>';
+  return '';
+}
+function suggestionsComptes(input, choisir){
+  const enveloppe = document.createElement('div');
+  enveloppe.className = 'sugg-env';
+  input.parentNode.insertBefore(enveloppe, input);
+  enveloppe.appendChild(input);
+  /* La liste flotte au-dessus de tout (jamais coupee par le bord de la
+     fenetre) : elle est posee sur la page, sous la case (ou au-dessus s'il
+     n'y a pas la place). */
+  document.querySelectorAll('.sugg-liste').forEach(function(l){ if(l.__input && !document.body.contains(l.__input)) l.remove(); });
+  const liste = document.createElement('div');
+  liste.__input = input;
+  liste.className = 'sugg-liste';
+  liste.hidden = true;
+  liste.setAttribute('role', 'listbox');
+  document.body.appendChild(liste);
+  const placer = function(){
+    if(!document.body.contains(input)){ liste.remove(); return; }
+    const r = input.getBoundingClientRect();
+    const h = Math.min(280, liste.scrollHeight || 280);
+    const dessous = window.innerHeight - r.bottom - 8;
+    liste.style.left = Math.round(r.left) + 'px';
+    liste.style.width = Math.round(r.width) + 'px';
+    liste.style.top = Math.round(dessous >= Math.min(h, 160) || dessous >= r.top ? r.bottom + 4 : Math.max(8, r.top - 4 - h)) + 'px';
+    liste.style.maxHeight = Math.max(120, Math.min(280, dessous >= r.top ? dessous : r.top - 12)) + 'px';
+  };
+  window.addEventListener('resize', function(){ if(!liste.hidden) placer(); });
+  document.addEventListener('scroll', function(){ if(!liste.hidden) placer(); }, true);
+  input.setAttribute('autocomplete', 'off');
+  let res = [], actif = -1;
+  const N = function(x){ return String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+  const fermer = function(){ liste.hidden = true; actif = -1; delete input.dataset.suggOuverte; };
+  const prendre = function(i){
+    const c = res[i];
+    if(!c) return;
+    input.value = c.email;
+    fermer();
+    if(choisir) choisir(c.email);
+  };
+  const dessiner = function(){
+    if(!res.length){ fermer(); return; }
+    liste.innerHTML = res.map(function(c, i){
+      return '<div class="sugg-item' + (i === actif ? ' actif' : '') + '" role="option" data-i="' + i + '">'
+        + badgeTypeCompte(c.type) + '<b>' + esc(c.email) + '</b>' + (c.nom ? ' <span>' + esc(c.nom) + '</span>' : '') + '</div>';
+    }).join('');
+    liste.hidden = false;
+    input.dataset.suggOuverte = '1';
+    placer();
+    liste.querySelectorAll('.sugg-item').forEach(function(el){
+      el.onmousedown = function(e){ e.preventDefault(); prendre(Number(el.dataset.i)); };
+    });
+  };
+  const chercher = async function(){
+    const q = N(input.value.trim());
+    if(q.length < 1){ fermer(); return; }
+    const l = await chargerComptesSuggestions();
+    if(N(input.value.trim()) !== q) return;           // on a tape entre-temps
+    const debut = [], dedans = [];
+    l.forEach(function(c){
+      const e = N(c.email), n = N(c.nom);
+      if(e.indexOf(q) === 0 || n.indexOf(q) === 0) debut.push(c);
+      else if(e.indexOf(q) !== -1 || n.indexOf(q) !== -1) dedans.push(c);
+    });
+    res = debut.concat(dedans).slice(0, 8);
+    actif = res.length ? 0 : -1;
+    if(res.length === 1 && res[0].email === N(input.value.trim())){ fermer(); return; }
+    dessiner();
+  };
+  input.addEventListener('input', chercher);
+  input.addEventListener('focus', function(){ chargerComptesSuggestions(); if(input.value.trim()) chercher(); });
+  input.addEventListener('blur', function(){ setTimeout(fermer, 150); });
+  input.addEventListener('keydown', function(e){
+    if(liste.hidden) return;
+    if(e.key === 'ArrowDown'){ e.preventDefault(); actif = Math.min(res.length - 1, actif + 1); dessiner(); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); actif = Math.max(0, actif - 1); dessiner(); }
+    else if(e.key === 'Enter' && actif >= 0){ e.preventDefault(); e.stopImmediatePropagation(); prendre(actif); }
+    else if(e.key === 'Escape'){ fermer(); }
+  });
+}
+
+/* 3.53 : NOTIFICATIONS DE PAIEMENT, dans la colonne de gauche. Elles
+   restent jusqu'a ce que le client clique la croix.
+   - « Merci pour votre paiement » : des que le client a paye (carte,
+     PayPal, ou « J'ai payé » pour PayPal.Me) — gardee sur cet appareil.
+   - « Paiement validé » / « Paiement refusé + motif » : quand
+     l'administrateur traite la demande — lue sur le serveur (table
+     demandes_credits, script 27), fermee pour de bon par la croix. */
+let notifsServeur = [], notifsServeurConnues = {};
+function notifsLocales(){
+  try{ const d = ls.get('notifsLocales'); const l = JSON.parse(d && d.value ? d.value : '[]'); return Array.isArray(l) ? l : []; }catch(e){ return []; }
+}
+function ajouterNotifLocale(type, titre, texte){
+  const l = notifsLocales();
+  l.push({ id: 'L' + Date.now() + Math.random().toString(36).slice(2, 6), type: type, titre: titre, texte: texte, date: Date.now() });
+  try{ ls.set('notifsLocales', JSON.stringify(l.slice(-8))); }catch(e){}
+  dessinerNotifs();
+}
+function dessinerNotifs(){
+  const z = document.getElementById('notifsGauche');
+  if(!z) return;
+  const euro = function(c){ return eurosCredit(c); };
+  const cartes = notifsLocales().map(function(n){
+    return { id: n.id, classe: n.type === 'merci' ? 'notif-merci' : '', titre: n.titre, texte: n.texte, motif: '' };
+  }).concat(notifsServeur.map(function(d){
+    if(d.statut === 'validee') return { id: 'S' + d.id, classe: '', titre: '✅ ' + t('Votre paiement a été validé'),
+      texte: euro(d.credits) + ' ' + t('de crédit ajoutés à votre compte. Vous pouvez utiliser votre crédit.') + ' ' + t('Votre reçu est envoyé par e-mail.'), motif: '' };
+    return { id: 'S' + d.id, classe: 'notif-refus', titre: '❌ ' + t('Votre paiement n’a pas été validé'),
+      texte: t('Paiement de') + ' ' + euro(d.montant) + (d.reference ? ' (' + d.reference + ')' : '') + '.',
+      motif: d.motif ? t('Motif :') + ' ' + d.motif : '' };
+  }));
+  z.hidden = !cartes.length;
+  const mm = document.getElementById('menuMobile');
+  if(mm) mm.classList.toggle('a-notif', cartes.length > 0);
+  z.innerHTML = cartes.map(function(c){
+    return '<div class="notif-carte ' + c.classe + '" role="status"><b>' + esc(c.titre) + '</b>' + esc(c.texte)
+      + (c.motif ? '<span class="notif-motif">' + esc(c.motif) + '</span>' : '')
+      + '<button type="button" class="notif-croix" data-notif="' + esc(c.id) + '" title="' + esc(t('Fermer')) + '" aria-label="' + esc(t('Fermer')) + '">✕</button></div>';
+  }).join('');
+  z.querySelectorAll('[data-notif]').forEach(function(b){
+    b.onclick = function(){ fermerNotif(b.dataset.notif); };
+  });
+}
+async function fermerNotif(id){
+  if(id[0] === 'L'){
+    try{ ls.set('notifsLocales', JSON.stringify(notifsLocales().filter(function(n){ return n.id !== id; }))); }catch(e){}
+    dessinerNotifs();
+    return;
+  }
+  const n = Number(id.slice(1));
+  notifsServeur = notifsServeur.filter(function(d){ return d.id !== n; });
+  dessinerNotifs();
+  try{ await serveurAppel('/rest/v1/rpc/marquer_demande_vue', { method: 'POST', body: { p_id: n } }); }catch(e){}
+}
+async function majNotifications(){
+  const uid = sessionServeur && sessionServeur.user && sessionServeur.user.id;
+  if(!serveurPret() || !uid){ notifsServeur = []; dessinerNotifs(); return; }
+  try{
+    const l = await serveurAppel('/rest/v1/demandes_credits?select=id,statut,motif,credits,montant,reference,traitee_le'
+      + '&utilisateur=eq.' + encodeURIComponent(uid) + '&statut=neq.attente&vu_le=is.null&order=traitee_le.asc&limit=20');
+    notifsServeur = Array.isArray(l) ? l : [];
+    /* Un paiement vient d'etre valide : le credit affiche suit. */
+    if(notifsServeur.some(function(d){ return d.statut === 'validee' && !notifsServeurConnues[d.id]; })){
+      etatCreditsCache = {};
+      majBoutonCredits();
+    }
+    notifsServeur.forEach(function(d){ notifsServeurConnues[d.id] = 1; });
+  }catch(e){ /* script 27 pas encore installe : pas de notification serveur */ }
+  dessinerNotifs();
+}
+function demarrerNotifications(){
+  dessinerNotifs();
+  majNotifications().catch(function(){});
+  if(window.__notifsMinuteur) return;
+  window.__notifsMinuteur = setInterval(function(){ if(!document.hidden) majNotifications().catch(function(){}); }, 30000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) majNotifications().catch(function(){}); });
 }
 
 /* --- Administrateur : demandes PayPal.Me et credits a la main --------- */
@@ -42492,6 +42920,11 @@ async function fenetreCreditsAdmin(){
     +   '<label class="cred-montant"><input id="credNb" type="text" inputmode="decimal" value="10"><span>€</span></label>'
     +   '<button type="button" class="dlg-oui" id="credAjouter">' + esc(t('Ajouter')) + '</button></div>'
     + '<div class="dlg-detail" id="credMsg"></div>'
+    /* 3.55 : corriger le porte-monnaie d'un compte (erreur de montant...). */
+    + '<div class="cerfa-sec-title cred-titre">👛 ' + esc(t('Modifier le porte-monnaie d’un compte')) + '</div>'
+    + '<div class="pm-recherche"><input id="pmEmail" type="email" placeholder="' + esc(t('adresse e-mail du compte')) + '" autocomplete="off">'
+    +   '<button type="button" class="btn-sec" id="pmVoir">' + esc(t('Afficher')) + '</button></div>'
+    + '<div id="pmZone" class="pm-zone"></div>'
     + '<details class="cred-histo"><summary>' + esc(t('Dernières demandes traitées')) + '</summary><div id="credTraitees"></div></details>'
     + '<div class="dlg-actions"><button type="button" class="dlg-non">' + esc(t('Fermer')) + '</button></div></div>';
   document.body.appendChild(fond);
@@ -42516,8 +42949,13 @@ async function fenetreCreditsAdmin(){
     const tr = rep.traitees || [];
     fond.querySelector('#credTraitees').innerHTML = tr.length ? tr.map(function(d){
       return '<div class="cred-traitee">' + (d.statut === 'validee' ? '✓ ' : '✕ ') + esc(d.email || '?') + ' · '
-        + esc(t('payé')) + ' ' + esc(euro(d.montant)) + ' → ' + esc(eurosCredit(d.credits)) + ' · ' + esc(d.reference) + ' · ' + esc(quand(d.traitee_le)) + '</div>';
+        + esc(t('payé')) + ' ' + esc(euro(d.montant)) + ' → ' + esc(eurosCredit(d.credits)) + ' · ' + esc(d.reference) + ' · ' + esc(quand(d.traitee_le))
+        + (d.motif ? ' · <i>' + esc(t('Motif :')) + ' ' + esc(d.motif) + '</i>' : '')
+        + (d.statut === 'validee' && d.email ? ' <button type="button" class="btn-sec btn-petit" data-pmcorriger="' + esc(d.email) + '">✎ ' + esc(t('Corriger le crédit')) + '</button>' : '') + '</div>';
     }).join('') : '<div class="partage-vide">—</div>';
+    fond.querySelectorAll('[data-pmcorriger]').forEach(function(b){
+      b.onclick = function(){ fond.__pmAfficher(b.dataset.pmcorriger); const z = fond.querySelector('#pmZone'); if(z) z.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+    });
     fond.querySelectorAll('.cred-ligne').forEach(function(l){
       const id = Number(l.dataset.id);
       const agir = async function(action){
@@ -42525,15 +42963,99 @@ async function fenetreCreditsAdmin(){
         try{
           const r = await appelPaiement({ action: action, id: id });
           msg.textContent = action === 'admin-valider'
-            ? t('Validé :') + ' ' + eurosCredit(r.credits) + ' ' + t('de crédit ajoutés') + ' (' + t('crédit du compte :') + ' ' + eurosCredit(r.solde) + ').'
+            ? t('Validé :') + ' ' + eurosCredit(r.credits) + ' ' + t('de crédit ajoutés') + ' (' + t('crédit du compte :') + ' ' + eurosCredit(r.solde) + '). '
+              + t('Le client est prévenu') + (r.mail ? ' ' + t('(notification + e-mail).') : ' ' + t('(notification dans Autivio).'))
             : t('Demande refusée.');
         }catch(e){ msg.textContent = e.message || String(e); }
         charger();
       };
       l.querySelector('.cred-valider').onclick = function(){ agir('admin-valider'); };
-      l.querySelector('.cred-refuser').onclick = function(){ agir('admin-refuser'); };
+      l.querySelector('.cred-refuser').onclick = async function(){
+        /* 3.53 : un motif, envoye au client (notification + e-mail). */
+        const d = att.filter(function(x){ return x.id === id; })[0] || {};
+        fond.remove();
+        const motif = await demanderTexte({
+          titre: t('Refuser ce paiement'),
+          texte: (d.email || '') + ' · ' + euro(d.montant) + ' · ' + (d.reference || '') + '. ' + t('Motif envoyé au client (il le voit dans Autivio et le reçoit par e-mail) :'),
+          exemple: t('ex. Paiement non reçu sur PayPal'),
+          choix: [t('Paiement non reçu sur PayPal'), t('Montant différent de la demande'), t('Référence absente du message PayPal'), t('Paiement en double')],
+          oui: t('Refuser'), obligatoire: true
+        });
+        await fenetreCreditsAdmin();
+        if(motif == null) return;
+        const m2 = document.getElementById('credMsg');
+        try{
+          const r = await appelPaiement({ action: 'admin-refuser', id: id, motif: motif });
+          if(m2) m2.textContent = t('Demande refusée.') + ' ' + t('Le client est prévenu') + (r && r.mail ? ' ' + t('(notification + e-mail).') : ' ' + t('(notification dans Autivio).'));
+        }catch(e){ if(m2) m2.textContent = e.message || String(e); }
+        const re = document.querySelector('.dlg-credits-admin');
+        if(re) await fenetreCreditsAdmin();
+        const m3 = document.getElementById('credMsg');
+        if(m3 && m2 && m3 !== m2) m3.textContent = m2.textContent;
+      };
     });
   };
+  /* --- Porte-monnaie d'un compte (3.55) --- */
+  const pmZone = fond.querySelector('#pmZone');
+  const pmAfficher = async function(email, message){
+    email = String(email || fond.querySelector('#pmEmail').value || '').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ pmZone.innerHTML = '<div class="dlg-detail">' + esc(t('Indiquez l’adresse e-mail du compte.')) + '</div>'; return; }
+    fond.querySelector('#pmEmail').value = email;
+    pmZone.innerHTML = '<div class="partage-attente">' + esc(t('Lecture en cours…')) + '</div>';
+    let r;
+    try{ r = await appelPaiement({ action: 'admin-porte-monnaie', email: email }); }
+    catch(e){ pmZone.innerHTML = '<div class="dlg-detail">' + esc(e.message || String(e)) + '</div>'; return; }
+    const nomF = function(f){ return f === 'stripe' ? t('carte') : f === 'paypal' ? 'PayPal' : f === 'manuel' ? t('à la main / PayPal.Me') : f; };
+    const hist = (r.paiements || []).map(function(x){
+      return '<div class="cred-traitee">💳 ' + esc(quand(x.recu_le)) + ' · ' + esc(nomF(x.fournisseur)) + ' · ' + esc(t('payé')) + ' ' + esc(euro(x.montant)) + ' → ' + esc(t('crédit')) + ' ' + esc(eurosCredit(x.credits)) + '</div>';
+    }).concat((r.corrections || []).map(function(x){
+      return '<div class="cred-traitee">✎ ' + esc(quand(x.fait_le)) + ' · ' + esc(t('correction')) + ' ' + esc(eurosCredit(x.avant)) + ' → <b>' + esc(eurosCredit(x.apres)) + '</b>' + (x.motif ? ' · <i>' + esc(x.motif) + '</i>' : '') + '</div>';
+    }));
+    pmZone.innerHTML = '<div class="pm-carte">'
+      + '<div class="pm-tete">' + badgeTypeCompte(r.type_compte || ((comptesPourSuggestions || []).filter(function(c){ return c.email === String(r.email || '').toLowerCase(); })[0] || {}).type) + '<b>' + esc(r.email) + '</b>' + (r.nom ? ' · ' + esc(r.nom) : '') + '<span class="pm-solde">' + esc(t('Crédit actuel :')) + ' <b>' + esc(eurosCredit(r.solde)) + '</b></span></div>'
+      + '<div class="pm-form"><label>' + esc(t('Nouveau crédit')) + ' <span class="cred-montant"><input id="pmNouveau" type="text" inputmode="decimal" value="' + esc((r.solde / 100).toFixed(2).replace('.', ',')) + '"><span>€</span></span></label>'
+      +   '<input id="pmMotif" type="text" maxlength="300" placeholder="' + esc(t('Motif (ex. payé 20 €, crédité 30 € par erreur)')) + '">'
+      +   '<button type="button" class="dlg-oui" id="pmEnregistrer">' + esc(t('Enregistrer')) + '</button></div>'
+      + '<div class="dlg-detail" id="pmMsg">' + (message ? esc(message) : '') + '</div>'
+      + (hist.length ? '<details class="cred-histo" open><summary>' + esc(t('Derniers paiements et corrections')) + '</summary>' + hist.join('') + '</details>' : '')
+      + '</div>';
+    const champ = pmZone.querySelector('#pmNouveau'), bt = pmZone.querySelector('#pmEnregistrer'), m = pmZone.querySelector('#pmMsg');
+    let confirme = false;
+    const lireNouveau = function(){
+      const brut = champ.value.trim().replace(/\s|€/g, '').replace(',', '.');
+      return /^\d+(\.\d{0,2})?$/.test(brut) ? Math.round(Number(brut) * 100) : -1;
+    };
+    champ.oninput = function(){ confirme = false; bt.textContent = t('Enregistrer'); };
+    bt.onclick = async function(){
+      const n = lireNouveau();
+      if(n < 0 || n > 10000000){ m.textContent = t('Montant invalide (0 € à 100 000 €).'); return; }
+      if(n === r.solde){ m.textContent = t('C’est déjà le crédit du compte.'); return; }
+      /* Deuxieme clic = confirmation (la fenetre reste ouverte). */
+      if(!confirme){
+        confirme = true;
+        bt.textContent = t('Confirmer :') + ' ' + eurosCredit(r.solde) + ' → ' + eurosCredit(n);
+        m.textContent = t('Cliquez encore pour confirmer.');
+        return;
+      }
+      bt.disabled = true;
+      try{
+        const r2 = await appelPaiement({ action: 'admin-ajuster', email: r.email, nouveau: n, attendu: r.solde, motif: pmZone.querySelector('#pmMotif').value });
+        await pmAfficher(r.email, '✓ ' + t('Crédit modifié :') + ' ' + eurosCredit(r.solde) + ' → ' + eurosCredit(r2.solde) + '.');
+      }catch(e){
+        m.textContent = e.message || String(e);
+        bt.disabled = false; confirme = false; bt.textContent = t('Enregistrer');
+      }
+    };
+  };
+  fond.querySelector('#pmVoir').onclick = function(){ pmAfficher(); };
+  /* 3.56 : quelques lettres -> les adresses des comptes proposees. */
+  suggestionsComptes(fond.querySelector('#pmEmail'), function(email){ pmAfficher(email); });
+  suggestionsComptes(fond.querySelector('#credEmail'), function(){ const nb = fond.querySelector('#credNb'); if(nb){ nb.focus(); nb.select(); } });
+  fond.querySelector('#pmEmail').onkeydown = function(e){
+    /* Entree avec la liste ouverte : c'est la suggestion qui est prise. */
+    if(e.key === 'Enter' && this.dataset.suggOuverte !== '1') pmAfficher();
+  };
+  fond.__pmAfficher = pmAfficher;
   fond.querySelector('#credAjouter').onclick = async function(){
     const email = fond.querySelector('#credEmail').value.trim();
     const brut = fond.querySelector('#credNb').value.trim().replace(/\s|€/g, '').replace(',', '.');
@@ -42572,6 +43094,9 @@ async function verifierPaiement(fournisseur, id){
   }
   const enCours = lirePaiementEnCours();
   if(enCours && enCours.id === id) ecrirePaiementEnCours(null);
+  if(rep.nouveau) ajouterNotifLocale('merci', '🙏 ' + t('Merci pour votre paiement !'),
+    eurosCredit(rep.credits) + ' ' + t('de crédit ajoutés. Vous pouvez utiliser votre crédit.')
+    + (rep.recu ? ' ' + t('Votre reçu vous a été envoyé par e-mail.') : ''));
   bandeau(rep.nouveau
     ? t('Paiement reçu :') + ' ' + eurosCredit(rep.credits) + ' ' + t('de crédit ajoutés.') + ' ' + t('Votre crédit :') + ' ' + eurosCredit(rep.solde) + '.'
     : t('Paiement déjà enregistré.') + ' ' + t('Votre crédit :') + ' ' + eurosCredit(rep.solde) + '.', 'ok');
