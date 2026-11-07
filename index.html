@@ -11191,7 +11191,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.64';
+const VERSION = '3.65';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15676,6 +15676,9 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.65': { date: '07/11/2026', lignes: [
+    "Carnet d’entretien par e-mail : le PDF envoyé ne contient plus de liens cliquables (les références OEM renvoyaient vers une recherche Google). Les messageries vérifient chaque lien d’une pièce jointe avant de la livrer, ce qui retardait le carnet. Les références restent écrites ; le carnet téléchargé garde ses liens."
+  ] },
   '3.64': { date: '07/11/2026', lignes: [
     "Carnet d’entretien par e-mail : il arrive aussi vite que les autres documents. Depuis la 3.42, le PDF contenait un fichier joint caché (les données pour « Importer un carnet ») : les antivirus des messageries (Gmail, Outlook) retiennent plusieurs minutes un PDF qui contient un fichier joint. Les données sont maintenant rangées autrement dans le PDF : plus aucun fichier joint, et l’import d’un carnet reprend toujours tout, y compris les carnets envoyés avant."
   ] },
@@ -44344,7 +44347,10 @@ async function genererCarnetPdf(v, d){
       let x = MG;
       cells.forEach(function(cel, i){
         let yy = y - PAD - taille * 0.75;
-        const estLien = lien && lien.col === i;
+        /* 3.65 : pas de liens dans le PDF envoye par e-mail (les antivirus
+           des messageries verifient chaque lien d'une piece jointe avant
+           de la livrer) ; le PDF telecharge les garde. */
+        const estLien = lien && lien.col === i && !PDF_POUR_MAIL;
         lignesDe(cel, police, taille, larg[i] - PAD * 2).forEach(function(l){ ecrire(l, x + PAD, yy, taille, police, estLien ? BLEU : ENCRE); yy -= taille + 3; });
         if(estLien) lienPdf(pdf, page, x, y - h, larg[i], h, lien.url);
         x += larg[i];
@@ -44786,6 +44792,7 @@ async function genererCarnetPdf(v, d){
 
 /* Un lien cliquable dans le PDF (annotation URI). */
 function lienPdf(pdf, page, x, y, w, h, url){
+  if(PDF_POUR_MAIL) return;
   try{
     const ctx = pdf.context;
     const annot = ctx.obj({ Type: 'Annot', Subtype: 'Link', Rect: [x, y, x + w, y + h], Border: [0, 0, 0],
