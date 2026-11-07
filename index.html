@@ -11191,7 +11191,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.61';
+const VERSION = '3.62';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -11439,7 +11439,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '06/11/2026';
+const VERSION_DATE = '07/11/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -15676,6 +15676,11 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.62': { date: '07/11/2026', lignes: [
+    "Carnet d’entretien PDF en lecture seule : plus aucune case ni zone à remplir dans le PDF (on le modifie seulement dans Autivio). Il est environ 4 fois plus léger et se crée 10 fois plus vite : l’e-mail part aussi vite que les autres documents. Imprimé, les lignes libres se remplissent toujours au stylo.",
+    "La photo n’est plus copiée deux fois dans le PDF : à l’import d’un carnet, elle est reprise directement sur la couverture.",
+    "Demande d’immatriculation (occasion) : le bouton « Carnet d’entretien » est retiré de la barre."
+  ] },
   '3.61': { date: '06/11/2026', lignes: [
     "Reçu de paiement : la bibliothèque PDF est maintenant intégrée à la fonction « paiement » (elle était chargée à la volée, ce qui pouvait échouer sur le serveur et bloquer l'e-mail). Si le PDF échoue malgré tout, l'e-mail part quand même et fait office de reçu.",
     "Administrateur, « Crédits » : bouton « Tester l'envoi du reçu (à mon adresse) » qui envoie un reçu de test et affiche la raison exacte si l'e-mail ne part pas. Les échecs d'envoi sont aussi écrits dans les journaux Supabase de la fonction.",
@@ -19063,8 +19068,6 @@ function renderMain(){
     +     (currentDoc === 'carnet' && v.carnet && v.carnet.carnetImporte ? '<button type="button" class="btn-sec" id="btReprendreCarnet" title="' + esc(t('Remet la fiche comme dans le carnet importé : modèle, motorisation, fiche technique, références OEM. Gratuit, sans IA.')) + '">♻ ' + esc(t('Reprendre le carnet importé')) + '</button>' : '')
     +     (currentDoc === 'carnet' ? '<button type="button" class="official-btn" id="btPdfCarnet">'
             + ico('enregistrer') + '<span>' + esc(t('Télécharger le carnet')) + '</span></button>' : '')
-    +     (currentDoc === 'immatriculation' && docPermis('carnet') ? '<button type="button" class="btn-sec" id="btVersCarnet">'
-            + '<span>📘 ' + esc(t('Carnet d’entretien')) + '</span></button>' : '')
     +     (currentDoc === 'facture' ? '<button type="button" class="official-btn" id="btPdfFacture">'
             + ico('enregistrer') + '<span>' + esc(t('Télécharger la facture')) + '</span></button>' : '')
     /* Tous les documents qui ont un vrai PDF passent par la meme
@@ -19214,8 +19217,6 @@ function renderMain(){
       if(f) importerCarnetPdf(v, f).catch(function(e){ informer(e.message || String(e)); });
     };
   }
-  const btVersCarnet = document.getElementById('btVersCarnet');
-  if(btVersCarnet) btVersCarnet.onclick = function(){ currentDoc = 'carnet'; renderMain(); };
   const pjF = document.getElementById('pjFiche');
   if(pjF){
     const champ = pjF.querySelector('input');
@@ -43706,6 +43707,9 @@ function donneesCarnetExport(v, d){
   vk.forEach(function(k){ if(veh[k] !== undefined && veh[k] !== null && String(veh[k]).trim()) vo[k] = veh[k]; });
   const co = JSON.parse(JSON.stringify(c));
   ['historiqueIgnore', 'historiquePartage', 'techniqueCle', 'photoGeneriqueRefusee', 'photoGeneriqueRang', 'boiteRaison', 'carnetImporte'].forEach(function(k){ delete co[k]; });
+  /* 3.62 : la photo n'est plus copiee dans les donnees jointes (elle
+     doublait le poids du PDF) : a l'import, on la reprend sur la couverture. */
+  if(co.photo){ delete co.photo; co.photoEnCouverture = true; }
   return { format: 'autivio-carnet', version: 1, logiciel: 'Autivio ' + VERSION, cree_le: new Date().toISOString(),
            vehicule: vo, carnet: co,
            garage: d ? { raisonSociale: d.raisonSociale || '', ville: d.ville || '', siret: d.siret || '' } : {} };
@@ -43736,7 +43740,11 @@ async function donneesJointesPdf(octets){
     };
     fouiller(ef);
   }catch(e){}
-  /* Ce qui a ete rempli a la main dans le PDF (lecteur PDF, tablette). */
+  if(json && json.carnet && json.carnet.photoEnCouverture && !json.carnet.photo){
+    try{ const ph = photoCouverturePdf(doc); if(ph) json.carnet.photo = ph; }catch(e){}
+  }
+  if(json && json.carnet) delete json.carnet.photoEnCouverture;
+  /* Ce qui a ete rempli a la main dans le PDF (anciens carnets remplissables). */
   const champs = {}, bulles = {};
   try{
     doc.getForm().getFields().forEach(function(f){
@@ -43750,6 +43758,31 @@ async function donneesJointesPdf(octets){
     });
   }catch(e){}
   return { json: json, champs: champs, bulles: bulles };
+}
+/* La photo de couverture : la plus grande image JPEG de la 1re page. */
+function photoCouverturePdf(doc){
+  const L = window.PDFLib, N = L.PDFName;
+  const page = doc.getPages()[0];
+  if(!page) return '';
+  const res = page.node.Resources && page.node.Resources();
+  const xo = res && res.lookup(N.of('XObject'));
+  if(!xo) return '';
+  let best = null, aire = 0;
+  xo.keys().forEach(function(k){
+    const st = xo.lookup(k);
+    if(!st || !st.dict) return;
+    const filtre = st.dict.lookup(N.of('Filter'));
+    const sous = st.dict.lookup(N.of('Subtype'));
+    if(!sous || sous.toString() !== '/Image' || !filtre || filtre.toString().indexOf('DCTDecode') === -1) return;
+    const w = Number(st.dict.lookup(N.of('Width'))), h = Number(st.dict.lookup(N.of('Height')));
+    if(w * h > aire){ aire = w * h; best = st; }
+  });
+  if(!best) return '';
+  const octets = best.getContents ? best.getContents() : best.contents;
+  if(!octets || !octets.length) return '';
+  let bin = '';
+  for(let i = 0; i < octets.length; i += 0x8000) bin += String.fromCharCode.apply(null, octets.subarray(i, i + 0x8000));
+  return 'data:image/jpeg;base64,' + btoa(bin);
 }
 function lignesManuellesPdf(champs, bulles){
   const ent = [], rep = [];
@@ -44461,7 +44494,7 @@ async function genererCarnetPdf(v, d){
   y -= 8;
   page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
   y -= 10;
-  ecrire('À remplir au stylo ou à l’ordinateur : la date prend ses barres toute seule, « Prochain » se calcule (kilométrage + ' + kmLisible(ecartProchain(c)) + ' km ; tapez 15 ou 30 pour choisir).', MG, y - 2, 6.6, norm, DOUX);
+  ecrire('Entretiens notés dans Autivio. Lignes libres à remplir au stylo ; « Prochain » = kilométrage + ' + kmLisible(ecartProchain(c)) + ' km.', MG, y - 2, 6.6, norm, DOUX);
   y -= 14;
   const rappel = (tc.rappel_intervalles || []).filter(Boolean);
   if(rappel.length){
@@ -44521,29 +44554,10 @@ async function genererCarnetPdf(v, d){
   dessinerEnteteCarnet();
   /* Rangs hauts (19 mm) : la place pour le tampon du garage. */
   const hRang = 54;
-  /* Lignes vides remplissables a l'ordinateur (Adobe Reader, Chrome,
-     Edge, Firefox) : la date prend ses barres en tapant, le kilometrage
-     ne prend que des chiffres, « Prochain » se calcule (kilometrage
-     + l'ecart retenu ; tapez 15 ou 30 pour + 15 000 / + 30 000), les
-     cases se cochent. Imprime vide, le tableau reste a remplir au stylo. */
-  const form = pdf.getForm();
-  const pasProchain = ecartProchain(c);
-  const calculs = [];
-  const actionJs = function(champ, cle, js){
-    if(PDF_POUR_MAIL) return;   // e-mail : pas de script (voir piecesJointes)
-    const ctx = pdf.context, dict = champ.acroField.dict, N = PDFLib.PDFName;
-    let aa = dict.lookup(N.of('AA'));
-    if(!aa){ aa = ctx.obj({}); dict.set(N.of('AA'), aa); }
-    aa.set(N.of(cle), ctx.obj({ S: 'JavaScript', JS: PDFLib.PDFHexString.fromText(js) }));
-  };
-  const bulle = function(champ, txt){ champ.acroField.dict.set(PDFLib.PDFName.of('TU'), PDFLib.PDFHexString.fromText(txt)); };
-  const champTexte = function(nom, x, yy, w, h, taille){
-    const f = form.createTextField(nom);
-    f.addToPage(page, { x: x, y: yy, width: w, height: h, borderWidth: 0, font: norm, textColor: ENCRE });
-    f.setFontSize(taille);
-    return f;
-  };
-  let nChamp = 0;
+  /* 3.62 : le carnet est en lecture seule (aucun champ a remplir dans
+     le PDF) : il est plus leger et s'envoie plus vite par e-mail. On le
+     modifie seulement dans Autivio ; imprime, les lignes vides se
+     remplissent au stylo. */
   /* Tampons : l'image du cachet (lignes de ce garage), sinon un tampon ecrit. */
   let imgCachet = null;
   if(d && d.cachet && /^data:image/.test(d.cachet)){
@@ -44592,37 +44606,14 @@ async function genererCarnetPdf(v, d){
       ecrire(km ? Number(km).toLocaleString('fr-FR') + ' km' : '', MG + wDate + 5, ym, 7.6, norm, ENCRE);
     }
     traitsVerticaux(y, yb);
-    const r = e ? -1 : nChamp++;
     if(!e){
-      /* « km » en fin de case, hors du champ : le chiffre tape ne le recouvre pas. */
+      /* « km » en fin de case, pour la ligne a remplir au stylo. */
       ecrire('km', MG + wDate + wKm - 5 - largeur('km', 6.4), ym, 6.4, norm, DOUX);
-      const fd = champTexte('date_' + r, MG + 3, yChamp, wDate - 6, hChamp, 8);
-      fd.setMaxLength(10);
-      actionJs(fd, 'K', JS_PDF_DATE_K); actionJs(fd, 'F', JS_PDF_DATE_F);
-      bulle(fd, 'Date JJ/MM/AAAA : tapez seulement les chiffres, les barres se mettent toutes seules.');
-      const fk = champTexte('km_' + r, MG + wDate + 3, yChamp, wKm - 18, hChamp, 8);
-      actionJs(fk, 'K', JS_PDF_CHIFFRES_K); actionJs(fk, 'F', JS_PDF_MILLIERS_F);
-      bulle(fk, 'Kilométrage au compteur');
-      /* Observations en haut de la case, le reste pour le tampon. */
-      const fo = champTexte('obs_' + r, MG + wDate + wKm + cols.length * wOp + 3, yb + hRang - 21, wObs - 6, 18, 6.6);
-      fo.enableMultiline();
-      bulle(fo, 'Observations, garage, coût');
-      const fp = champTexte('prochain_' + r, MG + LARG - wProch + 3, yChamp, wProch - 6, hChamp, 7.4);
-      actionJs(fp, 'K', jsPdfProchainK('km_' + r));
-      actionJs(fp, 'C', jsPdfProchainC('km_' + r, 'prochain_' + r, pasProchain));
-      actionJs(fp, 'F', JS_PDF_MILLIERS_F);
-      bulle(fp, 'Calculé tout seul : kilométrage + ' + kmLisible(pasProchain) + ' km. Tapez 15 ou 30 pour + 15 000 ou + 30 000 km.');
-      calculs.push(fp.acroField.ref);
     }
     let x = MG + wDate + wKm;
     cols.forEach(function(o, j){
       const cx = x + wOp / 2, cy = yb + hRang / 2;
       page.drawRectangle({ x: cx - 4, y: cy - 4, width: 8, height: 8, borderColor: rgb(0.55, 0.6, 0.68), borderWidth: 0.7 });
-      if(!e){
-        const cb = form.createCheckBox('op_' + r + '_' + j);
-        cb.addToPage(page, { x: cx - 3.5, y: cy - 3.5, width: 7, height: 7, borderWidth: 0, textColor: BLEU });
-        bulle(cb, String(o || ''));
-      }
       if(e && opCochee(e.ops, o)){
         page.drawLine({ start: { x: cx - 2.6, y: cy }, end: { x: cx - 0.6, y: cy - 2.2 }, thickness: 1.3, color: BLEU });
         page.drawLine({ start: { x: cx - 0.6, y: cy - 2.2 }, end: { x: cx + 3, y: cy + 2.6 }, thickness: 1.3, color: BLEU });
@@ -44638,12 +44629,6 @@ async function genererCarnetPdf(v, d){
       if(pr) ecrire(Number(pr).toLocaleString('fr-FR'), x + wObs + 4, ym, 7.2, norm, ENCRE);
     }
     y = yb;
-  }
-  if(calculs.length && !PDF_POUR_MAIL){
-    try{
-      const af = pdf.catalog.lookup(PDFLib.PDFName.of('AcroForm'));
-      if(af) af.set(PDFLib.PDFName.of('CO'), pdf.context.obj(calculs));
-    }catch(err){}
   }
 
   /* ---------------- Page « Entretien / Réparations » ----------------
@@ -44663,7 +44648,7 @@ async function genererCarnetPdf(v, d){
   y -= 8;
   page.drawLine({ start: { x: MG, y: y }, end: { x: MG + LARG, y: y }, thickness: 0.6, color: TRAIT });
   y -= 10;
-  ecrire('Travaux hors carnet (réparations, pièces remplacées, pneus, carrosserie…) : au stylo ou à l’ordinateur.', MG, y - 2, 6.6, norm, DOUX);
+  ecrire('Travaux hors carnet (réparations, pièces remplacées, pneus, carrosserie…) : notés dans Autivio, ou au stylo sur les lignes libres.', MG, y - 2, 6.6, norm, DOUX);
   y -= 14;
   const rD = 0.156, rK = 0.167;
   const wD = Math.round(LARG * rD), wK = Math.round(LARG * rK), wT = LARG - wD - wK;
@@ -44679,28 +44664,23 @@ async function genererCarnetPdf(v, d){
   for(let k = 0; k < nbRep; k++){
     const i = numRep++, rp = reparations[i];
     const yb = y - hR;
-    const fd = champTexte('rep_date_' + i, MG + 4, yb + (hR - 16) / 2, wD - 8, 16, 8.5);
-    fd.setMaxLength(10);
-    actionJs(fd, 'K', JS_PDF_DATE_K); actionJs(fd, 'F', JS_PDF_DATE_F);
-    bulle(fd, 'Date JJ/MM/AAAA : tapez seulement les chiffres, les barres se mettent toutes seules.');
     const avecTampon = !!(rp && rp.tampon && rp.tampon.nom !== undefined);
     const wTampon = avecTampon ? Math.min(Math.round(wT * 0.3), Math.round((hR - 8) * 2)) : 0;
-    const ft = champTexte('rep_travaux_' + i, MG + wD + 4, yb + 3, wT - 8 - (wTampon ? wTampon + 6 : 0), hR - 6, 8);
     if(avecTampon) poserTampon(rp, MG + wD + wT - 4 - wTampon, yb + 4, wTampon, hR - 8);
-    ft.enableMultiline();
-    bulle(ft, 'Entretien, réparations, pièces, garage, coût');
     ecrire('km', MG + LARG - 6 - largeur('km', 6.4), yb + hR / 2 - 2.6, 6.4, norm, DOUX);
-    const fk = champTexte('rep_km_' + i, MG + wD + wT + 4, yb + (hR - 16) / 2, wK - 22, 16, 8.5);
-    actionJs(fk, 'K', JS_PDF_CHIFFRES_K); actionJs(fk, 'F', JS_PDF_MILLIERS_F);
-    bulle(fk, 'Kilométrage au compteur');
     if(rp){
-      /* Reparation deja notee dans Autivio : imprimee, et toujours modifiable a l'ordinateur. */
-      try{
-        if(String(rp.date || '').trim()) fd.setText(texteCarnet(String(rp.date).trim()).slice(0, 10));
-        const kmR = chiffresKm(rp.km);
-        if(kmR) fk.setText(Number(kmR).toLocaleString('fr-FR').replace(/\s/g, ' '));
-        if(String(rp.travaux || '').trim()) ft.setText(texteCarnet(String(rp.travaux).trim()));
-      }catch(err){}
+      /* Reparation notee dans Autivio : imprimee (modifiable seulement dans Autivio). */
+      const yMil = yb + hR / 2 - 3;
+      if(String(rp.date || '').trim()) ecrire(texteCarnet(String(rp.date).trim()).slice(0, 10), MG + 6, yMil, 8.5, norm, ENCRE);
+      const kmR = chiffresKm(rp.km);
+      if(kmR) ecrire(Number(kmR).toLocaleString('fr-FR').replace(/\s/g, ' '), MG + wD + wT + 6, yMil, 8.5, norm, ENCRE);
+      const wTxt = wT - 12 - (wTampon ? wTampon + 6 : 0);
+      const nbMax = Math.max(1, Math.floor((hR - 8) / 10));
+      const lignes = lignesDe(texteCarnet(String(rp.travaux || '').trim()), norm, 8, wTxt);
+      const vues = lignes.slice(0, nbMax);
+      if(lignes.length > nbMax && vues.length) vues[vues.length - 1] = vues[vues.length - 1].replace(/.{0,2}$/, '…');
+      const y0 = yb + hR / 2 + (vues.length - 1) * 5 - 3;
+      vues.forEach(function(l, k){ ecrire(l, MG + wD + 6, y0 - k * 10, 8, norm, ENCRE); });
     }
     page.drawLine({ start: { x: MG, y: yb }, end: { x: MG + LARG, y: yb }, thickness: 0.7, color: NOIR });
     y = yb;
