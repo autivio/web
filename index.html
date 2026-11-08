@@ -422,6 +422,9 @@
   .badge-part{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
   .sugg-item.actif,.sugg-item:hover{background:#eef4ff;}
   .cred-test{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 4px;}
+  .suivi-mails{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;}
+  .suivi-mails th,.suivi-mails td{border-bottom:1px solid var(--border, #e5e7eb);padding:5px 6px;text-align:left;vertical-align:top;}
+  .suivi-ok{color:#15803d;font-weight:600;} .suivi-ko{color:#b91c1c;font-weight:600;}
   .pm-recherche{display:flex;gap:8px;align-items:center;}
   .pm-recherche #pmEmail{flex:1;min-width:0;}
   .pm-form #pmEnregistrer{padding:8px 14px;}
@@ -2999,6 +3002,32 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "IVA non applicabile, articolo 293 B del CGI: il venditore rientra nel regime di franchigia e non applica l’IVA.",
     "Complétez votre fiche garage": "Completi la scheda della sua officina",
     "Choisir un document": "Choisi un documento",
+    "Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.": "Ricerca mirata dell’IA, solo per i riferimenti rimasti «da verificare a catalogo». Gratis: il libretto di questo veicolo è già pagato.",
+    "Compléter les références manquantes": "Completa i riferimenti mancanti",
+    "Aucune référence manquante.": "Nessun riferimento mancante.",
+    "Recherche des références manquantes…": "Ricerca dei riferimenti mancanti…",
+    "L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.": "L’IA cerca ogni pezzo rimasto «da verificare a catalogo» nei cataloghi ricambi. Contate uno o due minuti.",
+    "La recherche a échoué :": "La ricerca non è riuscita:",
+    "références complétées": "riferimenti completati",
+    "référence complétée": "riferimento completato",
+    "encore introuvable(s) : à vérifier sur catalogue.": "ancora introvabile/i: da verificare a catalogo.",
+    "Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.": "Nessun nuovo riferimento trovato: restano da verificare a catalogo.",
+    "Aucun e-mail envoyé depuis cet appareil avec cette version.": "Nessuna e-mail inviata da questo dispositivo con questa versione.",
+    "La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.": "La funzione «envoyer» non è aggiornata su Supabase: ridistribuitela.",
+    "Envoyé": "Inviato",
+    "Ce qu’en a fait Brevo": "Cosa ne ha fatto Brevo",
+    "accepté par Brevo": "accettato da Brevo",
+    "délivré": "consegnato",
+    "différé": "differito",
+    "refus temporaire": "rifiuto temporaneo",
+    "bloqué": "bloccato",
+    "adresse invalide": "indirizzo non valido",
+    "erreur": "errore",
+    "signalé spam": "segnalato come spam",
+    "ouvert": "aperto",
+    "clic": "clic",
+    "pas encore d’information de Brevo": "ancora nessuna informazione da Brevo",
+    "Suivi des derniers e-mails (documents)": "Tracciamento delle ultime e-mail (documenti)",
     "Crédit offert ou réglé hors Autivio : pas de reçu de paiement (seuls les vrais paiements en ont un).": "Credito offerto o pagato fuori da Autivio: nessuna ricevuta (solo i pagamenti reali).",
     "Tester l’envoi du reçu (à mon adresse)": "Prova l’invio della ricevuta (al mio indirizzo)",
     "Reçu de test envoyé à": "Ricevuta di prova inviata a",
@@ -4664,6 +4693,32 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "TVA net uwendbar, Artikel 293 B CGI: de Verkeefer fält ënner d’Franchise en base a rechent keng TVA.",
     "Complétez votre fiche garage": "Kompletéiert Är Garages-Fiche",
     "Choisir un document": "En Dokument wielen",
+    "Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.": "Geziilt Sich vun der KI, nëmme fir Referenzen mat „am Katalog nokucken“. Gratis: d’Servicebuch vun dësem Gefier ass scho bezuelt.",
+    "Compléter les références manquantes": "Feelend Referenzen ergänzen",
+    "Aucune référence manquante.": "Keng Referenz feelt.",
+    "Recherche des références manquantes…": "Feelend Referenze ginn gesicht…",
+    "L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.": "D’KI sicht all Deel mat „am Katalog nokucken“ an de Pièce-Kataloger. Rechent mat enger bis zwou Minutten.",
+    "La recherche a échoué :": "D’Sich huet net geklappt:",
+    "références complétées": "Referenzen ergänzt",
+    "référence complétée": "Referenz ergänzt",
+    "encore introuvable(s) : à vérifier sur catalogue.": "nach net fonnt: am Katalog nokucken.",
+    "Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.": "Keng nei Referenz fonnt: se bleiwen am Katalog nozekucken.",
+    "Aucun e-mail envoyé depuis cet appareil avec cette version.": "Keng E-Mail vun dësem Apparat mat dëser Versioun geschéckt.",
+    "La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.": "D’Funktioun „envoyer“ ass net à jour op Supabase: nei deployen.",
+    "Envoyé": "Geschéckt",
+    "Ce qu’en a fait Brevo": "Wat Brevo domat gemaach huet",
+    "accepté par Brevo": "vu Brevo ugeholl",
+    "délivré": "zougestallt",
+    "différé": "verspéit",
+    "refus temporaire": "temporär refuséiert",
+    "bloqué": "blockéiert",
+    "adresse invalide": "ongülteg Adress",
+    "erreur": "Feeler",
+    "signalé spam": "als Spam gemellt",
+    "ouvert": "opgemaach",
+    "clic": "Klick",
+    "pas encore d’information de Brevo": "nach keng Informatioun vu Brevo",
+    "Suivi des derniers e-mails (documents)": "Suivi vun de leschten E-Mailen (Dokumenter)",
     "Crédit offert ou réglé hors Autivio : pas de reçu de paiement (seuls les vrais paiements en ont un).": "Guthaben geschenkt oder ausserhalb vun Autivio bezuelt: keng Quittung (nëmmen echt Bezuelungen).",
     "Tester l’envoi du reçu (à mon adresse)": "Quittung testen (op meng Adress)",
     "Reçu de test envoyé à": "Testquittung geschéckt un",
@@ -6328,6 +6383,32 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "VAT not applicable, article 293 B of the French tax code: the seller falls under the small business exemption and charges no VAT.",
     "Complétez votre fiche garage": "Complete your garage details",
     "Choisir un document": "Choose a document",
+    "Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.": "Targeted AI search, only for references left “check in catalogue”. Free: this vehicle’s service book is already paid for.",
+    "Compléter les références manquantes": "Complete missing references",
+    "Aucune référence manquante.": "No missing reference.",
+    "Recherche des références manquantes…": "Searching for missing references…",
+    "L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.": "The AI looks up each part left “check in catalogue” in parts catalogues. Allow one to two minutes.",
+    "La recherche a échoué :": "The search failed:",
+    "références complétées": "references completed",
+    "référence complétée": "reference completed",
+    "encore introuvable(s) : à vérifier sur catalogue.": "still not found: check in catalogue.",
+    "Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.": "No new reference found: they remain to be checked in the catalogue.",
+    "Aucun e-mail envoyé depuis cet appareil avec cette version.": "No e-mail sent from this device with this version.",
+    "La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.": "The “envoyer” function is not up to date on Supabase: redeploy it.",
+    "Envoyé": "Sent",
+    "Ce qu’en a fait Brevo": "What Brevo did with it",
+    "accepté par Brevo": "accepted by Brevo",
+    "délivré": "delivered",
+    "différé": "deferred",
+    "refus temporaire": "temporary rejection",
+    "bloqué": "blocked",
+    "adresse invalide": "invalid address",
+    "erreur": "error",
+    "signalé spam": "reported as spam",
+    "ouvert": "opened",
+    "clic": "click",
+    "pas encore d’information de Brevo": "no information from Brevo yet",
+    "Suivi des derniers e-mails (documents)": "Latest e-mails tracking (documents)",
     "Crédit offert ou réglé hors Autivio : pas de reçu de paiement (seuls les vrais paiements en ont un).": "Credit given or paid outside Autivio: no payment receipt (only real payments get one).",
     "Tester l’envoi du reçu (à mon adresse)": "Test sending the receipt (to my address)",
     "Reçu de test envoyé à": "Test receipt sent to",
@@ -7991,6 +8072,32 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Umsatzsteuer nicht anwendbar, Artikel 293 B CGI: Der Verkäufer fällt unter die Kleinunternehmerregelung und berechnet keine Umsatzsteuer.",
     "Complétez votre fiche garage": "Vervollständigen Sie Ihre Betriebsdaten",
     "Choisir un document": "Dokument wählen",
+    "Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.": "Gezielte KI-Suche, nur für Nummern mit „im Katalog prüfen“. Kostenlos: das Serviceheft dieses Fahrzeugs ist bereits bezahlt.",
+    "Compléter les références manquantes": "Fehlende Nummern ergänzen",
+    "Aucune référence manquante.": "Keine fehlende Nummer.",
+    "Recherche des références manquantes…": "Fehlende Nummern werden gesucht…",
+    "L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.": "Die KI sucht jedes Teil mit „im Katalog prüfen“ in Teilekatalogen. Rechnen Sie mit ein bis zwei Minuten.",
+    "La recherche a échoué :": "Die Suche ist fehlgeschlagen:",
+    "références complétées": "Nummern ergänzt",
+    "référence complétée": "Nummer ergänzt",
+    "encore introuvable(s) : à vérifier sur catalogue.": "noch nicht gefunden: im Katalog prüfen.",
+    "Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.": "Keine neue Nummer gefunden: bitte weiter im Katalog prüfen.",
+    "Aucun e-mail envoyé depuis cet appareil avec cette version.": "Keine E-Mail von diesem Gerät mit dieser Version gesendet.",
+    "La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.": "Die Funktion „envoyer“ ist auf Supabase nicht aktuell: bitte neu bereitstellen.",
+    "Envoyé": "Gesendet",
+    "Ce qu’en a fait Brevo": "Was Brevo damit gemacht hat",
+    "accepté par Brevo": "von Brevo angenommen",
+    "délivré": "zugestellt",
+    "différé": "verzögert",
+    "refus temporaire": "vorübergehend abgelehnt",
+    "bloqué": "blockiert",
+    "adresse invalide": "ungültige Adresse",
+    "erreur": "Fehler",
+    "signalé spam": "als Spam gemeldet",
+    "ouvert": "geöffnet",
+    "clic": "Klick",
+    "pas encore d’information de Brevo": "noch keine Information von Brevo",
+    "Suivi des derniers e-mails (documents)": "Verfolgung der letzten E-Mails (Dokumente)",
     "Crédit offert ou réglé hors Autivio : pas de reçu de paiement (seuls les vrais paiements en ont un).": "Geschenktes oder außerhalb von Autivio bezahltes Guthaben: keine Zahlungsquittung (nur echte Zahlungen).",
     "Tester l’envoi du reçu (à mon adresse)": "Quittungsversand testen (an meine Adresse)",
     "Reçu de test envoyé à": "Testquittung gesendet an",
@@ -9675,6 +9782,32 @@ const DICO = {
     "TVA non applicable, article 293 B du code général des impôts : le vendeur relève de la franchise en base et ne facture pas de TVA.": "Btw niet van toepassing, artikel 293 B CGI: de verkoper valt onder de vrijstellingsregeling en rekent geen btw aan.",
     "Complétez votre fiche garage": "Vul uw garagegegevens aan",
     "Choisir un document": "Kies een document",
+    "Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.": "Gerichte zoekopdracht door de AI, alleen voor referenties met „controleren in catalogus”. Gratis: het boekje van dit voertuig is al betaald.",
+    "Compléter les références manquantes": "Ontbrekende referenties aanvullen",
+    "Aucune référence manquante.": "Geen ontbrekende referentie.",
+    "Recherche des références manquantes…": "Ontbrekende referenties zoeken…",
+    "L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.": "De AI zoekt elk onderdeel met „controleren in catalogus” op in onderdelencatalogi. Reken op een tot twee minuten.",
+    "La recherche a échoué :": "Het zoeken is mislukt:",
+    "références complétées": "referenties aangevuld",
+    "référence complétée": "referentie aangevuld",
+    "encore introuvable(s) : à vérifier sur catalogue.": "nog niet gevonden: controleren in catalogus.",
+    "Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.": "Geen nieuwe referentie gevonden: blijven te controleren in catalogus.",
+    "Aucun e-mail envoyé depuis cet appareil avec cette version.": "Geen e-mail verzonden vanaf dit toestel met deze versie.",
+    "La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.": "De functie „envoyer” is niet bijgewerkt op Supabase: opnieuw deployen.",
+    "Envoyé": "Verzonden",
+    "Ce qu’en a fait Brevo": "Wat Brevo ermee deed",
+    "accepté par Brevo": "aanvaard door Brevo",
+    "délivré": "afgeleverd",
+    "différé": "uitgesteld",
+    "refus temporaire": "tijdelijk geweigerd",
+    "bloqué": "geblokkeerd",
+    "adresse invalide": "ongeldig adres",
+    "erreur": "fout",
+    "signalé spam": "als spam gemeld",
+    "ouvert": "geopend",
+    "clic": "klik",
+    "pas encore d’information de Brevo": "nog geen informatie van Brevo",
+    "Suivi des derniers e-mails (documents)": "Opvolging laatste e-mails (documenten)",
     "Crédit offert ou réglé hors Autivio : pas de reçu de paiement (seuls les vrais paiements en ont un).": "Tegoed geschonken of buiten Autivio betaald: geen ontvangstbewijs (alleen echte betalingen).",
     "Tester l’envoi du reçu (à mon adresse)": "Verzending ontvangstbewijs testen (naar mijn adres)",
     "Reçu de test envoyé à": "Testontvangstbewijs verstuurd naar",
@@ -11191,7 +11324,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.67';
+const VERSION = '3.68';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -11439,7 +11572,7 @@ async function serveurEnvoyerFiches(liste){
   });
 }
 
-const VERSION_DATE = '07/11/2026';
+const VERSION_DATE = '08/11/2026';
 
 const CLE_LANGUE = 'autivio:langue';
 let langue = 'fr';
@@ -15676,6 +15809,12 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.68': { date: '08/11/2026', lignes: [
+    "Carnet : nouveau bouton « 🔎 Compléter les références manquantes » quand des pièces sont restées « à vérifier sur catalogue » (kit de distribution, bouchon de vidange, liquides, plaquettes…). L’IA cherche seulement ces pièces, une par une, dans les catalogues ; le reste de la fiche ne bouge pas. Sans frais (le carnet du véhicule est déjà payé), et les références trouvées servent aussi aux autres garages pour cette motorisation.",
+    "Fiche technique : l’IA a deux fois plus de recherches pour les références et la liste exacte des pièces à trouver (filtre à carburant, kit de distribution, bouchon et joint de vidange, liquide de frein, liquide de refroidissement). Les marques d’huiles et de liquides (Castrol, Total, Motul, Glysantin…) et de joints (Elring, Victor Reinz, Corteco) sont reconnues.",
+    "Carnet envoyé par e-mail : la phrase « Cliquez sur une référence (en bleu) » n’y figure plus (ce PDF n’a pas de liens).",
+    "Administration › Crédits : « 📬 Suivi des derniers e-mails » montre, pour chaque document envoyé, ce que Brevo en a fait : accepté, différé (avec la raison donnée par la messagerie), délivré, et en combien de temps."
+  ] },
   '3.67': { date: '07/11/2026', lignes: [
     "Carnet : le Start & Stop rempli automatiquement (identification par le VIN ou l’IA) ne filtre plus la liste des motorisations. Il était pris pour un choix du garage : sur une Golf 7 de 2017, il ne restait que 4 versions sans Start & Stop, et le 1.4 TSI 140 disparaissait. Les 17 versions sont de nouveau proposées.",
     "Si le Start & Stop choisi par le garage ne correspond à aucune version, la liste entière reste proposée au lieu d’être vide."
@@ -30105,6 +30244,60 @@ async function brevoExpedier(dest, objet, texte, html, pieces, repondreA){
 
    C'est ce qui permet de distribuer le logiciel : vos clients
    l'installent et envoient des documents sans rien configurer. */
+/* 3.68 : suivi de livraison. On garde (sur cet appareil) l'identifiant
+   Brevo des 15 derniers envois ; l'administrateur voit ensuite ce que
+   Brevo en a fait : accepte, differe (et pourquoi), delivre, a quelle heure. */
+const SUIVI_MAILS = 'autivio:suiviMails';
+function suiviMailsLocal(){
+  try{ const l = JSON.parse(localStorage.getItem(SUIVI_MAILS) || '[]'); return Array.isArray(l) ? l : []; }catch(e){ return []; }
+}
+function noterEnvoiMail(id, objet, pieces){
+  if(!id) return;
+  try{
+    const p = (pieces || [])[0] || {};
+    const b64 = String(p.b64 || p.content || p.data || '');
+    const l = suiviMailsLocal();
+    l.unshift({ id: String(id), quand: Date.now(), objet: String(objet || '').slice(0, 120),
+                doc: String(p.nom || p.name || ''), ko: b64 ? Math.round(b64.length * 0.75 / 1024) : 0 });
+    localStorage.setItem(SUIVI_MAILS, JSON.stringify(l.slice(0, 15)));
+  }catch(e){}
+}
+async function chargerSuiviMails(zone){
+  const l = suiviMailsLocal();
+  if(!l.length){ zone.textContent = t('Aucun e-mail envoyé depuis cet appareil avec cette version.'); return; }
+  zone.textContent = t('Chargement…');
+  let rep = null;
+  try{
+    const r = await fetch(SUPABASE_URL + '/functions/v1/envoyer', { method: 'POST',
+      headers: { 'apikey': SUPABASE_CLE, 'Authorization': 'Bearer ' + sessionServeur.access_token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ suivi: l.map(function(x){ return x.id; }) }) });
+    rep = await r.json().catch(function(){ return null; });
+    if(!r.ok || !rep || !Array.isArray(rep.suivi)) throw new Error((rep && rep.erreur) || ('Erreur ' + r.status));
+  }catch(e){
+    zone.textContent = /Destinataire/.test(e.message || '') ? t('La fonction « envoyer » n’est pas à jour sur Supabase : redéployez-la.') : (e.message || String(e));
+    return;
+  }
+  const heure = function(ms){ const d = new Date(ms); return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR'); };
+  const duree = function(s){ s = Math.max(0, Math.round(s)); return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60) + ' s'; };
+  const NOMS = { requests: 'accepté par Brevo', delivered: 'délivré', deferred: 'différé', softBounces: 'refus temporaire', hardBounces: 'refusé',
+                 blocked: 'bloqué', invalid: 'adresse invalide', error: 'erreur', spam: 'signalé spam', opened: 'ouvert', loadedByProxy: 'ouvert', clicks: 'clic' };
+  zone.innerHTML = '<table class="suivi-mails"><tr><th>' + esc(t('Envoyé')) + '</th><th>' + esc(t('Document')) + '</th><th>' + esc(t('Ce qu’en a fait Brevo')) + '</th></tr>'
+    + l.map(function(x){
+        const s = (rep.suivi.filter(function(y){ return y.id === x.id; })[0] || {}).evenements || [];
+        /* delais comptes depuis l'acceptation par Brevo (pas l'horloge de l'appareil) */
+        const dep = s.filter(function(e){ return e.event === 'requests'; })[0];
+        const t0 = dep && isFinite(Date.parse(dep.date)) ? Date.parse(dep.date) : x.quand;
+        const etapes = s.filter(function(e){ return NOMS[e.event] && e.event !== 'clicks'; }).map(function(e){
+          const ms = Date.parse(e.date), mauvais = /deferred|Bounces|blocked|invalid|error|spam/.test(e.event);
+          return '<span class="' + (mauvais ? 'suivi-ko' : (e.event === 'delivered' ? 'suivi-ok' : '')) + '">' + esc(t(NOMS[e.event]))
+            + (isFinite(ms) ? ' ' + esc(new Date(ms).toLocaleTimeString('fr-FR')) + (e.event !== 'requests' ? ' (+' + duree((ms - t0) / 1000) + ')' : '') : '')
+            + (e.reason ? ' — ' + esc(String(e.reason).slice(0, 160)) : '') + '</span>';
+        });
+        return '<tr><td>' + esc(heure(x.quand)) + '</td><td>' + esc(x.doc || x.objet) + (x.ko ? ' · ' + x.ko + ' Ko' : '') + '</td><td>'
+          + (etapes.length ? etapes.join('<br>') : esc(t('pas encore d’information de Brevo'))) + '</td></tr>';
+      }).join('') + '</table>';
+}
+
 async function serveurExpedier(dest, objet, texte, html, pieces, repondreA){
   if(!sessionServeur || !sessionServeur.access_token){
     return { ok: false, message: t('Connectez-vous pour envoyer des e-mails.') };
@@ -30127,7 +30320,11 @@ async function serveurExpedier(dest, objet, texte, html, pieces, repondreA){
         }).filter(function(p){ return !!p.content; })
       })
     });
-    if(r.ok) return { ok: true };
+    if(r.ok){
+      let d = null; try{ d = await r.json(); }catch(e){}
+      noterEnvoiMail(d && d.messageId, objet, pieces);
+      return { ok: true };
+    }
     let msg = 'Erreur ' + r.status;
     try{ const d = await r.json(); if(d && d.erreur) msg = d.erreur; }catch(e){}
     return { ok: false, message: msg };
@@ -40072,7 +40269,10 @@ function carnetForm(v){
   + '<div class="gar-choix">'
   +   (c.carnetImporte ? '<button type="button" class="official-btn" id="carnetReprendre">♻ ' + esc(t('Régénérer depuis le carnet importé (gratuit)')) + '</button>' : '')
   +   '<button type="button" class="' + (c.carnetImporte ? 'btn-sec' : 'official-btn') + '" id="carnetGenerer">🤖 '
-  +   esc(t(tc ? 'Régénérer avec l’IA' : 'Générer avec l’IA')) + '</button></div>'
+  +   esc(t(tc ? 'Régénérer avec l’IA' : 'Générer avec l’IA')) + '</button>'
+  +   (refsManquantes(c.technique).length ? '<button type="button" class="btn-sec" id="carnetCompleterRefs" title="' + esc(t('Recherche ciblée par l’IA, seulement pour les références restées « à vérifier sur catalogue ». Sans frais : le carnet de ce véhicule est déjà payé.')) + '">🔎 '
+  +     esc(t('Compléter les références manquantes')) + ' (' + refsManquantes(c.technique).length + ')</button>' : '')
+  + '</div>'
   + '<div class="carnet-credits" id="carnetCredits"></div>'
   + (tc ? '<div class="carnet-alerte">⚠ ' + esc(t('Données produites par l’IA à partir de sources publiques : vérifiez les valeurs critiques (couples de serrage, références de pièces, capacités) avant toute intervention. Corrigez-les ci-dessous si besoin : le PDF suit.')) + '</div>'
         + editeurTechnique(tc) : '')
@@ -40672,6 +40872,8 @@ function wireCarnetForm(v, d){
   window.__identDemandee = window.__identDemandee || {};
   const gen = document.getElementById('carnetGenerer');
   if(gen) gen.onclick = function(){ genererTechniqueIA(v).catch(function(e){ informer(e.message); }); };
+  const compl = document.getElementById('carnetCompleterRefs');
+  if(compl) compl.onclick = function(){ completerRefsManquantes(v).catch(function(e){ informer(e.message); }); };
   document.querySelectorAll('[data-codechoix]').forEach(function(b){
     b.onclick = function(){
       const c = ensureCarnet(v);
@@ -42487,7 +42689,10 @@ function choisirCandidatMoteur(rep, startStop){
    Sachs, LuK. Les marques premier prix (Ridex, Stark, Vaico...) sont
    retirees. */
 const MARQUES_PIECES_OK = ['BOSCH', 'TRW', 'ATE', 'BREMBO', 'TEXTAR', 'FERODO', 'MANN-FILTER', 'MANN', 'MAHLE', 'KNECHT',
-  'PURFLUX', 'HENGST', 'NGK', 'DENSO', 'BERU', 'CONTITECH', 'CONTINENTAL', 'GATES', 'INA', 'SKF', 'DAYCO', 'VALEO', 'SACHS', 'LUK'];
+  'PURFLUX', 'HENGST', 'NGK', 'DENSO', 'BERU', 'CONTITECH', 'CONTINENTAL', 'GATES', 'INA', 'SKF', 'DAYCO', 'VALEO', 'SACHS', 'LUK',
+  /* 3.68 : huiles et liquides, joints de vidange */
+  'CASTROL', 'TOTAL', 'TOTALENERGIES', 'ELF', 'MOTUL', 'MOBIL', 'SHELL', 'FUCHS', 'GLYSANTIN', 'BASF', 'PENTOSIN', 'LIQUI-MOLY',
+  'ELRING', 'REINZ', 'VICTOR-REINZ', 'CORTECO'];
 const MOTS_PAS_MARQUES = ['DOT', 'VW', 'PSA', 'ACEA', 'API', 'SAE', 'PR', 'OEM', 'OE', 'LL', 'TL', 'MB', 'GM', 'DEXOS', 'NB', 'AV', 'AR'];
 function equivalentsPremium(texte){
   const brut = String(texte || '').trim();
@@ -43067,6 +43272,8 @@ async function fenetreCreditsAdmin(){
     + '<div class="cred-test"><button type="button" class="btn-sec" id="credTestRecu">📧 ' + esc(t('Tester l’envoi du reçu (à mon adresse)')) + '</button>'
     +   '<span class="dlg-detail" id="credTestMsg"></span></div>'
     + '<details class="cred-histo"><summary>' + esc(t('Dernières demandes traitées')) + '</summary><div id="credTraitees"></div></details>'
+    /* 3.68 : ou un e-mail a-t-il ete retenu ? */
+    + '<details class="cred-histo" id="credSuiviMails"><summary>📬 ' + esc(t('Suivi des derniers e-mails (documents)')) + '</summary><div id="credSuiviZone" class="dlg-detail"></div></details>'
     + '<div class="dlg-actions"><button type="button" class="dlg-non">' + esc(t('Fermer')) + '</button></div></div>';
   document.body.appendChild(fond);
   const fermer = function(){ fond.remove(); majDemandesCredits().catch(function(){}); };
@@ -43198,6 +43405,9 @@ async function fenetreCreditsAdmin(){
     if(e.key === 'Enter' && this.dataset.suggOuverte !== '1') pmAfficher();
   };
   fond.__pmAfficher = pmAfficher;
+  fond.querySelector('#credSuiviMails').addEventListener('toggle', function(){
+    if(this.open) chargerSuiviMails(fond.querySelector('#credSuiviZone'));
+  });
   fond.querySelector('#credTestRecu').onclick = async function(){
     const b = this, m = fond.querySelector('#credTestMsg');
     b.disabled = true; m.textContent = t('Envoi en cours…');
@@ -43575,6 +43785,63 @@ async function genererTechniqueIA(v, apresIdentification){
     if(e.code === 'credit'){ await manqueDeCredit(v, 'fiche'); return; }
     await informer(t('La génération a échoué :') + ' ' + (e.message || e));
   }
+}
+
+/* 3.68 : references restees « à vérifier sur catalogue » (colonne OEM ou
+   equivalents) dans les tableaux de references de la fiche technique. */
+const REF_MANQUANTE = /^\s*(à|a) vérifier sur catalogue\b|^\s*$/i;
+function refsManquantes(tech){
+  const out = [];
+  if(!tech || typeof tech !== 'object') return out;
+  ['refs_filtres', 'refs_freins'].forEach(function(k){
+    (Array.isArray(tech[k]) ? tech[k] : []).forEach(function(x){
+      if(!x || !String(x.piece || '').trim()) return;
+      const oem = String(x.oem || ''), eq = String(x.equivalents || '');
+      /* « pas de filtre a carburant d'entretien » : ce n'est pas un manque */
+      if(/^pas de |^aucun|^sans /i.test(oem.trim())) return;
+      if(REF_MANQUANTE.test(oem) || REF_MANQUANTE.test(eq)) out.push({ table: k, piece: String(x.piece).trim() });
+    });
+  });
+  return out;
+}
+/* Recherche ciblee des seules references manquantes ; ce qui est trouve
+   remplace « à vérifier sur catalogue », le reste de la fiche ne bouge pas. */
+async function completerRefsManquantes(v){
+  const c = ensureCarnet(v), veh = v.vehicule || {};
+  const manquants = refsManquantes(c.technique);
+  if(!manquants.length){ bandeau(t('Aucune référence manquante.'), 'ok'); return; }
+  const attente = fenetreAttente(t('Recherche des références manquantes…'),
+    t('L’IA cherche chaque pièce restée « à vérifier sur catalogue » dans les catalogues de pièces. Comptez une à deux minutes.'));
+  let rep;
+  try{
+    rep = await appelFicheTechnique({ mode: 'completer_refs', vehicule_id: v.id, vin: veh.vin || '',
+      vehicule: descripteurFiche(v), plaque: veh.immat || '', pays: paysPlaque(v), manquants: manquants });
+  }catch(e){
+    attente.fermer();
+    if(e.code === 'credit'){ await manqueDeCredit(v, 'fiche'); return; }
+    await informer(t('La recherche a échoué :') + ' ' + (e.message || e));
+    return;
+  }
+  attente.fermer();
+  const lus = (rep && Array.isArray(rep.lignes)) ? rep.lignes : [];
+  const norm = function(x){ return sansAccentsTxt(String(x || '')).toLowerCase().replace(/\s+/g, ' ').trim(); };
+  let trouves = 0;
+  lus.forEach(function(x){
+    const tab = c.technique && Array.isArray(c.technique[x.table]) ? c.technique[x.table] : null;
+    const l = tab && tab.filter(function(y){ return y && norm(y.piece) === norm(x.piece); })[0];
+    if(!l) return;
+    let ok = false;
+    const oem = oemPropre(x.oem), eq = equivalentsPremium(x.equivalents);
+    if(REF_MANQUANTE.test(String(l.oem || '')) && !REF_MANQUANTE.test(oem)){ l.oem = oem; ok = true; }
+    if(REF_MANQUANTE.test(String(l.equivalents || '')) && !REF_MANQUANTE.test(eq)){ l.equivalents = eq; ok = true; }
+    if(ok){ if(x.source) l.source = x.source; trouves++; }
+  });
+  saveVehicle(v);
+  renderMain();
+  const reste = refsManquantes(c.technique).length;
+  bandeau(trouves
+    ? '✓ ' + trouves + ' ' + t(trouves > 1 ? 'références complétées' : 'référence complétée') + (reste ? ' — ' + reste + ' ' + t('encore introuvable(s) : à vérifier sur catalogue.') : '.')
+    : t('Aucune nouvelle référence trouvée : elles restent à vérifier sur catalogue.'), trouves ? 'ok' : '');
 }
 
 async function lireCarnetPapier(v, fichiers){
@@ -44562,7 +44829,7 @@ async function genererCarnetPdf(v, d){
         refs.map(function(x){ return [x.piece || '', oemPropre(x.oem), equivalentsPremium(x.equivalents)]; }), [0.28, 0.3, 0.42],
         refs.map(function(x){ const r = premiereReference(x.oem); return r ? { col: 1, url: 'https://www.google.com/search?q=' + encodeURIComponent(r) } : null; }),
         { titre: (P.technique ? '9. ' : '') + 'Références OEM & Consommables', pied: 12 });
-      ecrire('Cliquez sur une référence constructeur (en bleu) pour la rechercher chez les vendeurs en ligne avant de commander.', MG, y, 7, norm, DOUX);
+      if(!PDF_POUR_MAIL) ecrire('Cliquez sur une référence constructeur (en bleu) pour la rechercher chez les vendeurs en ligne avant de commander.', MG, y, 7, norm, DOUX);
       y -= 12;
     }
     if(tc.note_commande) encadre('Note de Commande : ' + romainEnChiffres(tc.note_commande));
