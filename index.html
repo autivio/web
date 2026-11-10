@@ -11394,7 +11394,7 @@ const DICO = {
 };
 
 /* Version du logiciel : a modifier ici, elle s'affiche partout. */
-const VERSION = '3.75';
+const VERSION = '3.76';
 
 /* =====================================================================
    SERVEUR SUPABASE
@@ -15879,6 +15879,10 @@ const CLE_NOTE_VUE = LS_BASE + 'note-vue';
    restent ici : le bouton « Voir les nouveautes » les rouvre toutes,
    de la plus recente a la plus ancienne. */
 const NOTES_VERSION = {
+  '3.76': { date: '10/11/2026', lignes: [
+    "Carnet : toutes les pièces d’entretien ont maintenant leur ligne et leur référence recherchée pour le moteur exact : kit de distribution, pompe à eau, kit courroie d’accessoires, bouchon de vidange et joint, filtres, bougies, disques et plaquettes avant et arrière. Les carnets déjà faits sont complétés à l’ouverture.",
+    "Recherche automatique : un 4e passage cherche chaque pièce restante seule (une recherche dédiée par pièce : référence constructeur + équivalents), par code moteur."
+  ] },
   '3.75': { date: '10/11/2026', lignes: [
     "Carnet : plus jamais « Selon VIN ». Les liquides (frein, refroidissement, huile) sont toujours remplis d’après la norme de la fiche, avec des produits homologués (ATE, BOSCH, TRW, GLYSANTIN, MOTUL, CASTROL…).",
     "Freins : l’IA cherche disques et plaquettes par modèle, motorisation et dimensions des disques (déjà dans la fiche), pas par VIN.",
@@ -44040,6 +44044,50 @@ function valeursAConfirmer(tech){
 /* 3.71 : confirmation automatique, en arriere-plan : juste apres la
    generation de la fiche, et une fois pour un carnet deja fait qui a
    encore des valeurs « à vérifier » (c.confirmationAuto = date). */
+/* 3.76 : toutes les pieces d'entretien ont leur ligne dans la fiche (kit de
+   distribution, pompe a eau, kit d'accessoires, vidange, filtres, bougies,
+   disques, plaquettes) : une ligne absente est ajoutee « à vérifier sur
+   catalogue », et la recherche automatique trouve sa reference. */
+const VERSION_PIECES = 1;
+function completerLignesPieces(v){
+  const c = ensureCarnet(v), tech = c.technique, veh = v.vehicule || {};
+  if(!tech || typeof tech !== 'object' || c.piecesCompletees === VERSION_PIECES) return 0;
+  const en = String(veh.energie || '').toUpperCase(), moto = String(c.motorisation || '');
+  const electrique = en === 'EL' || /^(électrique|electrique)$/i.test(en);
+  const diesel = /^(GO|GH|GL)$/.test(en) || /\b(TDI|HDI|DCI|CDTI|TDCI|JTD|MULTIJET|CRDI|D-4D|BLUEHDI|CDI|TDS|SDI)\b/i.test(moto);
+  const chaine = /cha[iî]ne/i.test(String(c.distribution || ''));
+  const V = 'à vérifier sur catalogue';
+  const moteur = electrique ? [] : [
+    [/filtre [àa] huile/i, 'Filtre à huile'],
+    [/filtre [àa] air/i, 'Filtre à air'],
+    diesel ? [/filtre [àa] (carburant|gazole|gasoil)/i, 'Filtre à gazole'] : [/bougie/i, 'Bougies d’allumage'],
+    diesel ? [/pr[ée]chauffage/i, 'Bougies de préchauffage'] : null,
+    [/distribution/i, chaine ? 'Kit chaîne de distribution (chaîne, tendeur, guides)' : 'Kit de distribution (courroie + galets)'],
+    [/pompe [àa] eau/i, 'Pompe à eau'],
+    [/accessoire/i, 'Kit courroie d’accessoires (courroie + galet tendeur)'],
+    [/vidange/i, 'Bouchon de vidange et joint']
+  ].filter(Boolean);
+  const commun = [[/habitacle|pollen/i, 'Filtre d’habitacle']];
+  const freins = [
+    [/disque.*(avant|\bAV\b)/i, 'Disques de frein avant'], [/plaquette.*(avant|\bAV\b)/i, 'Plaquettes de frein avant'],
+    [/(disque|tambour).*(arri|\bAR\b)/i, 'Disques de frein arrière'], [/(plaquette|m[âa]choire|garniture).*(arri|\bAR\b)/i, 'Plaquettes de frein arrière']
+  ];
+  let n = 0;
+  const ajouter = function(tab, liste){
+    if(!Array.isArray(tech[tab])) tech[tab] = [];
+    liste.forEach(function(d){
+      if(tech[tab].some(function(x){ return x && d[0].test(String(x.piece || '')); })) return;
+      /* la piece peut etre rangee dans l'autre tableau */
+      const autre = tab === 'refs_filtres' ? 'refs_freins' : 'refs_filtres';
+      if((tech[autre] || []).some(function(x){ return x && d[0].test(String(x.piece || '')); })) return;
+      tech[tab].push({ piece: d[1], oem: V, equivalents: V, source: '' }); n++;
+    });
+  };
+  ajouter('refs_filtres', moteur.concat(commun));
+  ajouter('refs_freins', freins);
+  c.piecesCompletees = VERSION_PIECES;
+  return n;
+}
 const CONFIRMATIONS_EN_COURS = {}, CONFIRMATIONS_TENTEES = {};
 /* Lance fn sur chaque element, « limite » a la fois. */
 async function enParallele(liste, limite, fn){
@@ -44050,7 +44098,10 @@ async function enParallele(liste, limite, fn){
 }
 function lancerConfirmationAuto(v, force){
   const c = ensureCarnet(v);
-  if(!c.technique || CONFIRMATIONS_EN_COURS[v.id] || !valeursAConfirmer(c.technique).length) return;
+  if(!c.technique || CONFIRMATIONS_EN_COURS[v.id]) return;
+  /* 3.76 : pieces sans ligne (pompe a eau, kit d'accessoires...) : ajoutees, puis cherchees */
+  if(completerLignesPieces(v)){ force = true; saveVehicle(v); }
+  if(!valeursAConfirmer(c.technique).length) return;
   /* 3.72 : « faite » seulement quand la recherche a abouti (c.confirmationFaite) ;
      apres un echec, nouvel essai a la prochaine session. */
   if(!force && (c.confirmationFaite || CONFIRMATIONS_TENTEES[v.id])) return;
@@ -44066,6 +44117,7 @@ function lancerConfirmationAuto(v, force){
 async function confirmerValeurs(v, opts){
   opts = opts || {};
   const c = ensureCarnet(v), veh = v.vehicule || {};
+  completerLignesPieces(v);
   if(!valeursAConfirmer(c.technique).length){ if(!opts.silencieux) bandeau(t('Aucune valeur à confirmer.'), 'ok'); return; }
   const attente = opts.silencieux ? { fermer: function(){} } : fenetreAttente(t('Confirmation des valeurs…'),
     t('L’IA recherche en ligne chaque valeur incertaine ou manquante (références, capacités, couples…). Comptez une à trois minutes.'));
@@ -44077,10 +44129,16 @@ async function confirmerValeurs(v, opts){
      Par groupes de 4 valeurs (plusieurs recherches par valeur, et chaque
      appel reste court), 3 groupes a la fois. */
   let credit = false;
-  for(let passage = 1; passage <= 3 && !credit; passage++){
+  for(let passage = 1; passage <= 4 && !credit; passage++){
   const tous = valeursAConfirmer(c.technique);
   if(!tous.length) break;
   const paquets = [];
+  /* 3.76 : dernier passage = une piece par appel (oem + equivalents), recherche dediee */
+  if(passage === 4){
+    const parLigne = {};
+    tous.forEach(function(x){ const k = x.table + '|' + x.ligne; (parLigne[k] = parLigne[k] || []).push(x); });
+    Object.keys(parLigne).forEach(function(k){ paquets.push(parLigne[k]); });
+  }else
   for(let i = 0; i < tous.length; i += 4) paquets.push(tous.slice(i, i + 4));
   let echecs = 0;
   const reponses = await enParallele(paquets, 3, async function(items){
